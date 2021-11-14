@@ -34,10 +34,9 @@ public class TSPGraph {
         this.edgeContainer = edgeContainer;
     }
 
-    public static TSPGraph generateRandomGraph() {
+    public static TSPGraph generateRandomGraph(int numNodes) {
         // Create our graph to draw
         TSPNodeContainer nSet = new TSPNodeContainer();
-        int numNodes = 20;
         for (int i = 0; i < numNodes; i++) {
             try {
                 nSet.add(TSPNode.generateRandomTSPNode());
