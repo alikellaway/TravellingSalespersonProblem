@@ -1,16 +1,12 @@
 package com.alike.tspgraphsystem;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import com.alike.customexceptions.EdgeSuperimpositionException;
+import com.alike.customexceptions.NodeSuperimpositionException;
 
 public class TSPGraph {
 
     private TSPNodeContainer nodeContainer;
     private TSPEdgeContainer edgeContainer;
-
-    private final Color nodeColor = Color.RED;
-    private final int nodeDiameter = 10;
-
 
     public TSPGraph(TSPNodeContainer nodeContainer, TSPEdgeContainer edgeContainer) {
         setNodeContainer(nodeContainer);
@@ -38,25 +34,29 @@ public class TSPGraph {
         this.edgeContainer = edgeContainer;
     }
 
-    public void drawGraph(GraphicsContext gc) {
-        gc.setFill(nodeColor);
-        for (TSPNode node : nodeContainer.getNodeSet()) {
-            // gc.fillOval(x, y, w, h)
-            gc.fillOval(node.getX(), node.getY(), nodeDiameter, nodeDiameter);
+    public static TSPGraph generateRandomGraph() {
+        // Create our graph to draw
+        TSPNodeContainer nSet = new TSPNodeContainer();
+        int numNodes = 20;
+        for (int i = 0; i < numNodes; i++) {
+            try {
+                nSet.add(TSPNode.generateRandomTSPNode());
+            } catch (NodeSuperimpositionException e) {
+                i--;
+            }
         }
-        for (TSPEdge edge : edgeContainer.getEdgeSet()) {
-            Coordinate start = edge.getStartNode().getCoordinate();
-            Coordinate end = edge.getEndNode().getCoordinate();
-            Coordinate tempStart = new Coordinate(start.getX(), start.getY());
-            Coordinate tempEnd = new Coordinate(end.getX(), end.getY());
-            adjustCoordinateToCentreNode(tempStart);
-            adjustCoordinateToCentreNode(tempEnd);
-            gc.strokeLine(tempStart.getX(), tempStart.getY(), tempEnd.getX(), tempEnd.getY());
-        }
-    }
+        TSPEdgeContainer eSet = new TSPEdgeContainer();
 
-    private void adjustCoordinateToCentreNode(Coordinate c) {
-        c.setX(c.getX() + nodeDiameter/2);
-        c.setY(c.getY() + nodeDiameter/2);
+        for (int x = 0; x < numNodes; x++) {
+            try {
+                eSet.add(new TSPEdge(nSet.getNodeSet().get(x), nSet.getNodeSet().get((x + 1) % numNodes)));
+            } catch (EdgeSuperimpositionException e) {
+                x--;
+            }
+        }
+        TSPGraph g = new TSPGraph();
+        g.setNodeContainer(nSet);
+        g.setEdgeContainer(eSet);
+        return g;
     }
 }
