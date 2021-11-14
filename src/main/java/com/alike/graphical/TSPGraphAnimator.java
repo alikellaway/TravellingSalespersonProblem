@@ -15,7 +15,7 @@ public class TSPGraphAnimator extends AnimationTimer {
     private TSPGraph graph;
     private GraphicsContext graphicsContext;
     private int editsPerRedraw;
-    public static final int NODE_DIAMETER = 60;
+    public static final int NODE_DIAMETER = 15;
     public static final Color NODE_COLOR = Color.RED;
 
     public TSPGraphAnimator(TSPGraph graph, Canvas canvas, int editsPerRedraw) {
@@ -32,7 +32,6 @@ public class TSPGraphAnimator extends AnimationTimer {
             TSPGraphAnimator.drawGraph(graph, graphicsContext);
         }
     }
-
 
     public TSPGraph getGraph() {
         return graph;
@@ -91,8 +90,8 @@ public class TSPGraphAnimator extends AnimationTimer {
         }
     }
 
-    public static void drawRandomGraph(GraphicsContext gc) {
-        drawGraph(TSPGraph.generateRandomGraph(), gc);
+    public static void drawRandomGraph(GraphicsContext gc, int numNodes) {
+        drawGraph(TSPGraph.generateRandomGraph(numNodes), gc);
     }
 
     private static void adjustCoordinateToCentreNode(Coordinate c) {
