@@ -12,13 +12,17 @@ public class TSPEdgeContainer {
 
     public ArrayList<TSPEdge> edgeSet;
 
+    private int editCount;
+
     public TSPEdgeContainer() {
         edgeSet = new ArrayList<>();
+        editCount = 0;
     }
 
     public TSPEdgeContainer(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
         setEdgeSet(edgeSet);
         edgeSet.trimToSize();
+        editCount = 0;
     }
 
     public void add(TSPEdge e) throws EdgeSuperimpositionException {
@@ -27,6 +31,7 @@ public class TSPEdgeContainer {
         } else {
             edgeSet.add(e);
             edgeSet.trimToSize();
+            editCount++;
         }
 
     }
@@ -34,6 +39,7 @@ public class TSPEdgeContainer {
     public void remove(TSPEdge e) {
         edgeSet.remove(e);
         edgeSet.trimToSize();
+        editCount++;
     }
 
     private void checkEdgeSetForSuperimposition(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
@@ -50,6 +56,7 @@ public class TSPEdgeContainer {
     public void setEdgeSet(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
         checkEdgeSetForSuperimposition(edgeSet);
         this.edgeSet = edgeSet;
+        editCount++;
     }
 
     public ArrayList<TSPEdge> getEdgeSet() {
@@ -63,5 +70,8 @@ public class TSPEdgeContainer {
             }
         }
         return false;
+    }
+    public int getEditCount() {
+        return editCount;
     }
 }
