@@ -88,22 +88,6 @@ public class TSPNode {
         return getCoordinate().getY();
     }
 
-//    public TSPEdge getInEdge() {
-//        return inEdge;
-//    }
-//
-//    public void setInEdge(TSPEdge inEdge) {
-//        this.inEdge = inEdge;
-//    }
-//
-//    public TSPEdge getOutEdge() {
-//        return outEdge;
-//    }
-//
-//    public void setOutEdge(TSPEdge outEdge) {
-//        this.outEdge = outEdge;
-//    }
-
     @Override
     public String toString() {
         return getCoordinate().toString();
@@ -123,6 +107,6 @@ public class TSPNode {
     }
 
     public static TSPNode generateRandomTSPNode() {
-        return new TSPNode(Coordinate.generateRandomCoordinate(Main.WIDTH, Main.HEIGHT));
+        return new TSPNode(Coordinate.generateRandomCoordinate(Main.COORDINATE_MAX_WIDTH, Main.COORDINATE_MAX_HEIGHT));
     }
 }
