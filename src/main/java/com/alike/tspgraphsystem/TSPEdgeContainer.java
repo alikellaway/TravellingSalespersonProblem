@@ -33,7 +33,6 @@ public class TSPEdgeContainer {
             edgeSet.trimToSize();
             editCount++;
         }
-
     }
 
     public void remove(TSPEdge e) {
@@ -56,7 +55,7 @@ public class TSPEdgeContainer {
     public void setEdgeSet(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
         checkEdgeSetForSuperimposition(edgeSet);
         this.edgeSet = edgeSet;
-        editCount++;
+        editCount += edgeSet.size();
     }
 
     public ArrayList<TSPEdge> getEdgeSet() {
@@ -71,6 +70,7 @@ public class TSPEdgeContainer {
         }
         return false;
     }
+
     public int getEditCount() {
         return editCount;
     }
