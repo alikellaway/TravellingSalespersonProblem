@@ -41,10 +41,6 @@ public class Main extends Application {
         drawer.start();
     }
 
-    public void initGI(Stage stage) {
-
-    }
-
     public TSPGraph generateRandomGraph() {
         // Create our graph to draw
         TSPNodeContainer nSet = new TSPNodeContainer();
@@ -70,14 +66,4 @@ public class Main extends Application {
         g.setEdgeContainer(eSet);
         return g;
     }
-
-    public static class MyTimer extends AnimationTimer {
-
-        @Override
-        public void handle(long l) {
-
-        }
-    }
-
-
 }
