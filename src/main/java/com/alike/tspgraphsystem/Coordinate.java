@@ -32,8 +32,8 @@ public class Coordinate {
      * @return Vector A new vector object describing the vector between this coordinate and another coordinate.
      */
     public Vector getVectorTo(Coordinate otherCoordinate) {
-        double vectorX = getX() * (-1) + otherCoordinate.getX();
-        double vectorY = getY() * (-1) + otherCoordinate.getY();
+        double vectorX = otherCoordinate.getX() - getX();
+        double vectorY = otherCoordinate.getY() - getY();
         return new Vector(vectorX, vectorY);
     }
 
