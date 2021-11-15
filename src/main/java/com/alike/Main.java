@@ -1,5 +1,6 @@
 package com.alike;
 
+import com.alike.customexceptions.InvalidGraphException;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solutions.NearestNeighbourSolver;
 import com.alike.tspgraphsystem.TSPGraph;
@@ -41,11 +42,15 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         Thread t = new Thread(() -> {
-            NearestNeighbourSolver nns = new NearestNeighbourSolver(graph);
-            nns.runSolution();
+            try {
+                NearestNeighbourSolver nns = new NearestNeighbourSolver(graph);
+                nns.runSolution();
+            } catch (InvalidGraphException e) {
+                e.printStackTrace();
+            }
         });
         t.start();
-        launch(args);
+//        launch(args);
     }
 
     @Override
@@ -57,19 +62,6 @@ public class Main extends Application {
         Scene scene = new Scene(root, WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         stage.setScene(scene);
         stage.show();
-
-//        AnimationTimer drawer = new AnimationTimer() {
-//            @Override
-//            public void handle(long l) {
-//                canvas.getGraphicsContext2D().clearRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
-////                try {
-////                    Thread.sleep(2000);
-////                } catch (InterruptedException e) {
-////                    e.printStackTrace();
-////                }
-//                TSPGraphAnimator.drawRandomGraph(canvas.getGraphicsContext2D(), 1000);
-//            }
-//        };
 
         TSPGraphAnimator drawer = new TSPGraphAnimator(graph, canvas, 1);
         drawer.start();

@@ -116,4 +116,13 @@ public class TSPEdgeContainer {
             lock.readLock().unlock();
         }
     }
+
+    public double calculateCurrentRouteLength() {
+        double totalLength = 0;
+        for (TSPEdge e : edgeSet) {
+            Vector v = e.getStartNode().getVectorTo(e.getEndNode());
+            totalLength+=v.magnitude();
+        }
+        return totalLength;
+    }
 }
