@@ -1,23 +1,44 @@
 package com.alike.solutions;
 
+import com.alike.Main;
 import com.alike.customexceptions.InvalidGraphException;
 import com.alike.tspgraphsystem.*;
 import javafx.util.Pair;
-
 import java.util.ArrayList;
 
+/**
+ * This class takes a graph object as a parameter, and will create a TSP route using the 'Nearest Neighbour Algorithm'.
+ * @author alike
+ * @version 1.0
+ */
 public class NearestNeighbourSolver {
-
-    private TSPGraph graph;
-
-    private TSPEdgeContainer edgeContainer;
-    private TSPNodeContainer nodeContainer;
-    private int currentNodeID;
+    /**
+     * A reference to the graph we are solving.
+     */
+    private final TSPGraph graph;
+    /**
+     * A reference to the edge container we are operating within.
+     */
+    private final TSPEdgeContainer edgeContainer;
+    /**
+     * A reference to the node container we are operating on.
+     */
+    private final TSPNodeContainer nodeContainer;
+    /**
+     * The node the algorithm is currently sitting on.
+     */
     private TSPNode currentNode;
-    private boolean[] visited;
-    // We do this so we dont have to repeatedly loop through the list to check they've all been visited.
+    /**
+     * This records the number of nodes we have already visited. We do this so we don't have to repeatedly loop
+     * through the list to check they've all been visited.
+     */
     private int numNodesVisited;
 
+    /**
+     * Constructor used to load a graph into the object, so that a solution can be run.
+     * @param graph The graph to load into the NNS object.
+     * @throws InvalidGraphException Thrown if the input graph has less than 3 nodes (illegal graph).
+     */
     public NearestNeighbourSolver(TSPGraph graph) throws InvalidGraphException {
         this.graph = graph;
         this.edgeContainer = graph.getEdgeContainer();
@@ -25,85 +46,74 @@ public class NearestNeighbourSolver {
         if (nodeContainer.getNodeSet().size() < 3) {
             throw new InvalidGraphException("Edge set smaller than 3.");
         }
-        this.nodeContainer = graph.getNodeContainer();
     }
 
-    public Pair<TSPGraph, Double> runSolution() {
+    /**
+     * Method starts the algorithm that solves the TSP through the graph.
+     * @return Returns the graph (with the solution in the edgeContainer) and a double describing how long the found
+     * route was.
+     */
+    public Pair<TSPGraph, Double> runSolution(long delayPerStep) throws InterruptedException {
         // Set our current node to be the first node in the list of nodes.
         setCurrentNode(nodeContainer.getNodeSet().get(0));
         currentNode.setVisited(true); // Set it as visited
-        numNodesVisited = 1; // Add 1 to the number of nodes visited
-        // Exectute the traversal steps
+        numNodesVisited = 0; // Nodes visited is not 1 as we account for the last node when we visit it at the end.
+        // Execute the traversal steps
         while (numNodesVisited < nodeContainer.getNodeSet().size() + 1) {
+            Thread.sleep(delayPerStep);
             traverseToNextClosestNode();
         }
         // Output information about solve
-        System.out.println("Finished solve!");
-        Pair<TSPGraph, Double> out = new Pair<>(this.graph, graph.getEdgeContainer().calculateCurrentRouteLength());
-        return out;
+        return new Pair<>(this.graph, graph.getEdgeContainer().calculateCurrentRouteLength());
     }
 
+    /**
+     * Method used to set the current node to a new node.
+     * @param tspNode The new node to become the current node.
+     */
     private void setCurrentNode(TSPNode tspNode) {
         this.currentNode = tspNode;
     }
 
-    private Pair<TSPNode, Integer> findClosestUnvistedNode() {
+    /**
+     * This method is used to find the closest unvisited node to the current node.
+     * @return TSPNode The closest univisited node (or the starting node if no others are found).
+     */
+    private TSPNode findClosestUnvistedNode() {
          // Generate our space to put our results
-        double distanceToClosestFoundNode = 0.0; // Keep a record of the closest distance
+        double distanceToClosestFoundNode =  // We set the distance to be the maximum distance two nodes could away
+                Math.ceil(Math.sqrt(Math.pow(Main.COORDINATE_MAX_WIDTH, 2) + Math.pow(Main.COORDINATE_MAX_HEIGHT, 2)));
         TSPNode closestFoundNode = null; // Keep a record of the closest found node
         ArrayList<TSPNode> nodeSet = nodeContainer.getNodeSet(); // Get the set
-        int idxOfFoundNode = -1; // -1 so we can throw errors later
-        for (int i = 0; i < nodeSet.size(); i++) {
-            TSPNode nodeBeingChecked = nodeSet.get(i);
-            if (!nodeBeingChecked.isVisited()) {
+        for (TSPNode nodeBeingChecked : nodeSet) {
+            if (!nodeBeingChecked.isVisited() && nodeBeingChecked != currentNode) {
                 Vector v = currentNode.getVectorTo(nodeBeingChecked);
                 double mag = v.magnitude();
-                if (mag > distanceToClosestFoundNode) {
+                if (mag < distanceToClosestFoundNode) {
                     distanceToClosestFoundNode = mag;
                     closestFoundNode = nodeBeingChecked;
-                    idxOfFoundNode = i;
                 }
             }
         }
         if (closestFoundNode == null) { // Means the end of the graphs - loop back to beginning.
             closestFoundNode = nodeSet.get(0);
-            idxOfFoundNode = 0;
         }
-        return new Pair<>(closestFoundNode, idxOfFoundNode);
+        return closestFoundNode;
     }
 
-
+    /**
+     * Traverse the algorithm to the next closes node.
+     */
     private void traverseToNextClosestNode() {
-        // Find the closest node
-//        double distanceToClosestFoundNode = 0.0;
-//        TSPNode closestFoundNode = null;
-//        int closestFoundNodeIdx = -1;
-//        for (int i = 1; i < visited.length - 1; i++) { // We always start at the node at idx 0 so no need to check
-//            if (!visited[i]) {
-//                TSPNode nodeBeingChecked = nodeContainer.getNodeSet().get(i);
-//                Vector v = currentNode.getVectorTo(nodeBeingChecked);
-//                double mag = v.magnitude();
-//                if (mag > distanceToClosestFoundNode) {
-//                    distanceToClosestFoundNode = mag;
-//                    closestFoundNode = nodeBeingChecked;
-//                    closestFoundNodeIdx = i;
-//                }
-//            }
-//        }
-//        if (closestFoundNode == null) {
-//            edgeContainer.getEdgeSet().add(new TSPEdge(currentNode, nodeContainer.getNodeSet().get(0)));
-//
-//            setCurrentNode(nodeContainer.getNodeSet().get(0));
-//            System.out.println("bo");
-//            return;
-//        }
-        Pair<TSPNode, Integer> nextNodeInfo = findClosestUnvistedNode();
-        TSPNode closestFoundNode = nextNodeInfo.getKey();
-        Integer closestFoundNodeIdx = nextNodeInfo.getValue();
-        edgeContainer.getEdgeSet().add(new TSPEdge(currentNode, closestFoundNode));
-        closestFoundNode.setVisited(true);
-        setCurrentNode(closestFoundNode);
+        // Find the next closest unvisited node.
+        TSPNode nextNode = findClosestUnvistedNode();
+        // Add an edge between the current node and the next closest node.
+        edgeContainer.getEdgeSet().add(new TSPEdge(currentNode, nextNode));
+        nextNode.setVisited(true); // Set that node to visited.
+        System.out.println(nextNode.isVisited());
+        setCurrentNode(nextNode); // Change the current node.
         numNodesVisited++;
-        System.out.println("Travelled to: " + currentNode.toString() + ", " + nextNodeInfo.getValue());
+        // Debug verbosity
+        System.out.println("Travelled to: " + currentNode.toString() + ", " + nextNode.getNodeID() + ", " + numNodesVisited);
     }
 }
