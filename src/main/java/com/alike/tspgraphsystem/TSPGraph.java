@@ -34,7 +34,7 @@ public class TSPGraph {
         this.edgeContainer = edgeContainer;
     }
 
-    public static TSPGraph generateRandomGraph(int numNodes) {
+    public static TSPGraph generateRandomGraph(int numNodes, boolean addEdges) {
         // Create our graph to draw
         TSPNodeContainer nSet = new TSPNodeContainer();
         for (int i = 0; i < numNodes; i++) {
@@ -45,12 +45,14 @@ public class TSPGraph {
             }
         }
         TSPEdgeContainer eSet = new TSPEdgeContainer();
+        if (addEdges) {
 
-        for (int x = 0; x < numNodes; x++) {
-            try {
-                eSet.add(new TSPEdge(nSet.getNodeSet().get(x), nSet.getNodeSet().get((x + 1) % numNodes)));
-            } catch (EdgeSuperimpositionException e) {
-                x--;
+            for (int x = 0; x < numNodes; x++) {
+                try {
+                    eSet.add(new TSPEdge(nSet.getNodeSet().get(x), nSet.getNodeSet().get((x + 1) % numNodes)));
+                } catch (EdgeSuperimpositionException e) {
+                    x--;
+                }
             }
         }
         TSPGraph g = new TSPGraph();

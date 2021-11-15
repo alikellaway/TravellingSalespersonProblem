@@ -1,9 +1,6 @@
 package com.alike.graphical;
 
-import com.alike.tspgraphsystem.Coordinate;
-import com.alike.tspgraphsystem.TSPEdge;
-import com.alike.tspgraphsystem.TSPGraph;
-import com.alike.tspgraphsystem.TSPNode;
+import com.alike.tspgraphsystem.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -29,7 +26,7 @@ public class TSPGraphAnimator extends AnimationTimer {
     public void handle(long l) {
         if (graph.getEdgeContainer().getEditCount() % editsPerRedraw == 0) {
             clearCanvas(graphicsContext);
-            TSPGraphAnimator.drawGraph(graph, graphicsContext);
+            drawGraph(graph, graphicsContext);
         }
     }
 
@@ -72,14 +69,15 @@ public class TSPGraphAnimator extends AnimationTimer {
         this.editsPerRedraw = editsPerRedraw;
     }
 
-    public static void drawGraph(TSPGraph graph, GraphicsContext gc) {
+    public void drawGraph(TSPGraph graph, GraphicsContext gc) {
         gc.setFill(TSPGraphAnimator.NODE_COLOR);
         gc.setStroke(Color.BLACK);
         for (TSPNode node : graph.getNodeContainer().getNodeSet()) {
             // gc.fillOval(x, y, w, h)
             gc.fillOval(node.getX(), node.getY(), TSPGraphAnimator.NODE_DIAMETER, TSPGraphAnimator.NODE_DIAMETER);
         }
-        for (TSPEdge edge : graph.getEdgeContainer().getEdgeSet()) {
+        TSPEdgeContainer edges = graph.getEdgeContainer();
+        for (TSPEdge edge : edges.getEdgeSet()) {
             Coordinate start = edge.getStartNode().getCoordinate();
             Coordinate end = edge.getEndNode().getCoordinate();
             Coordinate tempStart = new Coordinate(start.getX(), start.getY());
@@ -88,10 +86,6 @@ public class TSPGraphAnimator extends AnimationTimer {
             adjustCoordinateToCentreNode(tempEnd);
             gc.strokeLine(tempStart.getX(), tempStart.getY(), tempEnd.getX(), tempEnd.getY());
         }
-    }
-
-    public static void drawRandomGraph(GraphicsContext gc, int numNodes) {
-        drawGraph(TSPGraph.generateRandomGraph(numNodes), gc);
     }
 
     private static void adjustCoordinateToCentreNode(Coordinate c) {

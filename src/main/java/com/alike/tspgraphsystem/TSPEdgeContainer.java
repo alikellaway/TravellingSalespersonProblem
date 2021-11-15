@@ -3,6 +3,8 @@ package com.alike.tspgraphsystem;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Used to mange sets of edges for use in TSPGraph objects.
@@ -13,6 +15,8 @@ public class TSPEdgeContainer {
     public ArrayList<TSPEdge> edgeSet;
 
     private int editCount;
+
+    public final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public TSPEdgeContainer() {
         edgeSet = new ArrayList<>();
@@ -26,52 +30,90 @@ public class TSPEdgeContainer {
     }
 
     public void add(TSPEdge e) throws EdgeSuperimpositionException {
-        if (edgeExists(e)) {
-            throw new EdgeSuperimpositionException("Tried to add an edge that already exists.");
-        } else {
-            edgeSet.add(e);
-            edgeSet.trimToSize();
-            editCount++;
+        lock.writeLock().lock();
+        try {
+            if (edgeExists(e)) {
+                throw new EdgeSuperimpositionException("Tried to add an edge that already exists.");
+            } else {
+                edgeSet.add(e);
+                edgeSet.trimToSize();
+                editCount++;
+            }
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
     public void remove(TSPEdge e) {
-        edgeSet.remove(e);
-        edgeSet.trimToSize();
-        editCount++;
+        lock.writeLock().lock();
+        try {
+            edgeSet.remove(e);
+            edgeSet.trimToSize();
+            editCount++;
+        } finally {
+            lock.writeLock().unlock();
+        }
+
     }
 
     private void checkEdgeSetForSuperimposition(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
-        for (TSPEdge e : edgeSet) {
-            for (int i = edgeSet.indexOf(e) + 1; i < edgeSet.size(); i++) {
-                if (e.equals(edgeSet.get(i))) {
-                    throw new EdgeSuperimpositionException("Tried to initialise edge set with input array " +
-                            "containing superimposed edges.");
+        lock.readLock().lock();
+        try {
+            for (TSPEdge e : edgeSet) {
+                for (int i = edgeSet.indexOf(e) + 1; i < edgeSet.size(); i++) {
+                    if (e.equals(edgeSet.get(i))) {
+                        throw new EdgeSuperimpositionException("Tried to initialise edge set with input array " +
+                                "containing superimposed edges.");
+                    }
                 }
             }
+        } finally {
+            lock.readLock().unlock();
         }
     }
 
     public void setEdgeSet(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
-        checkEdgeSetForSuperimposition(edgeSet);
-        this.edgeSet = edgeSet;
-        editCount += edgeSet.size();
+        lock.writeLock().lock();
+        try {
+            checkEdgeSetForSuperimposition(edgeSet);
+            this.edgeSet = edgeSet;
+            editCount += edgeSet.size();
+        } finally {
+            lock.writeLock().lock();
+        }
+
     }
 
     public ArrayList<TSPEdge> getEdgeSet() {
-        return this.edgeSet;
+        lock.readLock().lock();
+        try {
+            return this.edgeSet;
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
     private boolean edgeExists(TSPEdge e) {
-        for (TSPEdge edge : getEdgeSet()) {
-            if (edge.equals(e)) {
-                return true;
+        lock.readLock().lock();
+        try {
+            for (TSPEdge edge : getEdgeSet()) {
+                if (edge.equals(e)) {
+                    return true;
+                }
             }
+            return false;
+        } finally {
+            lock.readLock().unlock();
         }
-        return false;
+
     }
 
     public int getEditCount() {
-        return editCount;
+        lock.readLock().lock();
+        try {
+            return editCount;
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 }

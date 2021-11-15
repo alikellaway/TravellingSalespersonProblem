@@ -24,7 +24,6 @@ public class NearestNeighbourSolver {
 
     public void runSolution() {
         // Set our current node to be the first node in the list of nodes.
-        setCurrentNodeID(nodeContainer.getNodeSet().get(0).getNodeID());
         setCurrentNode(nodeContainer.getNodeSet().get(0));
         setVisited(0);
         numNodesVisited = 1;
@@ -32,10 +31,10 @@ public class NearestNeighbourSolver {
         while (numNodesVisited < visited.length) {
             traverseToNextClosestNode();
         }
-
     }
 
     private void setCurrentNode(TSPNode tspNode) {
+        System.out.println(tspNode);
         this.currentNode = tspNode;
     }
 
@@ -47,20 +46,19 @@ public class NearestNeighbourSolver {
         return currentNodeID;
     }
 
-    public void setCurrentNodeID(int currentNodeID) {
-        this.currentNodeID = currentNodeID;
-        setVisited(currentNodeID);
-    }
 
     private void setVisited(int index) {
         visited[index] = true;
         numNodesVisited++;
     }
 
-    private TSPNode findClosestUnvisitedNode() {
+
+    private void traverseToNextClosestNode() {
+        // Find the closest node
         double distanceToClosestFoundNode = 0.0;
         TSPNode closestFoundNode = null;
-        for (int i = 1; i < visited.length - 1; i++) {
+        int closestFoundNodeIdx = -1;
+        for (int i = 1; i < visited.length - 1; i++) { // We always start at the node at idx 0 so no need to check
             if (!visited[i]) {
                 TSPNode nodeBeingChecked = nodeContainer.getNodeSet().get(i);
                 Vector v = currentNode.getVectorTo(nodeBeingChecked);
@@ -68,19 +66,21 @@ public class NearestNeighbourSolver {
                 if (mag > distanceToClosestFoundNode) {
                     distanceToClosestFoundNode = mag;
                     closestFoundNode = nodeBeingChecked;
+                    closestFoundNodeIdx = i;
                 }
             }
         }
-        return closestFoundNode;
-    }
+        if (closestFoundNode == null) {
+            edges.getEdgeSet().add(new TSPEdge(currentNode, nodeContainer.getNodeSet().get(0)));
 
-    private void traverseToNextClosestNode() {
-        TSPNode nextNode = findClosestUnvisitedNode();
-        if (nextNode == null) {
-            System.out.println("Unable to find a next closest node.");
+            setCurrentNode(nodeContainer.getNodeSet().get(0));
+            System.out.println("bo");
             return;
         }
-        edges.getEdgeSet().add(new TSPEdge(currentNode, nextNode));
-        setCurrentNode(nextNode); // Also sets next node as visited
+        edges.getEdgeSet().add(new TSPEdge(currentNode, closestFoundNode));
+        setVisited(closestFoundNodeIdx);
+        setCurrentNode(closestFoundNode);
+        numNodesVisited++;
+        System.out.println("hi");
     }
 }
