@@ -22,12 +22,6 @@ public class TSPNode {
      */
     private Coordinate coordinate;
 
-//    /**
-//     * A record of the edges currently connected to this node. This is used to quickly check for edge superimposition
-//     * rather than checking all other edges that exist (Note: "in" and "out" are arbitrary).
-//     */
-//    private TSPEdge inEdge;
-//    private TSPEdge outEdge;
     /**
      * The unique ID of this node object.
      */
@@ -42,8 +36,6 @@ public class TSPNode {
         Coordinate c = new Coordinate(x, y);
         setCoordinate(c);
         assignID();
-//        setInEdge(null);
-//        setOutEdge(null);
     }
 
     /**
@@ -53,18 +45,13 @@ public class TSPNode {
     public TSPNode(Coordinate c) {
         setCoordinate(c);
         assignID();
-//        setInEdge(null);
-//        setOutEdge(null);
     }
 
-
-//    public int getNodeOrder() {
-//        int out = 0;
-//        if (getInEdge() != null) {out++;}
-//        if (getOutEdge() != null) {out++;}
-//        return out;
-//    }
-
+    /**
+     * Used to get the vector from this node to another parameter node.
+     * @param otherNode The node to find a vector to.
+     * @return Vector A vector describing the distance between this node and the parameter node.
+     */
     public Vector getVectorTo(TSPNode otherNode) {
         return coordinate.getVectorTo(otherNode.getCoordinate());
     }
@@ -85,41 +72,77 @@ public class TSPNode {
         this.coordinate = coordinate;
     }
 
-    public double getX() {
-        return getCoordinate().getX();
-    }
-
-    public double getY() {
-        return getCoordinate().getY();
-    }
-
+    /**
+     * Used to represent the TSPNode as a string (in console or terminal).
+     * @return String The TSPNode object as a string.
+     */
     @Override
     public String toString() {
         return getCoordinate().toString();
     }
 
+    /**
+     * Assigns a unique ID to the node in the @code{nodeID} attribute.
+     */
     private void assignID() {
         setNodeID(numNodes);
         numNodes++;
     }
 
-    public int getNodeID() {
-        return nodeID;
-    }
-
-    private void setNodeID(int nodeID) {
-        this.nodeID = nodeID;
-    }
-
+    /**
+     * Used to generate a random TSPNode object with random coordinates within the parameters specified by the
+     * static final variables from the Main class.
+     * @return TSPNode A new TSPNode with random coordinate values.
+     */
     public static TSPNode generateRandomTSPNode() {
         return new TSPNode(Coordinate.generateRandomCoordinate(Main.COORDINATE_MAX_WIDTH, Main.COORDINATE_MAX_HEIGHT));
     }
 
+    /**
+     * Used to check whether the TSPNode has been visited by an algorithm in this run.
+     * @return true: if the node has been visited, false: if the node has not been visited (by a solver)
+     */
     public boolean isVisited() {
         return visited;
     }
 
+    /**
+     * Sets the @code{visited} attribute to a new boolean value.
+     * @param visited The new boolean value to assign to the @code{visited} attribute.
+     */
     public void setVisited(boolean visited) {
         this.visited = visited;
+    }
+
+    /**
+     * Returns the value of the @code{nodeID} attribute.
+     * @return @code{nodeID} The value of the @code{nodeID} attribute.
+     */
+    public int getNodeID() {
+        return nodeID;
+    }
+
+    /**
+     * Sets the value of the @code{nodeID} attribute to a new value.
+     * @param nodeID The new value to assign the @code{nodeID} attribute to.
+     */
+    private void setNodeID(int nodeID) {
+        this.nodeID = nodeID;
+    }
+
+    /**
+     * Returns the value of the @code{x} attribute of the coordinate attribute of the TSPNode.
+     * @return @code{x} The value of the @code{x} attribute of the coordinate attribute of the TSPNode.
+     */
+    public double getX() {
+        return getCoordinate().getX();
+    }
+
+    /**
+     * Returns the value of the @code{y} attribute of the coordinate attribute of the TSPNode.
+     * @return @code{y} The value of the @code{y} attribute of the coordinate attribute of the TSPNode.
+     */
+    public double getY() {
+        return getCoordinate().getY();
     }
 }
