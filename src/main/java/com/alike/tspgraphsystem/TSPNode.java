@@ -13,6 +13,11 @@ public class TSPNode {
     private static int numNodes = 0;
 
     /**
+     * A record of whether a solution has visited the node.
+     */
+    private boolean visited = false;
+
+    /**
      * The coordinate of the node.
      */
     private Coordinate coordinate;
@@ -108,5 +113,13 @@ public class TSPNode {
 
     public static TSPNode generateRandomTSPNode() {
         return new TSPNode(Coordinate.generateRandomCoordinate(Main.COORDINATE_MAX_WIDTH, Main.COORDINATE_MAX_HEIGHT));
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 }
