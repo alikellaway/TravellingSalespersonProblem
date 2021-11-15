@@ -4,7 +4,6 @@ import com.alike.customexceptions.InvalidGraphException;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solutions.NearestNeighbourSolver;
 import com.alike.tspgraphsystem.TSPGraph;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -37,20 +36,20 @@ public class Main extends Application {
      */
     private Canvas canvas;
 
-    private static TSPGraph graph = TSPGraph.generateRandomGraph(10, false);
+    private static TSPGraph graph = TSPGraph.generateRandomGraph(1000, false);
 
 
     public static void main(String[] args) {
         Thread t = new Thread(() -> {
             try {
                 NearestNeighbourSolver nns = new NearestNeighbourSolver(graph);
-                nns.runSolution();
-            } catch (InvalidGraphException e) {
+                nns.runSolution(100);
+            } catch (InvalidGraphException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
         t.start();
-//        launch(args);
+        launch(args);
     }
 
     @Override
