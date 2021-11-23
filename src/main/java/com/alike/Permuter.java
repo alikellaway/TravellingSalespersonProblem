@@ -1,6 +1,8 @@
 package com.alike;
 
 import com.alike.customexceptions.PermutationExhaustionException;
+import com.alike.customexceptions.PermutationFocusException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +22,17 @@ public class Permuter<T> {
     private int focusIdx = 0;
 
     /**
+     * Boolean describing whether the focus idx has passed over every permutation.
+     */
+    boolean unseenPermutations;
+
+    /**
      * Constructs a new Permuter object and calculates all the permutations.
      * @param inputArray The list of which we wish to find the permutations of.
      */
     public Permuter(List<T> inputArray) {
         perms = generatePermutations(inputArray);
+        unseenPermutations = !perms.isEmpty();
     }
 
     /**
@@ -62,7 +70,36 @@ public class Permuter<T> {
             throw new PermutationExhaustionException("No more permutations to view in the Permuter object.");
         }
         List<T> nextPerm = perms.get(focusIdx);
-        focusIdx++;
+        incrementFocusIdx();
         return nextPerm;
     }
+
+    /**
+     * Returns the permutation that is currently being viewed.
+     * @return List<T> The permutation that is currently being viewed.
+     * @throws PermutationFocusException Thrown if the method is called when no permutation is being viewed.
+     */
+    public List<T> getCurrentPermutation() throws PermutationFocusException {
+        if (focusIdx != 0) {
+            return perms.get(focusIdx - 1); // Need to subtract
+        } else {
+            throw new PermutationFocusException("Not looking at a permutation.");
+        }
+    }
+
+    /**
+     * Used to increment the focus index and checks if we have reached the end.
+     */
+    private void incrementFocusIdx() {
+        focusIdx++;
+        if (focusIdx == perms.size()) {
+            unseenPermutations = false;
+        }
+    }
+
+    public boolean hasUnseenPermutations() {
+        return this.unseenPermutations;
+    }
+
+
 }
