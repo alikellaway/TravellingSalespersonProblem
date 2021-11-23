@@ -1,7 +1,8 @@
 package com.alike.tspgraphsystem;
 
 import com.alike.customexceptions.EdgeSuperimpositionException;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -128,6 +129,12 @@ public class TSPEdgeContainer {
 
     @Override
     public String toString() {
-        return getEdgeSet().toString();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "Failed to load TSPNodeContainer object into JSON format.";
     }
 }

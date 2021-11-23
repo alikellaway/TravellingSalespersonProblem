@@ -2,6 +2,8 @@ package com.alike.tspgraphsystem;
 
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.NodeSuperimpositionException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TSPGraph {
 
@@ -59,5 +61,16 @@ public class TSPGraph {
         g.setNodeContainer(nSet);
         g.setEdgeContainer(eSet);
         return g;
+    }
+
+    @Override
+    public String toString() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "Failed to load TSPNodeContainer object into JSON format.";
     }
 }
