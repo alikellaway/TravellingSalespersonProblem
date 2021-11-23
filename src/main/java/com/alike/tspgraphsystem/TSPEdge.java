@@ -1,19 +1,16 @@
 package com.alike.tspgraphsystem;
 
-import com.alike.customexceptions.EdgeSuperimpositionException;
-import com.alike.customexceptions.NodeOrderException;
-
 /**
  * Used to link two TSPNodes together.
  * @author alike
  */
 public class TSPEdge {
     /**
-     * The node at which the edge starts.
+     * The node at which the edge starts (note: the edge does not start of finish, its just a naming convention).
      */
     private TSPNode startNode;
     /**
-     * The node at which the edge ends.
+     * The node at which the edge ends (note: the edge does not start of finish, its just a naming convention).
      */
     private TSPNode endNode;
 
@@ -34,30 +31,51 @@ public class TSPEdge {
         setEdgeID(generateID());
     }
 
+    /**
+     * Used to check whether this edge links the same two nodes as another edge.
+     * @param otherEdge The edge with which to check equality.
+     * @return boolean: true if the edges join the same nodes, false if they do not.
+     */
     public boolean equals(TSPEdge otherEdge) {
         return this.getEdgeID().equalsIgnoreCase(otherEdge.getEdgeID());
     }
 
     /**
-     *
-     * @return
+     * Returns the node this edge starts at.
+     * @return startNode The edge this node starts at.
      */
     public TSPNode getStartNode() {
         return startNode;
     }
 
+    /**
+     * Sets the @code{startNode} attribute to a new value.
+     * @param startNode The new value to assign to the @code{startNode} attribute.
+     */
     public void setStartNode(TSPNode startNode) {
         this.startNode = startNode;
     }
 
+    /**
+     * Returns the node this edge finishes on.
+     * @return @code{endNode} The node this edge ends on.
+     */
     public TSPNode getEndNode() {
         return endNode;
     }
 
+    /**
+     * Sets the @code{endNode} attribute to a new value.
+     * @param endNode The new value to assign the @code{endNode} attribute.
+     */
     public void setEndNode(TSPNode endNode) {
         this.endNode = endNode;
     }
 
+    /**
+     * Returns the ID of the edge (this may not be unique, since it will
+     * @return
+     */
     public String getEdgeID() {
         return edgeID;
     }
@@ -71,6 +89,10 @@ public class TSPEdge {
         return getStartNode().toString() + "-" + getEndNode().toString();
     }
 
+    /**
+     * Used to generate a non-unique ID for this edge so that we can check if two edges are joining the same two nodes.
+     * @return String a string in the format "lowerNodeID:higherNodeID".
+     */
     private String generateID() {
         int startID = getStartNode().getNodeID();
         int endID = getEndNode().getNodeID();
