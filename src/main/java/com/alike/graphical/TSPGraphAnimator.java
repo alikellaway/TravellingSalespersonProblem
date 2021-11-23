@@ -7,6 +7,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Class runs at frame rate and views the graph object input during construction and then updates the canvas object
+ * input during construction to represent what the graph looks like in that during that moment. This is not synced with
+ * solution classes - it runs simultaneously.
+ * @author alike
+ */
 public class TSPGraphAnimator extends AnimationTimer {
     /**
      * The canvas on which we are animating.
@@ -29,30 +35,35 @@ public class TSPGraphAnimator extends AnimationTimer {
     private int editsPerRedraw;
 
     /**
-     * The diameter of the nodes in the animation.
+     * The drawn radius of the nodes.
      */
-    public static final int NODE_DIAMETER = 20; // Nice val = 15
+    public static final int NODE_RADIUS = 10; // Nice val = 10
+
+    /**
+     * The width of the edges that are drawn in the animation.
+     */
+    private static final double LINE_WIDTH = 2; // Nice val = 2/3/4
 
     /**
      * The color of the nodes in the animations.
      */
 //    public static final Color NODE_COLOR = Color.GREEN;
-    public static final Color NODE_COLOR = Color.rgb(62, 134, 180);
+    private static final Color NODE_COLOR = Color.rgb(62, 134, 180);
+
+    private static final Color NODE_OUTLINE_COLOR = Color.rgb(20, 20, 20);
+
+    private static final double NODE_OUTLINE_WIDTH = 2.5;
 
     /**
      * The color of the lines representing the edges of the graph in the animations.
      */
 //    public static final Color LINE_COLOR = Color.MAGENTA;
-    public static final Color LINE_COLOR = Color.rgb(199, 84, 80);
-
-
+    private static final Color LINE_COLOR = Color.rgb(199, 84, 80);
 
     /**
-     * The width of the edges that are drawn in the animation.
+     * The color of the window background.
      */
-    public static final double LINE_WIDTH = 3; // Nice val = 3/4
-
-    public static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
+    private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
 
     /**
      * Used to initialise a TSPGraphAnimator object.
@@ -111,8 +122,6 @@ public class TSPGraphAnimator extends AnimationTimer {
      */
     private void clearCanvas(GraphicsContext gc) {
         gc.clearRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
-//        gc.setFill(BACK_GROUND_COLOR);
-//        gc.fillRect(0.0, 0.0, scene.getWidth(), scene.getHeight());
     }
 
     /**
@@ -135,24 +144,47 @@ public class TSPGraphAnimator extends AnimationTimer {
      * Draws the currently stored graph in its current state into the graphicsContext of the current canvas.
      */
     public void drawGraph() {
-        TSPEdgeContainer edges = graph.getEdgeContainer();
+        // Design lines
         graphicsContext.setStroke(LINE_COLOR);
         graphicsContext.setLineWidth(LINE_WIDTH);
-        for (TSPEdge edge : edges.getEdgeSet()) {
-            Coordinate start = edge.getStartNode().getCoordinate();
-            Coordinate end = edge.getEndNode().getCoordinate();
-            Coordinate tempStart = new Coordinate(start.getX(), start.getY());
-            Coordinate tempEnd = new Coordinate(end.getX(), end.getY());
-            adjustCoordinateToCentreNode(tempStart);
-            adjustCoordinateToCentreNode(tempEnd);
-            graphicsContext.strokeLine(tempStart.getX(), tempStart.getY(), tempEnd.getX(), tempEnd.getY());
+        // graphicsContext.setLineDashes(5, 10); // Set lines to dotted
+        // Draw lines
+        for (TSPEdge edge : graph.getEdgeContainer().getEdgeSet()) {
+            drawEdge(edge);
         }
-
+        // Design nodes
         graphicsContext.setFill(TSPGraphAnimator.NODE_COLOR);
+        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
+        graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
+        // graphicsContext.setLineDashes(); // Turns of dotted lines when outlining nodes
+        // Draw nodes
         for (TSPNode node : graph.getNodeContainer().getNodeSet()) {
-            // gc.fillOval(x, y, w, h)
-            graphicsContext.fillOval(node.getX(), node.getY(), TSPGraphAnimator.NODE_DIAMETER, TSPGraphAnimator.NODE_DIAMETER);
+            drawNode(node);
         }
+    }
+
+    /**
+     * Draws an edge onto the current canvas.
+     * @param edge The edge to be drawn onto the current canvas.
+     */
+    private void drawEdge(TSPEdge edge) {
+        Coordinate start = edge.getStartNode().getCoordinate();
+        Coordinate end = edge.getEndNode().getCoordinate();
+        Coordinate tempStart = new Coordinate(start.getX(), start.getY());
+        Coordinate tempEnd = new Coordinate(end.getX(), end.getY());
+        adjustCoordinateToCentreNode(tempStart);
+        adjustCoordinateToCentreNode(tempEnd);
+        graphicsContext.strokeLine(tempStart.getX(), tempStart.getY(), tempEnd.getX(), tempEnd.getY());
+    }
+
+    /**
+     * Draws a node onto the current canvas.
+     * @param node The node to be drawn on the current canvas.
+     */
+    private void drawNode(TSPNode node) {
+        // Oval format : gc.fillOval(x, y, w, h)
+        graphicsContext.fillOval(node.getX(), node.getY(), NODE_RADIUS*2, NODE_RADIUS*2); // Main node
+        graphicsContext.strokeOval(node.getX(), node.getY(), NODE_RADIUS*2, NODE_RADIUS*2); // Node outline
     }
 
     /**
@@ -160,7 +192,7 @@ public class TSPGraphAnimator extends AnimationTimer {
      * @param c The coordinate to adjust.
      */
     private static void adjustCoordinateToCentreNode(Coordinate c) {
-        c.setX(c.getX() + TSPGraphAnimator.NODE_DIAMETER/2);
-        c.setY(c.getY() + TSPGraphAnimator.NODE_DIAMETER/2);
+        c.setX(c.getX() + TSPGraphAnimator.NODE_RADIUS);
+        c.setY(c.getY() + TSPGraphAnimator.NODE_RADIUS);
     }
 }
