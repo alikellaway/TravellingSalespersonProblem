@@ -5,37 +5,69 @@ import com.alike.customexceptions.NodeSuperimpositionException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Class used to represent and collate data on a travelling salesperson problem graph.
+ * TSPGraph.java
+ * @author alike
+ */
 public class TSPGraph {
 
+    /**
+     * The nodes of this graph object (stored in a @code{nodeContainer} object for easier management).
+     */
     private TSPNodeContainer nodeContainer;
+
+    /**
+     * The edges of this graph object (stored in an @code{edgeContainer} object for easier management).
+     */
     private TSPEdgeContainer edgeContainer;
 
-    public TSPGraph(TSPNodeContainer nodeContainer, TSPEdgeContainer edgeContainer) {
-        setNodeContainer(nodeContainer);
-        setEdgeContainer(edgeContainer);
-    }
-
+    /**
+     * Constructs a new graph with empty node and edge containers.
+     */
     public TSPGraph() {
         setNodeContainer(new TSPNodeContainer());
         setEdgeContainer(new TSPEdgeContainer());
     }
 
+    /**
+     * Returns the @code{nodeContainer} attribute of the TSPGraph object.
+     * @return @code{nodeContainer} The @code{nodeContainer} attribute of the TSPGraph object.
+     */
     public TSPNodeContainer getNodeContainer() {
         return nodeContainer;
     }
 
+    /**
+     * Sets the @code{nodeContainer} attribute to a new value.
+     * @param nodeContainer The new value to become the @code{nodeContainer} attribute.
+     */
     public void setNodeContainer(TSPNodeContainer nodeContainer) {
         this.nodeContainer = nodeContainer;
     }
 
+    /**
+     * Returns the @code{edgeContainer} attribute of the TSPGraph object.
+     * @return @code{edgeContainer} The value of the @code{edgeContainer} attribute.
+     */
     public TSPEdgeContainer getEdgeContainer() {
         return edgeContainer;
     }
 
+    /**
+     * Sets the @code{edgeContainer} attribute to a new value.
+     * @param edgeContainer The new value to assign to the @code{edgeContainer} attribute.
+     */
     public void setEdgeContainer(TSPEdgeContainer edgeContainer) {
         this.edgeContainer = edgeContainer;
     }
 
+    /**
+     * Used to generate a random TSPGraph object with randomized node positions and randomized edges (if needed).
+     * @param numNodes The number of nodes the random graph must have.
+     * @param addEdges Whether or not the method should output a graph with randomized edges already assigned.
+     * @return @code{g} A new randomized TSPGraph object.
+     */
     public static TSPGraph generateRandomGraph(int numNodes, boolean addEdges) {
         // Create our graph to draw
         TSPNodeContainer nSet = new TSPNodeContainer();
@@ -63,6 +95,10 @@ public class TSPGraph {
         return g;
     }
 
+    /**
+     * Used to represent a TSPGraph object as a string - output the object in JSON format.
+     * @return String The TSPGraph represented as a JSON format string.
+     */
     @Override
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();
