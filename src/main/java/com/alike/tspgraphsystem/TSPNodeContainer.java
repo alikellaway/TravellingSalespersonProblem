@@ -94,11 +94,11 @@ public class TSPNodeContainer {
      * Returns an array containing all the node IDs of the nodes in the set of this container.
      * @return int[] An array containing all the node IDs of the nodes in the set of this container.
      */
-    public int[] getNodeIDs() {
+    public ArrayList<Integer> getNodeIDs() {
         ArrayList<TSPNode> nodes = getNodeSet();
-        int[] nodeIDs = new int[nodes.size()];
+        ArrayList<Integer> nodeIDs = new ArrayList<>(nodes.size());
         for (int i = 0; i < nodes.size() - 1; i++) {
-            nodeIDs[i] = nodes.get(i).getNodeID();
+             nodeIDs.add(nodes.get(i).getNodeID());
         }
         return nodeIDs;
     }
