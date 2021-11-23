@@ -7,8 +7,6 @@ module com.alike {
 
 
     exports com.alike.customexceptions;
-//    exports com.alike.tspgraphsystem;
-//    exports com.alike.graphical;
     exports com.alike to com.fasterxml.jackson.databind, javafx.graphics;
     exports com.alike.graphical to javafx.graphics;
     exports com.alike.tspgraphsystem to com.fasterxml.jackson.databind;

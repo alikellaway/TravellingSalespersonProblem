@@ -1,6 +1,7 @@
 package com.alike.solutions;
 
 import com.alike.Main;
+import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.InvalidGraphException;
 import com.alike.tspgraphsystem.*;
 import javafx.util.Pair;
@@ -53,7 +54,7 @@ public class NearestNeighbourSolver {
      * @return Returns the graph (with the solution in the edgeContainer) and a double describing how long the found
      * route was.
      */
-    public Pair<TSPGraph, Double> runSolution(long delayPerStep) throws InterruptedException {
+    public Pair<TSPGraph, Double> runSolution(long delayPerStep) throws InterruptedException, EdgeSuperimpositionException {
         // Set our current node to be the first node in the list of nodes.
         setCurrentNode(nodeContainer.getNodeSet().get(0));
         currentNode.setVisited(true); // Set it as visited
@@ -104,16 +105,16 @@ public class NearestNeighbourSolver {
     /**
      * Traverse the algorithm to the next closes node.
      */
-    private void traverseToNextClosestNode() {
+    private void traverseToNextClosestNode() throws EdgeSuperimpositionException {
         // Find the next closest unvisited node.
         TSPNode nextNode = findClosestUnvistedNode();
         // Add an edge between the current node and the next closest node.
-        edgeContainer.getEdgeSet().add(new TSPEdge(currentNode, nextNode));
+        edgeContainer.add(new TSPEdge(currentNode, nextNode));
         nextNode.setVisited(true); // Set that node to visited.
-        System.out.println(nextNode.isVisited());
+        // System.out.println(nextNode.isVisited());
         setCurrentNode(nextNode); // Change the current node.
         numNodesVisited++;
         // Debug verbosity
-        System.out.println("Travelled to: " + currentNode.toString() + ", " + nextNode.getNodeID() + ", " + numNodesVisited);
+        // System.out.println("Travelled to: " + currentNode.toString() + ", " + nextNode.getNodeID() + ", " + numNodesVisited);
     }
 }
