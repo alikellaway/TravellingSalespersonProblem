@@ -7,14 +7,52 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class TSPGraphAnimator extends AnimationTimer {
-
+    /**
+     * The canvas on which we are animating.
+     */
     private Canvas canvas;
-    private TSPGraph graph;
-    private GraphicsContext graphicsContext;
-    private int editsPerRedraw;
-    public static final int NODE_DIAMETER = 15;
-    public static final Color NODE_COLOR = Color.RED;
 
+    /**
+     * The graph which we are animating.
+     */
+    private TSPGraph graph;
+
+    /**
+     * The graphics context of the canvas object.
+     */
+    private GraphicsContext graphicsContext;
+
+    /**
+     * The amount of edits to a graph after which we will redraw it (for optimisation algorithms or big maps).
+     */
+    private int editsPerRedraw;
+
+    /**
+     * The diameter of the nodes in the animation.
+     */
+    public static final int NODE_DIAMETER = 15;
+
+    /**
+     * The color of the nodes in the animations.
+     */
+    public static final Color NODE_COLOR = Color.BLACK;
+
+    /**
+     * The color of the lines representing the edges of the graph in the animations.
+     */
+    public static final Color LINE_COLOR = Color.MAGENTA;
+
+    /**
+     * The width of the edges that are drawn in the animation.
+     */
+    public static final double LINE_WIDTH = 3;
+
+    /**
+     * Used to initialise a TSPGraphAnimator object.
+     * @param graph The graph that will be animated.
+     * @param canvas The canvas we will be drawing to.
+     * @param editsPerRedraw The value to assign to the @code{editsPerRedraw} attribute.
+     */
     public TSPGraphAnimator(TSPGraph graph, Canvas canvas, int editsPerRedraw) {
         setGraph(graph);
         setCanvas(canvas);
@@ -22,61 +60,86 @@ public class TSPGraphAnimator extends AnimationTimer {
         setEditsPerRedraw(editsPerRedraw);
     }
 
+    /**
+     * The code run each frame of the animation.
+     * @param l The length of each frame (nanoseconds).
+     */
     @Override
     public void handle(long l) {
         if (graph.getEdgeContainer().getEditCount() % editsPerRedraw == 0) {
             clearCanvas(graphicsContext);
-            drawGraph(graph, graphicsContext);
+            drawGraph();
         }
     }
 
-    public TSPGraph getGraph() {
-        return graph;
-    }
-
+    /**
+     * Sets the @code{graph} attribute to a new value.
+     * @param graph The new value to set the @code{graph} attribute to.
+     */
     public void setGraph(TSPGraph graph) {
         this.graph = graph;
     }
 
+    /**
+     * Returns the value of the @code{graphicsContext} attribute.
+     * @return @code{graphicsContext} The value of the @code{graphicsContext} attribute.
+     */
     public GraphicsContext getGraphicsContext() {
         return graphicsContext;
     }
 
+    /**
+     * Sets the value of the @code{graphicsContext} attribute to a new value.
+     * @param graphicsContext The new value to assign the @code{graphicsContext}.
+     */
     public void setGraphicsContext(GraphicsContext graphicsContext) {
         this.graphicsContext = graphicsContext;
     }
 
     /**
-     * Clears a canvas.
+     * Clears a canvas (makes the canvas white, so we can redraw the graph).
+     * @param gc The @code{graphicsContext} attribute of the canvas object.
      */
     private void clearCanvas(GraphicsContext gc) {
         gc.clearRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
     }
 
-    public Canvas getCanvas() {
-        return canvas;
-    }
-
+    /**
+     * Sets the @code{canvas} attribute to a new value.
+     * @param canvas The new value to assign the @code{canvas} attribute.
+     */
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getEditsPerRedraw() {
         return editsPerRedraw;
     }
 
+    /**
+     * Sets the @code{editsPerRedraw} attribute to a new value.
+     * @param editsPerRedraw The new value to assign the @code{editsPerRedraw} attribute.
+     */
     public void setEditsPerRedraw(int editsPerRedraw) {
         this.editsPerRedraw = editsPerRedraw;
     }
 
-    public void drawGraph(TSPGraph graph, GraphicsContext gc) {
-        gc.setFill(TSPGraphAnimator.NODE_COLOR);
-        gc.setStroke(Color.BLACK);
+    /**
+     * Draws the currently stored graph in its current state into the graphicsContext of the current canvas.
+     */
+    public void drawGraph() {
+        graphicsContext.setFill(TSPGraphAnimator.NODE_COLOR);
         for (TSPNode node : graph.getNodeContainer().getNodeSet()) {
             // gc.fillOval(x, y, w, h)
-            gc.fillOval(node.getX(), node.getY(), TSPGraphAnimator.NODE_DIAMETER, TSPGraphAnimator.NODE_DIAMETER);
+            graphicsContext.fillOval(node.getX(), node.getY(), TSPGraphAnimator.NODE_DIAMETER, TSPGraphAnimator.NODE_DIAMETER);
         }
         TSPEdgeContainer edges = graph.getEdgeContainer();
+        graphicsContext.setStroke(LINE_COLOR);
+        graphicsContext.setLineWidth(LINE_WIDTH);
         for (TSPEdge edge : edges.getEdgeSet()) {
             Coordinate start = edge.getStartNode().getCoordinate();
             Coordinate end = edge.getEndNode().getCoordinate();
@@ -84,10 +147,14 @@ public class TSPGraphAnimator extends AnimationTimer {
             Coordinate tempEnd = new Coordinate(end.getX(), end.getY());
             adjustCoordinateToCentreNode(tempStart);
             adjustCoordinateToCentreNode(tempEnd);
-            gc.strokeLine(tempStart.getX(), tempStart.getY(), tempEnd.getX(), tempEnd.getY());
+            graphicsContext.strokeLine(tempStart.getX(), tempStart.getY(), tempEnd.getX(), tempEnd.getY());
         }
     }
 
+    /**
+     * Used to adjust coordinates of edges so that they appear to end and start in the middle of drawn nodes.
+     * @param c The coordinate to adjust.
+     */
     private static void adjustCoordinateToCentreNode(Coordinate c) {
         c.setX(c.getX() + TSPGraphAnimator.NODE_DIAMETER/2);
         c.setY(c.getY() + TSPGraphAnimator.NODE_DIAMETER/2);
