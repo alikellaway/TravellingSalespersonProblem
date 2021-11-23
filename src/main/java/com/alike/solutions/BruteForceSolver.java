@@ -1,6 +1,6 @@
 package com.alike.solutions;
 
-import com.alike.Permuter;
+import com.alike.solution_helpers.Permuter;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.NonExistentNodeException;
 import com.alike.customexceptions.PermutationExhaustionException;

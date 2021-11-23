@@ -1,4 +1,4 @@
-package com.alike;
+package com.alike.solution_helpers;
 
 import com.alike.customexceptions.PermutationExhaustionException;
 import com.alike.customexceptions.PermutationFocusException;

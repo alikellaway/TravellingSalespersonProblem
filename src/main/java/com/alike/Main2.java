@@ -4,6 +4,7 @@ package com.alike;
 
 import com.alike.customexceptions.PermutationExhaustionException;
 import com.alike.customexceptions.PermutationFocusException;
+import com.alike.solution_helpers.Permuter;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class Main2 {
 
 
 
-        Permuter<Integer> p1 = new Permuter<Integer>(a);
+        Permuter<Integer> p1 = new Permuter<>(a);
         try {
 //        System.out.println(p1.getCurrentPermutation());
 //        System.out.println(p1.getCurrentPermutation());
