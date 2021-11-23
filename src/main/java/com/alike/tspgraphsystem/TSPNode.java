@@ -78,7 +78,7 @@ public class TSPNode {
      */
     @Override
     public String toString() {
-        return getCoordinate().toString();
+        return getCoordinate().toString() + ":" + getNodeID();
     }
 
     /**
