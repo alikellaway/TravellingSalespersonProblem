@@ -125,4 +125,9 @@ public class TSPEdgeContainer {
         }
         return totalLength;
     }
+
+    @Override
+    public String toString() {
+        return getEdgeSet().toString();
+    }
 }
