@@ -13,14 +13,28 @@ import java.util.ArrayList;
  */
 public class TSPNodeContainer {
 
+    /**
+     * The set of nodes that this container manages.
+     */
     private ArrayList<TSPNode> nodeSet;
 
+    /**
+     * The name of this node set (if applicable).
+     */
     private String name;
 
+    /**
+     * Used to initialise a new empty TSPNodeContainer object.
+     */
     public TSPNodeContainer() {
         nodeSet = new ArrayList<>();
     }
 
+    /**
+     * Used to initialise a new filled TSPNodeContainer.
+     * @param nodeSet The set of nodes that will populate the container.
+     * @throws NodeSuperimpositionException Thrown if two nodes occupy the same coordinates in the input node set.
+     */
     public TSPNodeContainer(ArrayList<TSPNode> nodeSet) throws NodeSuperimpositionException {
         checkNodeSetForSuperimposition(nodeSet);
         nodeSet = new ArrayList<>();
@@ -28,6 +42,12 @@ public class TSPNodeContainer {
         nodeSet.trimToSize();
     }
 
+    /**
+     * Used to add a new node to container.
+     * @param n The new node to add.
+     * @throws NodeSuperimpositionException Thrown if the new node's coordinates are already occupied by a node already
+     * in this container.
+     */
     public void add(TSPNode n) throws NodeSuperimpositionException {
         if (!isCoordinateOccupied(n.getCoordinate())) {
             nodeSet.add(n);
@@ -38,11 +58,20 @@ public class TSPNodeContainer {
         }
     }
 
+    /**
+     * Used to remove a node from this container.
+     * @param n The node to remove.
+     */
     public void remove(TSPNode n) {
         nodeSet.remove(n);
         nodeSet.trimToSize();
     }
 
+    /**
+     * Used to check if the input coordinates are occupied by a node in this container.
+     * @param c The coordinates to check for occupation.
+     * @return boolean true if the coordinates are occupied by a node, false if not.
+     */
     public boolean isCoordinateOccupied(Coordinate c) {
         for (TSPNode n : nodeSet) {
             if (n.getCoordinate().equals(c)) {
@@ -52,6 +81,11 @@ public class TSPNodeContainer {
         return false;
     }
 
+    /**
+     * Used to check an input node set for nodes occupying the same coordinates.
+     * @param nSet The node set to check.
+     * @throws NodeSuperimpositionException Thrown if nodes where found to occupy the same coordinates.
+     */
     public void checkNodeSetForSuperimposition(ArrayList<TSPNode> nSet) throws NodeSuperimpositionException {
         for (TSPNode n : nSet) {
             for (int i = nSet.indexOf(n) + 1; i < nSet.size(); i++) {
@@ -63,23 +97,28 @@ public class TSPNodeContainer {
         }
     }
 
+    /**
+     * Sets the node set to a new value.
+     * @param nodeSet The new value to become the node set.
+     * @throws NodeSuperimpositionException Thrown if the new node set contains nodes occupying the same coordinates.
+     */
     public void setNodeSet(ArrayList<TSPNode> nodeSet) throws NodeSuperimpositionException {
         checkNodeSetForSuperimposition(nodeSet);
         this.nodeSet = nodeSet;
     }
 
+    /**
+     * Returns the value of the @code{nodeSet} attribute.
+     * @return @code{nodeSet} The value of the nodeSet attribute of this TSPNodeContainer object.
+     */
     public ArrayList<TSPNode> getNodeSet() {
         return nodeSet;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    /**
+     * Used to represent this TSPNodeContainer object as a JSON format string.
+     * @return String This container as a JSON format string.
+     */
     @Override
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();
