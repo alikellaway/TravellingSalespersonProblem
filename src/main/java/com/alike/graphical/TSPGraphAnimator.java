@@ -2,6 +2,7 @@ package com.alike.graphical;
 
 import com.alike.tspgraphsystem.*;
 import javafx.animation.AnimationTimer;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -30,22 +31,28 @@ public class TSPGraphAnimator extends AnimationTimer {
     /**
      * The diameter of the nodes in the animation.
      */
-    public static final int NODE_DIAMETER = 15;
+    public static final int NODE_DIAMETER = 20; // Nice val = 15
 
     /**
      * The color of the nodes in the animations.
      */
-    public static final Color NODE_COLOR = Color.BLACK;
+//    public static final Color NODE_COLOR = Color.GREEN;
+    public static final Color NODE_COLOR = Color.rgb(62, 134, 180);
 
     /**
      * The color of the lines representing the edges of the graph in the animations.
      */
-    public static final Color LINE_COLOR = Color.MAGENTA;
+//    public static final Color LINE_COLOR = Color.MAGENTA;
+    public static final Color LINE_COLOR = Color.rgb(199, 84, 80);
+
+
 
     /**
      * The width of the edges that are drawn in the animation.
      */
-    public static final double LINE_WIDTH = 3;
+    public static final double LINE_WIDTH = 3; // Nice val = 3/4
+
+    public static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
 
     /**
      * Used to initialise a TSPGraphAnimator object.
@@ -53,11 +60,13 @@ public class TSPGraphAnimator extends AnimationTimer {
      * @param canvas The canvas we will be drawing to.
      * @param editsPerRedraw The value to assign to the @code{editsPerRedraw} attribute.
      */
-    public TSPGraphAnimator(TSPGraph graph, Canvas canvas, int editsPerRedraw) {
+    public TSPGraphAnimator(Scene scene, Canvas canvas, TSPGraph graph, int editsPerRedraw) {
         setGraph(graph);
         setCanvas(canvas);
         setGraphicsContext(canvas.getGraphicsContext2D());
         setEditsPerRedraw(editsPerRedraw);
+        scene.setFill(BACK_GROUND_COLOR);
+
     }
 
     /**
@@ -102,6 +111,8 @@ public class TSPGraphAnimator extends AnimationTimer {
      */
     private void clearCanvas(GraphicsContext gc) {
         gc.clearRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
+//        gc.setFill(BACK_GROUND_COLOR);
+//        gc.fillRect(0.0, 0.0, scene.getWidth(), scene.getHeight());
     }
 
     /**
@@ -110,14 +121,6 @@ public class TSPGraphAnimator extends AnimationTimer {
      */
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getEditsPerRedraw() {
-        return editsPerRedraw;
     }
 
     /**
@@ -132,11 +135,6 @@ public class TSPGraphAnimator extends AnimationTimer {
      * Draws the currently stored graph in its current state into the graphicsContext of the current canvas.
      */
     public void drawGraph() {
-        graphicsContext.setFill(TSPGraphAnimator.NODE_COLOR);
-        for (TSPNode node : graph.getNodeContainer().getNodeSet()) {
-            // gc.fillOval(x, y, w, h)
-            graphicsContext.fillOval(node.getX(), node.getY(), TSPGraphAnimator.NODE_DIAMETER, TSPGraphAnimator.NODE_DIAMETER);
-        }
         TSPEdgeContainer edges = graph.getEdgeContainer();
         graphicsContext.setStroke(LINE_COLOR);
         graphicsContext.setLineWidth(LINE_WIDTH);
@@ -148,6 +146,12 @@ public class TSPGraphAnimator extends AnimationTimer {
             adjustCoordinateToCentreNode(tempStart);
             adjustCoordinateToCentreNode(tempEnd);
             graphicsContext.strokeLine(tempStart.getX(), tempStart.getY(), tempEnd.getX(), tempEnd.getY());
+        }
+
+        graphicsContext.setFill(TSPGraphAnimator.NODE_COLOR);
+        for (TSPNode node : graph.getNodeContainer().getNodeSet()) {
+            // gc.fillOval(x, y, w, h)
+            graphicsContext.fillOval(node.getX(), node.getY(), TSPGraphAnimator.NODE_DIAMETER, TSPGraphAnimator.NODE_DIAMETER);
         }
     }
 
