@@ -69,7 +69,7 @@ public class TSPGraph {
      * @return @code{g} A new randomized TSPGraph object.
      */
     public static TSPGraph generateRandomGraph(int numNodes, boolean addEdges) {
-        // Create our graph to draw
+        // Create some random nodes
         TSPNodeContainer nSet = new TSPNodeContainer();
         for (int i = 0; i < numNodes; i++) {
             try {
@@ -78,9 +78,9 @@ public class TSPGraph {
                 i--;
             }
         }
+        // Create an empty edge set.
         TSPEdgeContainer eSet = new TSPEdgeContainer();
-        if (addEdges) {
-
+        if (addEdges) { // Fill with random edges using trial and error if edges are required.
             for (int x = 0; x < numNodes; x++) {
                 try {
                     eSet.add(new TSPEdge(nSet.getNodeSet().get(x), nSet.getNodeSet().get((x + 1) % numNodes)));
@@ -89,6 +89,7 @@ public class TSPGraph {
                 }
             }
         }
+        // Construct a new TSPGraph object and return it.
         TSPGraph g = new TSPGraph();
         g.setNodeContainer(nSet);
         g.setEdgeContainer(eSet);
