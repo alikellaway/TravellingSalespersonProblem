@@ -1,6 +1,7 @@
 package com.alike.tspgraphsystem;
 
 import com.alike.customexceptions.NodeSuperimpositionException;
+import com.alike.customexceptions.NonExistentNodeException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -101,5 +102,20 @@ public class TSPNodeContainer {
              nodeIDs.add(nodes.get(i).getNodeID());
         }
         return nodeIDs;
+    }
+
+    /**
+     * Returns a node object given its unique identified (ID).
+     * @param id The ID attribute of the node you wish to get.
+     * @return TSPNode The node with matching ID to input.
+     * @throws NonExistentNodeException Thrown if the node was not found.
+     */
+    public TSPNode getNodeByID(int id) throws NonExistentNodeException {
+        for (TSPNode n : getNodeSet()) {
+            if (n.getNodeID() == id) {
+                return n;
+            }
+        }
+        throw new NonExistentNodeException("No node found with ID: " + id);
     }
 }
