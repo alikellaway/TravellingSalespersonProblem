@@ -2,6 +2,7 @@ package com.alike;
 
 import com.alike.customexceptions.*;
 import com.alike.graphical.TSPGraphAnimator;
+import com.alike.solutions.AntColonyOptimizationSolver;
 import com.alike.solutions.BruteForceSolver;
 import com.alike.solutions.NearestNeighbourSolver;
 import com.alike.tspgraphsystem.TSPGraph;
@@ -40,20 +41,21 @@ public class Main extends Application {
 
     private static TSPGraph nnsGraph = TSPGraph.generateRandomGraph(1000, false);
     private static TSPGraph bsGraph = TSPGraph.generateRandomGraph(6, false);
+    private static TSPGraph acosGraph = TSPGraph.generateRandomGraph(9, false);
 
 
     public static void main(String[] args) {
 
         // Nearest neighbour solver
-        Thread nnsT = new Thread(() -> {
-            try {
-                NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
-                nns.runSolution(100);
-            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException e) {
-                e.printStackTrace();
-            }
-        });
-        nnsT.start();
+//        Thread nnsT = new Thread(() -> {
+//            try {
+//                NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
+//                nns.runSolution(100);
+//            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//        nnsT.start();
         // Brute force solver
 //        Thread bsT = new Thread(() -> {
 //           try {
@@ -67,6 +69,12 @@ public class Main extends Application {
 //           }
 //        });
 //        bsT.start();
+        // Ant Colony Optimisation Solver
+        Thread acosT = new Thread(() -> {
+            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
+            acos.runSolution();
+        });
+        acosT.start();
         launch(args);
     }
 
@@ -81,7 +89,7 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
 
-        TSPGraphAnimator drawer = new TSPGraphAnimator(scene, canvas, nnsGraph,1);
+        TSPGraphAnimator drawer = new TSPGraphAnimator(scene, canvas, acosGraph,1);
         drawer.start();
     }
 }
