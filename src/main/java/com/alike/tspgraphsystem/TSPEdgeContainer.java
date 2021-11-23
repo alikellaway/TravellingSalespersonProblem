@@ -8,28 +8,38 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * Used to mange sets of edges for use in TSPGraph objects.
+ * Used to manage a set of TSPEdge objects for use in TSPGraph objects.
  * @author alike
  */
 public class TSPEdgeContainer {
-
+    /**
+     * The collection of edges that are managed by this @code{TSPEdgeContainer} object.
+     */
     public ArrayList<TSPEdge> edgeSet;
 
+    /**
+     * The number of times this edge container has been edited (for use during heuristic and optimisation algorithms)
+     */
     private int editCount;
 
+    /**
+     * Used to lock the object to avoid concurrency issues.
+     */
     public final ReadWriteLock lock = new ReentrantReadWriteLock();
 
+    /**
+     * Used to initialise a new empty @code{TSPEdgeContainer} object.
+     */
     public TSPEdgeContainer() {
         edgeSet = new ArrayList<>();
         editCount = 0;
     }
 
-    public TSPEdgeContainer(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
-        setEdgeSet(edgeSet);
-        edgeSet.trimToSize();
-        editCount = 0;
-    }
-
+    /**
+     * Used to add to the edge set in this edge container object.
+     * @param e A new TSPEdge object to add to this container.
+     * @throws EdgeSuperimpositionException Thrown if the edg already exists inside this edge object.
+     */
     public void add(TSPEdge e) throws EdgeSuperimpositionException {
         lock.writeLock().lock();
         try {
@@ -45,6 +55,10 @@ public class TSPEdgeContainer {
         }
     }
 
+    /**
+     * Used to remove edges from this container.
+     * @param e The edge to remove from this container.
+     */
     public void remove(TSPEdge e) {
         lock.writeLock().lock();
         try {
@@ -57,6 +71,11 @@ public class TSPEdgeContainer {
 
     }
 
+    /**
+     * Used to check that an input edgeSet doesn't have any superimposed edges.
+     * @param edgeSet The edge set to check.
+     * @throws EdgeSuperimpositionException Thrown if the edge set has superimposed edges.
+     */
     private void checkEdgeSetForSuperimposition(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
         lock.readLock().lock();
         try {
@@ -73,6 +92,11 @@ public class TSPEdgeContainer {
         }
     }
 
+    /**
+     * Used to set the edgeSet attribute of this container to a new edge set.
+     * @param edgeSet The new edge set to become the edge set of this container.
+     * @throws EdgeSuperimpositionException Thrown if the input edge set has superimposed edges.
+     */
     public void setEdgeSet(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
         lock.writeLock().lock();
         try {
@@ -82,9 +106,12 @@ public class TSPEdgeContainer {
         } finally {
             lock.writeLock().lock();
         }
-
     }
 
+    /**
+     * Returns the @code{edgeSet} attribute of this TSPEdgeContainer object.
+     * @return edgeSet The @code{edgeSet} attribute.
+     */
     public ArrayList<TSPEdge> getEdgeSet() {
         lock.readLock().lock();
         try {
@@ -94,6 +121,11 @@ public class TSPEdgeContainer {
         }
     }
 
+    /**
+     * Used to check if an edge currently exists inside this container.
+     * @param e The edge to check existance for.
+     * @return boolean: true if the edge already exists in this container, false if it does not.
+     */
     private boolean edgeExists(TSPEdge e) {
         lock.readLock().lock();
         try {
@@ -109,6 +141,10 @@ public class TSPEdgeContainer {
 
     }
 
+    /**
+     * Returns the value of the @code{editCount} attribute.
+     * @return @code{editCount} The value of the @code{editCount} attribute.
+     */
     public int getEditCount() {
         lock.readLock().lock();
         try {
@@ -118,6 +154,10 @@ public class TSPEdgeContainer {
         }
     }
 
+    /**
+     * Calculates the total length of the edges currently within the container.
+     * @return totalLenght The total length of the edges in the container.
+     */
     public double calculateCurrentRouteLength() {
         double totalLength = 0;
         for (TSPEdge e : edgeSet) {
@@ -127,6 +167,10 @@ public class TSPEdgeContainer {
         return totalLength;
     }
 
+    /**
+     * Outputs this TSPEdgeContainer into a JSON format string.
+     * @return
+     */
     @Override
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();
