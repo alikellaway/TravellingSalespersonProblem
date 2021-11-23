@@ -89,4 +89,17 @@ public class TSPNodeContainer {
         }
         return "Failed to load TSPNodeContainer object into JSON format.";
     }
+
+    /**
+     * Returns an array containing all the node IDs of the nodes in the set of this container.
+     * @return int[] An array containing all the node IDs of the nodes in the set of this container.
+     */
+    public int[] getNodeIDs() {
+        ArrayList<TSPNode> nodes = getNodeSet();
+        int[] nodeIDs = new int[nodes.size()];
+        for (int i = 0; i < nodes.size() - 1; i++) {
+            nodeIDs[i] = nodes.get(i).getNodeID();
+        }
+        return nodeIDs;
+    }
 }
