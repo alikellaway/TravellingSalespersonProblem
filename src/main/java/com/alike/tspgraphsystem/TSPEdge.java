@@ -74,7 +74,7 @@ public class TSPEdge {
 
     /**
      * Returns the ID of the edge (this may not be unique, since it will
-     * @return
+     * @return edgeID The ID of the edge (non-unique).
      */
     public String getEdgeID() {
         return edgeID;
@@ -86,7 +86,7 @@ public class TSPEdge {
 
     @Override
     public String toString() {
-        return getStartNode().toString() + "-" + getEndNode().toString();
+        return getStartNode().toString() + " -- " + getEndNode().toString();
     }
 
     /**
