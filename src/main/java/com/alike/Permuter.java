@@ -1,12 +1,12 @@
 package com.alike;
 
 import com.alike.customexceptions.PermutationExhaustionException;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This class is used to calculate and manage the permutations of a list object.
+ * @author alike
  * @param <T> The object type in the list that will be permuted.
  */
 public class Permuter<T> {
@@ -19,11 +19,19 @@ public class Permuter<T> {
      */
     private int focusIdx = 0;
 
+    /**
+     * Constructs a new Permuter object and calculates all the permutations.
+     * @param inputArray The list of which we wish to find the permutations of.
+     */
     public Permuter(List<T> inputArray) {
         perms = generatePermutations(inputArray);
-        System.out.println(perms);
     }
 
+    /**
+     * Generates the permutations of the elements in the input lists and sets the @code{perms} attribute equal to that.
+     * @param inputArray The list of which to calculate the permutations of.
+     * @return output A list of permutations of the input array.
+     */
     private List<List<T>> generatePermutations(List<T> inputArray) {
         // If an empty array list is entered, we have no permutations so output an empty permutation set.
         if (inputArray.isEmpty()) {
@@ -44,7 +52,11 @@ public class Permuter<T> {
         return output;
     }
 
-
+    /**
+     * Returns the next permutation in the list of permutations.
+     * @return @code{nextPerm} The next permutation in the list of permutations.
+     * @throws PermutationExhaustionException Thrown if we exhaust the permutations in the list.
+     */
     public List<T> getNextPermutation() throws PermutationExhaustionException {
         if (focusIdx >= perms.size()) {
             throw new PermutationExhaustionException("No more permutations to view in the Permuter object.");
