@@ -98,7 +98,7 @@ public class TSPNodeContainer {
     public ArrayList<Integer> getNodeIDs() {
         ArrayList<TSPNode> nodes = getNodeSet();
         ArrayList<Integer> nodeIDs = new ArrayList<>(nodes.size());
-        for (int i = 0; i < nodes.size() - 1; i++) {
+        for (int i = 0; i <= nodes.size() - 1; i++) {
              nodeIDs.add(nodes.get(i).getNodeID());
         }
         return nodeIDs;
