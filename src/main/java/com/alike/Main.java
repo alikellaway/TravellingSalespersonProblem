@@ -3,6 +3,7 @@ package com.alike;
 import com.alike.customexceptions.*;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solutions.BruteForceSolver;
+import com.alike.solutions.NearestNeighbourSolver;
 import com.alike.tspgraphsystem.TSPGraph;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -15,57 +16,57 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 400;
+    public static final int COORDINATE_MAX_WIDTH = 1800;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 400;
+    public static final int COORDINATE_MAX_HEIGHT = 900;
 
     /**
      * The maximum width value the window and canvas can be given.
      */
-    public static final int WINDOW_MAX_WIDTH = (int) Math.ceil(COORDINATE_MAX_WIDTH + TSPGraphAnimator.NODE_DIAMETER);
+    public static final int WINDOW_MAX_WIDTH = (int) Math.ceil(COORDINATE_MAX_WIDTH + TSPGraphAnimator.NODE_RADIUS*2);
 
     /**
      * The maximum height value the window and canvas can be given.
      */
-    public static final int WINDOW_MAX_HEIGHT =(int) Math.ceil(COORDINATE_MAX_HEIGHT + TSPGraphAnimator.NODE_DIAMETER);
+    public static final int WINDOW_MAX_HEIGHT = (int) Math.ceil(COORDINATE_MAX_HEIGHT + TSPGraphAnimator.NODE_RADIUS*2);
 
     /**
      * The name of the window.
      */
     private final String STAGE_TITLE = "TSP";
 
-    private static TSPGraph nnsGraph = TSPGraph.generateRandomGraph(100000, false);
-    private static TSPGraph bsGraph = TSPGraph.generateRandomGraph(4, false);
+    private static TSPGraph nnsGraph = TSPGraph.generateRandomGraph(1000, false);
+    private static TSPGraph bsGraph = TSPGraph.generateRandomGraph(6, false);
 
 
     public static void main(String[] args) {
 
         // Nearest neighbour solver
-//        Thread nnsT = new Thread(() -> {
-//            try {
-//                NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
-//                nns.runSolution(0);
-//            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        nnsT.start();
-        // Brute force solver
-        Thread bsT = new Thread(() -> {
-           try {
-               BruteForceSolver bs = new BruteForceSolver(bsGraph);
-               Pair<TSPGraph, Double> solutionOutput = bs.runSolution(1);
-               System.out.println(solutionOutput.getKey());
-               System.out.println(solutionOutput.getValue());
-
-           } catch (PermutationExhaustionException | EdgeSuperimpositionException | PermutationFocusException | NonExistentNodeException | InterruptedException e) {
-               e.printStackTrace();
-           }
+        Thread nnsT = new Thread(() -> {
+            try {
+                NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
+                nns.runSolution(100);
+            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException e) {
+                e.printStackTrace();
+            }
         });
-        bsT.start();
+        nnsT.start();
+        // Brute force solver
+//        Thread bsT = new Thread(() -> {
+//           try {
+//               BruteForceSolver bs = new BruteForceSolver(bsGraph);
+//               Pair<TSPGraph, Double> solutionOutput = bs.runSolution(100);
+//               System.out.println(solutionOutput.getKey());
+//               System.out.println(solutionOutput.getValue());
+//
+//           } catch (PermutationExhaustionException | EdgeSuperimpositionException | PermutationFocusException | NonExistentNodeException | InterruptedException e) {
+//               e.printStackTrace();
+//           }
+//        });
+//        bsT.start();
         launch(args);
     }
 
@@ -80,7 +81,7 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
 
-        TSPGraphAnimator drawer = new TSPGraphAnimator(scene, canvas, bsGraph,1);
+        TSPGraphAnimator drawer = new TSPGraphAnimator(scene, canvas, nnsGraph,1);
         drawer.start();
     }
 }
