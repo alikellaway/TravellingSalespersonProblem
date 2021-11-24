@@ -5,6 +5,7 @@ import com.alike.solution_helpers.AtomicDouble;
 import com.alike.tspgraphsystem.TSPEdgeContainer;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPNode;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -50,7 +51,7 @@ public class AntColonyOptimizationSolver {
         initialisePheremoneLevels();
     }
 
-    public void runSolution() {
+    public Pair<TSPGraph, Double> runSolution() {
         // Activate all ants
         for (int x = 0; x < numberOfAnts; x++) {
             executorCompletionService.submit(new Ant(this));
@@ -61,6 +62,7 @@ public class AntColonyOptimizationSolver {
         }
         processAnts();
         getExecutorService().shutdown();
+        return new Pair<>(graph, graph.getEdgeContainer().calculateCurrentRouteLength());
     }
 
     private void processAnts() {

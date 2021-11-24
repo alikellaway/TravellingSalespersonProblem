@@ -72,7 +72,9 @@ public class Main extends Application {
         // Ant Colony Optimisation Solver
         Thread acosT = new Thread(() -> {
             AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
-            acos.runSolution();
+            Pair<TSPGraph, Double> solOutput = acos.runSolution();
+            System.out.println(solOutput.getKey());
+            System.out.println(solOutput.getValue());
         });
         acosT.start();
         launch(args);
