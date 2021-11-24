@@ -25,11 +25,6 @@ public class AntColonyOptimizationSolver {
      */
     private TSPGraph graph;
 
-    /**
-     * The number of ants that will traverse the graph to be solved by this solver class.
-     */
-    private final int numberOfAnts = 500;
-
     private static final double PROCESSING_CYCLE_PROBABILITY = 0.8;
 
     private TSPEdgeContainer shortestRoute;
@@ -43,6 +38,8 @@ public class AntColonyOptimizationSolver {
 
     private int activeAnts = 0;
 
+    private int delayPerStep;
+
     public AntColonyOptimizationSolver(TSPGraph graph) {
         setGraph(graph);
         setExecutorService(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
@@ -51,9 +48,10 @@ public class AntColonyOptimizationSolver {
         initialisePheremoneLevels();
     }
 
-    public Pair<TSPGraph, Double> runSolution() {
+    public Pair<TSPGraph, Double> runSolution(int numAnts, int delayPerStep) {
+        setDelayPerStep(delayPerStep);
         // Activate all ants
-        for (int x = 0; x < numberOfAnts; x++) {
+        for (int x = 0; x < numAnts; x++) {
             executorCompletionService.submit(new Ant(this));
             activeAnts++;
             if (Math.random() > PROCESSING_CYCLE_PROBABILITY) {
@@ -62,6 +60,7 @@ public class AntColonyOptimizationSolver {
         }
         processAnts();
         getExecutorService().shutdown();
+        System.out.println("All " + numAnts + " Ants have finished traversing!");
         return new Pair<>(graph, graph.getEdgeContainer().calculateCurrentRouteLength());
     }
 
@@ -136,5 +135,13 @@ public class AntColonyOptimizationSolver {
 
     public AtomicDouble[][] getPheremoneLevelMatrix() {
         return pheremoneLevelMatrix;
+    }
+
+    public int getDelayPerStep() {
+        return delayPerStep;
+    }
+
+    public void setDelayPerStep(int delayPerStep) {
+        this.delayPerStep = delayPerStep;
     }
 }

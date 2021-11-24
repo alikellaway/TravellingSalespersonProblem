@@ -81,7 +81,7 @@ public class Ant implements Callable<Ant> {
      * @throws EdgeSuperimpositionException Thrown when an edge is superimposed on another inside an edge container.
      */
     @Override
-    public Ant call() throws NonExistentNodeException, EdgeSuperimpositionException {
+    public Ant call() throws NonExistentNodeException, EdgeSuperimpositionException, InterruptedException {
         // Ant chooses a random node to start at.
         int startNodeID = ThreadLocalRandom.current().nextInt(numNodes);
         // Create space to store the nodes that the ant chooses to traverse as its route.
@@ -115,6 +115,7 @@ public class Ant implements Callable<Ant> {
             } else {
                 y = invalidNodeIdx; // Otherwise reset y to be invalidNodeIdx
             }
+            Thread.sleep(acos.getDelayPerStep());
         }
         // routeLength += acos.getDistanceMatrix()[x][startNodeID];
         routeNodes.add(acos.getGraph().getNodeContainer().getNodeByID(x)); // Add the final node to our route
