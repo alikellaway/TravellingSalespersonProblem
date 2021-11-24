@@ -39,6 +39,12 @@ public class Ant implements Callable<Ant> {
     private static final int invalidNodeIdx = -1;
 
     /**
+     * Storing the number of nodes statically to more efficiently use this value (before we had each ant checking it
+     * multiple times).
+     */
+    private static int numNodes;
+
+    /**
      * Parameter used to adjust the amount of pheromone deposited per traversal (0<Q<1).
      */
     private static final double Q = 0.0005;
@@ -57,12 +63,6 @@ public class Ant implements Callable<Ant> {
      * A parameter used for controlling the influence of distance between origin and destination (BETA>=1).
      */
     private static final double BETA = 9.5;
-
-    /**
-     * Storing the number of nodes statically to more efficiently use this value (before we had each ant checking it
-     * multiple times).
-     */
-    private static int numNodes;
 
     /**
      * Constructor initialises a new ant.
