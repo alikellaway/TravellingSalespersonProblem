@@ -154,6 +154,6 @@ public class TSPNodeContainer {
                 return n;
             }
         }
-        throw new NonExistentNodeException("No node found with ID: " + id);
+        throw new NonExistentNodeException("No node found with ID: " + id + " (" + getNodeSet().toString() + ")");
     }
 }

@@ -69,6 +69,7 @@ public class TSPGraph {
      * @return @code{g} A new randomized TSPGraph object.
      */
     public static TSPGraph generateRandomGraph(int numNodes, boolean addEdges) {
+        TSPNode.restartNodeCounter();
         // Create some random nodes
         TSPNodeContainer nSet = new TSPNodeContainer();
         for (int i = 0; i < numNodes; i++) {
@@ -109,5 +110,13 @@ public class TSPGraph {
             e.printStackTrace();
         }
         return "Failed to load TSPNodeContainer object into JSON format.";
+    }
+
+    /**
+     * Returns the number of nodes in the graph object's TSPNodeContainer object.
+     * @return int The number of TSPNode objects managed by the TSPGraph's TSPNodeContainer object.
+     */
+    public int getNumNodes() {
+        return getNodeContainer().getNodeSet().size();
     }
 }

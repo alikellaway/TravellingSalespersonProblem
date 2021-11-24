@@ -145,4 +145,8 @@ public class TSPNode {
     public double getY() {
         return getCoordinate().getY();
     }
+
+    public static void restartNodeCounter() {
+        numNodes = 0;
+    }
 }
