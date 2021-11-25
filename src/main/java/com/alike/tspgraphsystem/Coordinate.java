@@ -97,4 +97,23 @@ public class Coordinate {
         Random r = new Random();
         return new Coordinate(r.nextInt(xMax), r.nextInt(yMax));
     }
+
+    /**
+     * Multiplies the coordinate values by some factor (like a PVector).
+     * @param factor The factor by which to multiply.
+     */
+    public void mult(float factor) {
+        setX((int) (getX()*factor));
+        setY((int) (getY()*factor));
+    }
+
+    /**
+     * Adds the parameter values to the coordinate components.
+     * @param addX The value to add to X.
+     * @param addY The value to add to Y.
+     */
+    public void add(float addX, float addY) {
+        setX((int) (getX() + addX));
+        setY((int) (getY() + addY));
+    }
 }
