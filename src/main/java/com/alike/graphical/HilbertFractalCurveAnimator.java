@@ -30,54 +30,93 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      */
     private static final Color LINE_COLOR = Color.rgb(255, 255, 255);
 
-    private int order = 8;
-    private int n = (int) Math.pow(2, order);
-    int total = n * n;
+    /**
+     * The order of Hilbert curve to draw (how many iterations to animate).
+     */
+    private int order = 7;
 
-    int progressCounter = 0;
+    /**
+     * The number of sectors that the fractal will be broken into (e.g. quadrants at order 2).
+     */
+    private final int n = (int) Math.pow(2, order);
 
-    private Coordinate[] path = new Coordinate[total];
+    /**
+     * The total number of points that will be drawn.
+     */
+    private final int total = n * n;
 
+    /**
+     * A counter used to record how far through the drawing process we are (higher leads to faster drawing speed).
+     */
+    private int progressCounter = 0;
+
+    /**
+     * The series of coordinates that is our path.
+     */
+    private final Coordinate[] path = new Coordinate[total];
+
+    /**
+     * The number of lines to draw in one drawing cycle.
+     */
+//    private final int linesPerStep = total - 1;
+
+    /**
+     * Used to construct a new @code{HilbertFractalCurveAnimator} object.
+     * @param canvas The canvas on which to animate.
+     * @param graph The graph which we are animating.
+     * @throws NonSquareCanvasException Thrown if the canvas is not a square and of side length a power of two.
+     */
     public HilbertFractalCurveAnimator(Canvas canvas, TSPGraph graph) throws NonSquareCanvasException {
         setCanvas(canvas);
         setGraph(graph);
         setGc(canvas.getGraphicsContext2D());
+        // Calculate the hilbert curve
         for (int i = 0; i < total; i++) {
             path[i] = hilbert(i);
             float len = (float) canvas.getWidth() / n;
             path[i].mult(len);
             path[i].add(len/2, len/2);
         }
+        System.out.println(path.length);
+        System.out.println(canvas.getWidth() * canvas.getHeight());
     }
 
+    /**
+     * The code that is run each frame.
+     * @param l The length of each frome time.
+     */
+    @Override
+    public void handle(long l) {
+        draw();
+    }
+
+    /**
+     * Used to draw the hilbert curve onto the canvas.
+     */
     private void draw() {
         // Draw the lines
 //        gc.setStroke(LINE_COLOR);
-        gc.beginPath();
-        gc.moveTo(path[0].getX(), path[0].getY());
-        for (int i = 0; i < progressCounter; i++) {
-            float hue = map(i, path.length,360);
+        for (int i = 1; i < progressCounter; i++) {
+            gc.beginPath();
+            gc.moveTo(path[i].getX(), path[i].getY());
+            float hue = map(i, path.length); // Vary the color with the path completion.
             gc.setStroke(Color.hsb(hue, 1, 1));
-            gc.lineTo(path[i].getX(), path[i].getY());
+            gc.lineTo(path[i - 1].getX(), path[i - 1].getY());
+            gc.stroke();
         }
-        gc.stroke();
-
-        // Draw the indexes
-//        gc.setFill(LINE_COLOR);
-//        for (int i = 0; i < path.length; i++) {
-//            gc.fillText(Integer.toString(i), path[i].getX() + 5, path[i].getY() - 5);
-//        }
-        progressCounter += 10;
+        // Draw the indexes (used for debugging etc)
+        /* gc.setFill(LINE_COLOR);
+        for (int i = 0; i < path.length; i++) {
+            gc.fillText(Integer.toString(i), path[i].getX() + 5, path[i].getY() - 5);
+        } */
+        progressCounter += 10; // This is how many lines will be drawn each draw cycle
         if (progressCounter >= path.length) {
             progressCounter = 0;
             gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
         }
     }
 
-    @Override
-    public void handle(long l) {
-        draw();
-    }
+
 
     private Coordinate hilbert(int i) {
         Coordinate[] points = {
@@ -108,11 +147,6 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
                 c.setX(c.getX() + len);
             }
         }
-
-
-
-
-
         return c;
     }
 
@@ -153,7 +187,11 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         return num == 1.00;
     }
 
-    private float map(int i, int iMax, int nMax) {
-        return (i/nMax) * iMax;
+    private float map(float i, float iMax) {
+        return (i/iMax) * 360;
+    }
+
+    public Coordinate[] getPath() {
+        return this.path;
     }
 }

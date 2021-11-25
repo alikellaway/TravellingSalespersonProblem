@@ -98,11 +98,12 @@ public class Main extends Application {
 
 
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
-//        TSPGraphAnimator drawer = new TSPGraphAnimator(canvas, acosGraph,1);
 
-        HilbertFractalCurveAnimator drawer = new HilbertFractalCurveAnimator(canvas, nnsGraph);
+        HilbertFractalCurveAnimator drawer1 = new HilbertFractalCurveAnimator(canvas, nnsGraph);
+        TSPGraphAnimator drawer = new TSPGraphAnimator(canvas, acosGraph,1);
 
-        drawer.start();
+//        drawer.start();
+        drawer1.start();
         root.getChildren().add(canvas);
         stage.setScene(scene);
         stage.show();
