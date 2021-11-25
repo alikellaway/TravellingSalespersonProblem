@@ -60,10 +60,7 @@ public class TSPGraphAnimator extends AnimationTimer {
 //    public static final Color LINE_COLOR = Color.MAGENTA;
     private static final Color LINE_COLOR = Color.rgb(199, 84, 80);
 
-    /**
-     * The color of the window background.
-     */
-    private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
+
 
     /**
      * Used to initialise a TSPGraphAnimator object.
@@ -71,12 +68,11 @@ public class TSPGraphAnimator extends AnimationTimer {
      * @param canvas The canvas we will be drawing to.
      * @param editsPerRedraw The value to assign to the @code{editsPerRedraw} attribute.
      */
-    public TSPGraphAnimator(Scene scene, Canvas canvas, TSPGraph graph, int editsPerRedraw) {
+    public TSPGraphAnimator(Canvas canvas, TSPGraph graph, int editsPerRedraw) {
         setGraph(graph);
         setCanvas(canvas);
         setGraphicsContext(canvas.getGraphicsContext2D());
         setEditsPerRedraw(editsPerRedraw);
-        scene.setFill(BACK_GROUND_COLOR);
 
     }
 

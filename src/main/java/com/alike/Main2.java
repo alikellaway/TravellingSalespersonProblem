@@ -1,36 +1,50 @@
 package com.alike;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
+public class Main2 extends Application {
 
-import com.alike.customexceptions.PermutationExhaustionException;
-import com.alike.customexceptions.PermutationFocusException;
-import com.alike.solution_helpers.Permuter;
+    @Override/* w   ww   .   d e m  o   2 s    .c   o m  */
+    public void start(Stage stage) {
 
-import java.util.ArrayList;
-
-
-public class Main2 {
-    public static void main(String[] args) throws PermutationExhaustionException {
-        ArrayList<Integer> a = new ArrayList<>();
-        a.add(1);
-        a.add(2);
-        a.add(3);
-
-
-
-
-        Permuter<Integer> p1 = new Permuter<>(a);
-        try {
-//        System.out.println(p1.getCurrentPermutation());
-//        System.out.println(p1.getCurrentPermutation());
-            System.out.println(p1.getNextPermutation());
-            System.out.println(p1.getCurrentPermutation());
-            System.out.println(p1.getNextPermutation());
-            System.out.println(p1.getCurrentPermutation());
-        } catch (PermutationFocusException e) {
-            e.printStackTrace();
-        }
-
+        initUI(stage);
     }
 
+    private void initUI(Stage stage) {
+
+        Pane root = new Pane();
+
+        Canvas canvas = new Canvas(300, 300);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        drawLines(gc);
+
+        root.getChildren().add(canvas);
+
+        Scene scene = new Scene(root, 300, 250, Color.WHITESMOKE);
+
+        stage.setTitle("Lines");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void drawLines(GraphicsContext gc) {
+
+        gc.beginPath();
+        gc.moveTo(30.5, 30.5);
+        gc.lineTo(150.5, 30.5);
+        gc.lineTo(150.5, 150.5);
+//        gc.lineTo(30.5, 30.5);
+//        gc.closePath();
+        gc.stroke();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

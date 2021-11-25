@@ -13,4 +13,9 @@
       <module name="FinalYearProjectT2" target="17" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="FinalYearProjectT2" options="--add-exports javafx.graphics/com.sun.javafx.application=com.alike" />
+    </option>
+  </component>
 </project>
