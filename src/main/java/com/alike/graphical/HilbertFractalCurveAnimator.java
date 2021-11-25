@@ -116,8 +116,11 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         }
     }
 
-
-
+    /**
+     * Used to return the coordinate of a point i on the coordinate.
+     * @param i The i th step on a path using the hilbert curve as a route.
+     * @return c The coordinates of the i th step on the path.
+     */
     private Coordinate hilbert(int i) {
         Coordinate[] points = {
                 new Coordinate(0,0),
@@ -150,10 +153,11 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         return c;
     }
 
-    public Canvas getCanvas() {
-        return canvas;
-    }
-
+    /**
+     * Sets the canvas to a new value and checks for certain constraints.
+     * @param canvas The new value to become the @code{canvas} attribute.
+     * @throws NonSquareCanvasException Thrown if the parameter canvas is not a square and of side length of power of 2.
+     */
     public void setCanvas(Canvas canvas) throws NonSquareCanvasException {
         double h = canvas.getHeight() - TSPGraphAnimator.NODE_RADIUS*2;
         double w = canvas.getWidth() - TSPGraphAnimator.NODE_RADIUS*2;
@@ -164,22 +168,27 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         this.canvas = canvas;
     }
 
-    public TSPGraph getGraph() {
-        return graph;
-    }
-
+    /**
+     * Sets the @code{graph} attribute to a new value.
+     * @param graph The new value to become the @code{graph} attribute.
+     */
     public void setGraph(TSPGraph graph) {
         this.graph = graph;
     }
 
-    public GraphicsContext getGc() {
-        return gc;
-    }
-
+    /**
+     * Sets the @code{gc} attribute to a new value.
+     * @param gc The new value to become the @code{gc} attribute.
+     */
     public void setGc(GraphicsContext gc) {
         this.gc = gc;
     }
 
+    /**
+     * Outputs a boolean describing whether the input number was a power of two or not.
+     * @param num The number we are checking.
+     * @return boolean true if the number is a power of 2, false if not.
+     */
     private boolean isPowerOfTwo(double num) {
         while (num > 1) {
             num = num / 2;
@@ -187,10 +196,20 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         return num == 1.00;
     }
 
+    /**
+     * Maps a value to a fraction of 360 to find a HSB colour (we assume the minimum value i could be is 0).
+     * @param i The input value.
+     * @param iMax The maximum value the input value could be.
+     * @return float The value as a color between 0 and 360.
+     */
     private float map(float i, float iMax) {
         return (i/iMax) * 360;
     }
 
+    /**
+     * Returns the value of the @code{path} attribute.
+     * @return @code{path} The value of the @code{path} attribute.
+     */
     public Coordinate[] getPath() {
         return this.path;
     }
