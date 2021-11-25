@@ -213,4 +213,10 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     public Coordinate[] getPath() {
         return this.path;
     }
+
+    /* TODO: move responsibility of getting the path to the solver and then figure out how to get the nodes in order.
+        You may need to use some sort of nearest node or something since the number of path points cannot equal the
+        number of pixels - closest we can get is order 8 (double check) - the console prints out the number of path
+        points and then the number of pixels in the canvas i.e. available to place nodes.
+     */
 }
