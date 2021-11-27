@@ -68,4 +68,12 @@ public class Vector {
     public void setY(double y) {
         this.y = y;
     }
+
+    /**
+     * Used to deduce whether this vector is horizontal i.e. has no Y component.
+     * @return boolean true if the vector is horizontal.
+     */
+    public boolean isHorizontal() {
+        return getY() == 0;
+    }
 }

@@ -1,6 +1,7 @@
 package com.alike.graphical;
 
 import com.alike.customexceptions.NonSquareCanvasException;
+import com.alike.solutions.HilbertFractalCurveSolver;
 import com.alike.tspgraphsystem.Coordinate;
 import com.alike.tspgraphsystem.TSPGraph;
 import javafx.animation.AnimationTimer;
@@ -8,6 +9,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Class used to animate a Hilbert fractal curve onto a java fx canvas.
+ * @author alike
+ */
 public class HilbertFractalCurveAnimator extends AnimationTimer {
 
     /**
@@ -33,7 +38,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     /**
      * The order of Hilbert curve to draw (how many iterations to animate).
      */
-    private int order = 7;
+    private int order = 10;
 
     /**
      * The number of sectors that the fractal will be broken into (e.g. quadrants at order 2).
@@ -53,7 +58,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     /**
      * The series of coordinates that is our path.
      */
-    private final Coordinate[] path = new Coordinate[total];
+    final Coordinate[] path = new Coordinate[total];
 
     /**
      * The number of lines to draw in one drawing cycle.
@@ -66,7 +71,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      * @param graph The graph which we are animating.
      * @throws NonSquareCanvasException Thrown if the canvas is not a square and of side length a power of two.
      */
-    public HilbertFractalCurveAnimator(Canvas canvas, TSPGraph graph) throws NonSquareCanvasException {
+    public HilbertFractalCurveAnimator(Canvas canvas, TSPGraph graph, HilbertFractalCurveSolver hfcs) throws NonSquareCanvasException {
         setCanvas(canvas);
         setGraph(graph);
         setGc(canvas.getGraphicsContext2D());
@@ -77,8 +82,6 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
             path[i].mult(len);
             path[i].add(len/2, len/2);
         }
-        System.out.println(path.length);
-        System.out.println(canvas.getWidth() * canvas.getHeight());
     }
 
     /**
@@ -109,7 +112,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         for (int i = 0; i < path.length; i++) {
             gc.fillText(Integer.toString(i), path[i].getX() + 5, path[i].getY() - 5);
         } */
-        progressCounter += 10; // This is how many lines will be drawn each draw cycle
+        progressCounter += 1000; // This is how many lines will be drawn each draw cycle
         if (progressCounter >= path.length) {
             progressCounter = 0;
             gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());

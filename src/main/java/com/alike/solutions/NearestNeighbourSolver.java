@@ -54,7 +54,7 @@ public class NearestNeighbourSolver {
      * @return Returns the graph (with the solution in the edgeContainer) and a double describing how long the found
      * route was.
      */
-    public Pair<TSPGraph, Double> runSolution(long delayPerStep) throws InterruptedException, EdgeSuperimpositionException {
+    public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws InterruptedException, EdgeSuperimpositionException {
         // Set our current node to be the first node in the list of nodes.
         setCurrentNode(nodeContainer.getNodeSet().get(0));
         currentNode.setVisited(true); // Set it as visited

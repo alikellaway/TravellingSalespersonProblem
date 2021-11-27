@@ -5,6 +5,7 @@ import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solutions.AntColonyOptimizationSolver;
 import com.alike.solutions.BruteForceSolver;
+import com.alike.solutions.HilbertFractalCurveSolver;
 import com.alike.solutions.NearestNeighbourSolver;
 import com.alike.tspgraphsystem.TSPGraph;
 import javafx.application.Application;
@@ -46,10 +47,12 @@ public class Main extends Application {
      */
     private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
 
-    private static TSPGraph nnsGraph = TSPGraph.generateRandomGraph(2000, false);
+    private static TSPGraph nnsGraph = TSPGraph.generateRandomGraph(1000, false);
     private static TSPGraph bsGraph = TSPGraph.generateRandomGraph(6, false);
-    private static TSPGraph acosGraph = TSPGraph.generateRandomGraph(9, false);
+    private static TSPGraph acosGraph = TSPGraph.generateRandomGraph(100, false);
+    private static TSPGraph hfcsGraph = TSPGraph.generateRandomGraph(9, false);
 
+    private static HilbertFractalCurveSolver hfcs;
 
     public static void main(String[] args) {
 
@@ -79,11 +82,21 @@ public class Main extends Application {
         // Ant Colony Optimisation Solver
 //        Thread acosT = new Thread(() -> {
 //            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
-//            Pair<TSPGraph, Double> solOutput = acos.runSolution(1000, 0);
+//            Pair<TSPGraph, Double> solOutput = acos.runSolution(1000, 10);
 //            System.out.println(solOutput.getKey());
 //            System.out.println(solOutput.getValue());
 //        });
 //        acosT.start();
+
+        // Hilbert fractal curve solver
+        Thread hfcsT = new Thread(() -> {
+            try {
+                hfcs = new HilbertFractalCurveSolver(hfcsGraph);
+            } catch (NonSquareCanvasException e) {
+                e.printStackTrace();
+            }
+        });
+        hfcsT.start();
         launch(args);
     }
 
@@ -99,8 +112,8 @@ public class Main extends Application {
 
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
 
-        HilbertFractalCurveAnimator drawer1 = new HilbertFractalCurveAnimator(canvas, nnsGraph);
-        TSPGraphAnimator drawer = new TSPGraphAnimator(canvas, acosGraph,1);
+        HilbertFractalCurveAnimator drawer1 = new HilbertFractalCurveAnimator(canvas, hfcsGraph, hfcs);
+//        TSPGraphAnimator drawer = new TSPGraphAnimator(canvas, acosGraph,1);
 
 //        drawer.start();
         drawer1.start();

@@ -118,4 +118,5 @@ public class BruteForceSolver {
     private void setPermuter(Permuter<Integer> permuter) {
         this.permuter = permuter;
     }
+
 }
