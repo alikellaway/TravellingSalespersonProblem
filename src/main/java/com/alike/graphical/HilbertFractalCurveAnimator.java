@@ -35,20 +35,6 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      */
     private static final Color LINE_COLOR = Color.rgb(255, 255, 255);
 
-    /**
-     * The order of Hilbert curve to draw (how many iterations to animate).
-     */
-    private int order = 10;
-
-    /**
-     * The number of sectors that the fractal will be broken into (e.g. quadrants at order 2).
-     */
-    private final int n = (int) Math.pow(2, order);
-
-    /**
-     * The total number of points that will be drawn.
-     */
-    private final int total = n * n;
 
     /**
      * A counter used to record how far through the drawing process we are (higher leads to faster drawing speed).
@@ -56,9 +42,16 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     private int progressCounter = 0;
 
     /**
+     * A counter used to limit how far the current draw cycle will draw into the hilbert curve.
+     */
+    private int drawLimit = 0;
+
+    /**
      * The series of coordinates that is our path.
      */
-    final Coordinate[] path = new Coordinate[total];
+    private Coordinate[] path;
+
+    private HilbertFractalCurveSolver hfcs;
 
     /**
      * The number of lines to draw in one drawing cycle.
@@ -66,22 +59,25 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
 //    private final int linesPerStep = total - 1;
 
     /**
+     * Used to check if the order of the graph has changed while we are drawing (we need to reset the progress counter
+     * to 0 if it has)
+     */
+    private int orderWeAreDrawing;
+
+    /**
      * Used to construct a new @code{HilbertFractalCurveAnimator} object.
      * @param canvas The canvas on which to animate.
      * @param graph The graph which we are animating.
+     * @param hfcs The Hilbert solver containing the path we want to join.
      * @throws NonSquareCanvasException Thrown if the canvas is not a square and of side length a power of two.
      */
     public HilbertFractalCurveAnimator(Canvas canvas, TSPGraph graph, HilbertFractalCurveSolver hfcs) throws NonSquareCanvasException {
         setCanvas(canvas);
         setGraph(graph);
         setGc(canvas.getGraphicsContext2D());
-        // Calculate the hilbert curve
-        for (int i = 0; i < total; i++) {
-            path[i] = hilbert(i);
-            float len = (float) canvas.getWidth() / n;
-            path[i].mult(len);
-            path[i].add(len/2, len/2);
-        }
+        setHfcs(hfcs);
+        setOrderWeAreDrawing(HilbertFractalCurveSolver.order);
+        setPath(hfcs.getCornerCoordinates());
     }
 
     /**
@@ -97,63 +93,63 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      * Used to draw the hilbert curve onto the canvas.
      */
     private void draw() {
+        if (getOrderWeAreDrawing() != HilbertFractalCurveSolver.order) { // The graph we are drawing is not current
+            progressCounter = 0;
+            path = hfcs.getCornerCoordinates();
+            gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+        }
         // Draw the lines
-//        gc.setStroke(LINE_COLOR);
-        for (int i = 1; i < progressCounter; i++) {
-            gc.beginPath();
-            gc.moveTo(path[i].getX(), path[i].getY());
+        // gc.setStroke(LINE_COLOR);
+        for (int i = 1 + progressCounter; i < drawLimit; i++) {
             float hue = map(i, path.length); // Vary the color with the path completion.
-            gc.setStroke(Color.hsb(hue, 1, 1));
-            gc.lineTo(path[i - 1].getX(), path[i - 1].getY());
-            gc.stroke();
+            gc.setStroke(Color.hsb(hue, 1, 1, 1.0/HilbertFractalCurveSolver.order));
+            gc.strokeLine(path[i].getX(), path[i].getY(), path[i - 1].getX(), path[i - 1].getY());
+            progressCounter++;
         }
         // Draw the indexes (used for debugging etc)
         /* gc.setFill(LINE_COLOR);
         for (int i = 0; i < path.length; i++) {
             gc.fillText(Integer.toString(i), path[i].getX() + 5, path[i].getY() - 5);
         } */
-        progressCounter += 1000; // This is how many lines will be drawn each draw cycle
-        if (progressCounter >= path.length) {
-            progressCounter = 0;
+        drawLimit += 1000; // This is how many lines will be drawn each draw cycle
+        if (drawLimit >= path.length) {
+            drawLimit = 0;
             gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
         }
+
+
+    }
+
+
+
+    /**
+     * Outputs a boolean describing whether the input number was a power of two or not.
+     * @param num The number we are checking.
+     * @return boolean true if the number is a power of 2, false if not.
+     */
+    private boolean isPowerOfTwo(double num) {
+        while (num > 1) {
+            num = num / 2;
+        }
+        return num == 1.00;
     }
 
     /**
-     * Used to return the coordinate of a point i on the coordinate.
-     * @param i The i th step on a path using the hilbert curve as a route.
-     * @return c The coordinates of the i th step on the path.
+     * Maps a value to a fraction of 360 to find a HSB colour (we assume the minimum value i could be is 0).
+     * @param i The input value.
+     * @param iMax The maximum value the input value could be.
+     * @return float The value as a color between 0 and 360.
      */
-    private Coordinate hilbert(int i) {
-        Coordinate[] points = {
-                new Coordinate(0,0),
-                new Coordinate(0,1),
-                new Coordinate(1,1),
-                new Coordinate(1,0)};
-        int index = i & 3;
-        Coordinate c = points[index];
+    private float map(float i, float iMax) {
+        return (i/iMax) * 360;
+    }
 
-        for (int j = 1; j < order; j++) {
-            int len = (int) Math.pow(2, j);
-            i = i >>> 2;
-            index = i & 3;
-            if (index == 0) {
-                float temp = c.getX();
-                c.setX(c.getY());
-                c.setY((int) temp);
-            } else if (index == 1) {
-                c.setY(c.getY() + len);
-            } else if (index == 2) {
-                c.setX(c.getX() + len);
-                c.setY(c.getY() + len);
-            } else {
-                float temp = len - 1 - c.getX();
-                c.setX(len - 1 - c.getY());
-                c.setY((int) temp);
-                c.setX(c.getX() + len);
-            }
-        }
-        return c;
+    /**
+     * Sets the value of the @code{path} attribute to a new value.
+     * @param newPath The new value to become the @code{path} attribute.
+     */
+    private void setPath(Coordinate[] newPath) {
+        this.path = newPath;
     }
 
     /**
@@ -187,39 +183,19 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         this.gc = gc;
     }
 
-    /**
-     * Outputs a boolean describing whether the input number was a power of two or not.
-     * @param num The number we are checking.
-     * @return boolean true if the number is a power of 2, false if not.
-     */
-    private boolean isPowerOfTwo(double num) {
-        while (num > 1) {
-            num = num / 2;
-        }
-        return num == 1.00;
+    public HilbertFractalCurveSolver getHfcs() {
+        return hfcs;
     }
 
-    /**
-     * Maps a value to a fraction of 360 to find a HSB colour (we assume the minimum value i could be is 0).
-     * @param i The input value.
-     * @param iMax The maximum value the input value could be.
-     * @return float The value as a color between 0 and 360.
-     */
-    private float map(float i, float iMax) {
-        return (i/iMax) * 360;
+    public void setHfcs(HilbertFractalCurveSolver hfcs) {
+        this.hfcs = hfcs;
     }
 
-    /**
-     * Returns the value of the @code{path} attribute.
-     * @return @code{path} The value of the @code{path} attribute.
-     */
-    public Coordinate[] getPath() {
-        return this.path;
+    public int getOrderWeAreDrawing() {
+        return orderWeAreDrawing;
     }
 
-    /* TODO: move responsibility of getting the path to the solver and then figure out how to get the nodes in order.
-        You may need to use some sort of nearest node or something since the number of path points cannot equal the
-        number of pixels - closest we can get is order 8 (double check) - the console prints out the number of path
-        points and then the number of pixels in the canvas i.e. available to place nodes.
-     */
+    public void setOrderWeAreDrawing(int orderWeAreDrawing) {
+        this.orderWeAreDrawing = orderWeAreDrawing;
+    }
 }

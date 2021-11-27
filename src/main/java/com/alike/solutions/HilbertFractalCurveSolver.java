@@ -1,12 +1,11 @@
 package com.alike.solutions;
 
-
 import com.alike.Main;
+import com.alike.customexceptions.EdgeSuperimpositionException;
+import com.alike.customexceptions.NodeMissedException;
 import com.alike.customexceptions.NonSquareCanvasException;
-import com.alike.tspgraphsystem.Coordinate;
-import com.alike.tspgraphsystem.TSPGraph;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import com.alike.tspgraphsystem.*;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 
@@ -16,7 +15,6 @@ import java.util.ArrayList;
  */
 public class HilbertFractalCurveSolver {
 
-
     /**
      * The graph which we are animating.
      */
@@ -25,27 +23,30 @@ public class HilbertFractalCurveSolver {
     /**
      * The order of Hilbert curve to draw (how many iterations to animate).
      */
-    private int order = 9;
+    public static int order = 9;
+
+    private static final int ORDER_LIMIT = 14; // equates to roughly 1E59W points plotted in the line
 
     /**
      * The number of sectors that the fractal will be broken into (e.g. quadrants at order 2).
      */
-    private final int n = (int) Math.pow(2, order);
+    private final int N = (int) Math.pow(2, order);
 
     /**
      * The total number of points that will be drawn.
      */
-    private final int total = n * n;
+    private final int total = N * N;
+
 
     /**
      * The series of coordinates that is used to draw the curve.
      */
-    private final Coordinate[] cornerCoordinates = new Coordinate[total];
+    private static Coordinate[] cornerCoordinates;
 
     /**
      * All the coordinates the path is travelling through.
      */
-    private ArrayList<Coordinate> curveCoordinates;
+    private static ArrayList<Coordinate> curveCoordinates = new ArrayList<>();
 
     /**
      * Used to construct a new @code{HilbertFractalCurveAnimator} object.
@@ -53,6 +54,9 @@ public class HilbertFractalCurveSolver {
      * @throws NonSquareCanvasException Thrown if the canvas is not a square and of side length a power of two.
      */
     public HilbertFractalCurveSolver(TSPGraph graph) throws NonSquareCanvasException {
+        cornerCoordinates = new Coordinate[total];
+        curveCoordinates = new ArrayList<>();
+
         // Check that we are running this solver in a square context with a side length or a n^2
         int w = Main.COORDINATE_MAX_WIDTH;
         int h = Main.COORDINATE_MAX_HEIGHT;
@@ -66,16 +70,15 @@ public class HilbertFractalCurveSolver {
         // Calculate the hilbert curve and store it as a sequence of points
         for (int i = 0; i < total; i++) {
             cornerCoordinates[i] = hilbert(i);
-            float len = (float) Main.COORDINATE_MAX_WIDTH / n;
+            float len = (float) Main.WINDOW_MAX_WIDTH / N;
             cornerCoordinates[i].mult(len);
-            cornerCoordinates[i].add(len/2, len/2);
+//            cornerCoordinates[i].add(len/2, len/2);
         }
 
         /*
-             Need to get all the points that are covered by the lines that join those points since cornerCoordinates only contains
-             the points on the corners of the hilbert curve currently.
+             Need to get all the points that are covered by the lines that join those points since cornerCoordinates
+             only contains the points on the corners of the hilbert curve currently.
          */
-        curveCoordinates = new ArrayList<>();
         for (int pathIdx = 0; pathIdx < cornerCoordinates.length; pathIdx++) {
             // Get our two coordinates to find the ones between.
             Coordinate thisCo = cornerCoordinates[pathIdx];
@@ -92,12 +95,75 @@ public class HilbertFractalCurveSolver {
                         curveCoordinates.add(new Coordinate(i, thisCo.getX()));
                     }
                 }
-            } catch (ArrayIndexOutOfBoundsException e) { // When we hit the end, do nothing.
-                continue;
+            } catch (ArrayIndexOutOfBoundsException e) {
+                // When we hit the end, do nothing.
             }
         }
-        System.out.println(cornerCoordinates.length);
-        System.out.println(curveCoordinates.size());
+        // We now need to add the four corners, since this algorithm misses them
+
+        System.out.println("Order " + order + ", Coordinates reached: " + curveCoordinates.size());
+    }
+
+    public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws EdgeSuperimpositionException, NodeMissedException, InterruptedException, NonSquareCanvasException {
+        try {
+            constructRoute(delayPerStep);
+        } catch (NodeMissedException e) {
+            // If we missed node(s), try the next order up.
+            System.out.println(graph.getEdgeContainer().getEdgeSet().size() + " " + graph.getNumNodes());
+            if (graph.getNumNodes() - e.getNumNodesMissed() < graph.getNumNodes()/2) {
+                order += 2; // If we missed more than half, go up two
+            } else {
+                order++;
+            }
+            if (order == 13) {
+                return new Pair<>(graph, -1.0); // Use -1 to show it was a failure.
+            }
+            // Flush route to save RAM
+            new HilbertFractalCurveSolver(graph).runSolution(delayPerStep);
+        }
+        return new Pair<>(graph, graph.getEdgeContainer().calculateCurrentRouteLength());
+    }
+
+    public TSPEdgeContainer constructRoute(int delayPerStep)
+            throws EdgeSuperimpositionException, NodeMissedException, InterruptedException {
+        ArrayList<TSPNode> nodesOrdered = getNodesOrdered();
+        TSPEdgeContainer container = new TSPEdgeContainer();
+        graph.setEdgeContainer(container); // We do this here so we can see the path as its being constructed
+        for (int i = 0; i < nodesOrdered.size(); i++) {
+            // Create the edge and add it
+            container.add(new TSPEdge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
+            Thread.sleep(delayPerStep);
+        }
+
+        return container;
+    }
+
+    public ArrayList<TSPNode> getNodesOrdered() throws NodeMissedException {
+        // Find which nodes we want and put them in order according to the graph.
+        // We copy the node array here so that we can remove the node from the list once weve found it.
+        ArrayList<TSPNode> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
+        ArrayList<TSPNode> nodesOrdered = new ArrayList<>();
+
+        for (Coordinate c : curveCoordinates) {
+            for (int i = 0; i < nodes.size(); i++) {
+                TSPNode n = nodes.get(i);
+                if (n.getCoordinate().equals(c)) {
+                    nodesOrdered.add(n);
+                    nodes.remove(i); // Removing them as we go will speed it up as we advance
+                }
+            }
+        }
+        System.out.println(nodesOrdered.size() + ":" + graph.getNumNodes());
+
+        if (nodesOrdered.size() != graph.getNumNodes()) {
+            StringBuilder sb = new StringBuilder("Node(s) missed: ");
+            for (TSPNode n : nodes) {
+                sb.append(n.toString()).append(", ");
+            }
+            throw new NodeMissedException(sb.toString(), nodes.size());
+        }
+
+        return nodesOrdered;
     }
 
     /**
@@ -106,11 +172,12 @@ public class HilbertFractalCurveSolver {
      * @return c The coordinates of the i th step on the cornerCoordinates.
      */
     private Coordinate hilbert(int i) {
-        Coordinate[] points = {
+        Coordinate[] points = { // This is the order 1
                 new Coordinate(0,0),
                 new Coordinate(0,1),
                 new Coordinate(1,1),
                 new Coordinate(1,0)};
+
         int index = i & 3;
         Coordinate c = points[index];
 
@@ -136,7 +203,6 @@ public class HilbertFractalCurveSolver {
         }
         return c;
     }
-
 
     /**
      * Sets the @code{graph} attribute to a new value.
@@ -164,10 +230,6 @@ public class HilbertFractalCurveSolver {
      */
     public Coordinate[] getCornerCoordinates() {
         return this.cornerCoordinates;
-    }
-
-    public ArrayList<Coordinate> getCurve() {
-        return curveCoordinates;
     }
 }
 

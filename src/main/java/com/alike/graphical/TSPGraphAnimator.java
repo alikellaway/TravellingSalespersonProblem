@@ -34,6 +34,8 @@ public class TSPGraphAnimator extends AnimationTimer {
      */
     private int editsPerRedraw;
 
+    private boolean drawNodeIDs;
+
     /**
      * The drawn radius of the nodes.
      */
@@ -68,12 +70,12 @@ public class TSPGraphAnimator extends AnimationTimer {
      * @param canvas The canvas we will be drawing to.
      * @param editsPerRedraw The value to assign to the @code{editsPerRedraw} attribute.
      */
-    public TSPGraphAnimator(Canvas canvas, TSPGraph graph, int editsPerRedraw) {
+    public TSPGraphAnimator(Canvas canvas, TSPGraph graph, int editsPerRedraw, boolean drawNodeIDs) {
         setGraph(graph);
         setCanvas(canvas);
         setGraphicsContext(canvas.getGraphicsContext2D());
         setEditsPerRedraw(editsPerRedraw);
-
+        setDrawNodeIDs(drawNodeIDs);
     }
 
     /**
@@ -84,7 +86,7 @@ public class TSPGraphAnimator extends AnimationTimer {
     public void handle(long l) {
         if (graph.getEdgeContainer().getEditCount() % editsPerRedraw == 0) {
             clearCanvas(graphicsContext);
-            drawGraph();
+            drawGraph(areDrawNodeIDs());
         }
     }
 
@@ -139,7 +141,7 @@ public class TSPGraphAnimator extends AnimationTimer {
     /**
      * Draws the currently stored graph in its current state into the graphicsContext of the current canvas.
      */
-    public void drawGraph() {
+    public void drawGraph(boolean numbered) {
         // Design lines
         graphicsContext.setStroke(LINE_COLOR);
         graphicsContext.setLineWidth(LINE_WIDTH);
@@ -156,6 +158,13 @@ public class TSPGraphAnimator extends AnimationTimer {
         // Draw nodes
         for (TSPNode node : graph.getNodeContainer().getNodeSet()) {
             drawNode(node);
+        }
+        // Number nodes
+        if (numbered) {
+            graphicsContext.setFill(LINE_COLOR);
+            for (TSPNode node: graph.getNodeContainer().getNodeSet()) {
+                graphicsContext.fillText(Integer.toString(node.getNodeID()), node.getX(), node.getY() - 2);
+            }
         }
     }
 
@@ -190,5 +199,13 @@ public class TSPGraphAnimator extends AnimationTimer {
     private static void adjustCoordinateToCentreNode(Coordinate c) {
         c.setX(c.getX() + TSPGraphAnimator.NODE_RADIUS);
         c.setY(c.getY() + TSPGraphAnimator.NODE_RADIUS);
+    }
+
+    public boolean areDrawNodeIDs() {
+        return drawNodeIDs;
+    }
+
+    public void setDrawNodeIDs(boolean drawNodeIDs) {
+        this.drawNodeIDs = drawNodeIDs;
     }
 }

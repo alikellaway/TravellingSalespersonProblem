@@ -20,12 +20,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 1024;
+    public static final int COORDINATE_MAX_WIDTH = 512;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 1024;
+    public static final int COORDINATE_MAX_HEIGHT = 512;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -50,7 +50,7 @@ public class Main extends Application {
     private static TSPGraph nnsGraph = TSPGraph.generateRandomGraph(1000, false);
     private static TSPGraph bsGraph = TSPGraph.generateRandomGraph(6, false);
     private static TSPGraph acosGraph = TSPGraph.generateRandomGraph(100, false);
-    private static TSPGraph hfcsGraph = TSPGraph.generateRandomGraph(9, false);
+    private static TSPGraph hfcsGraph = TSPGraph.generateRandomGraph(50, false);
 
     private static HilbertFractalCurveSolver hfcs;
 
@@ -92,7 +92,8 @@ public class Main extends Application {
         Thread hfcsT = new Thread(() -> {
             try {
                 hfcs = new HilbertFractalCurveSolver(hfcsGraph);
-            } catch (NonSquareCanvasException e) {
+                hfcs.runSolution(0);
+            } catch (NonSquareCanvasException | EdgeSuperimpositionException | NodeMissedException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
@@ -101,7 +102,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws NonSquareCanvasException {
+    public void start(Stage stage) throws InterruptedException, NonSquareCanvasException {
         stage.setTitle(STAGE_TITLE);
         Group root = new Group();
 
@@ -111,11 +112,13 @@ public class Main extends Application {
 
 
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
-
+        while (hfcs == null) {
+            Thread.sleep(10);
+        }
         HilbertFractalCurveAnimator drawer1 = new HilbertFractalCurveAnimator(canvas, hfcsGraph, hfcs);
-//        TSPGraphAnimator drawer = new TSPGraphAnimator(canvas, acosGraph,1);
+        TSPGraphAnimator drawer = new TSPGraphAnimator(canvas, hfcsGraph,1, false);
 
-//        drawer.start();
+        drawer.start();
         drawer1.start();
         root.getChildren().add(canvas);
         stage.setScene(scene);
