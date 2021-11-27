@@ -8,6 +8,9 @@ import com.alike.tspgraphsystem.*;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Class used to animate a Hilbert fractal curve onto a java fx canvas.
@@ -23,7 +26,7 @@ public class HilbertFractalCurveSolver {
     /**
      * The order of Hilbert curve to draw (how many iterations to animate).
      */
-    public static int order = 9;
+    public static int order = 8;
 
     private static final int ORDER_LIMIT = 14; // equates to roughly 1E59W points plotted in the line
 
@@ -35,13 +38,13 @@ public class HilbertFractalCurveSolver {
     /**
      * The total number of points that will be drawn.
      */
-    private final int total = N * N;
+    public final int total = N * N;
 
 
     /**
      * The series of coordinates that is used to draw the curve.
      */
-    private static Coordinate[] cornerCoordinates;
+    private static ArrayList<Coordinate> cornerCoordinates;
 
     /**
      * All the coordinates the path is travelling through.
@@ -54,7 +57,7 @@ public class HilbertFractalCurveSolver {
      * @throws NonSquareCanvasException Thrown if the canvas is not a square and of side length a power of two.
      */
     public HilbertFractalCurveSolver(TSPGraph graph) throws NonSquareCanvasException {
-        cornerCoordinates = new Coordinate[total];
+        cornerCoordinates = new ArrayList<>();
         curveCoordinates = new ArrayList<>();
 
         // Check that we are running this solver in a square context with a side length or a n^2
@@ -69,22 +72,22 @@ public class HilbertFractalCurveSolver {
 
         // Calculate the hilbert curve and store it as a sequence of points
         for (int i = 0; i < total; i++) {
-            cornerCoordinates[i] = hilbert(i);
+            cornerCoordinates.add(hilbert(i));
             float len = (float) Main.WINDOW_MAX_WIDTH / N;
-            cornerCoordinates[i].mult(len);
-//            cornerCoordinates[i].add(len/2, len/2);
-        }
 
+            cornerCoordinates.get(i).mult(len);
+            cornerCoordinates.get(i).add(len/2, len/2);
+        }
         /*
              Need to get all the points that are covered by the lines that join those points since cornerCoordinates
              only contains the points on the corners of the hilbert curve currently.
          */
-        for (int pathIdx = 0; pathIdx < cornerCoordinates.length; pathIdx++) {
+        for (int pathIdx = 0; pathIdx < cornerCoordinates.size(); pathIdx++) {
             // Get our two coordinates to find the ones between.
-            Coordinate thisCo = cornerCoordinates[pathIdx];
+            Coordinate thisCo = cornerCoordinates.get(pathIdx);
             curveCoordinates.add(thisCo);
             try {
-                Coordinate nextCo = cornerCoordinates[pathIdx + 1];
+                Coordinate nextCo = cornerCoordinates.get(pathIdx + 1);
                 // Get the coordinates the line between them will go through.
                 if (thisCo.getVectorTo(nextCo).isHorizontal()) { // The gaps are always horizontal or vertical
                     for (int i = thisCo.getX() + 1; i < nextCo.getX(); i++) {
@@ -95,12 +98,11 @@ public class HilbertFractalCurveSolver {
                         curveCoordinates.add(new Coordinate(i, thisCo.getX()));
                     }
                 }
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 // When we hit the end, do nothing.
             }
         }
-        // We now need to add the four corners, since this algorithm misses them
-
+        // Update progress in console
         System.out.println("Order " + order + ", Coordinates reached: " + curveCoordinates.size());
     }
 
@@ -108,14 +110,9 @@ public class HilbertFractalCurveSolver {
         try {
             constructRoute(delayPerStep);
         } catch (NodeMissedException e) {
-            // If we missed node(s), try the next order up.
-            System.out.println(graph.getEdgeContainer().getEdgeSet().size() + " " + graph.getNumNodes());
-            if (graph.getNumNodes() - e.getNumNodesMissed() < graph.getNumNodes()/2) {
-                order += 2; // If we missed more than half, go up two
-            } else {
-                order++;
-            }
-            if (order == 13) {
+            order++;
+            if (order == 12) { // Causes memory error
+                System.out.println("Re");
                 return new Pair<>(graph, -1.0); // Use -1 to show it was a failure.
             }
             // Flush route to save RAM
@@ -129,12 +126,13 @@ public class HilbertFractalCurveSolver {
         ArrayList<TSPNode> nodesOrdered = getNodesOrdered();
         TSPEdgeContainer container = new TSPEdgeContainer();
         graph.setEdgeContainer(container); // We do this here so we can see the path as its being constructed
+        System.out.println("here");
         for (int i = 0; i < nodesOrdered.size(); i++) {
+            System.out.println();
             // Create the edge and add it
             container.add(new TSPEdge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
             Thread.sleep(delayPerStep);
         }
-
         return container;
     }
 
@@ -153,7 +151,7 @@ public class HilbertFractalCurveSolver {
                 }
             }
         }
-        System.out.println(nodesOrdered.size() + ":" + graph.getNumNodes());
+//        System.out.println(nodesOrdered.size() + ":" + graph.getNumNodes());
 
         if (nodesOrdered.size() != graph.getNumNodes()) {
             StringBuilder sb = new StringBuilder("Node(s) missed: ");
@@ -228,8 +226,10 @@ public class HilbertFractalCurveSolver {
      * Returns the value of the @code{cornerCoordinates} attribute.
      * @return @code{cornerCoordinates} The value of the @code{cornerCoordinates} attribute.
      */
-    public Coordinate[] getCornerCoordinates() {
-        return this.cornerCoordinates;
+    public ArrayList<Coordinate> getCornerCoordinates() {
+        return cornerCoordinates;
     }
+
+
 }
 

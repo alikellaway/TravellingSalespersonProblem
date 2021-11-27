@@ -20,12 +20,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 512;
+    public static final int COORDINATE_MAX_WIDTH = 1024;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 512;
+    public static final int COORDINATE_MAX_HEIGHT = 1024;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -92,7 +92,7 @@ public class Main extends Application {
         Thread hfcsT = new Thread(() -> {
             try {
                 hfcs = new HilbertFractalCurveSolver(hfcsGraph);
-                hfcs.runSolution(0);
+                hfcs.runSolution(10);
             } catch (NonSquareCanvasException | EdgeSuperimpositionException | NodeMissedException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -112,15 +112,17 @@ public class Main extends Application {
 
 
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
+        Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         while (hfcs == null) {
             Thread.sleep(10);
         }
-        HilbertFractalCurveAnimator drawer1 = new HilbertFractalCurveAnimator(canvas, hfcsGraph, hfcs);
-        TSPGraphAnimator drawer = new TSPGraphAnimator(canvas, hfcsGraph,1, false);
+        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, hfcsGraph,1, false);
 
-        drawer.start();
-        drawer1.start();
         root.getChildren().add(canvas);
+        root.getChildren().add(canvas1);
+        graphDrawer.start();
+        curveDrawer.start();
         stage.setScene(scene);
         stage.show();
     }

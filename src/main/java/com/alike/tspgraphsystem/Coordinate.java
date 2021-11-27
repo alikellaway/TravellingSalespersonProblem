@@ -69,14 +69,7 @@ public class Coordinate {
         this.y = y;
     }
 
-    /**
-     * Used to check if two coordinate objects have the same x and y attribute values.
-     * @param otherC The coordinate object we are checking against.
-     * @return bool True if the coordinates have equal attribute values.
-     */
-    public boolean equals(Coordinate otherC) {
-        return getX() == otherC.getX() && getY() == otherC.getY();
-    }
+
 
     /**
      * Used to represent the object as a string in terminal or any text format.
@@ -115,5 +108,22 @@ public class Coordinate {
     public void add(float addX, float addY) {
         setX((int) (getX() + addX));
         setY((int) (getY() + addY));
+    }
+
+    /**
+     * Used to check if two coordinate objects have the same x and y attribute values.
+     * @param o The coordinate object we are checking against.
+     * @return bool True if the coordinates have equal attribute values.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) { // If o is self
+            return true;
+        }
+        if (!(o instanceof Coordinate c)) {
+            return false;
+        } // If not a coordinate
+        // If they have the same x and y values theyre equal
+        return this.getX() == c.getX() && this.getY() == c.getY();
     }
 }
