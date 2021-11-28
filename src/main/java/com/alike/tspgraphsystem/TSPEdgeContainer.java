@@ -181,4 +181,12 @@ public class TSPEdgeContainer {
         }
         return "Failed to load TSPNodeContainer object into JSON format.";
     }
+
+    /**
+     * Used to empty the edge set.
+     */
+    public void clear() {
+        getEdgeSet().clear();
+        editCount = 0;
+    }
 }
