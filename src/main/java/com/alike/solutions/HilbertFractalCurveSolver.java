@@ -1,10 +1,7 @@
 package com.alike.solutions;
 
 import com.alike.Main;
-import com.alike.customexceptions.EdgeSuperimpositionException;
-import com.alike.customexceptions.FractalDensityFailure;
-import com.alike.customexceptions.NodeMissedException;
-import com.alike.customexceptions.NonSquareCanvasException;
+import com.alike.customexceptions.*;
 import com.alike.tspgraphsystem.*;
 import javafx.util.Pair;
 import java.util.ArrayList;
@@ -113,7 +110,7 @@ public class HilbertFractalCurveSolver {
             NodeMissedException, InterruptedException, NonSquareCanvasException, FractalDensityFailure {
         try {
             constructRoute(delayPerStep);
-        } catch (NodeMissedException e) {
+        } catch (NodeMissedException | EdgeToSelfException e) {
             order++;
             if (order == 12) { // Causes memory error
                 throw new FractalDensityFailure("Attempted to create Hilbert of order 12 which causes a memory" +
@@ -132,7 +129,7 @@ public class HilbertFractalCurveSolver {
      * @throws InterruptedException Thrown if the thread is interrupted.
      */
     public void constructRoute(int delayPerStep)
-            throws EdgeSuperimpositionException, NodeMissedException, InterruptedException {
+            throws EdgeSuperimpositionException, NodeMissedException, InterruptedException, EdgeToSelfException {
         ArrayList<TSPNode> nodesOrdered = getNodesOrdered();
         TSPEdgeContainer container = new TSPEdgeContainer();
         graph.setEdgeContainer(container); // We do this here so we can see the path as its being constructed

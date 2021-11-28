@@ -1,9 +1,13 @@
 package com.alike.tspgraphsystem;
 
 import com.alike.customexceptions.EdgeSuperimpositionException;
+import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NodeSuperimpositionException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class used to represent and collate data on a travelling salesperson problem graph.
@@ -85,7 +89,7 @@ public class TSPGraph {
             for (int x = 0; x < numNodes; x++) {
                 try {
                     eSet.add(new TSPEdge(nSet.getNodeSet().get(x), nSet.getNodeSet().get((x + 1) % numNodes)));
-                } catch (EdgeSuperimpositionException e) {
+                } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
                     x--;
                 }
             }
@@ -118,5 +122,18 @@ public class TSPGraph {
      */
     public int getNumNodes() {
         return getNodeContainer().getNodeSet().size();
+    }
+
+    public void makeComplete() {
+        ArrayList<TSPNode> nodes = getNodeContainer().getNodeSet();
+        TSPEdgeContainer edgeContainer = getEdgeContainer();
+        for (TSPNode n : nodes) {
+            for (TSPNode o : nodes) {
+               try {
+                   edgeContainer.add(new TSPEdge(n, o));
+               } catch (EdgeSuperimpositionException | EdgeToSelfException ignored) {
+               }
+            }
+        }
     }
 }

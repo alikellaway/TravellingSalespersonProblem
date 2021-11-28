@@ -1,10 +1,7 @@
 package com.alike.solutions;
 
+import com.alike.customexceptions.*;
 import com.alike.solution_helpers.Permuter;
-import com.alike.customexceptions.EdgeSuperimpositionException;
-import com.alike.customexceptions.NonExistentNodeException;
-import com.alike.customexceptions.PermutationExhaustionException;
-import com.alike.customexceptions.PermutationFocusException;
 import com.alike.tspgraphsystem.*;
 import javafx.util.Pair;
 import java.util.List;
@@ -57,10 +54,10 @@ public class BruteForceSolver {
      * @throws InterruptedException Thrown if the thread is interrupted.
      */
     public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws PermutationExhaustionException,
-                                                                        EdgeSuperimpositionException,
-                                                                            PermutationFocusException,
-                                                                                NonExistentNodeException,
-                                                                                    InterruptedException {
+            EdgeSuperimpositionException,
+            PermutationFocusException,
+            NonExistentNodeException,
+            InterruptedException, EdgeToSelfException {
         // While there are still permutations we haven't checked we wish to continue checking more.
         while (permuter.hasUnseenPermutations()) {
             // Set the graphs edges to be a new edge container containing the edges constructed from a permutation
@@ -88,7 +85,7 @@ public class BruteForceSolver {
      * @throws NonExistentNodeException Thrown if a node ID is encountered that does not exist.
      */
     private TSPEdgeContainer createEdgeContainerFromNodeSetPermutation(List<Integer> nodeIDs)
-            throws EdgeSuperimpositionException, NonExistentNodeException {
+            throws EdgeSuperimpositionException, NonExistentNodeException, EdgeToSelfException {
         TSPEdgeContainer edgeContainer = new TSPEdgeContainer();
         TSPNodeContainer nodeContainer = graph.getNodeContainer();
         int numNodes = nodeContainer.getNodeSet().size();

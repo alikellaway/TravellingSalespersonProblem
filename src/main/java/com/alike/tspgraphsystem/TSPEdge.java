@@ -1,5 +1,7 @@
 package com.alike.tspgraphsystem;
 
+import com.alike.customexceptions.EdgeToSelfException;
+
 /**
  * Used to link two TSPNodes together.
  * @author alike
@@ -25,7 +27,10 @@ public class TSPEdge {
      * @param startNode The node at which the edge starts.
      * @param endNode The node at which the edge ends.
      */
-    public TSPEdge(TSPNode startNode, TSPNode endNode) {
+    public TSPEdge(TSPNode startNode, TSPNode endNode) throws EdgeToSelfException {
+        if (startNode == endNode) {
+            throw new EdgeToSelfException("Cannot create an edge between 1 node.");
+        }
         setStartNode(startNode);
         setEndNode(endNode);
         setEdgeID(generateID());

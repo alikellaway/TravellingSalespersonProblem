@@ -1,6 +1,7 @@
 package com.alike.solution_helpers;
 
 import com.alike.customexceptions.EdgeSuperimpositionException;
+import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NonExistentNodeException;
 import com.alike.solutions.AntColonyOptimizationSolver;
 import com.alike.tspgraphsystem.TSPEdge;
@@ -81,7 +82,7 @@ public class Ant implements Callable<Ant> {
      * @throws EdgeSuperimpositionException Thrown when an edge is superimposed on another inside an edge container.
      */
     @Override
-    public Ant call() throws NonExistentNodeException, EdgeSuperimpositionException, InterruptedException {
+    public Ant call() throws NonExistentNodeException, EdgeSuperimpositionException, InterruptedException, EdgeToSelfException {
         // Ant chooses a random node to start at.
         int startNodeID = ThreadLocalRandom.current().nextInt(numNodes);
         // Create space to store the nodes that the ant chooses to traverse as its route.
@@ -228,7 +229,8 @@ public class Ant implements Callable<Ant> {
      * @throws EdgeSuperimpositionException Thrown if the @code{TSPEdgeContainer} object finds edges superimposed
      * in the input set.
      */
-    private TSPEdgeContainer createEdgeContainerFromNodeSet(ArrayList<TSPNode> routeNodes) throws EdgeSuperimpositionException {
+    private TSPEdgeContainer createEdgeContainerFromNodeSet(ArrayList<TSPNode> routeNodes) throws
+                                                                EdgeSuperimpositionException, EdgeToSelfException {
         TSPEdgeContainer edgeContainer = new TSPEdgeContainer();
         for (int idx = 0; idx < routeNodes.size(); idx++) {
             TSPNode startNode = routeNodes.get(idx);
