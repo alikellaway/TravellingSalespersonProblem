@@ -125,19 +125,25 @@ public class TSPGraph {
     }
 
     /**
-     * Constructs an edge container for this graph that ensures the graph is complete.
+     * Constructs an edge container for this graph that ensures the graph is complete. NB: The number of edges
+     * constructed during this process will be (n * (n-1))/2
      */
     public void makeComplete() {
-        ArrayList<TSPNode> nodes = getNodeContainer().getNodeSet();
+        ArrayList<TSPNode> nodes = new ArrayList<>(getNodeContainer().getNodeSet()); // Copy the node set
         TSPEdgeContainer edgeContainer = getEdgeContainer();
         edgeContainer.clear();
-        for (TSPNode n : nodes) {
-            for (TSPNode o : nodes) {
-               try {
-                   edgeContainer.add(new TSPEdge(n, o));
-               } catch (EdgeSuperimpositionException | EdgeToSelfException ignored) {
-               }
+
+        for (int i = 0; i < nodes.size(); i++) {
+            for (TSPNode node : nodes) {
+                try {
+                    TSPEdge e = new TSPEdge(nodes.get(i), node);
+                    edgeContainer.add(e);
+                } catch (EdgeSuperimpositionException | EdgeToSelfException ignored) {
+
+                }
             }
+            nodes.remove(i); // Removing the element at the front means we will still be at index 0
+            i--;
         }
     }
 }
