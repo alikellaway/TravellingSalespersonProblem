@@ -4,7 +4,6 @@ import com.alike.Main;
 import com.alike.customexceptions.NonSquareCanvasException;
 import com.alike.solutions.HilbertFractalCurveSolver;
 import com.alike.tspgraphsystem.Coordinate;
-import com.alike.tspgraphsystem.TSPGraph;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,30 +12,23 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 /**
- * Class used to animate a Hilbert fractal curve onto a java fx canvas.
+ * Animates a Hilbert fractal curve generated inside a @code{HilbertFractalCurveSolver} onto a java fx canvas.
  * @author alike
  */
 public class HilbertFractalCurveAnimator extends AnimationTimer {
-
-
     /**
      * The graphics context of the canvas object.
      */
     private GraphicsContext gc; // graphics context
 
     /**
-     * The color to draw the hilbert curve lines.
-     */
-    private static final Color LINE_COLOR = Color.rgb(255, 255, 255);
-
-
-    /**
-     * A counter used to record how far through the drawing process we are (higher leads to faster drawing speed).
+     * A counter used to record how far through the drawing process we are so we don't re-draw the whole line each
+     * cycle.
      */
     private int progressCounter = 0;
 
     /**
-     * A counter used to limit how far the current draw cycle will draw into the hilbert curve.
+     * A counter used to limit how far the current draw cycle will draw into the hilbert curve past the progressCounter.
      */
     private int drawLimit = 0;
 
@@ -45,12 +37,10 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      */
     private ArrayList<Coordinate> path;
 
-    private HilbertFractalCurveSolver hfcs;
-
     /**
-     * The number of lines to draw in one drawing cycle.
+     * A reference to the @code{HilbertFractalCurveSolver} object we will be animating.
      */
-//    private final int linesPerStep = total - 1;
+    private HilbertFractalCurveSolver hfcs;
 
     /**
      * Used to check if the order of the graph has changed while we are drawing (we need to reset the progress counter
@@ -61,7 +51,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     /**
      * Used to construct a new @code{HilbertFractalCurveAnimator} object.
      * @param canvas The canvas on which to animate.
-     * @param hfcs The Hilbert solver containing the path we want to join.
+     * @param hfcs The Hilbert solver containing the path we want to draw.
      * @throws NonSquareCanvasException Thrown if the canvas is not a square and of side length a power of two.
      */
     public HilbertFractalCurveAnimator(Canvas canvas, HilbertFractalCurveSolver hfcs) throws NonSquareCanvasException {
@@ -82,49 +72,35 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     }
 
     /**
-     * Used to draw the hilbert curve onto the canvas.
+     * Draws the hilbert curve in hfcs onto the canvas. This works by drawing a little more of the line on each time
+     * it is called rather than redrawing the whole line (so it is faster).
      */
     private void draw() {
-        if (getOrderWeAreDrawing() != HilbertFractalCurveSolver.order && HilbertFractalCurveSolver.order < 10) { // The graph we are drawing is not current
+        /* We must check if the hfcs hasn't changed its order during our drawing process which may happen as its
+        run solution method is recursive. My PC struggles to draw any order above 9 so thats the limit. */
+        if (getOrderWeAreDrawing() != HilbertFractalCurveSolver.order && HilbertFractalCurveSolver.order < 10) {
             progressCounter = 0;
             path = hfcs.getCornerCoordinates();
             gc.clearRect(0,0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         }
-        // Draw the lines
-        // gc.setStroke(LINE_COLOR);
+        // Draw the lines from the graph that are after our progress counter but before the draw limit
         for (int i = 1 + progressCounter; i < drawLimit; i++) {
-            float hue = map(HilbertFractalCurveSolver.order * i, path.size()); // Vary the color with the path completion.
+            // Design the line - vary the color with the path completion
+            float hue = map(HilbertFractalCurveSolver.order * i, path.size());
             gc.setStroke(Color.hsb(hue, 1, 1, 2.0/HilbertFractalCurveSolver.order));
-            try {
+            try { // Draw the line
                 gc.strokeLine(path.get(i).getX(), path.get(i).getY(), path.get(i-1).getX(), path.get(i-1).getY());
-            } catch (IndexOutOfBoundsException e) {
-
+            } catch (IndexOutOfBoundsException ignored) {
             }
             progressCounter++;
         }
-
-        // Draw the indexes (used for debugging etc)
-        /* gc.setFill(LINE_COLOR);
-        for (int i = 0; i < path.size(); i++) {
-            gc.fillText(Integer.toString(i), path[i].getX() + 5, path[i].getY() - 5);
-        } */
-        drawLimit += 1024; // This is how many lines will be drawn each draw cycle
+        /* Draw limit describes what index we go up to in the path, here we increase it so we can go further in the
+           next cycle. It is important it's the side length so the line is completed. */
+        drawLimit += Main.COORDINATE_MAX_WIDTH;
         if (drawLimit > path.size()) {
             drawLimit = path.size();
         }
-
-
-            if ((progressCounter + 1) % hfcs.getCornerCoordinates().size() == 0) {
-                progressCounter = 0;
-            }
-
-
-
-
-
     }
-
-
 
     /**
      * Outputs a boolean describing whether the input number was a power of two or not.
@@ -145,7 +121,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      * @return float The value as a color between 0 and 360.
      */
     private float map(float i, float iMax) {
-        return (i/iMax) * 360;
+        return (i/iMax) * 360; // Note that when using the hue value in the hsb method, it will loop round to red
     }
 
     /**
@@ -170,7 +146,6 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         }
     }
 
-
     /**
      * Sets the @code{gc} attribute to a new value.
      * @param gc The new value to become the @code{gc} attribute.
@@ -179,16 +154,26 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         this.gc = gc;
     }
 
-
+    /**
+     * Sets the value of the @code{hfcs} attribute to a new value.
+     * @param hfcs The new value to become the @code{hfcs} attribute.
+     */
     public void setHfcs(HilbertFractalCurveSolver hfcs) {
         this.hfcs = hfcs;
     }
 
-
+    /**
+     * Sets the @code{orderWeAreDrawing} attribute to a new value.
+     * @param orderWeAreDrawing The new value to become the @code{orderWeAreDrawing} attribute.
+     */
     public void setOrderWeAreDrawing(int orderWeAreDrawing) {
         this.orderWeAreDrawing = orderWeAreDrawing;
     }
 
+    /**
+     * Returns the value of the @code{orderWeAreDrawing} attribute.
+     * @return @code{orderWeAreDrawing} The value of the @code{orderWeAreDrawing} attribute.
+     */
     public int getOrderWeAreDrawing() {
         return this.orderWeAreDrawing;
     }
