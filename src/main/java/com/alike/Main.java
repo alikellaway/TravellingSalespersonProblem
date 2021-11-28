@@ -93,7 +93,7 @@ public class Main extends Application {
             try {
                 hfcs = new HilbertFractalCurveSolver(hfcsGraph);
                 hfcs.runSolution(10);
-            } catch (NonSquareCanvasException | EdgeSuperimpositionException | NodeMissedException | InterruptedException e) {
+            } catch (NonSquareCanvasException | EdgeSuperimpositionException | NodeMissedException | InterruptedException | FractalDensityFailure e) {
                 e.printStackTrace();
             }
         });

@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
+import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
+
 /**
  * Animates a Hilbert fractal curve generated inside a @code{HilbertFractalCurveSolver} onto a java fx canvas.
  * @author alike
@@ -100,18 +102,6 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         if (drawLimit > path.size()) {
             drawLimit = path.size();
         }
-    }
-
-    /**
-     * Outputs a boolean describing whether the input number was a power of two or not.
-     * @param num The number we are checking.
-     * @return boolean true if the number is a power of 2, false if not.
-     */
-    private boolean isPowerOfTwo(double num) {
-        while (num > 1) {
-            num = num / 2;
-        }
-        return num == 1.00;
     }
 
     /**

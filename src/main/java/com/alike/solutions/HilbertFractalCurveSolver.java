@@ -2,33 +2,29 @@ package com.alike.solutions;
 
 import com.alike.Main;
 import com.alike.customexceptions.EdgeSuperimpositionException;
+import com.alike.customexceptions.FractalDensityFailure;
 import com.alike.customexceptions.NodeMissedException;
 import com.alike.customexceptions.NonSquareCanvasException;
 import com.alike.tspgraphsystem.*;
 import javafx.util.Pair;
-
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+
+import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
 
 /**
- * Class used to animate a Hilbert fractal curve onto a java fx canvas.
+ * Class constructs hilbert fractal curves and then uses the path to solve a TSPGraph route.
  * @author alike
  */
 public class HilbertFractalCurveSolver {
-
     /**
-     * The graph which we are animating.
+     * The graph which we are solving.
      */
     private TSPGraph graph;
 
     /**
-     * The order of Hilbert curve to draw (how many iterations to animate).
+     * The order of Hilbert curve to construct (how many iterations to do).
      */
     public static int order = 8;
-
-    private static final int ORDER_LIMIT = 14; // equates to roughly 1E59W points plotted in the line
 
     /**
      * The number of sectors that the fractal will be broken into (e.g. quadrants at order 2).
@@ -40,20 +36,20 @@ public class HilbertFractalCurveSolver {
      */
     public final int total = N * N;
 
-
     /**
-     * The series of coordinates that is used to draw the curve.
+     * The series of coordinates that is used to draw the curve. It's the corners since we can use them to stroke lines
+     * on a canvas.
      */
     private static ArrayList<Coordinate> cornerCoordinates;
 
     /**
-     * All the coordinates the path is travelling through.
+     * All the coordinates the curve travels through (not just the corners).
      */
     private static ArrayList<Coordinate> curveCoordinates = new ArrayList<>();
 
     /**
-     * Used to construct a new @code{HilbertFractalCurveAnimator} object.
-     * @param graph The graph which we are animating.
+     * Used to construct a new @code{HilbertFractalCurveSolver} object.
+     * @param graph The graph which we are solving.
      * @throws NonSquareCanvasException Thrown if the canvas is not a square and of side length a power of two.
      */
     public HilbertFractalCurveSolver(TSPGraph graph) throws NonSquareCanvasException {
@@ -70,18 +66,15 @@ public class HilbertFractalCurveSolver {
         // Set our graph
         setGraph(graph);
 
-        // Calculate the hilbert curve and store it as a sequence of points
+        // Calculate the hilbert curve corners and store them as a sequence of Coordinates
         for (int i = 0; i < total; i++) {
-            cornerCoordinates.add(hilbert(i));
+            cornerCoordinates.add(getHilbertCorner(i));
             float len = (float) Main.WINDOW_MAX_WIDTH / N;
-
             cornerCoordinates.get(i).mult(len);
             cornerCoordinates.get(i).add(len/2, len/2);
         }
-        /*
-             Need to get all the points that are covered by the lines that join those points since cornerCoordinates
-             only contains the points on the corners of the hilbert curve currently.
-         */
+        /* Need to get all the points that are covered by the lines that will join the corners since cornerCoordinates
+           only contains the points on the corners of the hilbert curve currently. */
         for (int pathIdx = 0; pathIdx < cornerCoordinates.size(); pathIdx++) {
             // Get our two coordinates to find the ones between.
             Coordinate thisCo = cornerCoordinates.get(pathIdx);
@@ -102,26 +95,43 @@ public class HilbertFractalCurveSolver {
                 // When we hit the end, do nothing.
             }
         }
-        // Update progress in console
+        // Update progress in console - NB: at this point we have only a hilbert path around a coordinate space
         System.out.println("Order " + order + ", Coordinates reached: " + curveCoordinates.size());
     }
 
-    public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws EdgeSuperimpositionException, NodeMissedException, InterruptedException, NonSquareCanvasException {
+    /**
+     * Used to instruct @code{this} to find a route around the @code{graph} attribute.
+     * @param delayPerStep Time to wait between adding edges to the graphs edge container (so we can see it drawn).
+     * @return A pair containing the value of the @code{graph} attribute and a double - the length of its route.
+     * @throws EdgeSuperimpositionException Thrown if an attempt is made to make an edge that already exists.
+     * @throws NodeMissedException Thrown if a node is missed by the fractal path we used.
+     * @throws InterruptedException Thrown if the thread is interrupted.
+     * @throws NonSquareCanvasException Thrown if the canvas is not square (needed because we are calling the
+     * constructor again).
+     */
+    public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws EdgeSuperimpositionException,
+            NodeMissedException, InterruptedException, NonSquareCanvasException, FractalDensityFailure {
         try {
             constructRoute(delayPerStep);
         } catch (NodeMissedException e) {
             order++;
             if (order == 12) { // Causes memory error
-                System.out.println("Re");
-                return new Pair<>(graph, -1.0); // Use -1 to show it was a failure.
+                throw new FractalDensityFailure("Attempted to create Hilbert of order 12 which causes a memory" +
+                        " exception.");
             }
-            // Flush route to save RAM
-            new HilbertFractalCurveSolver(graph).runSolution(delayPerStep);
+            new HilbertFractalCurveSolver(graph).runSolution(delayPerStep); // Try again at a higher order
         }
         return new Pair<>(graph, graph.getEdgeContainer().calculateCurrentRouteLength());
     }
 
-    public TSPEdgeContainer constructRoute(int delayPerStep)
+    /**
+     * Constructs an edge container for the @code{graph} using the list output by @code{getNodesOrdered}.
+     * @param delayPerStep The time wait after each edge addition (so we can see it draw if we want).
+     * @throws EdgeSuperimpositionException Thrown if an attempt is made to create an edge that already exists.
+     * @throws NodeMissedException Thrown if a node is missed using the current hilbert curve as the map.
+     * @throws InterruptedException Thrown if the thread is interrupted.
+     */
+    public void constructRoute(int delayPerStep)
             throws EdgeSuperimpositionException, NodeMissedException, InterruptedException {
         ArrayList<TSPNode> nodesOrdered = getNodesOrdered();
         TSPEdgeContainer container = new TSPEdgeContainer();
@@ -133,15 +143,18 @@ public class HilbertFractalCurveSolver {
             container.add(new TSPEdge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
             Thread.sleep(delayPerStep);
         }
-        return container;
     }
 
+    /**
+     * Returns the nodes in an order using the current hilbert curve to map the nodes into an order.
+     * @return @code{nodesOrdered} A list containing the nodes in the order the hilbert curve hits them.
+     * @throws NodeMissedException Thrown if the current hilbert curve misses nodes when used as the map.
+     */
     public ArrayList<TSPNode> getNodesOrdered() throws NodeMissedException {
         // Find which nodes we want and put them in order according to the graph.
-        // We copy the node array here so that we can remove the node from the list once weve found it.
+        // We copy the node array here so that we can remove the node from the list once we've found it.
         ArrayList<TSPNode> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
         ArrayList<TSPNode> nodesOrdered = new ArrayList<>();
-
         for (Coordinate c : curveCoordinates) {
             for (int i = 0; i < nodes.size(); i++) {
                 TSPNode n = nodes.get(i);
@@ -151,8 +164,7 @@ public class HilbertFractalCurveSolver {
                 }
             }
         }
-//        System.out.println(nodesOrdered.size() + ":" + graph.getNumNodes());
-
+        // Check to see if we missed nodes - if so throw an exception.
         if (nodesOrdered.size() != graph.getNumNodes()) {
             StringBuilder sb = new StringBuilder("Node(s) missed: ");
             for (TSPNode n : nodes) {
@@ -160,22 +172,22 @@ public class HilbertFractalCurveSolver {
             }
             throw new NodeMissedException(sb.toString(), nodes.size());
         }
-
         return nodesOrdered;
     }
 
     /**
-     * Used to return the coordinate of a point i on the coordinate.
-     * @param i The i th step on a cornerCoordinates using the hilbert curve as a route.
-     * @return c The coordinates of the i th step on the cornerCoordinates.
+     * Used to return the coordinates of an index i on the curve.
+     * Algorithm found: http://blog.marcinchwedczuk.pl/iterative-algorithm-for-drawing-hilbert-curve
+     * @param i The i th corner we find the coordinates of.
+     * @return c The coordinates of the i th step on the curve.
      */
-    private Coordinate hilbert(int i) {
-        Coordinate[] points = { // This is the order 1
-                new Coordinate(0,0),
-                new Coordinate(0,1),
-                new Coordinate(1,1),
-                new Coordinate(1,0)};
-
+    private Coordinate getHilbertCorner(int i) {
+        // This is order 1 (the simplest case)
+        Coordinate[] points = {new Coordinate(0,0),
+                               new Coordinate(0,1),
+                               new Coordinate(1,1),
+                               new Coordinate(1,0)};
+        // Mask by 3 to find which quadrant the coordinate is in the order above.
         int index = i & 3;
         Coordinate c = points[index];
 
@@ -211,25 +223,11 @@ public class HilbertFractalCurveSolver {
     }
 
     /**
-     * Outputs a boolean describing whether the input number was a power of two or not.
-     * @param num The number we are checking.
-     * @return boolean true if the number is a power of 2, false if not.
-     */
-    private boolean isPowerOfTwo(double num) {
-        while (num > 1) {
-            num = num / 2;
-        }
-        return num == 1.00;
-    }
-
-    /**
      * Returns the value of the @code{cornerCoordinates} attribute.
      * @return @code{cornerCoordinates} The value of the @code{cornerCoordinates} attribute.
      */
     public ArrayList<Coordinate> getCornerCoordinates() {
         return cornerCoordinates;
     }
-
-
 }
 
