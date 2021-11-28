@@ -124,9 +124,13 @@ public class TSPGraph {
         return getNodeContainer().getNodeSet().size();
     }
 
+    /**
+     * Constructs an edge container for this graph that ensures the graph is complete.
+     */
     public void makeComplete() {
         ArrayList<TSPNode> nodes = getNodeContainer().getNodeSet();
         TSPEdgeContainer edgeContainer = getEdgeContainer();
+        edgeContainer.clear();
         for (TSPNode n : nodes) {
             for (TSPNode o : nodes) {
                try {
