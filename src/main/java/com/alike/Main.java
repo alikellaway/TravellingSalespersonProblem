@@ -3,10 +3,7 @@ package com.alike;
 import com.alike.customexceptions.*;
 import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
-import com.alike.solutions.AntColonyOptimizationSolver;
-import com.alike.solutions.BruteForceSolver;
-import com.alike.solutions.HilbertFractalCurveSolver;
-import com.alike.solutions.NearestNeighbourSolver;
+import com.alike.solutions.*;
 import com.alike.tspgraphsystem.TSPGraph;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -47,12 +44,13 @@ public class Main extends Application {
      */
     private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
 
-    private static TSPGraph nnsGraph = TSPGraph.generateRandomGraph(1000, false);
-    private static TSPGraph bsGraph = TSPGraph.generateRandomGraph(6, false);
+    private static TSPGraph nnsGraph = TSPGraph.generateRandomGraph(500, false);
+    private static TSPGraph bsGraph = TSPGraph.generateRandomGraph(12, false);
     private static TSPGraph acosGraph = TSPGraph.generateRandomGraph(100, false);
     private static TSPGraph hfcsGraph = TSPGraph.generateRandomGraph(50, false);
+    private static TSPGraph csGraph = TSPGraph.generateRandomGraph(100, false);
 
-    private static HilbertFractalCurveSolver hfcs;
+    private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
 
     public static void main(String[] args) {
 
@@ -61,7 +59,7 @@ public class Main extends Application {
 //            try {
 //                NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
 //                nns.runSolution(20);
-//            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException e) {
+//            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException | EdgeToSelfException e) {
 //                e.printStackTrace();
 //            }
 //        });
@@ -70,11 +68,11 @@ public class Main extends Application {
 //        Thread bsT = new Thread(() -> {
 //           try {
 //               BruteForceSolver bs = new BruteForceSolver(bsGraph);
-//               Pair<TSPGraph, Double> solutionOutput = bs.runSolution(100);
+//               Pair<TSPGraph, Double> solutionOutput = bs.runSolution(50);
 //               System.out.println(solutionOutput.getKey());
 //               System.out.println(solutionOutput.getValue());
 //
-//           } catch (PermutationExhaustionException | EdgeSuperimpositionException | PermutationFocusException | NonExistentNodeException | InterruptedException e) {
+//           } catch (PermutationExhaustionException | EdgeSuperimpositionException | PermutationFocusException | NonExistentNodeException | InterruptedException | EdgeToSelfException e) {
 //               e.printStackTrace();
 //           }
 //        });
@@ -98,6 +96,16 @@ public class Main extends Application {
             }
         });
         hfcsT.start();
+        // Christofide's algorithm solver
+//        Thread csT = new Thread(() -> {
+//            try {
+//                ChristofidesSolver cs = new ChristofidesSolver(csGraph);
+//                cs.runSolution(0);
+//            } catch (EdgeSuperimpositionException | EdgeToSelfException | NonExistentNodeException | InterruptedException | NodeSuperimpositionException | NoClosestNodeException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//        csT.start();
         launch(args);
     }
 
@@ -106,10 +114,8 @@ public class Main extends Application {
         stage.setTitle(STAGE_TITLE);
         Group root = new Group();
 
-
         Scene scene = new Scene(root, WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         scene.setFill(BACK_GROUND_COLOR);
-
 
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
