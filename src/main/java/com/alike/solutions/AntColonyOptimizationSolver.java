@@ -7,7 +7,6 @@ import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPNode;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
@@ -29,7 +28,7 @@ public class AntColonyOptimizationSolver {
 
     private TSPEdgeContainer shortestRoute;
 
-    private AtomicDouble[][] pheremoneLevelMatrix;
+    private AtomicDouble[][] pheromoneLevelMatrix;
     private double[][] distanceMatrix;
 
     private ExecutorService executorService;
@@ -61,7 +60,7 @@ public class AntColonyOptimizationSolver {
         processAnts();
         getExecutorService().shutdown();
         System.out.println("All " + numAnts + " Ants have finished traversing!");
-        return new Pair<>(graph, graph.getEdgeContainer().calculateCurrentRouteLength());
+        return new Pair<>(graph, graph.getEdgeContainer().getTotalLength());
     }
 
     private void processAnts() {
@@ -69,10 +68,10 @@ public class AntColonyOptimizationSolver {
             try {
                 Ant ant = getExecutorCompletionService().take().get();
                 TSPEdgeContainer currentRoute = ant.getRoute();
-                if (shortestRoute == null || currentRoute.calculateCurrentRouteLength()
-                                                        < shortestRoute.calculateCurrentRouteLength()) {
+                if (shortestRoute == null || currentRoute.getTotalLength()
+                                                        < shortestRoute.getTotalLength()) {
                     shortestRoute = currentRoute;
-                    System.out.println(shortestRoute.calculateCurrentRouteLength() + " : " + ant.getAntID());
+                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
                     graph.setEdgeContainer(shortestRoute);
                 }
             } catch (InterruptedException | ExecutionException e) {
@@ -120,11 +119,11 @@ public class AntColonyOptimizationSolver {
 
     private void initialisePheremoneLevels() {
         int numNodes = graph.getNumNodes();
-        pheremoneLevelMatrix = new AtomicDouble[numNodes][numNodes];
+        pheromoneLevelMatrix = new AtomicDouble[numNodes][numNodes];
         Random r = new Random();
         for (int x = 0; x < numNodes; x++) {
             for (int y = 0; y < numNodes; y++) {
-                pheremoneLevelMatrix[x][y] = new AtomicDouble(r.nextDouble());
+                pheromoneLevelMatrix[x][y] = new AtomicDouble(r.nextDouble());
             }
         }
     }
@@ -133,8 +132,8 @@ public class AntColonyOptimizationSolver {
         return distanceMatrix;
     }
 
-    public AtomicDouble[][] getPheremoneLevelMatrix() {
-        return pheremoneLevelMatrix;
+    public AtomicDouble[][] getPheromoneLevelMatrix() {
+        return pheromoneLevelMatrix;
     }
 
     public int getDelayPerStep() {

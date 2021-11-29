@@ -134,12 +134,12 @@ public class Ant implements Callable<Ant> {
     private void adjustPheremoneLevel(int x, int y, double distance) {
         boolean flag = false;
         while (!flag) {
-            double currentPheremoneLevel = acos.getPheremoneLevelMatrix()[x][y].doubleValue();
+            double currentPheremoneLevel = acos.getPheromoneLevelMatrix()[x][y].doubleValue();
             double updatedPheremoneLevel = (1 - RHO) * currentPheremoneLevel + Q/distance;
             if (updatedPheremoneLevel < 0) {
-                flag = acos.getPheremoneLevelMatrix()[x][y].compareAndSet(0);
+                flag = acos.getPheromoneLevelMatrix()[x][y].compareAndSet(0);
             } else {
-                flag = acos.getPheremoneLevelMatrix()[x][y].compareAndSet(updatedPheremoneLevel);
+                flag = acos.getPheromoneLevelMatrix()[x][y].compareAndSet(updatedPheremoneLevel);
             }
         }
     }
@@ -214,7 +214,7 @@ public class Ant implements Callable<Ant> {
 
     private double getTPNumerator(int x, int y) {
         double numerator = 0.0;
-        double pheromoneLevel = acos.getPheremoneLevelMatrix()[y][x].doubleValue();
+        double pheromoneLevel = acos.getPheromoneLevelMatrix()[y][x].doubleValue();
         if (pheromoneLevel != 0.0) { // If pheromone level not 0
             // Recalculate pheromone level using the formula.
             numerator = Math.pow(pheromoneLevel, ALPHA) * Math.pow(1/acos.getDistanceMatrix()[x][y], BETA);
