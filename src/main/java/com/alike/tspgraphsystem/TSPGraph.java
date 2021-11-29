@@ -35,6 +35,16 @@ public class TSPGraph {
     }
 
     /**
+     * Constructs a new graph object given a node container and an edge container.
+     * @param nodeContainer The value that will become the @code{nodeContainer} attribute.
+     * @param edgeContainer The value that will become the @code{edgeContainer} attribute.
+     */
+    public TSPGraph(TSPNodeContainer nodeContainer, TSPEdgeContainer edgeContainer) {
+        setNodeContainer(nodeContainer);
+        setEdgeContainer(edgeContainer);
+    }
+
+    /**
      * Returns the @code{nodeContainer} attribute of the TSPGraph object.
      * @return @code{nodeContainer} The @code{nodeContainer} attribute of the TSPGraph object.
      */
@@ -122,5 +132,14 @@ public class TSPGraph {
      */
     public int getNumNodes() {
         return getNodeContainer().getNodeSet().size();
+    }
+
+    /**
+     * Ensures all nodes are set to unvisited.
+     */
+    public void setAllNodesUnvisited() {
+        for (TSPNode n : getNodeContainer().getNodeSet()) {
+            n.setVisited(false);
+        }
     }
 }
