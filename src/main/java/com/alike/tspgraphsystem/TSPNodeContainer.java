@@ -36,7 +36,6 @@ public class TSPNodeContainer {
      */
     public TSPNodeContainer(ArrayList<TSPNode> nodeSet) throws NodeSuperimpositionException {
         checkNodeSetForSuperimposition(nodeSet);
-        nodeSet = new ArrayList<>();
         setNodeSet(nodeSet);
         nodeSet.trimToSize();
     }
@@ -155,5 +154,20 @@ public class TSPNodeContainer {
             }
         }
         throw new NonExistentNodeException("No node found with ID: " + id + " (" + getNodeSet().toString() + ")");
+    }
+
+    /**
+     * Returns an array list containing all the nodes that have an equal boolean as their @code{visited} attribute.
+     * @param getVisitedOrUnvisited The value of visited you would like the nodes of.
+     * @return ouput The array list containing the nodes that had a matching value of visited.
+     */
+    public ArrayList<TSPNode> getNodesWithVisitedState(boolean getVisitedOrUnvisited) {
+        ArrayList<TSPNode> output = new ArrayList<>();
+        for (TSPNode n : nodeSet) {
+            if (n.isVisited() == getVisitedOrUnvisited) {
+                output.add(n);
+            }
+        }
+        return output;
     }
 }
