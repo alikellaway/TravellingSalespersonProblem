@@ -1,6 +1,9 @@
 package com.alike.tspgraphsystem;
 
 import com.alike.Main;
+import com.alike.customexceptions.NoClosestNodeException;
+
+import java.util.ArrayList;
 
 /**
  * Used to represent nodes (cities) in the TSP.
@@ -148,5 +151,32 @@ public class TSPNode {
 
     public static void restartNodeCounter() {
         numNodes = 0;
+    }
+
+    /**
+     * Finds the closest node to this node in the input array of nodes.
+     * @param otherNodes The input array of node from which we will find a closest node.
+     * @return closestFoundNode The closest found node to this node.
+     * @throws NoClosestNodeException Thrown if a closest node could not be found.
+     */
+    public TSPNode getClosestNode(ArrayList<TSPNode> otherNodes) throws NoClosestNodeException {
+        if (!otherNodes.contains(this)) {
+            throw new NoClosestNodeException("This node was not found in the input list.");
+        }
+        TSPNode closestFoundNode = null;
+        double distanceToClosestNode = Double.MAX_VALUE;
+        for (TSPNode n : otherNodes) {
+            if (!(this.equals(n))) {
+                double distance = this.getVectorTo(n).magnitude();
+                if (distance < distanceToClosestNode) {
+                    closestFoundNode = n;
+                    distanceToClosestNode = distance;
+                }
+            }
+        }
+        if (closestFoundNode == null) {
+            throw new NoClosestNodeException("There was no closest node.");
+        }
+        return closestFoundNode;
     }
 }
