@@ -107,4 +107,13 @@ public class TSPEdge {
             return startID + ":" + endID;
         }
     }
+
+    /**
+     * Returns a boolean describing whether an edge starts or ends on the parameter node.
+     * @param n The node to check the edge for.
+     * @return boolean true if the edge does touch the paramet node.
+     */
+    public boolean containsNode(TSPNode n) {
+        return startNode.equals(n) || endNode.equals(n);
+    }
 }
