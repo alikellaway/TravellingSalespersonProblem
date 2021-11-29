@@ -15,7 +15,7 @@ public class TSPEdgeContainer {
     /**
      * The collection of edges that are managed by this @code{TSPEdgeContainer} object.
      */
-    public ArrayList<TSPEdge> edgeSet;
+    private ArrayList<TSPEdge> edgeSet;
 
     /**
      * The number of times this edge container has been edited (for use during heuristic and optimisation algorithms)
@@ -158,7 +158,7 @@ public class TSPEdgeContainer {
      * Calculates the total length of the edges currently within the container.
      * @return totalLenght The total length of the edges in the container.
      */
-    public double calculateCurrentRouteLength() {
+    public double getTotalLength() {
         double totalLength = 0;
         for (TSPEdge e : edgeSet) {
             Vector v = e.getStartNode().getVectorTo(e.getEndNode());
@@ -188,5 +188,19 @@ public class TSPEdgeContainer {
     public void clear() {
         getEdgeSet().clear();
         editCount = 0;
+    }
+
+    /**
+     * Used to add all the edges from the parameter container into this container
+     * @param otherContainer The container to absorb.
+     */
+    public void absorb(TSPEdgeContainer otherContainer) {
+        for (TSPEdge e : otherContainer.getEdgeSet()) {
+            try {
+                this.add(e);
+            } catch (EdgeSuperimpositionException ignored) {
+
+            }
+        }
     }
 }

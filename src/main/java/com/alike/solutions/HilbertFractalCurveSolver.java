@@ -118,7 +118,7 @@ public class HilbertFractalCurveSolver {
             }
             new HilbertFractalCurveSolver(graph).runSolution(delayPerStep); // Try again at a higher order
         }
-        return new Pair<>(graph, graph.getEdgeContainer().calculateCurrentRouteLength());
+        return new Pair<>(graph, graph.getEdgeContainer().getTotalLength());
     }
 
     /**

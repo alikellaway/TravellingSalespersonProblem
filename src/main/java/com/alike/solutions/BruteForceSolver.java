@@ -63,7 +63,7 @@ public class BruteForceSolver {
             // Set the graphs edges to be a new edge container containing the edges constructed from a permutation
             graph.setEdgeContainer(createEdgeContainerFromNodeSetPermutation(permuter.getNextPermutation()));
             // Calculate the length of that route
-            double routeLength = graph.getEdgeContainer().calculateCurrentRouteLength();
+            double routeLength = graph.getEdgeContainer().getTotalLength();
             // Check if the route is the shortest route, if it is the record it.
             if (routeLength < shortestFoundRoute) {
                 shortestFoundRoute = routeLength;

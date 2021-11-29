@@ -67,7 +67,7 @@ public class NearestNeighbourSolver {
             traverseToNextClosestNode();
         }
         // Output information about solve
-        return new Pair<>(this.graph, graph.getEdgeContainer().calculateCurrentRouteLength());
+        return new Pair<>(this.graph, graph.getEdgeContainer().getTotalLength());
     }
 
     /**
