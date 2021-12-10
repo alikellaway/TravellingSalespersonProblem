@@ -5,6 +5,7 @@ import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solutions.*;
 import com.alike.tspgraphsystem.TSPGraph;
+import com.alike.tspgraphsystem.TSPGraphGenerator;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -17,12 +18,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 1024;
+    public static final int COORDINATE_MAX_WIDTH = 512;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 1024;
+    public static final int COORDINATE_MAX_HEIGHT = 512;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -44,11 +45,11 @@ public class Main extends Application {
      */
     private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
 
-    private static TSPGraph nnsGraph = TSPGraph.generateRandomGraph(500, false);
-    private static TSPGraph bsGraph = TSPGraph.generateRandomGraph(12, false);
-    private static TSPGraph acosGraph = TSPGraph.generateRandomGraph(100, false);
-    private static TSPGraph hfcsGraph = TSPGraph.generateRandomGraph(50, false);
-    private static TSPGraph csGraph = TSPGraph.generateRandomGraph(100, false);
+    private static TSPGraph nnsGraph = TSPGraphGenerator.generateRandomGraph(500, false);
+    private static TSPGraph bsGraph = TSPGraphGenerator.generateRandomGraph(12, false);
+    private static TSPGraph acosGraph = TSPGraphGenerator.generateRandomGraph(100, false);
+    private static TSPGraph hfcsGraph = TSPGraphGenerator.generateRandomGraph(50, false);
+    private static TSPGraph csGraph = TSPGraphGenerator.generateRandomGraph(100, false);
 
     private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
 
@@ -110,7 +111,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws InterruptedException, NonSquareCanvasException {
+    public void start(Stage stage) throws InterruptedException, NonSquareCanvasException, InvalidGraphException, NodeSuperimpositionException {
         stage.setTitle(STAGE_TITLE);
         Group root = new Group();
 
@@ -122,13 +123,14 @@ public class Main extends Application {
         while (hfcs == null) {
             Thread.sleep(10);
         }
-        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, hfcsGraph,1, false);
+//        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
+        TSPGraph g = TSPGraphGenerator.generateRegularPolygonalGraph(20, COORDINATE_MAX_WIDTH, COORDINATE_MAX_HEIGHT);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, g,1, false);
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);
         graphDrawer.start();
-        curveDrawer.start();
+//        curveDrawer.start();
         stage.setScene(scene);
         stage.show();
     }

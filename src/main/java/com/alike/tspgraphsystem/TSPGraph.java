@@ -5,6 +5,7 @@ import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NodeSuperimpositionException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,41 +78,6 @@ public class TSPGraph {
     }
 
     /**
-     * Used to generate a random TSPGraph object with randomized node positions and randomized edges (if needed).
-     * @param numNodes The number of nodes the random graph must have.
-     * @param addEdges Whether or not the method should output a graph with randomized edges already assigned.
-     * @return @code{g} A new randomized TSPGraph object.
-     */
-    public static TSPGraph generateRandomGraph(int numNodes, boolean addEdges) {
-        TSPNode.restartNodeCounter();
-        // Create some random nodes
-        TSPNodeContainer nSet = new TSPNodeContainer();
-        for (int i = 0; i < numNodes; i++) {
-            try {
-                nSet.add(TSPNode.generateRandomTSPNode());
-            } catch (NodeSuperimpositionException e) {
-                i--;
-            }
-        }
-        // Create an empty edge set.
-        TSPEdgeContainer eSet = new TSPEdgeContainer();
-        if (addEdges) { // Fill with random edges using trial and error if edges are required.
-            for (int x = 0; x < numNodes; x++) {
-                try {
-                    eSet.add(new TSPEdge(nSet.getNodeSet().get(x), nSet.getNodeSet().get((x + 1) % numNodes)));
-                } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
-                    x--;
-                }
-            }
-        }
-        // Construct a new TSPGraph object and return it.
-        TSPGraph g = new TSPGraph();
-        g.setNodeContainer(nSet);
-        g.setEdgeContainer(eSet);
-        return g;
-    }
-
-    /**
      * Used to represent a TSPGraph object as a string - output the object in JSON format.
      * @return String The TSPGraph represented as a JSON format string.
      */
@@ -141,5 +107,13 @@ public class TSPGraph {
         for (TSPNode n : getNodeContainer().getNodeSet()) {
             n.setVisited(false);
         }
+    }
+
+    public TSPGraph copy() throws NodeSuperimpositionException, EdgeSuperimpositionException {
+        TSPGraph graphCopy = new TSPGraph();
+        ArrayList<TSPNode> nodesCopy = new ArrayList<>(getNodeContainer().getNodeSet());
+        graphCopy.setNodeContainer(new TSPNodeContainer(nodesCopy));
+        graphCopy.setEdgeContainer(getEdgeContainer().copy());
+        return graphCopy;
     }
 }

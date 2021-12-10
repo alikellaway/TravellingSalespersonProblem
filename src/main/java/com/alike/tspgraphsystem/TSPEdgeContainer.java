@@ -203,4 +203,17 @@ public class TSPEdgeContainer {
             }
         }
     }
+
+    /**
+     * Constructs a new Edge container that is a copy of this container.
+     * @return copy The copy of this edge container.
+     * @throws EdgeSuperimpositionException Thrown if an edge superimpostion occurs when copying.
+     */
+    public TSPEdgeContainer copy() throws EdgeSuperimpositionException {
+        TSPEdgeContainer copy = new TSPEdgeContainer();
+        for (TSPEdge e : getEdgeSet()) {
+            copy.add(e);
+        }
+        return copy;
+    }
 }
