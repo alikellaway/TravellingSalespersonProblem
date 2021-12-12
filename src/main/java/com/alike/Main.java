@@ -3,6 +3,8 @@ package com.alike;
 import com.alike.customexceptions.*;
 import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
+import com.alike.read_write.CoordinateListFileReader;
+import com.alike.read_write.CoordinateListFileWriter;
 import com.alike.solutions.*;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPGraphGenerator;
@@ -13,6 +15,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
+import java.io.IOException;
 
 public class Main extends Application {
     /**
@@ -107,6 +111,14 @@ public class Main extends Application {
 //            }
 //        });
 //        csT.start();
+        // Populate our graph file with the test graphs incl. random graphs, polygon graphs and irregular polygon graphs
+        try {
+            CoordinateListFileWriter clfw = new CoordinateListFileWriter();
+            clfw.populateFile();
+            CoordinateListFileReader clfr = new CoordinateListFileReader();
+        } catch (InvalidGraphException | NodeSuperimpositionException | IOException e) {
+            e.printStackTrace();
+        }
         launch(args);
     }
 
@@ -120,9 +132,9 @@ public class Main extends Application {
 
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
-        while (hfcs == null) {
-            Thread.sleep(10);
-        }
+//        while (hfcs == null) {
+//            Thread.sleep(10);
+//        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
         TSPGraph g = TSPGraphGenerator.generateIrregularPolygonalGraph(4, COORDINATE_MAX_WIDTH, COORDINATE_MAX_HEIGHT, 700, 300);
         TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, g,1, false);

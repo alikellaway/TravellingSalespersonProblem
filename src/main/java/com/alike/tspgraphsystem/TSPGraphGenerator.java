@@ -75,13 +75,19 @@ public class TSPGraphGenerator {
             Coordinate c = new Coordinate(x, y);
             tspGraph.getNodeContainer().add(new TSPNode(c));
             currentAngle += angleStep;
-            /* Check that the node is not outside of the coordinate space in either direction. If it is then set the
-             * value to the max value. */
+            /* Check that the node is not outside the coordinate space in either direction. If it is then set the
+             * value to the max/min value. */
             if (c.getX() > xMax) {
                 c.setX(xMax);
             }
             if (c.getY() > yMax) {
                 c.setY(yMax);
+            }
+            if (c.getX() < 0) {
+                c.setX(0);
+            }
+            if (c.getY() < 0) {
+                c.setY(0);
             }
         }
         return tspGraph;

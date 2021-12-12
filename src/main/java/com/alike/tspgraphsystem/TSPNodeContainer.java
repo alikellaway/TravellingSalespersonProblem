@@ -172,33 +172,14 @@ public class TSPNodeContainer {
     }
 
     /**
-     * Constructs a node container from a string output from the @code{toStorageFormat} method.
-     * @param containerString The string from which we are trying to parse a container.
-     * @return nc The node container constructed using the information in the input string.
-     * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose a node on another.
+     * Returns the coordinates of all the nodes in the node container.
+     * @return cL An array list containing the coordinates of all the nodes in the container.
      */
-    public static TSPNodeContainer parseNodeContainer(String containerString) throws NodeSuperimpositionException {
-        TSPNodeContainer nc = new TSPNodeContainer();
-        String[] cs = containerString.split(";");
-        for (String c : cs) {
-            String[] values = c.split(",");
-            int x = Integer.parseInt(values[0].substring(1));
-            int y = Integer.parseInt(values[1].substring(0, values[1].length() - 1));
-            nc.add(new TSPNode(new Coordinate(x, y)));
-            System.out.println(x + "," + y);
-        }
-        return nc;
-    }
-
-    /**
-     * Used to arrange the coordinates of the nodes into a format that can be read from storage.
-     * @return sfNc The node container in storage format.
-     */
-    public String toStorageFormat() {
-        StringBuilder sfNc = new StringBuilder(); // This will help us construct what we write
+    public ArrayList<Coordinate> getNodeCoordinates() {
+        ArrayList<Coordinate> cL = new ArrayList<>();
         for (TSPNode n : getNodeSet()) {
-            sfNc.append(n.getCoordinate().toString()).append(";"); // Write each coordinate in
+            cL.add(n.getCoordinate());
         }
-        return sfNc.toString();
+        return cL;
     }
 }

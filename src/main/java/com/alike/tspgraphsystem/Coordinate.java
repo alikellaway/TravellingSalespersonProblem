@@ -1,5 +1,8 @@
 package com.alike.tspgraphsystem;
 
+import com.alike.customexceptions.NodeSuperimpositionException;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -125,5 +128,37 @@ public class Coordinate {
         } // If not a coordinate
         // If they have the same x and y values theyre equal
         return this.getX() == c.getX() && this.getY() == c.getY();
+    }
+
+    /**
+     * Constructs a node container from a string output from the @code{toStorageFormat} method.
+     * @param coordinateListString The string from which we are trying to parse a container.
+     * @return nc The node container constructed using the information in the input string.
+     * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose a node on another.
+     */
+    public static ArrayList<Coordinate> parseCoordinateList(String coordinateListString) {
+        ArrayList<Coordinate> cL = new ArrayList<>();
+        String[] cs = coordinateListString.split(";");
+        for (String c : cs) {
+            String[] values = c.split(",");
+            int x = Integer.parseInt(values[0].substring(1));
+            int y = Integer.parseInt(values[1].substring(0, values[1].length() - 1));
+            cL.add(new Coordinate(x, y));
+            System.out.println(x + "," + y);
+        }
+        return cL;
+    }
+
+    /**
+     * Takes in an arraylist of coordinates and outputs a string that can be used to later reconstruct an equal
+     * input coordinate list.
+     * @return sfCl The storage format coordinate list.
+     */
+    public static String coordinateListToStorageFormat(ArrayList<Coordinate> cL) {
+        StringBuilder sfCl = new StringBuilder(); // This will help us construct what we write
+        for (Coordinate c : cL) {
+            sfCl.append(c.toString()).append(";"); // Write each coordinate in
+        }
+        return sfCl.toString();
     }
 }
