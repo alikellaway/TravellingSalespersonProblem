@@ -88,15 +88,15 @@ public class Main extends Application {
 //        acosT.start();
 
         // Hilbert fractal curve solver
-        Thread hfcsT = new Thread(() -> {
-            try {
-                hfcs = new HilbertFractalCurveSolver(hfcsGraph);
-                hfcs.runSolution(10);
-            } catch (NonSquareCanvasException | EdgeSuperimpositionException | NodeMissedException | InterruptedException | FractalDensityFailure e) {
-                e.printStackTrace();
-            }
-        });
-        hfcsT.start();
+//        Thread hfcsT = new Thread(() -> {
+//            try {
+//                hfcs = new HilbertFractalCurveSolver(hfcsGraph);
+//                hfcs.runSolution(10);
+//            } catch (NonSquareCanvasException | EdgeSuperimpositionException | NodeMissedException | InterruptedException | FractalDensityFailure e) {
+//                e.printStackTrace();
+//            }
+//        });
+//        hfcsT.start();
         // Christofide's algorithm solver
 //        Thread csT = new Thread(() -> {
 //            try {
