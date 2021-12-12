@@ -47,6 +47,46 @@ public class TSPGraphGenerator {
         return tspGraph;
     }
 
+
+    /**
+     * Generates points that lie on an ellipse to create an irregular polygon.
+     * @param numCorners The number of corners the polygon will have.
+     * @param xMax The maximum coordinate in the x direction.
+     * @param yMax The maximum coordinate in the y direction.
+     * @param xRad The radius of the ellipse in the x direction.
+     * @param yRad The radius of the ellipse in the y direction.
+     * @return @code{tspGraph} A @code{TSPGraph} that contains new nodes arranged as an irregular polygon.
+     * @throws InvalidGraphException Thrown if the input numCorners is less than 3.
+     * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose a node.
+     */
+    public static TSPGraph generateIrregularPolygonalGraph(int numCorners, int xMax, int yMax, double xRad, double yRad) throws InvalidGraphException, NodeSuperimpositionException {
+        if (numCorners < 3) { // Check the graph has at least 3 nodes.
+            throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
+        }
+        // Create a graph to populate
+        TSPGraph tspGraph = new TSPGraph();
+        // Work our way around the circle in a step wise manner
+        double angleStep = (2 * Math.PI)/numCorners; // This is the step in angle between each corner
+        double currentAngle = 0;
+        while (currentAngle < 2 * Math.PI) {
+            // Generate the coordinate for this step
+            int y = (int) (yRad * Math.cos(currentAngle) + yMax/2);
+            int x = (int) (xRad * Math.sin(currentAngle) + xMax/2);
+            Coordinate c = new Coordinate(x, y);
+            tspGraph.getNodeContainer().add(new TSPNode(c));
+            currentAngle += angleStep;
+            /* Check that the node is not outside of the coordinate space in either direction. If it is then set the
+             * value to the max value. */
+            if (c.getX() > xMax) {
+                c.setX(xMax);
+            }
+            if (c.getY() > yMax) {
+                c.setY(yMax);
+            }
+        }
+        return tspGraph;
+    }
+
     /**
      * Used to generate a random TSPGraph object with randomized node positions and randomized edges (if needed).
      * @param numNodes The number of nodes the random graph must have.

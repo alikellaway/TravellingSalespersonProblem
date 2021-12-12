@@ -124,7 +124,7 @@ public class Main extends Application {
             Thread.sleep(10);
         }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraph g = TSPGraphGenerator.generateRegularPolygonalGraph(20, COORDINATE_MAX_WIDTH, COORDINATE_MAX_HEIGHT);
+        TSPGraph g = TSPGraphGenerator.generateIrregularPolygonalGraph(4, COORDINATE_MAX_WIDTH, COORDINATE_MAX_HEIGHT, 700, 300);
         TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, g,1, false);
 
         root.getChildren().add(canvas);
