@@ -11,10 +11,22 @@ import com.alike.customexceptions.NodeSuperimpositionException;
 public class TSPGraphGenerator {
 
     /**
-     * This number represents the value the radius will take relative to the maximum x inside the polygonal graph
-     * generator method: @code{generateRegularPolygonalGraph{}}.
+     * This number represents the fraction of the window the radius is for the circle generated in the regular
+     * polygon graph creator method.
      */
     private static final double CIRCLE_RADIUS_RATIO = 0.45;
+
+    /**
+     * This number represents the fraction of the window the x radius is for an ellipse generated in the irregular
+     * polygon graph creator method.
+     */
+    private static final double ELLIPSE_X_RADIUS_RATIO = 0.45;
+
+    /**
+     * This number represents the fraction of the window the y radius is for an ellipse generated in the irregular
+     * polygon graph creator method.
+     */
+    private static final double ELLIPSE_Y_RADIUS_RATIO = 0.45;
 
     /**
      * Uses parametric equations to retrieve points on a circle to generate regular polygonal graphs.
@@ -31,8 +43,9 @@ public class TSPGraphGenerator {
         }
         // Create a graph to populate
         TSPGraph tspGraph = new TSPGraph();
-        // Calculate a radius to be a quarter of the width of the screen
-        double r = xMax * CIRCLE_RADIUS_RATIO; // Chose 2.1 cos visibly pleasing
+        // Calculate radius from width or height of screen of the screen (depends on which is smaller)
+        int min = Math.min(xMax, yMax);
+        double r = min * CIRCLE_RADIUS_RATIO; // Chose 2.1 cos visibly pleasing
         // Work our way around the circle in a step wise manner
         double angleStep = (2 * Math.PI)/numCorners; // This is the step in angle between each corner
         double currentAngle = 0;
@@ -53,30 +66,30 @@ public class TSPGraphGenerator {
      * @param numCorners The number of corners the polygon will have.
      * @param xMax The maximum coordinate in the x direction.
      * @param yMax The maximum coordinate in the y direction.
-     * @param xRad The radius of the ellipse in the x direction.
-     * @param yRad The radius of the ellipse in the y direction.
      * @return @code{tspGraph} A @code{TSPGraph} that contains new nodes arranged as an irregular polygon.
      * @throws InvalidGraphException Thrown if the input numCorners is less than 3.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose a node.
      */
     public static TSPGraph generateIrregularPolygonalGraph(
-            int numCorners, int xMax, int yMax,double xRad, double yRad
+            int numCorners, int xMax, int yMax
         ) throws InvalidGraphException, NodeSuperimpositionException {
         if (numCorners < 3) { // Check the graph has at least 3 nodes.
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
         }
         // Create a graph to populate
         TSPGraph tspGraph = new TSPGraph();
+        // Note: 2Pi is the number of radians in a circle
+        double maxRad = 2 * Math.PI;
         // Work our way around the circle in a step wise manner
-        double angleStep = (2 * Math.PI)/numCorners; // This is the step in angle between each corner
+        double angleStep = (maxRad)/numCorners; // This is the step in angle between each corner
+            // Note 2Pi is the number of radians in a circle
         double currentAngle = 0;
-        while (currentAngle < 2 * Math.PI) {
+        while (currentAngle < maxRad) {
             // Generate the coordinate for this step
-            int y = (int) (yRad * Math.cos(currentAngle) + yMax/2);
-            int x = (int) (xRad * Math.sin(currentAngle) + xMax/2);
+            int x = (int) (xMax * ELLIPSE_X_RADIUS_RATIO * Math.sin(currentAngle) + xMax/2);
+            int y = (int) (yMax * ELLIPSE_Y_RADIUS_RATIO * Math.cos(currentAngle) + yMax/2);
+            // We have divided by two to move the coordinate to the middle of the window ^ and away from the origin.
             Coordinate c = new Coordinate(x, y);
-            tspGraph.getNodeContainer().add(new TSPNode(c));
-            currentAngle += angleStep;
             /* Check that the node is not outside the coordinate space in either direction. If it is then set the
              * value to the max/min value. */
             if (c.getX() > xMax) {
@@ -91,6 +104,9 @@ public class TSPGraphGenerator {
             if (c.getY() < 0) {
                 c.setY(0);
             }
+            // Add the coordinate to the container
+            tspGraph.getNodeContainer().add(new TSPNode(new Coordinate(x, y)));
+            currentAngle += angleStep;
         }
         return tspGraph;
     }
