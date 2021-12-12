@@ -59,7 +59,9 @@ public class TSPGraphGenerator {
      * @throws InvalidGraphException Thrown if the input numCorners is less than 3.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose a node.
      */
-    public static TSPGraph generateIrregularPolygonalGraph(int numCorners, int xMax, int yMax, double xRad, double yRad) throws InvalidGraphException, NodeSuperimpositionException {
+    public static TSPGraph generateIrregularPolygonalGraph(
+            int numCorners, int xMax, int yMax,double xRad, double yRad
+        ) throws InvalidGraphException, NodeSuperimpositionException {
         if (numCorners < 3) { // Check the graph has at least 3 nodes.
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
         }
