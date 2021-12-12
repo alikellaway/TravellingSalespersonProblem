@@ -4,9 +4,14 @@ import com.alike.customexceptions.CoordinateListExhaustionException;
 import com.alike.tspgraphsystem.Coordinate;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.stream.Stream;
 
 /**
  * Class contains the functionality to load graphs from file.
@@ -22,6 +27,7 @@ public class CoordinateListFileReader {
      * The line the class is currently looking at i.e. the line number that is retrieved if getNext is called.
      */
     private int focusLine = 0;
+
 
     /**
      * Constructs a new reader object.
@@ -39,18 +45,21 @@ public class CoordinateListFileReader {
         BufferedReader br = new BufferedReader(new FileReader(CoordinateListFileWriter.FILE_PATH)); // Grab the file
         // Construct the coordinate list on the currentLine
         int currentLine = 0;
-        String line = null;
-        while (currentLine <= focusLine && (line = br.readLine()) != null) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (currentLine == focusLine) {
+                br.close();
+                focusLine++;
+                return Coordinate.parseCoordinateList(line);
+            }
             currentLine++;
         }
-        if (line == null) { // If we didnt find one
-            if (focusLine == 0) {
-                throw new CoordinateListExhaustionException("Coordinate list file empty.");
-            }
-            throw new CoordinateListExhaustionException("End of file reached.");
+        if (currentLine == 0) { // If the file was empty
+            br.close();
+            throw new CoordinateListExhaustionException("The coordinate list file was empty.");
         }
-        focusLine++;
-        return Coordinate.parseCoordinateList(line);
+        br.close();
+        throw new CoordinateListExhaustionException("Seen all coordinate lists in the file.");
     }
 
     /**

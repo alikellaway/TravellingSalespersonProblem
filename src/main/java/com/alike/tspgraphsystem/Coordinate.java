@@ -3,6 +3,7 @@ package com.alike.tspgraphsystem;
 import com.alike.customexceptions.NodeSuperimpositionException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -174,6 +175,6 @@ public class Coordinate {
         for (Coordinate c : cL) {
             sfCl.append(c.toStorageFormat()).append(STORAGE_FORMAT_COORDINATE_LIST_DELIMETER); // Write each coordinate in
         }
-        return sfCl.substring(0, sfCl.length());
+        return sfCl.substring(0, sfCl.length() - 1);
     }
 }

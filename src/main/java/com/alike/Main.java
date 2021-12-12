@@ -6,8 +6,10 @@ import com.alike.graphical.TSPGraphAnimator;
 import com.alike.read_write.CoordinateListFileReader;
 import com.alike.read_write.CoordinateListFileWriter;
 import com.alike.solutions.*;
+import com.alike.tspgraphsystem.Coordinate;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPGraphGenerator;
+import com.alike.tspgraphsystem.TSPNodeContainer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -17,12 +19,13 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 512;
+    public static final int COORDINATE_MAX_WIDTH = 1000;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
@@ -57,7 +60,9 @@ public class Main extends Application {
 
     private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
 
-    public static void main(String[] args) {
+    private static TSPGraph currentG = new TSPGraph();
+
+    public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException {
 
         // Nearest neighbour solver
 //        Thread nnsT = new Thread(() -> {
@@ -112,13 +117,31 @@ public class Main extends Application {
 //        });
 //        csT.start();
         // Populate our graph file with the test graphs incl. random graphs, polygon graphs and irregular polygon graphs
-        try {
-            CoordinateListFileWriter clfw = new CoordinateListFileWriter();
-            clfw.populateFile();
-            CoordinateListFileReader clfr = new CoordinateListFileReader();
-        } catch (InvalidGraphException | NodeSuperimpositionException | IOException e) {
-            e.printStackTrace();
-        }
+        Thread test = new Thread(() -> {
+            try {
+                CoordinateListFileWriter clfw = new CoordinateListFileWriter();
+                clfw.populateFile();
+                clfw.close();
+                CoordinateListFileReader clfr = new CoordinateListFileReader();
+                while (true) {
+                    Thread.sleep(25);
+                    ArrayList<Coordinate> cL = clfr.getNext();
+                    Coordinate[] cA = cL.toArray(Coordinate[]::new);
+                    currentG.setNodeContainer(new TSPNodeContainer(cA));
+                    NearestNeighbourSolver nns2 = new NearestNeighbourSolver(currentG);
+                    nns2.runSolution(1);
+                }
+            } catch(CoordinateListExhaustionException ignored) {
+
+            } catch ( NodeSuperimpositionException | IOException | InvalidGraphException | InterruptedException e) {
+                e.printStackTrace();
+            } catch (EdgeSuperimpositionException e) {
+                e.printStackTrace();
+            } catch (EdgeToSelfException e) {
+                e.printStackTrace();
+            }
+        });
+        test.start();
         launch(args);
     }
 
@@ -136,8 +159,8 @@ public class Main extends Application {
 //            Thread.sleep(10);
 //        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraph g = TSPGraphGenerator.generateIrregularPolygonalGraph(4, COORDINATE_MAX_WIDTH, COORDINATE_MAX_HEIGHT, 700, 300);
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, g,1, false);
+
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, currentG,1, false);
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);

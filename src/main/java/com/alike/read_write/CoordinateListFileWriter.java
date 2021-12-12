@@ -28,7 +28,7 @@ public class CoordinateListFileWriter {
 
     /**
      * The number of random graphs that will be generated during the population of the list. It is used inside the po-
-     * pulate list method.
+     * populate list method.
      */
     private static final int NUM_RANDOM_GRAPHS = 1000;
 
@@ -36,13 +36,13 @@ public class CoordinateListFileWriter {
      * Each polygon shape with the number of corners bigger than 2 and lower or equal to this number will be added to
      * the list when populate is called. e.g. if the corner is five then a triangle, square and pentagon will be added.
      */
-    private static final int NUM_REGULAR_POLYGON_GRAPHS = 100;
+    private static final int NUM_REGULAR_POLYGON_GRAPHS = 250;
 
     /**
      * Similar to @code{NUM_REGULAR_POLYGON_GRAPHS}, irregular polygon shapes with corners bigger than 2 and less than
      * or equal to this number will be added to the list when populate is called.
      */
-    private static final int NUM_IRREGULAR_POLYGON_GRAPHS = 100;
+    private static final int NUM_IRREGULAR_POLYGON_GRAPHS = 250;
 
     /**
      * Constructs a new instance that can be used to edit the coordinate list file.
@@ -79,25 +79,25 @@ public class CoordinateListFileWriter {
      */
     public void populateFile() throws IOException, InvalidGraphException, NodeSuperimpositionException {
         clearFile();
-        // Writes 1000 random graphs and adds them to the file.
-        for (int n = 3; n <= NUM_RANDOM_GRAPHS; n++) {
+        // Writes random graphs and adds them to the file.
+        for (int n = 0; n < NUM_RANDOM_GRAPHS; n++) {
             appendCoordinateList(bw,
-                TSPGraphGenerator.generateRandomGraph(n, false).getNodeContainer().getNodeCoordinates()
+                TSPGraphGenerator.generateRandomGraph(n + 3, false).getNodeContainer().getNodeCoordinates()
             );
         }
         int xMax = Main.COORDINATE_MAX_WIDTH;
         int yMax = Main.COORDINATE_MAX_HEIGHT;
         // Writes the regular polygon graphs to the file
-        for (int n = 3; n <= NUM_REGULAR_POLYGON_GRAPHS; n++) {
-            appendCoordinateList(bw, TSPGraphGenerator.generateRegularPolygonalGraph(n, xMax, yMax)
+        for (int n = 0; n < NUM_REGULAR_POLYGON_GRAPHS; n++) {
+            appendCoordinateList(bw, TSPGraphGenerator.generateRegularPolygonalGraph(n + 3, xMax, yMax)
                     .getNodeContainer()
                     .getNodeCoordinates()
             );
         }
         // Writes the irregular polygon graphs to the file
-        for (int n = 3; n <= NUM_IRREGULAR_POLYGON_GRAPHS; n++) {
+        for (int n = 0; n < NUM_IRREGULAR_POLYGON_GRAPHS; n++) {
             appendCoordinateList(bw, TSPGraphGenerator.generateIrregularPolygonalGraph(
-                    n, xMax, yMax, xMax/2.0, yMax/2.0
+                    n + 3, xMax, yMax
                 ).getNodeContainer().getNodeCoordinates()
             );
         }

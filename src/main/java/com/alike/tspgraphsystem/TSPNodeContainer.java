@@ -41,6 +41,18 @@ public class TSPNodeContainer {
     }
 
     /**
+     * Constructs a new TSPNodeContainer from a Coordinate array.
+     * @param cL An array of coordinates.
+     * @throws NodeSuperimpositionException Thrown when an attempt is made to superimpose nodes.
+     */
+    public TSPNodeContainer(Coordinate[] cL) throws NodeSuperimpositionException {
+        this.setNodeSet(new ArrayList<>());
+        for (Coordinate c : cL) {
+            add(new TSPNode(c));
+        }
+    }
+
+    /**
      * Used to add a new node to container.
      * @param n The new node to add.
      * @throws NodeSuperimpositionException Thrown if the new node's coordinates are already occupied by a node already
@@ -182,4 +194,6 @@ public class TSPNodeContainer {
         }
         return cL;
     }
+
+
 }
