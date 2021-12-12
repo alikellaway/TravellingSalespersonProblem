@@ -71,7 +71,12 @@ public class CoordinateListFileWriter {
         bw = new BufferedWriter(new FileWriter(FILE_PATH, true));
     }
 
-
+    /**
+     * Used to repopulute the graph list with randomized graphs and the regular graphs.
+     * @throws IOException Thrown by the buffered reader.
+     * @throws InvalidGraphException Thrown if an attempt is made to create a graph with less than 3 nodes.
+     * @throws NodeSuperimpositionException Thrown if an attempt is made to create a graph with superimposed nodes.
+     */
     public void populateFile() throws IOException, InvalidGraphException, NodeSuperimpositionException {
         clearFile();
         // Writes 1000 random graphs and adds them to the file.
@@ -96,5 +101,13 @@ public class CoordinateListFileWriter {
                 ).getNodeContainer().getNodeCoordinates()
             );
         }
+    }
+
+    /**
+     * Closes the buffered writer.
+     * @throws IOException Thrown if the bw fails to close.
+     */
+    public void close() throws IOException {
+        bw.close();
     }
 }

@@ -18,6 +18,14 @@ public class Coordinate {
      * The y value for the coordinate.
      */
     private int y;
+    /**
+     * The string used to separate the x and y values of this coordinate when it is cast into storage format.
+     */
+    private static final String STORAGE_FORMAT_XY_SEPARATOR = ",";
+    /**
+     * The string used to delimit each coordinate in a storage format coordinate list.
+     */
+    private static final String STORAGE_FORMAT_COORDINATE_LIST_DELIMETER = ";";
 
     /**
      * Initialises a new coordinate.
@@ -131,20 +139,27 @@ public class Coordinate {
     }
 
     /**
+     * Returns the coordinate in the format x,y for storage - this saves a lot of () in the storage file and will
+     * minorly help the read times for the coordinate list parser.
+     * @return string The coordinate in storage format.
+     */
+    public String toStorageFormat() {
+        return getX() + STORAGE_FORMAT_XY_SEPARATOR + getY();
+    }
+
+    /**
      * Constructs a node container from a string output from the @code{toStorageFormat} method.
      * @param coordinateListString The string from which we are trying to parse a container.
      * @return nc The node container constructed using the information in the input string.
-     * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose a node on another.
      */
     public static ArrayList<Coordinate> parseCoordinateList(String coordinateListString) {
         ArrayList<Coordinate> cL = new ArrayList<>();
-        String[] cs = coordinateListString.split(";");
+        String[] cs = coordinateListString.split(STORAGE_FORMAT_COORDINATE_LIST_DELIMETER);
         for (String c : cs) {
-            String[] values = c.split(",");
-            int x = Integer.parseInt(values[0].substring(1));
-            int y = Integer.parseInt(values[1].substring(0, values[1].length() - 1));
+            String[] values = c.split(STORAGE_FORMAT_XY_SEPARATOR);
+            int x = Integer.parseInt(values[0]);
+            int y = Integer.parseInt(values[1]);
             cL.add(new Coordinate(x, y));
-            System.out.println(x + "," + y);
         }
         return cL;
     }
@@ -157,8 +172,8 @@ public class Coordinate {
     public static String coordinateListToStorageFormat(ArrayList<Coordinate> cL) {
         StringBuilder sfCl = new StringBuilder(); // This will help us construct what we write
         for (Coordinate c : cL) {
-            sfCl.append(c.toString()).append(";"); // Write each coordinate in
+            sfCl.append(c.toStorageFormat()).append(STORAGE_FORMAT_COORDINATE_LIST_DELIMETER); // Write each coordinate in
         }
-        return sfCl.toString();
+        return sfCl.substring(0, sfCl.length());
     }
 }
