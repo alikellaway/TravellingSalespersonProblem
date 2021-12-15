@@ -60,7 +60,7 @@ public class NearestNeighbourSolver {
         // Set our current node to be the first node in the list of nodes.
         setCurrentNode(nodeContainer.getNodeSet().get(0));
         currentNode.setVisited(true); // Set it as visited
-        numNodesVisited = 0; // Nodes visited is not 1 as we account for the last node when we visit it at the end.
+        numNodesVisited = 1; // Nodes visited is not 1 as we account for the last node when we visit it at the end.
         // Execute the traversal steps
         while (numNodesVisited < nodeContainer.getNodeSet().size() + 1) {
             Thread.sleep(delayPerStep);

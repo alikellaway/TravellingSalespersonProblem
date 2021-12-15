@@ -68,7 +68,7 @@ public class Main extends Application {
 //        Thread nnsT = new Thread(() -> {
 //            try {
 //                NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
-//                nns.runSolution(20);
+//                nns.runSolution(0);
 //            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException | EdgeToSelfException e) {
 //                e.printStackTrace();
 //            }
@@ -119,25 +119,23 @@ public class Main extends Application {
         // Populate our graph file with the test graphs incl. random graphs, polygon graphs and irregular polygon graphs
         Thread test = new Thread(() -> {
             try {
-                CoordinateListFileWriter clfw = new CoordinateListFileWriter();
-                clfw.populateFile();
-                clfw.close();
+                // Use this code to repopulate the generated graphs file.
+//                CoordinateListFileWriter clfw = new CoordinateListFileWriter();
+//                clfw.populateFile();
+//                clfw.close();
                 CoordinateListFileReader clfr = new CoordinateListFileReader();
                 while (true) {
-                    Thread.sleep(25);
+                    Thread.sleep(0);
                     ArrayList<Coordinate> cL = clfr.getNext();
                     Coordinate[] cA = cL.toArray(Coordinate[]::new);
                     currentG.setNodeContainer(new TSPNodeContainer(cA));
+                    currentG.getEdgeContainer().clear();
                     NearestNeighbourSolver nns2 = new NearestNeighbourSolver(currentG);
-                    nns2.runSolution(1);
+                    nns2.runSolution(0);
                 }
             } catch(CoordinateListExhaustionException ignored) {
 
-            } catch ( NodeSuperimpositionException | IOException | InvalidGraphException | InterruptedException e) {
-                e.printStackTrace();
-            } catch (EdgeSuperimpositionException e) {
-                e.printStackTrace();
-            } catch (EdgeToSelfException e) {
+            } catch ( NodeSuperimpositionException | IOException | InvalidGraphException | InterruptedException | EdgeSuperimpositionException | EdgeToSelfException e) {
                 e.printStackTrace();
             }
         });
