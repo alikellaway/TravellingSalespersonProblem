@@ -3,7 +3,7 @@ package com.alike.tspgraphsystem;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -15,7 +15,7 @@ public class TSPEdgeContainer {
     /**
      * The collection of edges that are managed by this @code{TSPEdgeContainer} object.
      */
-    private ArrayList<TSPEdge> edgeSet;
+    private CopyOnWriteArrayList<TSPEdge> edgeSet;
 
     /**
      * The number of times this edge container has been edited (for use during heuristic and optimisation algorithms)
@@ -31,7 +31,7 @@ public class TSPEdgeContainer {
      * Used to initialise a new empty @code{TSPEdgeContainer} object.
      */
     public TSPEdgeContainer() {
-        edgeSet = new ArrayList<>();
+        edgeSet = new CopyOnWriteArrayList<>();
         editCount = 0;
     }
 
@@ -47,7 +47,6 @@ public class TSPEdgeContainer {
                 throw new EdgeSuperimpositionException("Tried to add an edge that already exists.");
             } else {
                 edgeSet.add(e);
-                edgeSet.trimToSize();
                 editCount++;
             }
         } finally {
@@ -60,15 +59,8 @@ public class TSPEdgeContainer {
      * @param e The edge to remove from this container.
      */
     public void remove(TSPEdge e) {
-        lock.writeLock().lock();
-        try {
-            edgeSet.remove(e);
-            edgeSet.trimToSize();
-            editCount++;
-        } finally {
-            lock.writeLock().unlock();
-        }
-
+        edgeSet.remove(e);
+        editCount++;
     }
 
     /**
@@ -76,19 +68,14 @@ public class TSPEdgeContainer {
      * @param edgeSet The edge set to check.
      * @throws EdgeSuperimpositionException Thrown if the edge set has superimposed edges.
      */
-    private void checkEdgeSetForSuperimposition(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
-        lock.readLock().lock();
-        try {
-            for (TSPEdge e : edgeSet) {
-                for (int i = edgeSet.indexOf(e) + 1; i < edgeSet.size(); i++) {
-                    if (e.equals(edgeSet.get(i))) {
-                        throw new EdgeSuperimpositionException("Tried to initialise edge set with input array " +
-                                "containing superimposed edges.");
-                    }
+    private void checkEdgeSetForSuperimposition(CopyOnWriteArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
+        for (TSPEdge e : edgeSet) {
+            for (int i = edgeSet.indexOf(e) + 1; i < edgeSet.size(); i++) {
+                if (e.equals(edgeSet.get(i))) {
+                    throw new EdgeSuperimpositionException("Tried to initialise edge set with input array " +
+                            "containing superimposed edges.");
                 }
             }
-        } finally {
-            lock.readLock().unlock();
         }
     }
 
@@ -97,28 +84,18 @@ public class TSPEdgeContainer {
      * @param edgeSet The new edge set to become the edge set of this container.
      * @throws EdgeSuperimpositionException Thrown if the input edge set has superimposed edges.
      */
-    public void setEdgeSet(ArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
-        lock.writeLock().lock();
-        try {
+    public void setEdgeSet(CopyOnWriteArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
             checkEdgeSetForSuperimposition(edgeSet);
             this.edgeSet = edgeSet;
             editCount += edgeSet.size();
-        } finally {
-            lock.writeLock().lock();
-        }
     }
 
     /**
      * Returns the @code{edgeSet} attribute of this TSPEdgeContainer object.
      * @return edgeSet The @code{edgeSet} attribute.
      */
-    public ArrayList<TSPEdge> getEdgeSet() {
-        lock.readLock().lock();
-        try {
-            return this.edgeSet;
-        } finally {
-            lock.readLock().unlock();
-        }
+    public CopyOnWriteArrayList<TSPEdge> getEdgeSet() {
+        return this.edgeSet;
     }
 
     /**
@@ -127,18 +104,12 @@ public class TSPEdgeContainer {
      * @return boolean: true if the edge already exists in this container, false if it does not.
      */
     private boolean edgeExists(TSPEdge e) {
-        lock.readLock().lock();
-        try {
-            for (TSPEdge edge : getEdgeSet()) {
-                if (edge.equals(e)) {
-                    return true;
-                }
+        for (TSPEdge edge : getEdgeSet()) {
+            if (edge.equals(e)) {
+                return true;
             }
-            return false;
-        } finally {
-            lock.readLock().unlock();
         }
-
+        return false;
     }
 
     /**
@@ -146,12 +117,7 @@ public class TSPEdgeContainer {
      * @return @code{editCount} The value of the @code{editCount} attribute.
      */
     public int getEditCount() {
-        lock.readLock().lock();
-        try {
-            return editCount;
-        } finally {
-            lock.readLock().unlock();
-        }
+        return editCount;
     }
 
     /**
