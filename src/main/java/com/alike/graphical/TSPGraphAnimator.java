@@ -2,12 +2,11 @@ package com.alike.graphical;
 
 import com.alike.tspgraphsystem.*;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Class runs at frame rate and views the graph object input during construction and then updates the canvas object
@@ -92,7 +91,6 @@ public class TSPGraphAnimator extends AnimationTimer {
     @Override
     public void handle(long l) {
         if (graph.getEdgeContainer().getEditCount() % editsPerRedraw == 0) {
-
             drawGraph(areDrawNodeIDs());
         }
     }
@@ -155,7 +153,7 @@ public class TSPGraphAnimator extends AnimationTimer {
         graphicsContext.setLineWidth(LINE_WIDTH);
         // graphicsContext.setLineDashes(5, 10); // Set lines to dotted
         // Draw lines
-        ArrayList<TSPEdge> edges = graph.getEdgeContainer().getEdgeSet();
+        CopyOnWriteArrayList<TSPEdge> edges = graph.getEdgeContainer().getEdgeSet();
         for (TSPEdge edge : edges) {
             drawEdge(edge);
         }
