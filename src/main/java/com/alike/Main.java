@@ -99,10 +99,8 @@ public class Main extends Application {
         // Ant Colony Optimisation Solver
         Thread acosT = new Thread(() -> {
             AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(polygonGraph);
-            while (true) {
+            Pair<TSPGraph, Double> solOutput = acos.runSolution(10000, 10);
 
-                Pair<TSPGraph, Double> solOutput = acos.runSolution(10000, 10);
-            }
 //            System.out.println(solOutput.getKey());
 //            System.out.println(solOutput.getValue());
         });
