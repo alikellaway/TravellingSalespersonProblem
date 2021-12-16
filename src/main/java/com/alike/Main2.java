@@ -18,11 +18,7 @@ public class Main2 {
     public static void main(String[] args) throws IOException, NodeSuperimpositionException {
         ArrayList<Coordinate> cL = new ArrayList<>();
         cL.add(new Coordinate(100, 200));
-        CoordinateMover cm = new CoordinateMover(cL);
-        while (true) {
-            cm.stepRandomly();
-            System.out.println(cL);
-
-        }
+        CoordinateMover cm = new CoordinateMover(cL, 2);
+        cm.stepByVelocity();
     }
 }

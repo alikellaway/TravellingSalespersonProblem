@@ -89,7 +89,7 @@ public class CoordinateListFileWriter {
         int yMax = Main.COORDINATE_MAX_HEIGHT;
         // Writes the regular polygon graphs to the file
         for (int n = 0; n < NUM_REGULAR_POLYGON_GRAPHS; n++) {
-            appendCoordinateList(bw, TSPGraphGenerator.generateRegularPolygonalGraph(n + 3, xMax, yMax)
+            appendCoordinateList(bw, TSPGraphGenerator.generateRegularPolygonalGraph(n + 3)
                     .getNodeContainer()
                     .getNodeCoordinates()
             );

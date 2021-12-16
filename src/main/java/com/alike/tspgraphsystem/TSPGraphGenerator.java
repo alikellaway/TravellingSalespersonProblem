@@ -1,5 +1,6 @@
 package com.alike.tspgraphsystem;
 
+import com.alike.Main;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.InvalidGraphException;
@@ -31,28 +32,27 @@ public class TSPGraphGenerator {
     /**
      * Uses parametric equations to retrieve points on a circle to generate regular polygonal graphs.
      * @param numCorners The number of corners our regular polygon will have.
-     * @param xMax The maximum X value a coordinate can take.
-     * @param yMax The maximum Y value a coordinate can take.
      * @return @code{TSPGraph} A new graph containing nodes arranged in the shape of a polygon.
      * @throws InvalidGraphException Thrown if the @code{numCorners} parameter is less than 3.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose another node.
      */
-    public static TSPGraph generateRegularPolygonalGraph(int numCorners, int xMax, int yMax) throws InvalidGraphException, NodeSuperimpositionException {
+    public static TSPGraph generateRegularPolygonalGraph(int numCorners) throws InvalidGraphException, NodeSuperimpositionException {
         if (numCorners < 3) { // Check the graph has at least 3 nodes.
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
         }
+        TSPNode.restartNodeCounter();
         // Create a graph to populate
         TSPGraph tspGraph = new TSPGraph();
         // Calculate radius from width or height of screen of the screen (depends on which is smaller)
-        int min = Math.min(xMax, yMax);
+        int min = Math.min(Main.COORDINATE_MAX_WIDTH, Main.COORDINATE_MAX_HEIGHT);
         double r = min * CIRCLE_RADIUS_RATIO; // Chose 2.1 cos visibly pleasing
         // Work our way around the circle in a step wise manner
         double angleStep = (2 * Math.PI)/numCorners; // This is the step in angle between each corner
         double currentAngle = 0;
         while (currentAngle < 2 * Math.PI) {
             // Generate the coordinate for this step
-            int y = (int) (r * Math.cos(currentAngle) + yMax/2);
-            int x = (int) (r * Math.sin(currentAngle) + xMax/2);
+            int y = (int) (r * Math.cos(currentAngle) + Main.COORDINATE_MAX_HEIGHT/2);
+            int x = (int) (r * Math.sin(currentAngle) + Main.COORDINATE_MAX_WIDTH/2);
             Coordinate c = new Coordinate(x, y);
             tspGraph.getNodeContainer().add(new TSPNode(c));
             currentAngle += angleStep;
@@ -76,6 +76,7 @@ public class TSPGraphGenerator {
         if (numCorners < 3) { // Check the graph has at least 3 nodes.
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
         }
+        TSPNode.restartNodeCounter();
         // Create a graph to populate
         TSPGraph tspGraph = new TSPGraph();
         // Note: 2Pi is the number of radians in a circle

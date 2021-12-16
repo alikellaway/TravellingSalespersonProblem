@@ -2,15 +2,10 @@ package com.alike;
 
 import com.alike.customexceptions.*;
 import com.alike.dtspgraphsystem.CoordinateMover;
-import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
-import com.alike.read_write.CoordinateListFileReader;
-import com.alike.read_write.CoordinateListFileWriter;
 import com.alike.solutions.*;
-import com.alike.tspgraphsystem.Coordinate;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPGraphGenerator;
-import com.alike.tspgraphsystem.TSPNodeContainer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -20,7 +15,6 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Main extends Application {
     /**
@@ -53,24 +47,37 @@ public class Main extends Application {
      */
     private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
 
-    private static TSPGraph nnsGraph = TSPGraphGenerator.generateRandomGraph(500, false);
-    private static TSPGraph bsGraph = TSPGraphGenerator.generateRandomGraph(12, false);
-    private static TSPGraph acosGraph = TSPGraphGenerator.generateRandomGraph(100, false);
-    private static TSPGraph hfcsGraph = TSPGraphGenerator.generateRandomGraph(50, false);
-    private static TSPGraph csGraph = TSPGraphGenerator.generateRandomGraph(100, false);
+    private static TSPGraph nnsGraph;
+    private static TSPGraph bsGraph;
+    private static TSPGraph acosGraph;
+    private static TSPGraph hfcsGraph;
+    private static TSPGraph csGraph;
+    private static TSPGraph polygonGraph;
 
     private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
 
-    private static TSPGraph currentG = new TSPGraph();
+    private static TSPGraph currentG = new TSPGraph(); // This graph was used for cylcing through node sets.
 
-    private static CoordinateMover cm = new CoordinateMover(nnsGraph.getNodeContainer().getNodeCoordinates());
+    private static CoordinateMover cm;
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException {
+        // Generate some graphs for testing and general use
+        nnsGraph = TSPGraphGenerator.generateRandomGraph(250, false);
+        bsGraph = TSPGraphGenerator.generateRandomGraph(12, false);
+        acosGraph = TSPGraphGenerator.generateRandomGraph(100, false);
+        hfcsGraph = TSPGraphGenerator.generateRandomGraph(50, false);
+        csGraph = TSPGraphGenerator.generateRandomGraph(100, false);
+        polygonGraph = TSPGraphGenerator.generateRegularPolygonalGraph(10);
+
+        // Point the mover to the appropriate graph
+        cm = new CoordinateMover(polygonGraph.getNodeContainer().getNodeCoordinates(), 9);
+
+        /* Here is a list of example use cases of the solver methods. */
         // Nearest neighbour solver
 //        Thread nnsT = new Thread(() -> {
 //            try {
 //                NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
-//                nns.runSolution(0);
+//                nns.runSolution(10);
 //            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException | EdgeToSelfException e) {
 //                e.printStackTrace();
 //            }
@@ -90,13 +97,13 @@ public class Main extends Application {
 //        });
 //        bsT.start();
         // Ant Colony Optimisation Solver
-//        Thread acosT = new Thread(() -> {
-//            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
-//            Pair<TSPGraph, Double> solOutput = acos.runSolution(1000, 10);
-//            System.out.println(solOutput.getKey());
-//            System.out.println(solOutput.getValue());
-//        });
-//        acosT.start();
+        Thread acosT = new Thread(() -> {
+            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(polygonGraph);
+            Pair<TSPGraph, Double> solOutput = acos.runSolution(1000, 10);
+            System.out.println(solOutput.getKey());
+            System.out.println(solOutput.getValue());
+        });
+        acosT.start();
 
         // Hilbert fractal curve solver
 //        Thread hfcsT = new Thread(() -> {
@@ -170,7 +177,7 @@ public class Main extends Application {
 //            Thread.sleep(10);
 //        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, nnsGraph,1, false);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, polygonGraph,1, false);
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);

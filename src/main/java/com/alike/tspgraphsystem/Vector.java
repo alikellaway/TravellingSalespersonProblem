@@ -76,4 +76,22 @@ public class Vector {
     public boolean isHorizontal() {
         return getY() == 0;
     }
+
+    /**
+     * Normalizes this vector (makes it into a vector with magnitude 1).
+     */
+    public void normalize() {
+        double mag = magnitude();
+        setX(getX()/mag);
+        setY(getY()/mag);
+    }
+
+    /**
+     * Outputs a new vector reflecting the result of subtracting the input vector from this vector.
+     * @param oV The other vecotr (vector to subtract).
+     * @return new Vector A new vector - the result of this vector - the input vector.
+     */
+    public Vector sub(Vector oV) {
+        return new Vector(getX() - oV.getX(), getY() - oV.getY());
+    }
 }

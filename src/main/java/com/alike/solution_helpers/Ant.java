@@ -53,7 +53,7 @@ public class Ant implements Callable<Ant> {
     /**
      * A parameter used for adjusting the amount of pheromone evaporation (0<RHO<1).
      */
-    private static final double RHO = 0.2;
+    private static final double RHO = 0.6; // def for tsp = 0.2 - default for dtsp = 0.6
 
     /**
      * A parameter used for controlling the influence of the pheremone trail (ALPHA>=0).
@@ -63,7 +63,7 @@ public class Ant implements Callable<Ant> {
     /**
      * A parameter used for controlling the influence of distance between origin and destination (BETA>=1).
      */
-    private static final double BETA = 9.5;
+    private static final double BETA = 10.5; // def 9.
 
     /**
      * Constructor initialises a new ant.
