@@ -167,7 +167,7 @@ public class Main extends Application {
 //            Thread.sleep(10);
 //        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(canvas1, polygonGraph,1, false);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, polygonGraph,1, false);
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);

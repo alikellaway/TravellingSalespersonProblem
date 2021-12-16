@@ -2,9 +2,11 @@ package com.alike.graphical;
 
 import com.alike.tspgraphsystem.*;
 import javafx.animation.AnimationTimer;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -15,6 +17,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author alike
  */
 public class TSPGraphAnimator extends AnimationTimer {
+
+    /**
+     * The scene in which the graph is being animated (reference is used to update the title of the scene).
+     */
+    private Stage stage;
+
     /**
      * The canvas on which we are animating.
      */
@@ -76,12 +84,13 @@ public class TSPGraphAnimator extends AnimationTimer {
      * @param canvas The canvas we will be drawing to.
      * @param editsPerRedraw The value to assign to the @code{editsPerRedraw} attribute.
      */
-    public TSPGraphAnimator(Canvas canvas, TSPGraph graph, int editsPerRedraw, boolean drawNodeIDs) {
+    public TSPGraphAnimator(Stage stage, Canvas canvas, TSPGraph graph, int editsPerRedraw, boolean drawNodeIDs) {
         setGraph(graph);
         setCanvas(canvas);
         setGraphicsContext(canvas.getGraphicsContext2D());
         setEditsPerRedraw(editsPerRedraw);
         setDrawNodeIDs(drawNodeIDs);
+        setStage(stage);
     }
 
     /**
@@ -93,6 +102,7 @@ public class TSPGraphAnimator extends AnimationTimer {
         if (graph.getEdgeContainer().getEditCount() % editsPerRedraw == 0) {
             drawGraph(areDrawNodeIDs());
         }
+        stage.setTitle("TSP Length: " + String.format("%.2f", graph.getEdgeContainer().getTotalLength()));
     }
 
     /**
@@ -208,11 +218,27 @@ public class TSPGraphAnimator extends AnimationTimer {
         c.setY(c.getY() + TSPGraphAnimator.NODE_RADIUS);
     }
 
+    /**
+     * Returns the value of the @code{drawNodeIDs} attribute.
+     * @return @code{drawNodeIds} The value of the @code{drawNodeIDs} attribute.
+     */
     public boolean areDrawNodeIDs() {
         return drawNodeIDs;
     }
 
+    /**
+     * Sets the @code{drawNodeIDs} attribute to a new value.
+     * @param drawNodeIDs The new value to assign to the @code{drawNodeIDs} attribute.
+     */
     public void setDrawNodeIDs(boolean drawNodeIDs) {
         this.drawNodeIDs = drawNodeIDs;
+    }
+
+    /**
+     * Sets the @code{stage} attribute to a new value.
+     * @param stage The new value to assign the @code{stage} attribute.
+     */
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
