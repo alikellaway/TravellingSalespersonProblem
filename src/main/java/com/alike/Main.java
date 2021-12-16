@@ -2,6 +2,7 @@ package com.alike;
 
 import com.alike.customexceptions.*;
 import com.alike.dtspgraphsystem.CoordinateMover;
+import com.alike.dtspgraphsystem.DTSPGraph;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solutions.*;
 import com.alike.tspgraphsystem.TSPGraph;
@@ -58,8 +59,6 @@ public class Main extends Application {
 
     private static TSPGraph currentG = new TSPGraph(); // This graph was used for cylcing through node sets.
 
-    private static CoordinateMover cm;
-
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException {
         // Generate some graphs for testing and general use
         nnsGraph = TSPGraphGenerator.generateRandomGraph(250, false);
@@ -67,10 +66,9 @@ public class Main extends Application {
         acosGraph = TSPGraphGenerator.generateRandomGraph(100, false);
         hfcsGraph = TSPGraphGenerator.generateRandomGraph(50, false);
         csGraph = TSPGraphGenerator.generateRandomGraph(100, false);
-        polygonGraph = TSPGraphGenerator.generateRegularPolygonalGraph(5);
+        polygonGraph = TSPGraphGenerator.generateRegularPolygonalGraph(100);
 
         // Point the mover to the appropriate graph
-        cm = new CoordinateMover(polygonGraph.getNodeContainer().getNodeCoordinates(), 1);
 
         /* Here is a list of example use cases of the solver methods. */
         // Nearest neighbour solver
@@ -150,18 +148,8 @@ public class Main extends Application {
 //            }
 //        });
 //        test.start();
-        Thread moverThread = new Thread(() -> {
-            while (true) {
-                cm.stepByVelocity();
-                cm.stepRandomly();
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        moverThread.start();
+        DTSPGraph dg = new DTSPGraph(polygonGraph, 3, 10, false, true);
+        dg.move();
         launch(args);
     }
 
