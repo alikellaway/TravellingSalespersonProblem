@@ -39,6 +39,14 @@ public class Coordinate {
     }
 
     /**
+     * Constructs a coordinate that is a copy of this coordinate.
+     * @return copy The new copy of this coordinate.
+     */
+    public Coordinate copy() {
+        return new Coordinate(getX(), getY());
+    }
+
+    /**
      * Used to get a vector from this coordinate to another coordinate.
      * @param otherCoordinate The coordinate object to find vector to.
      * @return Vector A new vector object describing the vector between this coordinate and another coordinate.
@@ -176,5 +184,13 @@ public class Coordinate {
             sfCl.append(c.toStorageFormat()).append(STORAGE_FORMAT_COORDINATE_LIST_DELIMETER); // Write each coordinate in
         }
         return sfCl.substring(0, sfCl.length() - 1);
+    }
+
+    public void decrementX() {
+        setX(getX() - 1);
+    }
+
+    public void incrementX() {
+        setX(getX() + 1);
     }
 }

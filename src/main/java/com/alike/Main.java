@@ -67,10 +67,10 @@ public class Main extends Application {
         acosGraph = TSPGraphGenerator.generateRandomGraph(100, false);
         hfcsGraph = TSPGraphGenerator.generateRandomGraph(50, false);
         csGraph = TSPGraphGenerator.generateRandomGraph(100, false);
-        polygonGraph = TSPGraphGenerator.generateRegularPolygonalGraph(10);
+        polygonGraph = TSPGraphGenerator.generateRegularPolygonalGraph(5);
 
         // Point the mover to the appropriate graph
-        cm = new CoordinateMover(polygonGraph.getNodeContainer().getNodeCoordinates(), 9);
+        cm = new CoordinateMover(polygonGraph.getNodeContainer().getNodeCoordinates(), 1);
 
         /* Here is a list of example use cases of the solver methods. */
         // Nearest neighbour solver
@@ -99,9 +99,12 @@ public class Main extends Application {
         // Ant Colony Optimisation Solver
         Thread acosT = new Thread(() -> {
             AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(polygonGraph);
-            Pair<TSPGraph, Double> solOutput = acos.runSolution(1000, 10);
-            System.out.println(solOutput.getKey());
-            System.out.println(solOutput.getValue());
+            while (true) {
+
+                Pair<TSPGraph, Double> solOutput = acos.runSolution(10000, 10);
+            }
+//            System.out.println(solOutput.getKey());
+//            System.out.println(solOutput.getValue());
         });
         acosT.start();
 
@@ -151,6 +154,7 @@ public class Main extends Application {
 //        test.start();
         Thread moverThread = new Thread(() -> {
             while (true) {
+                cm.stepByVelocity();
                 cm.stepRandomly();
                 try {
                     Thread.sleep(10);

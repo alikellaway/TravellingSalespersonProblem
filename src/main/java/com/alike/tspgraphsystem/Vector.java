@@ -78,20 +78,42 @@ public class Vector {
     }
 
     /**
-     * Normalizes this vector (makes it into a vector with magnitude 1).
+     * Returns a new vector that is the normalization of this vector.
      */
-    public void normalize() {
+    public Vector getNormalized() {
         double mag = magnitude();
-        setX(getX()/mag);
-        setY(getY()/mag);
+        return new Vector(getX()/mag, getY()/mag);
     }
 
     /**
      * Outputs a new vector reflecting the result of subtracting the input vector from this vector.
      * @param oV The other vecotr (vector to subtract).
-     * @return new Vector A new vector - the result of this vector - the input vector.
+     * @return new Vector A new vector - the result of this calculation - the input vector.
      */
     public Vector sub(Vector oV) {
         return new Vector(getX() - oV.getX(), getY() - oV.getY());
+    }
+
+    /**
+     * Outputs a new vector reflecting the result of adding the input vector to this vector.
+     * @param oV The other vector (vector to add).
+     * @return new Vector A new vector - the result of this calculation - the input vector.
+     */
+    public Vector add(Vector oV) {
+        return new Vector(getX() + oV.getX(), getY() + oV.getX());
+    }
+
+    /**
+     * Inverts the x component of this vector.
+     */
+    public void invertX() {
+        setX(getX() * -1);
+    }
+
+    /**
+     * Inverts the y component of this vector.
+     */
+    public void invertY() {
+        setY(getY() * -1);
     }
 }
