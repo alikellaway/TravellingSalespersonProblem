@@ -64,14 +64,14 @@ public class TSPGraphGenerator {
     /**
      * Generates points that lie on an ellipse to create an irregular polygon.
      * @param numCorners The number of corners the polygon will have.
-     * @param xMax The maximum coordinate in the x direction.
-     * @param yMax The maximum coordinate in the y direction.
+     * @param radiusX The maximum coordinate in the x direction.
+     * @param radiusY The maximum coordinate in the y direction.
      * @return @code{tspGraph} A @code{TSPGraph} that contains new nodes arranged as an irregular polygon.
      * @throws InvalidGraphException Thrown if the input numCorners is less than 3.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose a node.
      */
     public static TSPGraph generateIrregularPolygonalGraph(
-            int numCorners, int xMax, int yMax
+            int numCorners, int radiusX, int radiusY
         ) throws InvalidGraphException, NodeSuperimpositionException {
         if (numCorners < 3) { // Check the graph has at least 3 nodes.
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
@@ -87,17 +87,17 @@ public class TSPGraphGenerator {
         double currentAngle = 0;
         while (currentAngle < maxRad) {
             // Generate the coordinate for this step
-            int x = (int) (xMax * ELLIPSE_X_RADIUS_RATIO * Math.sin(currentAngle) + xMax/2);
-            int y = (int) (yMax * ELLIPSE_Y_RADIUS_RATIO * Math.cos(currentAngle) + yMax/2);
+            int x = (int) (radiusX * ELLIPSE_X_RADIUS_RATIO * Math.sin(currentAngle) + Main.COORDINATE_MAX_WIDTH/2);
+            int y = (int) (radiusY * ELLIPSE_Y_RADIUS_RATIO * Math.cos(currentAngle) + Main.COORDINATE_MAX_HEIGHT/2);
             // We have divided by two to move the coordinate to the middle of the window ^ and away from the origin.
             Coordinate c = new Coordinate(x, y);
             /* Check that the node is not outside the coordinate space in either direction. If it is then set the
              * value to the max/min value. */
-            if (c.getX() > xMax) {
-                c.setX(xMax);
+            if (c.getX() > radiusX) {
+                c.setX(radiusX);
             }
-            if (c.getY() > yMax) {
-                c.setY(yMax);
+            if (c.getY() > radiusY) {
+                c.setY(radiusY);
             }
             if (c.getX() < 0) {
                 c.setX(0);
