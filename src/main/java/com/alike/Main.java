@@ -3,6 +3,7 @@ package com.alike;
 import com.alike.customexceptions.*;
 import com.alike.dtspgraphsystem.CoordinateMover;
 import com.alike.dtspgraphsystem.DTSPGraph;
+import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solutions.*;
 import com.alike.tspgraphsystem.TSPGraph;
@@ -21,12 +22,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 1000;
+    public static final int COORDINATE_MAX_WIDTH = 400;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 512;
+    public static final int COORDINATE_MAX_HEIGHT = 400;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -61,21 +62,21 @@ public class Main extends Application {
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException {
         // Generate some graphs for testing and general use
-        nnsGraph = TSPGraphGenerator.generateRandomGraph(250, false);
-        bsGraph = TSPGraphGenerator.generateRandomGraph(12, false);
-        acosGraph = TSPGraphGenerator.generateRandomGraph(100, false);
+        nnsGraph = TSPGraphGenerator.generateRandomGraph(500, false);
+        bsGraph = TSPGraphGenerator.generateRandomGraph(8, false);
+        acosGraph = TSPGraphGenerator.generateRandomGraph(700, false);
         hfcsGraph = TSPGraphGenerator.generateRandomGraph(50, false);
         csGraph = TSPGraphGenerator.generateRandomGraph(100, false);
-        polygonGraph = TSPGraphGenerator.generateRegularPolygonalGraph(100);
+        polygonGraph = TSPGraphGenerator.generateIrregularPolygonalGraph(45, 380, 290);
 
         // Point the mover to the appropriate graph
 
         /* Here is a list of example use cases of the solver methods. */
-        // Nearest neighbour solver
+//         Nearest neighbour solver
 //        Thread nnsT = new Thread(() -> {
 //            try {
 //                NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
-//                nns.runSolution(10);
+//                nns.runSolution(100);
 //            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException | EdgeToSelfException e) {
 //                e.printStackTrace();
 //            }
@@ -85,7 +86,7 @@ public class Main extends Application {
 //        Thread bsT = new Thread(() -> {
 //           try {
 //               BruteForceSolver bs = new BruteForceSolver(bsGraph);
-//               Pair<TSPGraph, Double> solutionOutput = bs.runSolution(50);
+//               Pair<TSPGraph, Double> solutionOutput = bs.runSolution(0);
 //               System.out.println(solutionOutput.getKey());
 //               System.out.println(solutionOutput.getValue());
 //
@@ -95,14 +96,14 @@ public class Main extends Application {
 //        });
 //        bsT.start();
         // Ant Colony Optimisation Solver
-        Thread acosT = new Thread(() -> {
-            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(polygonGraph);
-            Pair<TSPGraph, Double> solOutput = acos.runSolution(10000, 10);
-
-//            System.out.println(solOutput.getKey());
-//            System.out.println(solOutput.getValue());
-        });
-        acosT.start();
+//        Thread acosT = new Thread(() -> {
+//            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
+//            Pair<TSPGraph, Double> solOutput = acos.runSolution(987, 0);
+//
+////            System.out.println(solOutput.getKey());
+////            System.out.println(solOutput.getValue());
+//        });
+//        acosT.start();
 
         // Hilbert fractal curve solver
 //        Thread hfcsT = new Thread(() -> {
@@ -148,8 +149,8 @@ public class Main extends Application {
 //            }
 //        });
 //        test.start();
-        DTSPGraph dg = new DTSPGraph(polygonGraph, 3, 10, false, true);
-        dg.move();
+//        DTSPGraph dg = new DTSPGraph(polygonGraph, 3, 10, true, false);
+//        dg.move();
         launch(args);
     }
 

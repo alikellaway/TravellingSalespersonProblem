@@ -48,22 +48,22 @@ public class Ant implements Callable<Ant> {
     /**
      * Parameter used to adjust the amount of pheromone deposited per traversal (0<Q<1).
      */
-    private static final double Q = 0.0004; // tsp = 0.0005 dtsp = 0.0004
+    private static final double Q = 0.0005; // tsp = 0.0005 dtsp = 0.0004
 
     /**
      * A parameter used for adjusting the amount of pheromone evaporation (0<RHO<1).
      */
-    private static final double RHO = 0.9; // tsp = 0.2 dtsp = 0.9
+    private static final double RHO = 0.2; // tsp = 0.2 dtsp = 0.9
 
     /**
      * A parameter used for controlling the influence of the pheremone trail (ALPHA>=0).
      */
-    private static final double ALPHA = 0.02; // tsp = 0.01 dtsp = 0.02
+    private static final double ALPHA = 0.01; // tsp = 0.01 dtsp = 0.02
 
     /**
      * A parameter used for controlling the influence of distance between origin and destination (BETA>=1).
      */
-    private static final double BETA = 11.5; // tsp = 9.5 dtsp = 11.5
+    private static final double BETA = 9.5; // tsp = 9.5 dtsp = 11.5
 
     /**
      * Constructor initialises a new ant.
