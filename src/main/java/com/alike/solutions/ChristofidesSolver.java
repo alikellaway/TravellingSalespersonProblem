@@ -16,7 +16,6 @@ public class ChristofidesSolver {
      */
     private TSPGraph graph;
 
-
     public ChristofidesSolver(TSPGraph graph) {
         setGraph(graph);
     }
@@ -107,7 +106,6 @@ public class ChristofidesSolver {
                 unvisited.remove(uIdx);
             }
         }
-
     }
 
     /**
