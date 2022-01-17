@@ -133,7 +133,6 @@ public class HilbertFractalCurveSolver {
         ArrayList<TSPNode> nodesOrdered = getNodesOrdered();
         TSPEdgeContainer container = new TSPEdgeContainer();
         graph.setEdgeContainer(container); // We do this here so we can see the path as its being constructed
-        System.out.println("here");
         for (int i = 0; i < nodesOrdered.size(); i++) {
             System.out.println();
             // Create the edge and add it
