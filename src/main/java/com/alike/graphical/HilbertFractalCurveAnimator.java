@@ -51,6 +51,12 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     private int orderWeAreDrawing;
 
     /**
+     * This number will cap the maximum order that can be drawn by the animator (as a solver may try to push it further)
+     * My computer struggles to draw any  higher than 9, however, this cap may vary on your computer.
+     */
+    private final int order_limit = 9;
+
+    /**
      * Used to construct a new @code{HilbertFractalCurveAnimator} object.
      * @param canvas The canvas on which to animate.
      * @param hfcs The Hilbert solver containing the path we want to draw.
@@ -79,8 +85,8 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      */
     private void draw() {
         /* We must check if the hfcs hasn't changed its order during our drawing process which may happen as its
-        run solution method is recursive. My PC struggles to draw any order above 9 so thats the limit. */
-        if (getOrderWeAreDrawing() != HilbertFractalCurveSolver.order && HilbertFractalCurveSolver.order < 10) {
+        run solution method is recursive. My PC struggles to draw any order above 9 so that's the limit. */
+        if (getOrderWeAreDrawing() != HilbertFractalCurveSolver.order && HilbertFractalCurveSolver.order <= order_limit) {
             progressCounter = 0;
             path = hfcs.getCornerCoordinates();
             gc.clearRect(0,0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
