@@ -149,6 +149,8 @@ public class ChristofidesSolver {
      * Finds a perfect matching using a greedy algorithm given a starting node (only finds perfect matching if input
      * node set has an even number of nodes). Calculates starting from the node at the startingIdx in the graph's node
      * set.
+     * @param graph The graph on which to find a perfect matching.
+     * @param startingIdx The index at which
      * @return matching A TSPEdgeContianer containing the matching that arose from this starting index.
      */
     public TSPEdgeContainer findPerfectMatching(TSPGraph graph, int startingIdx) throws EdgeToSelfException, NoClosestNodeException, EdgeSuperimpositionException {

@@ -26,17 +26,19 @@ public class CoordinateMover {
      */
     private Vector[] coordinateVelocities = null;
 
-    private ArrayList<double[]> accruedPositionalError = null;
 
     /**
      * The random object used to generate the random components of the class.
      */
     private final Random rand = new Random();;
 
-
+    /**
+     * Creates a new CoordinateMover object.
+     * @param coordinates The list of Coordinates that this mover will be manipulating.
+     * @param speed The value to assign to the @code{movementSpeed} attribute.
+     */
     public CoordinateMover(ArrayList<Coordinate> coordinates, int speed) {
         setCoordinates(coordinates);
-
         setMovementSpeed(speed);
     }
 
@@ -64,6 +66,9 @@ public class CoordinateMover {
         }
     }
 
+    /**
+     * Moves each coordinate in @code{coordinates} by their value in @code{coordinateVelocities} (matched by index).
+     */
     public void stepByVelocity() {
         // If the list of velocities is not yet populated then initialise it and fill it with random velocities.
         if (coordinateVelocities == null) {
@@ -72,12 +77,6 @@ public class CoordinateMover {
                 // Produces velocities with integer numbers
                 coordinateVelocities[i] = generateRandomVector(movementSpeed); // This takes into account the speed.
             }
-            // We can also assume the positional error was not initialised.
-            accruedPositionalError = new ArrayList<>(); // Doubles are initialised as 0s.
-            for (int i = 0; i < coordinates.size(); i++) {
-                accruedPositionalError.add(new double[]{0.0, 0.0});
-                System.out.println(coordinateVelocities[i]  + " " + accruedPositionalError.get(i)[0] + " " + accruedPositionalError.get(i)[1]);
-            }
         }
         // Start the movement
         for (int i = 0; i < coordinates.size(); i++) { // Move each coordinate
@@ -85,6 +84,11 @@ public class CoordinateMover {
         }
     }
 
+    /**
+     * Moves a coordinate by a vector a reflects the coordinate if it hits a boundary line.
+     * @param c The coordinate to move.
+     * @param v The vector by which to move the coordinate.
+     */
     private void moveCoordinateByAVector(Coordinate c, Vector v) {
         // Do the x component of the vector first.
         if (v.getX() < 0) { // The vector is moving the coordinate left.
@@ -128,17 +132,10 @@ public class CoordinateMover {
         }
     }
 
-
-
-
-
-
-
-
-    public ArrayList<Coordinate> getCoordinates() {
-        return coordinates;
-    }
-
+    /**
+     * Sets the value of the @code{coordinates} attribute to a new value.
+     * @param coordinates The new value to assign to the @code{coordinates} value.
+     */
     public void setCoordinates(ArrayList<Coordinate> coordinates) {
         this.coordinates = coordinates;
     }

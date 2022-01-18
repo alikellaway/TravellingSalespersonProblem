@@ -6,18 +6,7 @@ package com.alike.customexceptions;
  */
 public class NodeMissedException extends Exception {
 
-    private int numNodesMissed;
-
     public NodeMissedException(String msg, int numNodesMissed) {
         super(msg);
-        setNumNodesMissed(numNodesMissed);
-    }
-
-    public int getNumNodesMissed() {
-        return numNodesMissed;
-    }
-
-    public void setNumNodesMissed(int numNodesMissed) {
-        this.numNodesMissed = numNodesMissed;
     }
 }

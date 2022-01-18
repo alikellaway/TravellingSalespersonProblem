@@ -119,7 +119,7 @@ public class TSPNode {
 
     /**
      * Returns the value of the @code{nodeID} attribute.
-     * @return @code{nodeID} The value of the @code{nodeID} attribute.
+     * @return nodeID The value of the @code{nodeID} attribute.
      */
     public int getNodeID() {
         return nodeID;
@@ -135,7 +135,7 @@ public class TSPNode {
 
     /**
      * Returns the value of the @code{x} attribute of the coordinate attribute of the TSPNode.
-     * @return @code{x} The value of the @code{x} attribute of the coordinate attribute of the TSPNode.
+     * @return x The value of the @code{x} attribute of the coordinate attribute of the TSPNode.
      */
     public double getX() {
         return getCoordinate().getX();
@@ -143,12 +143,15 @@ public class TSPNode {
 
     /**
      * Returns the value of the @code{y} attribute of the coordinate attribute of the TSPNode.
-     * @return @code{y} The value of the @code{y} attribute of the coordinate attribute of the TSPNode.
+     * @return y The value of the @code{y} attribute of the coordinate attribute of the TSPNode.
      */
     public double getY() {
         return getCoordinate().getY();
     }
 
+    /**
+     * Sets the value of the @code{numNodes} attribute to 0.
+     */
     public static void restartNodeCounter() {
         numNodes = 0;
     }

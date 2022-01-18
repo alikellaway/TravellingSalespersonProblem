@@ -56,6 +56,7 @@ public class CoordinateListFileWriter {
     /**
      * Used to append a new coordintae list to the bottom of the coordinate list file.
      * @param cL The new coordinate list to append.
+     * @param bw The BufferedWriter to write into.
      * @throws IOException Thrown if an io error is thrown.
      */
     public void appendCoordinateList(BufferedWriter bw, ArrayList<Coordinate> cL) throws IOException {
@@ -77,6 +78,8 @@ public class CoordinateListFileWriter {
      * @throws IOException Thrown by the buffered reader.
      * @throws InvalidGraphException Thrown if an attempt is made to create a graph with less than 3 nodes.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to create a graph with superimposed nodes.
+     * @throws RadiusExceedingBoundaryException Thrown by @code{generateIrregularPolygonGraph()} if an attempt is made
+     * to streth a polygon out of the display area.
      */
     public void populateFile() throws IOException, InvalidGraphException, NodeSuperimpositionException, RadiusExceedingBoundaryException {
         clearFile();

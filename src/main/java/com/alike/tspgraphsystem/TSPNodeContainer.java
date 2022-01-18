@@ -119,7 +119,7 @@ public class TSPNodeContainer {
 
     /**
      * Returns the value of the @code{nodeSet} attribute.
-     * @return @code{nodeSet} The value of the nodeSet attribute of this TSPNodeContainer object.
+     * @return nodeSet The value of the nodeSet attribute of this TSPNodeContainer object.
      */
     public ArrayList<TSPNode> getNodeSet() {
         return nodeSet;

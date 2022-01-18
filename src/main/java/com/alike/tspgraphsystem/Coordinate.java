@@ -176,6 +176,7 @@ public class Coordinate {
     /**
      * Takes in an arraylist of coordinates and outputs a string that can be used to later reconstruct an equal
      * input coordinate list.
+     * @param  cL The coordinateList to output in storage format.
      * @return sfCl The storage format coordinate list.
      */
     public static String coordinateListToStorageFormat(ArrayList<Coordinate> cL) {
@@ -184,13 +185,5 @@ public class Coordinate {
             sfCl.append(c.toStorageFormat()).append(STORAGE_FORMAT_COORDINATE_LIST_DELIMETER); // Write each coordinate in
         }
         return sfCl.substring(0, sfCl.length() - 1);
-    }
-
-    public void decrementX() {
-        setX(getX() - 1);
-    }
-
-    public void incrementX() {
-        setX(getX() + 1);
     }
 }

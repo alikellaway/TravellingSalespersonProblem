@@ -52,6 +52,7 @@ public class BruteForceSolver {
      * @throws PermutationFocusException Thrown if @code{Permuter} object is bugged or incorrectly used.
      * @throws NonExistentNodeException Thrown if the solution runs into a node ID that doesn't exist.
      * @throws InterruptedException Thrown if the thread is interrupted.
+     * @throws EdgeToSelfException Thrown if an attempt is made to make an edge to and from the same node.
      */
     public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws PermutationExhaustionException,
             EdgeSuperimpositionException,

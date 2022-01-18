@@ -63,9 +63,11 @@ public class TSPGraphGenerator {
      * @param numCorners The number of corners the polygon will have.
      * @param radiusX The maximum coordinate in the x direction.
      * @param radiusY The maximum coordinate in the y direction.
-     * @return @code{tspGraph} A @code{TSPGraph} that contains new nodes arranged as an irregular polygon.
+     * @return tspGraph A @code{TSPGraph} that contains new nodes arranged as an irregular polygon.
      * @throws InvalidGraphException Thrown if the input numCorners is less than 3.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose a node.
+     * @throws RadiusExceedingBoundaryException Thrown if an attempt is made to stretch a polygon outside the display
+     * area.
      */
     public static TSPGraph generateIrregularPolygonalGraph(
             int numCorners, int radiusX, int radiusY
@@ -122,7 +124,7 @@ public class TSPGraphGenerator {
      * Used to generate a random TSPGraph object with randomized node positions and randomized edges (if needed).
      * @param numNodes The number of nodes the random graph must have.
      * @param addEdges Whether or not the method should output a graph with randomized edges already assigned.
-     * @return @code{g} A new randomized TSPGraph object.
+     * @return g A new randomized TSPGraph object.
      */
     public static TSPGraph generateRandomGraph(int numNodes, boolean addEdges) {
         TSPNode.restartNodeCounter();

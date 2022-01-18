@@ -241,8 +241,8 @@ public class Ant implements Callable<Ant> {
     }
 
     /**
-     * Returns the route the ant took.
-     * @return @code{route} The value of the @code{route} attribute.
+     * Returns the route the Ant took.
+     * @return route The value of the @code{route} attribute.
      */
     public TSPEdgeContainer getRoute() {
         return route;
@@ -258,7 +258,7 @@ public class Ant implements Callable<Ant> {
 
     /**
      * Returns the value of the @code{acos} attribute.
-     * @return @code{acos} The value of the @code{acod} attribute.
+     * @return acos The value of the @code{acod} attribute.
      */
     public AntColonyOptimizationSolver getAcos() {
         return acos;
@@ -274,7 +274,7 @@ public class Ant implements Callable<Ant> {
 
     /**
      * Returns the value of the @code{antID} attribute.
-     * @return @code{antID} The value of the @code{antID} attribute.
+     * @return antID The value of the @code{antID} attribute.
      */
     public int getAntID() {
         return antID;

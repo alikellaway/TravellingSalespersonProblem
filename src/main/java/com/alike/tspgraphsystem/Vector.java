@@ -1,5 +1,9 @@
 package com.alike.tspgraphsystem;
 
+/**
+ * @author alike
+ * Class used to represent Vectors in code and holds relevant Vector manipulation logic.
+ */
 public class Vector {
     /**
      * The value of the x component of this Vector.
@@ -79,6 +83,7 @@ public class Vector {
 
     /**
      * Returns a new vector that is the normalization of this vector.
+     * @return newVector A new Vector object with equal direction to this Vector object but a magnitude of 1.0.
      */
     public Vector getNormalized() {
         double mag = magnitude();
