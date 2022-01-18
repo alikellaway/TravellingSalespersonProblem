@@ -77,7 +77,7 @@ public class Ant implements Callable<Ant> {
 
     /**
      * The code that the Ant runs when the thread pool calls it.
-     * @return this Itself so we can access necessary information from the thread pool.
+     * @return this Itself so we can access necessary information from the Ant.
      * @throws NonExistentNodeException Thrown when a node is searched for but does not exist.
      * @throws EdgeSuperimpositionException Thrown when an edge is superimposed on another inside an edge container.
      */
@@ -190,7 +190,7 @@ public class Ant implements Callable<Ant> {
     }
 
     /**
-     * Returns the value of the denominator of the probability function.
+     * Returns the value of the denominator of the transitional probability function.
      * @param transitionProbabilities The array list from which we are calculating the denominator.
      * @param x The ID of the current node.
      * @param visitedCities The hashmap containing information on the nodes whether they've been visited or not.
@@ -212,6 +212,12 @@ public class Ant implements Callable<Ant> {
         return denominator;
     }
 
+    /**
+     * Gets the value of the transitional probabilty function numerator.
+     * @param x The position in the x direction of this edge in the pheromone and distance matrices.
+     * @param y The position in the y direction of the current edge in the pheromone and distance matrices.
+     * @return numerator The value of the transitional probability function numerator.
+     */
     private double getTPNumerator(int x, int y) {
         double numerator = 0.0;
         double pheromoneLevel = acos.getPheromoneLevelMatrix()[y][x].doubleValue();
