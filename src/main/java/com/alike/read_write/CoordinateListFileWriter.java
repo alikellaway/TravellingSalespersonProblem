@@ -3,6 +3,7 @@ package com.alike.read_write;
 import com.alike.Main;
 import com.alike.customexceptions.InvalidGraphException;
 import com.alike.customexceptions.NodeSuperimpositionException;
+import com.alike.customexceptions.RadiusExceedingBoundaryException;
 import com.alike.tspgraphsystem.Coordinate;
 import com.alike.tspgraphsystem.TSPGraphGenerator;
 
@@ -77,7 +78,7 @@ public class CoordinateListFileWriter {
      * @throws InvalidGraphException Thrown if an attempt is made to create a graph with less than 3 nodes.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to create a graph with superimposed nodes.
      */
-    public void populateFile() throws IOException, InvalidGraphException, NodeSuperimpositionException {
+    public void populateFile() throws IOException, InvalidGraphException, NodeSuperimpositionException, RadiusExceedingBoundaryException {
         clearFile();
         // Writes random graphs and adds them to the file.
         for (int n = 0; n < NUM_RANDOM_GRAPHS; n++) {

@@ -1,10 +1,7 @@
 package com.alike.tspgraphsystem;
 
 import com.alike.Main;
-import com.alike.customexceptions.EdgeSuperimpositionException;
-import com.alike.customexceptions.EdgeToSelfException;
-import com.alike.customexceptions.InvalidGraphException;
-import com.alike.customexceptions.NodeSuperimpositionException;
+import com.alike.customexceptions.*;
 
 /**
  * Class contains functionality to generate TSPGraph objects of certain types or with certain properties.
@@ -72,11 +69,20 @@ public class TSPGraphGenerator {
      */
     public static TSPGraph generateIrregularPolygonalGraph(
             int numCorners, int radiusX, int radiusY
-        ) throws InvalidGraphException, NodeSuperimpositionException {
+        ) throws InvalidGraphException, NodeSuperimpositionException, RadiusExceedingBoundaryException {
         if (numCorners < 3) { // Check the graph has at least 3 nodes.
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
         }
-        TSPNode.restartNodeCounter();
+        // Check the polgyon is not stretched too far to be displayed.
+        if (radiusX * 2 > Main.COORDINATE_MAX_WIDTH) {
+            throw new RadiusExceedingBoundaryException("The radius of the polygon ("+ radiusX + ") was too large in " +
+                    "the x direction to be displayed as the maximum x diameter is " + Main.COORDINATE_MAX_WIDTH);
+        }
+        if (radiusY * 2 > Main.COORDINATE_MAX_HEIGHT) {
+            throw new RadiusExceedingBoundaryException("The radius of the polygon (" + radiusY + ") was too large in" +
+                    " the y direction to be displayed as the maximum y diameter is " + Main.COORDINATE_MAX_HEIGHT);
+        }
+        TSPNode.restartNodeCounter(); // We need the nodes in each graph to be numbered from 0.
         // Create a graph to populate
         TSPGraph tspGraph = new TSPGraph();
         // Note: 2Pi is the number of radians in a circle
@@ -87,8 +93,8 @@ public class TSPGraphGenerator {
         double currentAngle = 0;
         while (currentAngle < maxRad) {
             // Generate the coordinate for this step
-            int x = (int) (radiusX * ELLIPSE_X_RADIUS_RATIO * Math.sin(currentAngle) + Main.COORDINATE_MAX_WIDTH/2);
-            int y = (int) (radiusY * ELLIPSE_Y_RADIUS_RATIO * Math.cos(currentAngle) + Main.COORDINATE_MAX_HEIGHT/2);
+            int x = (int) (radiusX * Math.sin(currentAngle) + Main.COORDINATE_MAX_WIDTH/2);
+            int y = (int) (radiusY * Math.cos(currentAngle) + Main.COORDINATE_MAX_HEIGHT/2);
             // We have divided by two to move the coordinate to the middle of the window ^ and away from the origin.
             Coordinate c = new Coordinate(x, y);
             /* Check that the node is not outside the coordinate space in either direction. If it is then set the
@@ -107,7 +113,7 @@ public class TSPGraphGenerator {
             }
             // Add the coordinate to the container
             tspGraph.getNodeContainer().add(new TSPNode(new Coordinate(x, y)));
-            currentAngle += angleStep;
+            currentAngle += angleStep; // Increment the angle
         }
         return tspGraph;
     }

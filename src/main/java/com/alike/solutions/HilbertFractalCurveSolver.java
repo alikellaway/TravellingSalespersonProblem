@@ -107,13 +107,13 @@ public class HilbertFractalCurveSolver {
      * constructor again).
      */
     public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws EdgeSuperimpositionException,
-            NodeMissedException, InterruptedException, NonSquareCanvasException, FractalDensityFailure {
+            NodeMissedException, InterruptedException, NonSquareCanvasException, FractalDensityException {
         try {
             constructRoute(delayPerStep);
         } catch (NodeMissedException | EdgeToSelfException e) {
             order++;
             if (order == 12) { // Causes memory error
-                throw new FractalDensityFailure("Attempted to create Hilbert of order 12 which causes a memory" +
+                throw new FractalDensityException("Attempted to create Hilbert of order 12 which causes a memory" +
                         " exception.");
             }
             new HilbertFractalCurveSolver(graph).runSolution(delayPerStep); // Try again at a higher order

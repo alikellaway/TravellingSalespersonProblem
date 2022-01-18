@@ -22,12 +22,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 400;
+    public static final int COORDINATE_MAX_WIDTH = 1300;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 400;
+    public static final int COORDINATE_MAX_HEIGHT = 800;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -60,14 +60,14 @@ public class Main extends Application {
 
     private static TSPGraph currentG = new TSPGraph(); // This graph was used for cylcing through node sets.
 
-    public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException {
+    public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException, RadiusExceedingBoundaryException {
         // Generate some graphs for testing and general use
         nnsGraph = TSPGraphGenerator.generateRandomGraph(500, false);
         bsGraph = TSPGraphGenerator.generateRandomGraph(8, false);
-        acosGraph = TSPGraphGenerator.generateRandomGraph(700, false);
+        acosGraph = TSPGraphGenerator.generateRandomGraph(600, false);
         hfcsGraph = TSPGraphGenerator.generateRandomGraph(50, false);
         csGraph = TSPGraphGenerator.generateRandomGraph(100, false);
-        polygonGraph = TSPGraphGenerator.generateIrregularPolygonalGraph(45, 380, 290);
+        polygonGraph = TSPGraphGenerator.generateIrregularPolygonalGraph(9, 150, 200);
 
         // Point the mover to the appropriate graph
 
@@ -96,21 +96,20 @@ public class Main extends Application {
 //        });
 //        bsT.start();
         // Ant Colony Optimisation Solver
-//        Thread acosT = new Thread(() -> {
-//            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
-//            Pair<TSPGraph, Double> solOutput = acos.runSolution(987, 0);
-//
-////            System.out.println(solOutput.getKey());
-////            System.out.println(solOutput.getValue());
-//        });
-//        acosT.start();
+        Thread acosT = new Thread(() -> {
+            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
+            Pair<TSPGraph, Double> solOutput = acos.runSolution(900, 0);
+//            System.out.println(solOutput.getKey());
+//            System.out.println(solOutput.getValue());
+        });
+        acosT.start();
 
         // Hilbert fractal curve solver
 //        Thread hfcsT = new Thread(() -> {
 //            try {
 //                hfcs = new HilbertFractalCurveSolver(hfcsGraph);
 //                hfcs.runSolution(10);
-//            } catch (NonSquareCanvasException | EdgeSuperimpositionException | NodeMissedException | InterruptedException | FractalDensityFailure e) {
+//            } catch (NonSquareCanvasException | EdgeSuperimpositionException | NodeMissedException | InterruptedException | FractalDensityException e) {
 //                e.printStackTrace();
 //            }
 //        });
@@ -168,7 +167,7 @@ public class Main extends Application {
 //            Thread.sleep(10);
 //        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, polygonGraph,1, false);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, acosGraph,1, false);
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);
