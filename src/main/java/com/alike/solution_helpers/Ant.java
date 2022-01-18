@@ -22,18 +22,22 @@ public class Ant implements Callable<Ant> {
      * A reference to the @code{AntColonyOptimizationSolver} object this ant will be working in.
      */
     private AntColonyOptimizationSolver acos;
+
     /**
      * The edge container this ant will output.
      */
     private TSPEdgeContainer route;
+
     /**
      * The unique ID of this ant.
      */
     private int antID;
+
     /**
      * The number of ants currently initialised.
      */
     private static int numAnts = 0;
+
     /**
      * A state used to verify when certain events have or haven't happened.
      */

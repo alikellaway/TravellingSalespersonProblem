@@ -148,8 +148,8 @@ public class Main extends Application {
 //            }
 //        });
 //        test.start();
-//        DTSPGraph dg = new DTSPGraph(polygonGraph, 3, 10, true, false);
-//        dg.move();
+        DTSPGraph dg = new DTSPGraph(acosGraph, 3, 10, true, true);
+        dg.move();
         launch(args);
     }
 

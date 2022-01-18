@@ -92,11 +92,15 @@ public class AntColonyOptimizationSolver {
             }
         }
         processAnts();
-        getExecutorService().shutdown();
+        getExecutorService().shutdownNow();
         System.out.println("All " + numAnts + " Ants have finished traversing!");
         return new Pair<>(graph, graph.getEdgeContainer().getTotalLength());
     }
 
+    /**
+     * While Ants are still traversing, this method will check if they are completed and gets the result to see if it
+     * is smaller than the current shortest route.
+     */
     private void processAnts() {
         while (activeAnts > 0) {
             try {
