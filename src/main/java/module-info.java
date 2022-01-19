@@ -12,6 +12,7 @@ module com.alike {
     exports com.alike.tspgraphsystem to com.fasterxml.jackson.databind;
     exports com.alike.solution_helpers to com.fasterxml.jackson.databind, javafx.graphics;
     exports com.alike.solutions;
+    exports com.alike.solvertestsuite to com.fasterxml.jackson.databind, javafx.graphics;
 
 
 }

@@ -2,7 +2,7 @@ package com.alike.solutions;
 
 import com.alike.solution_helpers.Ant;
 import com.alike.solution_helpers.AtomicDouble;
-import com.alike.solution_helpers.TestResult;
+import com.alike.solvertestsuite.Solution;
 import com.alike.tspgraphsystem.TSPEdgeContainer;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPNode;
@@ -95,7 +95,7 @@ public class AntColonyOptimizationSolver implements Solver {
      * @param delayPerStep The delay each Ant will take before moving nodes.
      * @return output The results of the solution attempt.
      */
-    public TestResult runSolution(int delayPerStep) {
+    public Solution runSolution(int delayPerStep) {
         long startTime = System.nanoTime();
         setDelayPerStep(delayPerStep);
         // Activate all ants
@@ -110,7 +110,7 @@ public class AntColonyOptimizationSolver implements Solver {
         getExecutorService().shutdownNow();
         System.out.println("All " + numAnts + " Ants have finished traversing!");
         long finishTime = System.nanoTime();
-        return new TestResult(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+        return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
     }
 
     /**

@@ -2,7 +2,7 @@ package com.alike.solutions;
 
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.solution_helpers.TestResult;
+import com.alike.solvertestsuite.Solution;
 import com.alike.tspgraphsystem.*;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class ChristofidesSolver implements Solver {
 
     }
 
-    public TestResult runSolution(int delayPerStep) {
+    public Solution runSolution(int delayPerStep) {
         long startTime = System.nanoTime();
         // Construct a minimum spanning tree in graph (MST)
         try {
@@ -60,7 +60,7 @@ public class ChristofidesSolver implements Solver {
         // Now that every node has an even degree - we can calculate an Euler tour.
 
         long finishTime = System.nanoTime();
-        return new TestResult(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+        return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
     }
 
 //    /**

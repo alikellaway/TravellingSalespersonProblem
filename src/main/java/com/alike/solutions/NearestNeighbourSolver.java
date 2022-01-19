@@ -4,7 +4,7 @@ import com.alike.Main;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.solution_helpers.TestResult;
+import com.alike.solvertestsuite.Solution;
 import com.alike.tspgraphsystem.*;
 import java.util.ArrayList;
 
@@ -53,7 +53,7 @@ public class NearestNeighbourSolver implements Solver {
      * @return Returns the graph (with the solution in the edgeContainer) and a double describing how long the found
      * route was.
      */
-    public TestResult runSolution(int delayPerStep) {
+    public Solution runSolution(int delayPerStep) {
         long startTime = System.nanoTime();
         // Set our current node to be the first node in the list of nodes.
         setCurrentNode(nodeContainer.getNodeSet().get(0));
@@ -70,7 +70,7 @@ public class NearestNeighbourSolver implements Solver {
         }
         // Output information about solve
         long finishTime = System.nanoTime();
-        return new TestResult(this.graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+        return new Solution(this.graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
     }
 
     /**

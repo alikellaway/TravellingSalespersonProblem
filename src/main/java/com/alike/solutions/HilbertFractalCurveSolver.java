@@ -3,7 +3,7 @@ package com.alike.solutions;
 import com.alike.Main;
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.solution_helpers.TestResult;
+import com.alike.solvertestsuite.Solution;
 import com.alike.tspgraphsystem.*;
 import java.util.ArrayList;
 
@@ -108,7 +108,7 @@ public class HilbertFractalCurveSolver implements Solver {
      * @param delayPerStep Time to wait between adding edges to the graphs edge container (so we can see it drawn).
      * @return A pair containing the value of the @code{graph} attribute and a double - the length of its route.
      */
-    public TestResult runSolution(int delayPerStep) {
+    public Solution runSolution(int delayPerStep) {
         if (solutionStartTime == null) {
             solutionStartTime = System.nanoTime();
         }
@@ -136,7 +136,7 @@ public class HilbertFractalCurveSolver implements Solver {
             }
         }
         long finishTime = System.nanoTime();
-        return new TestResult(graph, graph.getEdgeContainer().getTotalLength(), finishTime - solutionStartTime);
+        return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - solutionStartTime);
     }
 
     /**

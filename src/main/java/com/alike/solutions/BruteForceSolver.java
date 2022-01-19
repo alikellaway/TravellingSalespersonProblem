@@ -3,7 +3,7 @@ package com.alike.solutions;
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.Permuter;
 import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.solution_helpers.TestResult;
+import com.alike.solvertestsuite.Solution;
 import com.alike.tspgraphsystem.*;
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class BruteForceSolver implements Solver {
      * @return Returns a pair object containing the TSPGraph (which contains the solution edge set) and its route
      * length.
      */
-    public TestResult runSolution(int delayPerStep) {
+    public Solution runSolution(int delayPerStep) {
         long startTime = System.nanoTime();
         // While there are still permutations we haven't checked we wish to continue checking more.
         while (permuter.hasUnseenPermutations()) {
@@ -82,7 +82,7 @@ public class BruteForceSolver implements Solver {
             e.printStackTrace();
         }
         long finishTime = System.nanoTime();
-        return new TestResult(graph, shortestFoundRoute, finishTime - startTime);
+        return new Solution(graph, shortestFoundRoute, finishTime - startTime);
     }
 
     /**
@@ -98,7 +98,6 @@ public class BruteForceSolver implements Solver {
         TSPEdgeContainer edgeContainer = new TSPEdgeContainer();
         TSPNodeContainer nodeContainer = graph.getNodeContainer();
         int numNodes = nodeContainer.getNodeSet().size();
-
         for (int idx = 0; idx < nodeIDs.size(); idx++) {
             TSPNode startNode = nodeContainer.getNodeByID(nodeIDs.get(idx));
             int idxOfEndNode = (idx + 1) % numNodes;
@@ -114,6 +113,7 @@ public class BruteForceSolver implements Solver {
      * @param graph The new value to assign the @code{graph} attribute.
      */
     public void setGraph(TSPGraph graph) {
+        flushAttributes();
         RepeatedFunctions.validateGraph(graph);
         this.graph = graph;
         setPermuter(new Permuter<>(graph.getNodeContainer().getNodeIDs()));
@@ -127,4 +127,14 @@ public class BruteForceSolver implements Solver {
         this.permuter = permuter;
     }
 
+    /**
+     * Used to reset the attributes so that if we use this class on multiple solutions, the values are reset to their
+     * originial values.
+     */
+    private void flushAttributes() {
+        permuter = null;
+        shortestFoundPerm = null;
+        shortestFoundRoute = Integer.MAX_VALUE;
+        graph = null;
+    }
 }

@@ -1,12 +1,9 @@
 package com.alike;
 
 import com.alike.customexceptions.*;
-import com.alike.dtspgraphsystem.CoordinateMover;
 import com.alike.dtspgraphsystem.DTSPGraph;
-import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
-import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.solution_helpers.TestResult;
+import com.alike.solvertestsuite.Solution;
 import com.alike.solutions.*;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPGraphGenerator;
@@ -16,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 import java.io.IOException;
 
@@ -99,8 +95,8 @@ public class Main extends Application {
 //        bsT.start();
         // Ant Colony Optimisation Solver
         Thread acosT = new Thread(() -> {
-            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph, 900);
-            TestResult solOutput = acos.runSolution( 0);
+            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
+            Solution solOutput = acos.runSolution(0);
 //            System.out.println(solOutput.getKey());
 //            System.out.println(solOutput.getValue());
         });
@@ -143,7 +139,7 @@ public class Main extends Application {
 //                    NearestNeighbourSolver nns2 = new NearestNeighbourSolver(currentG);
 //                    nns2.runSolution(0);
 //                }
-//            } catch(CoordinateListExhaustionException ignored) {
+//            } catch(CoordinateListException ignored) {
 //
 //            } catch ( NodeSuperimpositionException | IOException | InvalidGraphException | InterruptedException | EdgeSuperimpositionException | EdgeToSelfException e) {
 //                e.printStackTrace();
@@ -165,6 +161,7 @@ public class Main extends Application {
 
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
+        // Wait for the curve to be created - there is a waiting time while the path is being generated 1st time
 //        while (hfcs == null) {
 //        RepeatedFunctions.sleep(10);
 //        }
@@ -173,7 +170,7 @@ public class Main extends Application {
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);
-        graphDrawer.start();
+//        graphDrawer.start();
 //        curveDrawer.start();
         stage.setScene(scene);
         stage.show();
