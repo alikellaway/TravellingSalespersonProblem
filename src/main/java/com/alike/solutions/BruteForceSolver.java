@@ -2,6 +2,7 @@ package com.alike.solutions;
 
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.Permuter;
+import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.tspgraphsystem.*;
 import javafx.util.Pair;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * of node orders and traversing them all to find the shortest route.
  * @author alike
  */
-public class BruteForceSolver {
+public class BruteForceSolver implements Solver {
 
     /**
      * The graph the solution will be running on.
@@ -47,33 +48,36 @@ public class BruteForceSolver {
      * @param delayPerStep The time delay between checking different permutations (to slow the progress if required).
      * @return Returns a pair object containing the TSPGraph (which contains the solution edge set) and its route
      * length.
-     * @throws PermutationExhaustionException Thrown if @code{Permuter} object is bugged or incorrectly used.
-     * @throws EdgeSuperimpositionException Thrown if an edge is imposed onto another.
-     * @throws PermutationFocusException Thrown if @code{Permuter} object is bugged or incorrectly used.
-     * @throws NonExistentNodeException Thrown if the solution runs into a node ID that doesn't exist.
-     * @throws InterruptedException Thrown if the thread is interrupted.
-     * @throws EdgeToSelfException Thrown if an attempt is made to make an edge to and from the same node.
      */
-    public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws PermutationExhaustionException,
-            EdgeSuperimpositionException,
-            PermutationFocusException,
-            NonExistentNodeException,
-            InterruptedException, EdgeToSelfException {
+    public Pair<TSPGraph, Double> runSolution(int delayPerStep) {
         // While there are still permutations we haven't checked we wish to continue checking more.
         while (permuter.hasUnseenPermutations()) {
             // Set the graphs edges to be a new edge container containing the edges constructed from a permutation
-            graph.setEdgeContainer(createEdgeContainerFromNodeSetPermutation(permuter.getNextPermutation()));
+            try {
+                graph.setEdgeContainer(createEdgeContainerFromNodeSetPermutation(permuter.getNextPermutation()));
+            } catch (PermutationExhaustionException | EdgeSuperimpositionException |
+                    NonExistentNodeException | EdgeToSelfException e) {
+                e.printStackTrace();
+            }
             // Calculate the length of that route
             double routeLength = graph.getEdgeContainer().getTotalLength();
             // Check if the route is the shortest route, if it is the record it.
             if (routeLength < shortestFoundRoute) {
                 shortestFoundRoute = routeLength;
-                shortestFoundPerm = permuter.getCurrentPermutation(); // Do it this way to save memory
+                try {
+                    shortestFoundPerm = permuter.getCurrentPermutation(); // Do it this way to save memory
+                } catch (PermutationFocusException e) {
+                    e.printStackTrace();
+                }
             }
-            Thread.sleep(delayPerStep);
+            RepeatedFunctions.sleep(delayPerStep);
         }
         // Reset the edge container to the best we've found.
-        graph.setEdgeContainer(createEdgeContainerFromNodeSetPermutation(shortestFoundPerm));
+        try {
+            graph.setEdgeContainer(createEdgeContainerFromNodeSetPermutation(shortestFoundPerm));
+        } catch (EdgeSuperimpositionException | NonExistentNodeException | EdgeToSelfException e) {
+            e.printStackTrace();
+        }
         return new Pair<>(graph, shortestFoundRoute);
     }
 

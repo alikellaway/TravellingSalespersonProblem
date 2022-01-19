@@ -1,6 +1,7 @@
 package com.alike.solutions;
 
 import com.alike.customexceptions.*;
+import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.tspgraphsystem.*;
 import javafx.util.Pair;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * Used to find a route through a @code{TSPGraph} using Christofide's algorithm.
  * @author alike
  */
-public class ChristofidesSolver {
+public class ChristofidesSolver implements Solver {
     /**
      * The @code{TSPGraph} we are solving.
      */
@@ -20,18 +21,32 @@ public class ChristofidesSolver {
         setGraph(graph);
     }
 
-    public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws EdgeSuperimpositionException, EdgeToSelfException, NonExistentNodeException, InterruptedException, NodeSuperimpositionException, NoClosestNodeException {
+    public Pair<TSPGraph, Double> runSolution(int delayPerStep) {
         // Construct a minimum spanning tree in graph (MST)
-        makeMinimumSpanningTree(delayPerStep);
+        try {
+            makeMinimumSpanningTree(delayPerStep);
+        } catch (EdgeToSelfException | InterruptedException | EdgeSuperimpositionException e) {
+            e.printStackTrace();
+        }
         // Create a subgraph out of the nodes with an odd order.
-        TSPGraph subgraph = new TSPGraph(new TSPNodeContainer(getOddOrderedNodes()), new TSPEdgeContainer());
+        TSPGraph subgraph = null;
+        try {
+            subgraph = new TSPGraph(new TSPNodeContainer(getOddOrderedNodes()), new TSPEdgeContainer());
+        } catch (NodeSuperimpositionException e) {
+            e.printStackTrace();
+        }
         // Find the best perfect matching we can
-        TSPEdgeContainer bestPerfectMatching = findBestPerfectMatching(subgraph);
+        TSPEdgeContainer bestPerfectMatching = null;
+        try {
+            bestPerfectMatching = findBestPerfectMatching(subgraph);
+        } catch (EdgeSuperimpositionException | EdgeToSelfException | NoClosestNodeException e) {
+            e.printStackTrace();
+        }
         // Unite the MST and the matching
         TSPEdgeContainer temp = graph.getEdgeContainer();
-        Thread.sleep(5000);
+        RepeatedFunctions.sleep(5000);
         graph.setEdgeContainer(bestPerfectMatching);
-        Thread.sleep(1000);
+        RepeatedFunctions.sleep(1000);
         graph.setEdgeContainer(temp);
         graph.getEdgeContainer().absorb(bestPerfectMatching);
         // Now that every node has an even degree - we can calculate an Euler tour.
@@ -100,7 +115,7 @@ public class ChristofidesSolver {
             }
             if (vIdx != -1) { // Only check one since the are initialised in the same block
                 edgeContainer.add(new TSPEdge(visited.get(vIdx), unvisited.get(uIdx)));
-                Thread.sleep(delayPerStep);
+                RepeatedFunctions.sleep(delayPerStep);
                 unvisited.get(uIdx).setVisited(true);
                 visited.add(unvisited.get(uIdx));
                 unvisited.remove(uIdx);

@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
  * Class uses the Ant colony optimisation algorithm to solve an optimised route through a TSPGraph object.
  * @author alike
  */
-public class AntColonyOptimizationSolver {
+public class AntColonyOptimizationSolver implements Solver {
 
     /**
      * The graph object this solver will be solving.
@@ -63,12 +63,18 @@ public class AntColonyOptimizationSolver {
     private int delayPerStep;
 
     /**
+     * The number of Ants the solver will simulate.
+     */
+    private int  numAnts;
+
+    /**
      * Constructs a new Solver object which can run an ant colony optimisation solution implementation to find a route
      * through a TSP graph.
      * @param graph The graph the solver will solve when @code{runSolution} is called.
      */
-    public AntColonyOptimizationSolver(TSPGraph graph) {
+    public AntColonyOptimizationSolver(TSPGraph graph, int numAnts) {
         setGraph(graph);
+        setNumAnts(numAnts);
         setExecutorService(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
         setExecutorCompletionService(new ExecutorCompletionService<>(getExecutorService()));
         initialiseDistances();
@@ -77,11 +83,10 @@ public class AntColonyOptimizationSolver {
 
     /**
      * Starts this solver object running the logic to find a route through the TSPGraph in the @code{graph} attribute.
-     * @param numAnts The number of Ants that will traverse the graph.
      * @param delayPerStep The delay each Ant will take before moving nodes.
      * @return output The results of the solution attempt.
      */
-    public Pair<TSPGraph, Double> runSolution(int numAnts, int delayPerStep) {
+    public Pair<TSPGraph, Double> runSolution(int delayPerStep) {
         setDelayPerStep(delayPerStep);
         // Activate all ants
         for (int x = 0; x < numAnts; x++) {
@@ -219,5 +224,13 @@ public class AntColonyOptimizationSolver {
      */
     public void setDelayPerStep(int delayPerStep) {
         this.delayPerStep = delayPerStep;
+    }
+
+    /**
+     * Sets the @code{numAnts} attribute to a new value.
+     * @param numAnts The new value to assign to the @code{numAnts} attribute.
+     */
+    public void setNumAnts(int numAnts) {
+        this.numAnts = numAnts;
     }
 }

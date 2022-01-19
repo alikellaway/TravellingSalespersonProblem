@@ -12,7 +12,7 @@ import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
  * Class constructs hilbert fractal curves and then uses the path to solve a TSPGraph route.
  * @author alike
  */
-public class HilbertFractalCurveSolver {
+public class HilbertFractalCurveSolver implements Solver {
     /**
      * The graph which we are solving.
      */
@@ -106,17 +106,29 @@ public class HilbertFractalCurveSolver {
      * @throws NonSquareCanvasException Thrown if the canvas is not square (needed because we are calling the
      * constructor again).
      */
-    public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws EdgeSuperimpositionException,
-            NodeMissedException, InterruptedException, NonSquareCanvasException, FractalDensityException {
-        try {
+    public Pair<TSPGraph, Double> runSolution(int delayPerStep) {
+        try {// Try to construct the route.
             constructRoute(delayPerStep);
-        } catch (NodeMissedException | EdgeToSelfException e) {
+        } catch (EdgeSuperimpositionException | InterruptedException e) {
+            // Construct route method through some error.
+            e.printStackTrace();
+        } catch (NodeMissedException | EdgeToSelfException e) {// On route failure, try again with higher order.
             order++;
             if (order == 12) { // Causes memory error
-                throw new FractalDensityException("Attempted to create Hilbert of order 12 which causes a memory" +
-                        " exception.");
+                // While this is an odd way of writing it, it allows us to keep the solver implementing Solver.
+                try {
+                    throw new FractalDensityException("Attempted to create Hilbert of order 12 which causes a memory" +
+                            " exception.");
+                } catch (FractalDensityException ex) {
+                    ex.printStackTrace();
+                }
             }
-            new HilbertFractalCurveSolver(graph).runSolution(delayPerStep); // Try again at a higher order
+            // Start a new solution with a higher order.
+            try {
+                new HilbertFractalCurveSolver(graph).runSolution(delayPerStep); // Try again at a higher order
+            } catch (NonSquareCanvasException ex) {
+                ex.printStackTrace();
+            }
         }
         return new Pair<>(graph, graph.getEdgeContainer().getTotalLength());
     }

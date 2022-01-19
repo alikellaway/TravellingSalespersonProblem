@@ -4,6 +4,7 @@ import com.alike.Main;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.InvalidGraphException;
+import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.tspgraphsystem.*;
 import javafx.util.Pair;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * @author alike
  * @version 1.0
  */
-public class NearestNeighbourSolver {
+public class NearestNeighbourSolver implements Solver {
     /**
      * A reference to the graph we are solving.
      */
@@ -55,16 +56,19 @@ public class NearestNeighbourSolver {
      * @return Returns the graph (with the solution in the edgeContainer) and a double describing how long the found
      * route was.
      */
-    public Pair<TSPGraph, Double> runSolution(int delayPerStep) throws InterruptedException,
-            EdgeSuperimpositionException, EdgeToSelfException {
+    public Pair<TSPGraph, Double> runSolution(int delayPerStep) {
         // Set our current node to be the first node in the list of nodes.
         setCurrentNode(nodeContainer.getNodeSet().get(0));
         currentNode.setVisited(true); // Set it as visited
         numNodesVisited = 1; // Nodes visited is not 1 as we account for the last node when we visit it at the end.
         // Execute the traversal steps
         while (numNodesVisited < nodeContainer.getNodeSet().size() + 1) {
-            Thread.sleep(delayPerStep);
-            traverseToNextClosestNode();
+            RepeatedFunctions.sleep(delayPerStep);
+            try {
+                traverseToNextClosestNode();
+            } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
+                e.printStackTrace();
+            }
         }
         // Output information about solve
         return new Pair<>(this.graph, graph.getEdgeContainer().getTotalLength());

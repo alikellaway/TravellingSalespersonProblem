@@ -89,8 +89,6 @@ public class Coordinate {
         this.y = y;
     }
 
-
-
     /**
      * Used to represent the object as a string in terminal or any text format.
      * @return string The coordinate represented as a string.

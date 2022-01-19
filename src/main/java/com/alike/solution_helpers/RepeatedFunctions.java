@@ -18,4 +18,16 @@ public class RepeatedFunctions {
         return num == 1.00;
     }
 
+    /**
+     * Used to sleep the thread that executes it.
+     * @param milliseconds The amount of time in milliseconds that the thread should sleep for.
+     */
+    public static void sleep(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
