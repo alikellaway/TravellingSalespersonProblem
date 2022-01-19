@@ -46,6 +46,11 @@ public class HilbertFractalCurveSolver implements Solver {
     private static ArrayList<Coordinate> curveCoordinates = new ArrayList<>();
 
     /**
+     * Used to pass the start time to the end solution (if we needed to recursively solve).
+     */
+    private static Long solutionStartTime = null;
+
+    /**
      * Used to construct a new @code{HilbertFractalCurveSolver} object.
      * @param graph The graph which we are solving.
      * @throws NonSquareCanvasException Thrown if the canvas is not a square and of side length a power of two.
@@ -104,6 +109,9 @@ public class HilbertFractalCurveSolver implements Solver {
      * @return A pair containing the value of the @code{graph} attribute and a double - the length of its route.
      */
     public TestResult runSolution(int delayPerStep) {
+        if (solutionStartTime == null) {
+            solutionStartTime = System.nanoTime();
+        }
         try {// Try to construct the route.
             constructRoute(delayPerStep);
         } catch (EdgeSuperimpositionException | InterruptedException e) {
@@ -127,7 +135,8 @@ public class HilbertFractalCurveSolver implements Solver {
                 ex.printStackTrace();
             }
         }
-        return new TestResult(graph, graph.getEdgeContainer().getTotalLength());
+        long finishTime = System.nanoTime();
+        return new TestResult(graph, graph.getEdgeContainer().getTotalLength(), finishTime - solutionStartTime);
     }
 
     /**

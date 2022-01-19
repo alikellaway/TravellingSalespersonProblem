@@ -96,6 +96,7 @@ public class AntColonyOptimizationSolver implements Solver {
      * @return output The results of the solution attempt.
      */
     public TestResult runSolution(int delayPerStep) {
+        long startTime = System.nanoTime();
         setDelayPerStep(delayPerStep);
         // Activate all ants
         for (int x = 0; x < numAnts; x++) {
@@ -108,7 +109,8 @@ public class AntColonyOptimizationSolver implements Solver {
         processAnts();
         getExecutorService().shutdownNow();
         System.out.println("All " + numAnts + " Ants have finished traversing!");
-        return new TestResult(graph, graph.getEdgeContainer().getTotalLength());
+        long finishTime = System.nanoTime();
+        return new TestResult(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
     }
 
     /**

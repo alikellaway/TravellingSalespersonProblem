@@ -39,9 +39,10 @@ public class BruteForceSolver implements Solver {
      * @param graph The TSPGraph that this solution will run on.
      */
     public BruteForceSolver(TSPGraph graph) {
-        RepeatedFunctions.validateGraph(graph);
         setGraph(graph);
-        setPermuter(new Permuter<>(graph.getNodeContainer().getNodeIDs()));
+    }
+
+    public BruteForceSolver() {
     }
 
     /**
@@ -51,6 +52,7 @@ public class BruteForceSolver implements Solver {
      * length.
      */
     public TestResult runSolution(int delayPerStep) {
+        long startTime = System.nanoTime();
         // While there are still permutations we haven't checked we wish to continue checking more.
         while (permuter.hasUnseenPermutations()) {
             // Set the graphs edges to be a new edge container containing the edges constructed from a permutation
@@ -79,7 +81,8 @@ public class BruteForceSolver implements Solver {
         } catch (EdgeSuperimpositionException | NonExistentNodeException | EdgeToSelfException e) {
             e.printStackTrace();
         }
-        return new TestResult(graph, shortestFoundRoute);
+        long finishTime = System.nanoTime();
+        return new TestResult(graph, shortestFoundRoute, finishTime - startTime);
     }
 
     /**
@@ -113,6 +116,7 @@ public class BruteForceSolver implements Solver {
     public void setGraph(TSPGraph graph) {
         RepeatedFunctions.validateGraph(graph);
         this.graph = graph;
+        setPermuter(new Permuter<>(graph.getNodeContainer().getNodeIDs()));
     }
 
     /**

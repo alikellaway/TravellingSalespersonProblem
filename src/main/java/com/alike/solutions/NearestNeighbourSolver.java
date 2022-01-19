@@ -42,9 +42,7 @@ public class NearestNeighbourSolver implements Solver {
      */
     public NearestNeighbourSolver(TSPGraph graph) {
         RepeatedFunctions.validateGraph(graph);
-        this.graph = graph;
-        this.edgeContainer = graph.getEdgeContainer();
-        this.nodeContainer = graph.getNodeContainer();
+        setGraph(graph);
     }
 
     public NearestNeighbourSolver() {
@@ -56,6 +54,7 @@ public class NearestNeighbourSolver implements Solver {
      * route was.
      */
     public TestResult runSolution(int delayPerStep) {
+        long startTime = System.nanoTime();
         // Set our current node to be the first node in the list of nodes.
         setCurrentNode(nodeContainer.getNodeSet().get(0));
         currentNode.setVisited(true); // Set it as visited
@@ -70,7 +69,8 @@ public class NearestNeighbourSolver implements Solver {
             }
         }
         // Output information about solve
-        return new TestResult(this.graph, graph.getEdgeContainer().getTotalLength());
+        long finishTime = System.nanoTime();
+        return new TestResult(this.graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
     }
 
     /**

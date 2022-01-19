@@ -18,11 +18,18 @@ public class ChristofidesSolver implements Solver {
     private TSPGraph graph;
 
     public ChristofidesSolver(TSPGraph graph) {
-        RepeatedFunctions.validateGraph(graph);
         setGraph(graph);
     }
 
+    /**
+     * An empty constructor so that we can set the graph at a later date.
+     */
+    public ChristofidesSolver() {
+
+    }
+
     public TestResult runSolution(int delayPerStep) {
+        long startTime = System.nanoTime();
         // Construct a minimum spanning tree in graph (MST)
         try {
             makeMinimumSpanningTree(delayPerStep);
@@ -52,7 +59,8 @@ public class ChristofidesSolver implements Solver {
         graph.getEdgeContainer().absorb(bestPerfectMatching);
         // Now that every node has an even degree - we can calculate an Euler tour.
 
-        return new TestResult(graph, graph.getEdgeContainer().getTotalLength());
+        long finishTime = System.nanoTime();
+        return new TestResult(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
     }
 
 //    /**
