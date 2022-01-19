@@ -7,4 +7,5 @@ import javafx.util.Pair;
 
 public interface Solver {
     TestResult runSolution(int delayPerStep);
+    void setGraph(TSPGraph graph);
 }

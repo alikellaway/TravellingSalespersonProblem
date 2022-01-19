@@ -18,7 +18,7 @@ public class NearestNeighbourSolver implements Solver {
     /**
      * A reference to the graph we are solving.
      */
-    private final TSPGraph graph;
+    private TSPGraph graph;
     /**
      * A reference to the edge container we are operating within.
      */
@@ -122,5 +122,13 @@ public class NearestNeighbourSolver implements Solver {
         numNodesVisited++;
         // Debug verbosity
         // System.out.println("Travelled to: " + currentNode.toString() + ", " + nextNode.getNodeID() + ", " + numNodesVisited);
+    }
+
+    /**
+     * Sets the value of the @code{graph} attribute to a new value.
+     * @param newGraph The new value to assign to the @code{graph} attribute.
+     */
+    public void setGraph(TSPGraph newGraph) {
+        this.graph = newGraph;
     }
 }

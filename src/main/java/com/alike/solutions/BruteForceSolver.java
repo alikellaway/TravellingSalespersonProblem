@@ -109,7 +109,7 @@ public class BruteForceSolver implements Solver {
      * Sets the value @code{graph} attribute.
      * @param graph The new value to assign the @code{graph} attribute.
      */
-    private void setGraph(TSPGraph graph) {
+    public void setGraph(TSPGraph graph) {
         this.graph = graph;
     }
 
