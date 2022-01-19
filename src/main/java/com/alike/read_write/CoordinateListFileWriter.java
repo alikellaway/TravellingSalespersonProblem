@@ -31,19 +31,19 @@ public class CoordinateListFileWriter {
      * The number of random graphs that will be generated during the population of the list. It is used inside the po-
      * populate list method.
      */
-    private static final int NUM_RANDOM_GRAPHS = 1000;
+    private static final int NUM_RANDOM_GRAPHS = 10;
 
     /**
      * Each polygon shape with the number of corners bigger than 2 and lower or equal to this number will be added to
      * the list when populate is called. e.g. if the corner is five then a triangle, square and pentagon will be added.
      */
-    private static final int NUM_REGULAR_POLYGON_GRAPHS = 250;
+    private static final int NUM_REGULAR_POLYGON_GRAPHS = 200;
 
     /**
      * Similar to @code{NUM_REGULAR_POLYGON_GRAPHS}, irregular polygon shapes with corners bigger than 2 and less than
      * or equal to this number will be added to the list when populate is called.
      */
-    private static final int NUM_IRREGULAR_POLYGON_GRAPHS = 250;
+    private static final int NUM_IRREGULAR_POLYGON_GRAPHS = 10;
 
     /**
      * Constructs a new instance that can be used to edit the coordinate list file.
@@ -59,8 +59,11 @@ public class CoordinateListFileWriter {
      * @param bw The BufferedWriter to write into.
      * @throws IOException Thrown if an io error is thrown.
      */
+    int counter = 1;
     public void appendCoordinateList(BufferedWriter bw, ArrayList<Coordinate> cL) throws IOException {
+        System.out.println(counter + " " + Coordinate.coordinateListToStorageFormat(cL) + "\n");
         bw.write(Coordinate.coordinateListToStorageFormat(cL) + "\n");
+        counter++;
     }
 
     /**
@@ -79,9 +82,11 @@ public class CoordinateListFileWriter {
      * @throws InvalidGraphException Thrown if an attempt is made to create a graph with less than 3 nodes.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to create a graph with superimposed nodes.
      * @throws RadiusExceedingBoundaryException Thrown by @code{generateIrregularPolygonGraph()} if an attempt is made
-     * to streth a polygon out of the display area.
+     * to stretch a polygon out of the display area.
      */
-    public void populateFile() throws IOException, InvalidGraphException, NodeSuperimpositionException, RadiusExceedingBoundaryException {
+    public void populateFile() throws IOException, InvalidGraphException, NodeSuperimpositionException,
+            RadiusExceedingBoundaryException {
+
         clearFile();
         // Writes random graphs and adds them to the file.
         for (int n = 0; n < NUM_RANDOM_GRAPHS; n++) {
