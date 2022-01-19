@@ -2,8 +2,8 @@ package com.alike.solutions;
 
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.RepeatedFunctions;
+import com.alike.solution_helpers.TestResult;
 import com.alike.tspgraphsystem.*;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class ChristofidesSolver implements Solver {
         setGraph(graph);
     }
 
-    public Pair<TSPGraph, Double> runSolution(int delayPerStep) {
+    public TestResult runSolution(int delayPerStep) {
         // Construct a minimum spanning tree in graph (MST)
         try {
             makeMinimumSpanningTree(delayPerStep);
@@ -51,7 +51,7 @@ public class ChristofidesSolver implements Solver {
         graph.getEdgeContainer().absorb(bestPerfectMatching);
         // Now that every node has an even degree - we can calculate an Euler tour.
 
-        return new Pair<>(graph, graph.getEdgeContainer().getTotalLength());
+        return new TestResult(graph, graph.getEdgeContainer().getTotalLength());
     }
 
 //    /**

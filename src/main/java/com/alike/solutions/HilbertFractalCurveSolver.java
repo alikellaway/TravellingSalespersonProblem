@@ -2,8 +2,8 @@ package com.alike.solutions;
 
 import com.alike.Main;
 import com.alike.customexceptions.*;
+import com.alike.solution_helpers.TestResult;
 import com.alike.tspgraphsystem.*;
-import javafx.util.Pair;
 import java.util.ArrayList;
 
 import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
@@ -106,7 +106,7 @@ public class HilbertFractalCurveSolver implements Solver {
      * @throws NonSquareCanvasException Thrown if the canvas is not square (needed because we are calling the
      * constructor again).
      */
-    public Pair<TSPGraph, Double> runSolution(int delayPerStep) {
+    public TestResult runSolution(int delayPerStep) {
         try {// Try to construct the route.
             constructRoute(delayPerStep);
         } catch (EdgeSuperimpositionException | InterruptedException e) {
@@ -130,7 +130,7 @@ public class HilbertFractalCurveSolver implements Solver {
                 ex.printStackTrace();
             }
         }
-        return new Pair<>(graph, graph.getEdgeContainer().getTotalLength());
+        return new TestResult(graph, graph.getEdgeContainer().getTotalLength());
     }
 
     /**

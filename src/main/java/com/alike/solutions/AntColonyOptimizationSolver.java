@@ -2,10 +2,10 @@ package com.alike.solutions;
 
 import com.alike.solution_helpers.Ant;
 import com.alike.solution_helpers.AtomicDouble;
+import com.alike.solution_helpers.TestResult;
 import com.alike.tspgraphsystem.TSPEdgeContainer;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPNode;
-import javafx.util.Pair;
 
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -86,7 +86,7 @@ public class AntColonyOptimizationSolver implements Solver {
      * @param delayPerStep The delay each Ant will take before moving nodes.
      * @return output The results of the solution attempt.
      */
-    public Pair<TSPGraph, Double> runSolution(int delayPerStep) {
+    public TestResult runSolution(int delayPerStep) {
         setDelayPerStep(delayPerStep);
         // Activate all ants
         for (int x = 0; x < numAnts; x++) {
@@ -99,7 +99,7 @@ public class AntColonyOptimizationSolver implements Solver {
         processAnts();
         getExecutorService().shutdownNow();
         System.out.println("All " + numAnts + " Ants have finished traversing!");
-        return new Pair<>(graph, graph.getEdgeContainer().getTotalLength());
+        return new TestResult(graph, graph.getEdgeContainer().getTotalLength());
     }
 
     /**

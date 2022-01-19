@@ -3,8 +3,8 @@ package com.alike.solutions;
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.Permuter;
 import com.alike.solution_helpers.RepeatedFunctions;
+import com.alike.solution_helpers.TestResult;
 import com.alike.tspgraphsystem.*;
-import javafx.util.Pair;
 import java.util.List;
 
 /**
@@ -49,7 +49,7 @@ public class BruteForceSolver implements Solver {
      * @return Returns a pair object containing the TSPGraph (which contains the solution edge set) and its route
      * length.
      */
-    public Pair<TSPGraph, Double> runSolution(int delayPerStep) {
+    public TestResult runSolution(int delayPerStep) {
         // While there are still permutations we haven't checked we wish to continue checking more.
         while (permuter.hasUnseenPermutations()) {
             // Set the graphs edges to be a new edge container containing the edges constructed from a permutation
@@ -78,7 +78,7 @@ public class BruteForceSolver implements Solver {
         } catch (EdgeSuperimpositionException | NonExistentNodeException | EdgeToSelfException e) {
             e.printStackTrace();
         }
-        return new Pair<>(graph, shortestFoundRoute);
+        return new TestResult(graph, shortestFoundRoute);
     }
 
     /**

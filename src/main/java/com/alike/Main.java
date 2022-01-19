@@ -5,6 +5,7 @@ import com.alike.dtspgraphsystem.CoordinateMover;
 import com.alike.dtspgraphsystem.DTSPGraph;
 import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
+import com.alike.solution_helpers.TestResult;
 import com.alike.solutions.*;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPGraphGenerator;
@@ -98,7 +99,7 @@ public class Main extends Application {
         // Ant Colony Optimisation Solver
         Thread acosT = new Thread(() -> {
             AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph, 900);
-            Pair<TSPGraph, Double> solOutput = acos.runSolution( 0);
+            TestResult solOutput = acos.runSolution( 0);
 //            System.out.println(solOutput.getKey());
 //            System.out.println(solOutput.getValue());
         });
