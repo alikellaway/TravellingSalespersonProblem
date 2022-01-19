@@ -3,7 +3,6 @@ package com.alike.solutions;
 import com.alike.Main;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
-import com.alike.customexceptions.InvalidGraphException;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.TestResult;
 import com.alike.tspgraphsystem.*;
@@ -22,11 +21,11 @@ public class NearestNeighbourSolver implements Solver {
     /**
      * A reference to the edge container we are operating within.
      */
-    private final TSPEdgeContainer edgeContainer;
+    private TSPEdgeContainer edgeContainer;
     /**
      * A reference to the node container we are operating on.
      */
-    private final TSPNodeContainer nodeContainer;
+    private TSPNodeContainer nodeContainer;
     /**
      * The node the algorithm is currently sitting on.
      */
@@ -40,15 +39,15 @@ public class NearestNeighbourSolver implements Solver {
     /**
      * Constructor used to load a graph into the object, so that a solution can be run.
      * @param graph The graph to load into the NNS object.
-     * @throws InvalidGraphException Thrown if the input graph has less than 3 nodes (illegal graph).
      */
-    public NearestNeighbourSolver(TSPGraph graph) throws InvalidGraphException {
+    public NearestNeighbourSolver(TSPGraph graph) {
+        RepeatedFunctions.validateGraph(graph);
         this.graph = graph;
         this.edgeContainer = graph.getEdgeContainer();
         this.nodeContainer = graph.getNodeContainer();
-        if (nodeContainer.getNodeSet().size() < 3) {
-            throw new InvalidGraphException("Edge set smaller than 3.");
-        }
+    }
+
+    public NearestNeighbourSolver() {
     }
 
     /**
@@ -129,6 +128,9 @@ public class NearestNeighbourSolver implements Solver {
      * @param newGraph The new value to assign to the @code{graph} attribute.
      */
     public void setGraph(TSPGraph newGraph) {
+        RepeatedFunctions.validateGraph(newGraph);
         this.graph = newGraph;
+        this.nodeContainer = newGraph.getNodeContainer();
+        this.edgeContainer = newGraph.getEdgeContainer();
     }
 }

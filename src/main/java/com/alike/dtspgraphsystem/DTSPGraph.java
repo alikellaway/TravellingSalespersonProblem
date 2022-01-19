@@ -44,6 +44,11 @@ public class DTSPGraph implements Graph {
     private final ArrayList<TSPEdge> disallowedEdges;
 
     /**
+     * A reference to the underlying graph object which this object is manipulating.
+     */
+    private TSPGraph graph;
+
+    /**
      * Constructs a new DTSP object.
      * @param graph The underlying graph object of the DTSP.
      * @param movementSpeed The number value affecting the speed at which the nodes move.
@@ -53,6 +58,7 @@ public class DTSPGraph implements Graph {
     public DTSPGraph(TSPGraph graph, int movementSpeed, int delayPerStep, boolean stepRandomly, boolean stepByVelocity) {
         cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), movementSpeed);
         disallowedEdges = new ArrayList<>();
+        this.graph = graph;
         stop(); // Assigns moving var to false.
         setSteppingRandomly(stepRandomly);
         setSteppingByVelocity(stepByVelocity);
@@ -141,5 +147,9 @@ public class DTSPGraph implements Graph {
      */
     public void reAllowEdge(TSPEdge edge) {
         disallowedEdges.removeIf(edge::equals);
+    }
+
+    public int getNumNodes() {
+        return graph.getNumNodes();
     }
 }

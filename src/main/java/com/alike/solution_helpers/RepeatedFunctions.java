@@ -1,5 +1,8 @@
 package com.alike.solution_helpers;
 
+import com.alike.customexceptions.InvalidGraphException;
+import com.alike.tspgraphsystem.Graph;
+
 /**
  * Class contains some useful functions that are repeated multiple times in the project (or have no obvious space).
  * @author alike
@@ -30,4 +33,17 @@ public class RepeatedFunctions {
         }
     }
 
+    /**
+     * Used to validate whether a graph is legal by throwing an exception when an input graph is not.
+     * @param graph The graph to validate.
+     */
+    public static void validateGraph(Graph graph) {
+        try {
+            if (graph.getNumNodes() < 3) {
+                throw new InvalidGraphException("The graph had fewer than 3 nodes.");
+            }
+        } catch (InvalidGraphException e) {
+            e.printStackTrace();
+        }
+    }
 }

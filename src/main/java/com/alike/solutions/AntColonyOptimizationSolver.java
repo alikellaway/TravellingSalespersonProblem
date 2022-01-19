@@ -65,16 +65,25 @@ public class AntColonyOptimizationSolver implements Solver {
     /**
      * The number of Ants the solver will simulate.
      */
-    private int  numAnts;
+    private int  numAnts = 900;
 
     /**
      * Constructs a new Solver object which can run an ant colony optimisation solution implementation to find a route
      * through a TSP graph.
      * @param graph The graph the solver will solve when @code{runSolution} is called.
      */
-    public AntColonyOptimizationSolver(TSPGraph graph, int numAnts) {
+    public AntColonyOptimizationSolver(TSPGraph graph) {
         setGraph(graph);
-        setNumAnts(numAnts);
+        setExecutorService(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
+        setExecutorCompletionService(new ExecutorCompletionService<>(getExecutorService()));
+        initialiseDistances();
+        initialisePheromoneLevels();
+    }
+
+    /**
+     * An empty constructor so that we can set the graph at a later time.
+     */
+    public AntColonyOptimizationSolver() {
         setExecutorService(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
         setExecutorCompletionService(new ExecutorCompletionService<>(getExecutorService()));
         initialiseDistances();

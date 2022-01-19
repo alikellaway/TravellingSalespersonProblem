@@ -6,6 +6,9 @@ import com.alike.tspgraphsystem.TSPGraph;
 import javafx.util.Pair;
 
 public interface Solver {
+
     TestResult runSolution(int delayPerStep);
+
     void setGraph(TSPGraph graph);
+
 }
