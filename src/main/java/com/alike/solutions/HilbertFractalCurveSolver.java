@@ -22,7 +22,7 @@ public class HilbertFractalCurveSolver implements Solver {
     /**
      * The order of Hilbert curve to construct (how many iterations to do).
      */
-    public static int order = 8;
+    public static int order = 11;
 
     /**
      * The number of sectors that the fractal will be broken into (e.g. quadrants at order 2).
