@@ -1,6 +1,5 @@
 package com.alike.read_write;
 
-import com.alike.customexceptions.CoordinateListExhaustionException;
 import com.alike.tspgraphsystem.Coordinate;
 
 import java.io.BufferedReader;
