@@ -5,6 +5,7 @@ import com.alike.dtspgraphsystem.CoordinateMover;
 import com.alike.dtspgraphsystem.DTSPGraph;
 import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
+import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.TestResult;
 import com.alike.solutions.*;
 import com.alike.tspgraphsystem.TSPGraph;
@@ -134,7 +135,7 @@ public class Main extends Application {
 ////                clfw.close();
 //                CoordinateListFileReader clfr = new CoordinateListFileReader();
 //                while (true) {
-//                    Thread.sleep(0);
+//                    RepeatedFunctions.sleep(0);
 //                    ArrayList<Coordinate> cL = clfr.getNext();
 //                    Coordinate[] cA = cL.toArray(Coordinate[]::new);
 //                    currentG.setNodeContainer(new TSPNodeContainer(cA));
@@ -165,7 +166,7 @@ public class Main extends Application {
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
 //        while (hfcs == null) {
-//            Thread.sleep(10);
+//        RepeatedFunctions.sleep(10);
 //        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
         TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, acosGraph,1, false);

@@ -2,6 +2,7 @@ package com.alike.solutions;
 
 import com.alike.Main;
 import com.alike.customexceptions.*;
+import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.TestResult;
 import com.alike.tspgraphsystem.*;
 import java.util.ArrayList;
@@ -100,11 +101,6 @@ public class HilbertFractalCurveSolver implements Solver {
      * Used to instruct @code{this} to find a route around the @code{graph} attribute.
      * @param delayPerStep Time to wait between adding edges to the graphs edge container (so we can see it drawn).
      * @return A pair containing the value of the @code{graph} attribute and a double - the length of its route.
-     * @throws EdgeSuperimpositionException Thrown if an attempt is made to make an edge that already exists.
-     * @throws NodeMissedException Thrown if a node is missed by the fractal path we used.
-     * @throws InterruptedException Thrown if the thread is interrupted.
-     * @throws NonSquareCanvasException Thrown if the canvas is not square (needed because we are calling the
-     * constructor again).
      */
     public TestResult runSolution(int delayPerStep) {
         try {// Try to construct the route.
@@ -144,12 +140,12 @@ public class HilbertFractalCurveSolver implements Solver {
             throws EdgeSuperimpositionException, NodeMissedException, InterruptedException, EdgeToSelfException {
         ArrayList<TSPNode> nodesOrdered = getNodesOrdered();
         TSPEdgeContainer container = new TSPEdgeContainer();
-        graph.setEdgeContainer(container); // We do this here so we can see the path as its being constructed
+        graph.setEdgeContainer(container); // We do this here, so we can see the path as its being constructed
         for (int i = 0; i < nodesOrdered.size(); i++) {
             System.out.println();
             // Create the edge and add it
             container.add(new TSPEdge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
-            Thread.sleep(delayPerStep);
+            RepeatedFunctions.sleep(delayPerStep);
         }
     }
 
