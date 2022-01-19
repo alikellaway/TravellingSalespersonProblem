@@ -17,13 +17,19 @@ public class TestResult {
     private Double routeLength;
 
     /**
+     * The time taken to find this solution.
+     */
+    private long executionTime;
+
+    /**
      * Constructs a new test result object.
      * @param g The value to assign the @code{resultGraph} attribute.
      * @param length The value to assign the @code{length} attribute.
      */
-    public TestResult(Graph g, Double length) {
+    public TestResult(Graph g, Double length, long executionTime) {
         setResultGraph(g);
         setRouteLength(length);
+        setExecutionTime(executionTime);
     }
 
     /**
@@ -56,5 +62,30 @@ public class TestResult {
      */
     public void setRouteLength(Double routeLength) {
         this.routeLength = routeLength;
+    }
+
+    /**
+     * Used to represent the TestResult object as a string in console etc.
+     * @return string The TestResult as a string.
+     */
+    @Override
+    public String toString() {
+        return getRouteLength().toString();
+    }
+
+    /**
+     * Returns the value of the @code{executionTime} attribute.
+     * @return executionTime The value of the @code{executionTime} attribute.
+     */
+    public long getExecutionTime() {
+        return executionTime;
+    }
+
+    /**
+     * Sets the value of the @code{executionTime} attribute to a new value.
+     * @param executionTime The new value to assign to the @code{executionTime} attribute.
+     */
+    public void setExecutionTime(long executionTime) {
+        this.executionTime = executionTime;
     }
 }
