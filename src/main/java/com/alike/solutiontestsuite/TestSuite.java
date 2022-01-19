@@ -1,9 +1,14 @@
 package com.alike.solutiontestsuite;
 
+import com.alike.customexceptions.CoordinateListException;
+import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.read_write.CoordinateListFileReader;
 import com.alike.solution_helpers.TestResult;
 import com.alike.solutions.Solver;
+import com.alike.tspgraphsystem.TSPGraph;
+import com.alike.tspgraphsystem.TSPNodeContainer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TestSuite {
@@ -23,10 +28,30 @@ public class TestSuite {
         setSolver(solver);
     }
 
-    public ArrayList<TestResult> runTest() {
-        while (reader.hasRemainingLines()) {
 
+    public ArrayList<TestResult> runTest() {
+        ArrayList<TestResult> results = new ArrayList<>();
+        while (reader.hasRemainingLines()) {
+            try {
+                // Create the graph we want to test from file.
+                TSPNodeContainer nC = new TSPNodeContainer(reader.getNext());
+                solver.setGraph(new TSPGraph(nC));
+                // Run the solution on this graph.
+                TestResult r = solver.runSolution(0);
+                results.add(r);
+            } catch (IOException | NodeSuperimpositionException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) { // Get next will return null as its last argument
+                if (results.isEmpty()) { // If we have no results then something went wrong.
+                    try {
+                        throw new CoordinateListException("Test could not find coordinate lists to test with.");
+                    } catch (CoordinateListException ex) {
+                        e.printStackTrace();
+                    }
+                } // Otherwise, nothing went wrong - we can ignore the null pointer.
+            }
         }
+        return results;
     }
 
     /**
