@@ -1,7 +1,10 @@
 package com.alike.solutiontestsuite;
 
 import com.alike.read_write.CoordinateListFileReader;
+import com.alike.solution_helpers.TestResult;
 import com.alike.solutions.Solver;
+
+import java.util.ArrayList;
 
 public class TestSuite {
 
@@ -18,6 +21,12 @@ public class TestSuite {
 
     public TestSuite(Solver solver) {
         setSolver(solver);
+    }
+
+    public ArrayList<TestResult> runTest() {
+        while (reader.hasRemainingLines()) {
+
+        }
     }
 
     /**

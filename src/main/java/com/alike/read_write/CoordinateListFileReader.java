@@ -4,14 +4,9 @@ import com.alike.customexceptions.CoordinateListExhaustionException;
 import com.alike.tspgraphsystem.Coordinate;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.stream.Stream;
 
 /**
  * Class contains the functionality to load graphs from file.
@@ -27,6 +22,12 @@ public class CoordinateListFileReader {
      * The line the class is currently looking at i.e. the line number that is retrieved if getNext is called.
      */
     private int focusLine = 0;
+
+    /**
+     * Whether we have lines remaining in the file or not (true if we don't currently know which means we may get a
+     * null output from @code{getNext()}).
+     */
+    private boolean hasRemainingLines = true;
 
 
     /**
@@ -56,10 +57,11 @@ public class CoordinateListFileReader {
         }
         if (currentLine == 0) { // If the file was empty
             br.close();
-            throw new CoordinateListExhaustionException("The coordinate list file was empty.");
+            hasRemainingLines = false;
         }
         br.close();
-        throw new CoordinateListExhaustionException("Seen all coordinate lists in the file.");
+        hasRemainingLines = false;
+        return null;
     }
 
     /**
@@ -74,5 +76,13 @@ public class CoordinateListFileReader {
             ArrayList<Coordinate> cL = Coordinate.parseCoordinateList(line);
             coordinateLists.add(cL);
         }
+    }
+
+    /**
+     * Returns the value of the @code{hasRemainingLines} attribute.
+     * @return hasRemainingLines The value of the @code{hasRemainingLines} attribute.
+     */
+    public boolean hasRemainingLines() {
+        return hasRemainingLines;
     }
 }
