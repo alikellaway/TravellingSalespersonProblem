@@ -51,6 +51,7 @@ public class HilbertFractalCurveSolver implements Solver {
      * @throws NonSquareCanvasException Thrown if the canvas is not a square and of side length a power of two.
      */
     public HilbertFractalCurveSolver(TSPGraph graph) throws NonSquareCanvasException {
+        RepeatedFunctions.validateGraph(graph);
         cornerCoordinates = new ArrayList<>();
         curveCoordinates = new ArrayList<>();
 
@@ -223,6 +224,7 @@ public class HilbertFractalCurveSolver implements Solver {
      * @param graph The new value to become the @code{graph} attribute.
      */
     public void setGraph(TSPGraph graph) {
+        RepeatedFunctions.validateGraph(graph);
         this.graph = graph;
     }
 

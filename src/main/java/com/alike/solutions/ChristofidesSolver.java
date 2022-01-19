@@ -18,6 +18,7 @@ public class ChristofidesSolver implements Solver {
     private TSPGraph graph;
 
     public ChristofidesSolver(TSPGraph graph) {
+        RepeatedFunctions.validateGraph(graph);
         setGraph(graph);
     }
 
@@ -187,6 +188,7 @@ public class ChristofidesSolver implements Solver {
      * @param graph The new value to become the @code{graph} attribute.
      */
     public void setGraph(TSPGraph graph) {
+        RepeatedFunctions.validateGraph(graph);
         this.graph = graph;
     }
 }

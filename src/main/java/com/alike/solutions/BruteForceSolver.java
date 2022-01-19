@@ -39,6 +39,7 @@ public class BruteForceSolver implements Solver {
      * @param graph The TSPGraph that this solution will run on.
      */
     public BruteForceSolver(TSPGraph graph) {
+        RepeatedFunctions.validateGraph(graph);
         setGraph(graph);
         setPermuter(new Permuter<>(graph.getNodeContainer().getNodeIDs()));
     }
@@ -110,6 +111,7 @@ public class BruteForceSolver implements Solver {
      * @param graph The new value to assign the @code{graph} attribute.
      */
     public void setGraph(TSPGraph graph) {
+        RepeatedFunctions.validateGraph(graph);
         this.graph = graph;
     }
 
