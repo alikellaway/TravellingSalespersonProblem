@@ -46,6 +46,15 @@ public class TSPGraph implements Graph {
     }
 
     /**
+     * Used to create a graph with no edges but with a node container.
+     * @param nodeContainer The node container the graph will have as its node container.
+     */
+    public TSPGraph(TSPNodeContainer nodeContainer) {
+        setNodeContainer(nodeContainer);
+        setEdgeContainer(new TSPEdgeContainer());
+    }
+
+    /**
      * Returns the @code{nodeContainer} attribute of the TSPGraph object.
      * @return @code{nodeContainer} The @code{nodeContainer} attribute of the TSPGraph object.
      */
