@@ -76,14 +76,14 @@ public class TSPGraphGenerator {
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
         }
         // Check the polgyon is not stretched too far to be displayed.
-        if (radiusX * 2 > Main.COORDINATE_MAX_WIDTH) {
-            throw new RadiusExceedingBoundaryException("The radius of the polygon ("+ radiusX + ") was too large in " +
-                    "the x direction to be displayed as the maximum x diameter is " + Main.COORDINATE_MAX_WIDTH);
-        }
-        if (radiusY * 2 > Main.COORDINATE_MAX_HEIGHT) {
-            throw new RadiusExceedingBoundaryException("The radius of the polygon (" + radiusY + ") was too large in" +
-                    " the y direction to be displayed as the maximum y diameter is " + Main.COORDINATE_MAX_HEIGHT);
-        }
+//        if (radiusX * 2 > Main.COORDINATE_MAX_WIDTH) {
+//            throw new RadiusExceedingBoundaryException("The radius of the polygon ("+ radiusX + ") was too large in " +
+//                    "the x direction to be displayed as the maximum x diameter is " + Main.COORDINATE_MAX_WIDTH);
+//        }
+//        if (radiusY * 2 > Main.COORDINATE_MAX_HEIGHT) {
+//            throw new RadiusExceedingBoundaryException("The radius of the polygon (" + radiusY + ") was too large in" +
+//                    " the y direction to be displayed as the maximum y diameter is " + Main.COORDINATE_MAX_HEIGHT);
+//        }
         TSPNode.restartNodeCounter(); // We need the nodes in each graph to be numbered from 0.
         // Create a graph to populate
         TSPGraph tspGraph = new TSPGraph();
@@ -95,8 +95,8 @@ public class TSPGraphGenerator {
         double currentAngle = 0;
         while (currentAngle < maxRad) {
             // Generate the coordinate for this step
-            int x = (int) (radiusX * Math.sin(currentAngle) + Main.COORDINATE_MAX_WIDTH/2);
-            int y = (int) (radiusY * Math.cos(currentAngle) + Main.COORDINATE_MAX_HEIGHT/2);
+            int x = (int) (radiusX * ELLIPSE_X_RADIUS_RATIO * Math.sin(currentAngle) + Main.COORDINATE_MAX_WIDTH/2);
+            int y = (int) (radiusY * ELLIPSE_Y_RADIUS_RATIO * Math.cos(currentAngle) + Main.COORDINATE_MAX_HEIGHT/2);
             // We have divided by two to move the coordinate to the middle of the window ^ and away from the origin.
             Coordinate c = new Coordinate(x, y);
             /* Check that the node is not outside the coordinate space in either direction. If it is then set the
