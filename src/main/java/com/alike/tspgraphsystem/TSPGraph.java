@@ -15,7 +15,7 @@ import java.util.List;
  * TSPGraph.java
  * @author alike
  */
-public class TSPGraph {
+public class TSPGraph implements Graph {
 
     /**
      * The nodes of this graph object (stored in a @code{nodeContainer} object for easier management).

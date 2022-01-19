@@ -1,5 +1,6 @@
 package com.alike.dtspgraphsystem;
 
+import com.alike.tspgraphsystem.Graph;
 import com.alike.tspgraphsystem.TSPEdge;
 import com.alike.tspgraphsystem.TSPGraph;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * Class combines the @code{TSPGraph} and @code{CoordinateMover} classes to create a dynamic travelling salesperson
  * problem graph where the nodes move.
  */
-public class DTSPGraph {
+public class DTSPGraph implements Graph {
     /**
      * The mover that will be moving the nodes on the graph around.
      */
