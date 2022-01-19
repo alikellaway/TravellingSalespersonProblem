@@ -5,6 +5,7 @@ import com.alike.customexceptions.NonExistentNodeException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Used to manage sets of nodes for use in TSPGraph objects.
@@ -45,7 +46,7 @@ public class TSPNodeContainer {
      * @param cL An array of coordinates.
      * @throws NodeSuperimpositionException Thrown when an attempt is made to superimpose nodes.
      */
-    public TSPNodeContainer(Coordinate[] cL) throws NodeSuperimpositionException {
+    public TSPNodeContainer(Collection<Coordinate> cL) throws NodeSuperimpositionException {
         this.setNodeSet(new ArrayList<>());
         for (Coordinate c : cL) {
             add(new TSPNode(c));
