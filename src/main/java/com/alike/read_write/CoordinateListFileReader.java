@@ -40,9 +40,8 @@ public class CoordinateListFileReader {
      * Returns the coordinate list stored on the line numbered equal to the focusLine variable.
      * @return CoorinateList The coordinate list stored on the focusLine.
      * @throws IOException Thrown if an io exception occurs.
-     * @throws CoordinateListExhaustionException Thrown if the list is empty or if there are no more lines.
      */
-    public ArrayList<Coordinate> getNext() throws IOException, CoordinateListExhaustionException {
+    public ArrayList<Coordinate> getNext() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(CoordinateListFileWriter.FILE_PATH)); // Grab the file
         // Construct the coordinate list on the currentLine
         int currentLine = 0;
