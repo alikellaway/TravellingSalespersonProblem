@@ -1,7 +1,9 @@
 package com.alike.dtspgraphsystem;
 
-import com.alike.tspgraphsystem.Coordinate;
+import com.alike.tspgraphsystem.TSPEdge;
 import com.alike.tspgraphsystem.TSPGraph;
+
+import java.util.ArrayList;
 
 /**
  * Class combines the @code{TSPGraph} and @code{CoordinateMover} classes to create a dynamic travelling salesperson
@@ -11,7 +13,7 @@ public class DTSPGraph {
     /**
      * The mover that will be moving the nodes on the graph around.
      */
-    private CoordinateMover cm;
+    private final CoordinateMover cm;
 
     /**
      * A boolean that describes whether the DTSP's nodes are currently moving. True if they are moving.
@@ -30,7 +32,15 @@ public class DTSPGraph {
      */
     private boolean steppingByVelocity;
 
+    /**
+     * The delay per movement step or tick (if you don't want a delay then put 0).
+     */
     private int delayPerStep;
+
+    /**
+     * A collection of edges which have been disallowed (taken offline).
+     */
+    private final ArrayList<TSPEdge> disallowedEdges;
 
     /**
      * Constructs a new DTSP object.
@@ -41,6 +51,7 @@ public class DTSPGraph {
      */
     public DTSPGraph(TSPGraph graph, int movementSpeed, int delayPerStep, boolean stepRandomly, boolean stepByVelocity) {
         cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), movementSpeed);
+        disallowedEdges = new ArrayList<>();
         stop(); // Assigns moving var to false.
         setSteppingRandomly(stepRandomly);
         setSteppingByVelocity(stepByVelocity);
@@ -93,7 +104,41 @@ public class DTSPGraph {
         moving = false;
     }
 
+    /**
+     * Sets the value of the @code{delayPerStep} attribute to a new value.
+     * @param delayPerStep The new value to assign to the @code{delayPerStep} attribute.
+     */
     public void setDelayPerStep(int delayPerStep) {
         this.delayPerStep = delayPerStep;
+    }
+
+    /**
+     * Used to check if an edge is allowed on the DTSP graph.
+     * @param edge The edge to check for.
+     * @return boolean True if the edge is disallowed. False if the edge is allowed.
+     */
+    public boolean edgeDisallowed(TSPEdge edge) {
+        for (TSPEdge e : disallowedEdges) {
+            if (e.equals(edge)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Used to disallow edges on the DTSP.
+     * @param edge The edge to disallow on the DTSP.
+     */
+    public void disallowEdge(TSPEdge edge) {
+        disallowedEdges.add(edge);
+    }
+
+    /**
+     * Used to re-allow edges on the DTSP that have since been disallowed.
+     * @param edge The edge to re-allow.
+     */
+    public void reAllowEdge(TSPEdge edge) {
+        disallowedEdges.removeIf(edge::equals);
     }
 }

@@ -85,10 +85,18 @@ public class TSPEdge {
         return edgeID;
     }
 
+    /**
+     * Sets the @code{edgeID} attribute to a new value.
+     * @param edgeID The new value to assign to the @code{edgeID} attribute.
+     */
     private void setEdgeID(String edgeID) {
         this.edgeID = edgeID;
     }
 
+    /**
+     * Used to output the edge as a string for viewing in text form.
+     * @return edgeString The edge represented as a string.
+     */
     @Override
     public String toString() {
         return getStartNode().toString() + " -- " + getEndNode().toString();
