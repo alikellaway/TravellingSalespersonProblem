@@ -5,7 +5,6 @@ import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.read_write.CoordinateListFileReader;
 import com.alike.solutions.Solver;
 import com.alike.tspgraphsystem.TSPGraph;
-import com.alike.tspgraphsystem.TSPNode;
 import com.alike.tspgraphsystem.TSPNodeContainer;
 
 import java.io.IOException;
@@ -28,6 +27,8 @@ public class TestSuite {
      */
     private TSPGraph currentGraph = null;
 
+    private int testNumber = 0;
+
     /**
      * Used to create an instance of the TestSuite class.
      * @param solver The solver object we will be testing.
@@ -41,18 +42,26 @@ public class TestSuite {
         int testsFailed = 0;
         ArrayList<Solution> solutions = new ArrayList<>();
         while (reader.hasRemainingLines()) {
+            testNumber++;
             try {
-                TSPNode.restartNodeCounter();
                 // Create the graph we want to test from file.
                 TSPNodeContainer nC = new TSPNodeContainer(reader.getNext());
                 TSPGraph graph = new TSPGraph(nC);
                 currentGraph = graph;
                 solver.setGraph(graph);
                 // Run the solution on this graph.
-                Solution r = solver.runSolution(0);
-                solutions.add(r);
+                Solution s = solver.runSolution(0);
+                s.setTestNumber(testNumber);
+                solutions.add(s);
                 currentGraph = null;
-                testsPassed++;
+                if (!s.testFailed()) {
+                    testsPassed++;
+                    System.out.println(s);
+                } else {
+                    testsFailed++;
+                    System.out.println(s);
+                }
+
             } catch (IOException | NodeSuperimpositionException e) { // Thrown during file reading or graph creation.
                 e.printStackTrace();
             } catch (NullPointerException e) { // Get next will return null as its last argument
@@ -64,12 +73,14 @@ public class TestSuite {
                     }
                 } // Otherwise, nothing went wrong - we can ignore the null pointer.
             } catch (Exception e) {
-               Solution r = Solution.createFailedTest(currentGraph, e);
-               solutions.add(r);
-               testsFailed++;
+                Solution s = Solution.createFailedSolution(currentGraph, e);
+                s.setTestNumber(testNumber);
+                solutions.add(s);
+                testsFailed++;
+                System.out.println(s);
+//                e.printStackTrace();
             }
         }
-
         return new TestSuiteResult(solutions, testsPassed, testsFailed);
     }
 
