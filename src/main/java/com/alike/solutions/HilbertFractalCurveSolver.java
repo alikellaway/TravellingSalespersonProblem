@@ -45,10 +45,10 @@ public class HilbertFractalCurveSolver implements Solver {
      */
     private static ArrayList<Coordinate> curveCoordinates = new ArrayList<>();
 
-    /**
-     * Used to pass the start time to the end solution (if we needed to recursively solve).
-     */
-    private static Long solutionStartTime = null;
+//    /**
+//     * Used to pass the start time to the end solution (if we needed to recursively solve).
+//     */
+//    private static Long solutionStartTime = null;
 
     /**
      * Used to construct a new @code{HilbertFractalCurveSolver} object.
@@ -78,9 +78,7 @@ public class HilbertFractalCurveSolver implements Solver {
      */
     public Solution runSolution(int delayPerStep) {
         try {
-            if (solutionStartTime == null) {
-                solutionStartTime = System.nanoTime();
-            }
+            long solutionStartTime = System.nanoTime();
             try {// Try to construct the route.
                 constructRoute(delayPerStep);
             } catch (EdgeSuperimpositionException | InterruptedException | HilbertCurveUnconstructedException e) {
