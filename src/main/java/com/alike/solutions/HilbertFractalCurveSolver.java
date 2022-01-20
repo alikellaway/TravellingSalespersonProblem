@@ -156,6 +156,7 @@ public class HilbertFractalCurveSolver implements Solver {
             for (TSPNode n : nodes) {
                 sb.append(n.toString()).append(", ");
             }
+            sb.delete(sb.length()-2, sb.length()-1); // Remove the last comma
             throw new NodeMissedException(sb.toString(), nodes.size());
         }
         return nodesOrdered;
