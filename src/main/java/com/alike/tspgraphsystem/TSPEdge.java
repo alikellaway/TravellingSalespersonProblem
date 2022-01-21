@@ -33,7 +33,7 @@ public class TSPEdge {
         }
         setStartNode(startNode);
         setEndNode(endNode);
-        setEdgeID(generateID());
+        setEdgeID(generateEdgeID(startNode, endNode));
     }
 
     /**
@@ -103,12 +103,18 @@ public class TSPEdge {
     }
 
     /**
-     * Used to generate a non-unique ID for this edge so that we can check if two edges are joining the same two nodes.
-     * @return String a string in the format "lowerNodeID:higherNodeID".
+     * Used to generate a non-unique edge ID between two nodes (non-unique as its the same output for switched inputs).
+     * Its static because it needs to be called in the edge manager class to calculate edge IDs efficiently.
+     * @param startNode One of the nodes the edge is linking.
+     * @param endNode The other node the edge is linking.
+     * @return edgeID The ID of this edge.
      */
-    private String generateID() {
-        int startID = getStartNode().getNodeID();
-        int endID = getEndNode().getNodeID();
+    public static String generateEdgeID(TSPNode startNode, TSPNode endNode) throws EdgeToSelfException {
+        int startID = startNode.getNodeID();
+        int endID = endNode.getNodeID();
+        if (startID == endID) {
+            throw new EdgeToSelfException("Attempt made to create edge between nodes with equal ID's.");
+        }
         if (startID >= endID) {
             return endID + ":" + startID;
         } else {
