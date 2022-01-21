@@ -1,13 +1,10 @@
 package com.alike.dtspgraphsystem;
 
-import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
-import com.alike.tspgraphsystem.Graph;
 import com.alike.tspgraphsystem.TSPEdge;
 import com.alike.tspgraphsystem.TSPNode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Used to manage the state of possible edges on a Graph object. An edge can be 'Online' (represented with true) or
@@ -15,18 +12,14 @@ import java.util.Arrays;
  */
 public class EdgeStateManager {
     /**
-     * The graph this @code{EdgeStateManager} will be managing edges for.
-     */
-    private Graph graph;
-
-    /**
      * A map containing
      */
     private ArrayList<String> offlineEdges;
 
-
-    public EdgeStateManager(Graph graph) {
-        setGraph(graph);
+    /**
+     * Initialises a new @code{EdgeStateManager} object.
+     */
+    public EdgeStateManager() {
         reassignOfflineEdges(new ArrayList<>());
     }
 
@@ -77,22 +70,6 @@ public class EdgeStateManager {
         } catch (EdgeToSelfException e) {
             throw new EdgeToSelfException("Tried to check status of edge between nodes with the same node IDs.");
         }
-    }
-
-    /**
-     * Returns the value of the @code{graph} attribute.
-     * @return graph The value of the @code{graph} attribute.
-     */
-    public Graph getGraph() {
-        return graph;
-    }
-
-    /**
-     * Sets the value of the @code{graph} attribute.
-     * @param graph The new value to assign to the @code{graph} attribute.
-     */
-    public void setGraph(Graph graph) {
-        this.graph = graph;
     }
 
     /**

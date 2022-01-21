@@ -1,10 +1,8 @@
 package com.alike.dtspgraphsystem;
 
+import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.tspgraphsystem.Graph;
-import com.alike.tspgraphsystem.TSPEdge;
 import com.alike.tspgraphsystem.TSPGraph;
-
-import java.util.ArrayList;
 
 /**
  * Class combines the @code{TSPGraph} and @code{CoordinateMover} classes to create a dynamic travelling salesperson
@@ -19,7 +17,7 @@ public class DTSPGraph implements Graph {
     /**
      * A boolean that describes whether the DTSP's nodes are currently moving. True if they are moving.
      */
-    private boolean moving;
+    private volatile boolean moving;
 
     /**
      * A boolean that describes whether the DTSP's nodes are being moved using the stepRandomly method in the
@@ -38,15 +36,16 @@ public class DTSPGraph implements Graph {
      */
     private int delayPerStep;
 
-    /**
-     * A collection of edges which have been disallowed (taken offline).
-     */
-    private final ArrayList<TSPEdge> disallowedEdges;
 
     /**
      * A reference to the underlying graph object which this object is manipulating.
      */
     private TSPGraph graph;
+
+    /**
+     * The @code{EdgeStateManager} object that will be managing the status of edges (offline/online).
+     */
+    private EdgeStateManager edgeStateManager;
 
     /**
      * Constructs a new DTSP object.
@@ -57,7 +56,7 @@ public class DTSPGraph implements Graph {
      */
     public DTSPGraph(TSPGraph graph, int movementSpeed, int delayPerStep, boolean stepRandomly, boolean stepByVelocity) {
         cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), movementSpeed);
-        disallowedEdges = new ArrayList<>();
+        setEdgeStateManager(new EdgeStateManager());
         this.graph = graph;
         stop(); // Assigns moving var to false.
         setSteppingRandomly(stepRandomly);
@@ -94,11 +93,7 @@ public class DTSPGraph implements Graph {
                 if (steppingByVelocity) {
                     cm.stepByVelocity();
                 }
-                try {
-                    Thread.sleep(delayPerStep);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                RepeatedFunctions.sleep(delayPerStep);
             }
         });
         thread.start();
@@ -120,36 +115,26 @@ public class DTSPGraph implements Graph {
     }
 
     /**
-     * Used to check if an edge is allowed on the DTSP graph.
-     * @param edge The edge to check for.
-     * @return boolean True if the edge is disallowed. False if the edge is allowed.
+     * Returns the number of nodes the underlying graph has.
+     * @return numNodes The number of nodes the graph has.
      */
-    public boolean edgeDisallowed(TSPEdge edge) {
-        for (TSPEdge e : disallowedEdges) {
-            if (e.equals(edge)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Used to disallow edges on the DTSP.
-     * @param edge The edge to disallow on the DTSP.
-     */
-    public void disallowEdge(TSPEdge edge) {
-        disallowedEdges.add(edge);
-    }
-
-    /**
-     * Used to re-allow edges on the DTSP that have since been disallowed.
-     * @param edge The edge to re-allow.
-     */
-    public void reAllowEdge(TSPEdge edge) {
-        disallowedEdges.removeIf(edge::equals);
-    }
-
     public int getNumNodes() {
         return graph.getNumNodes();
+    }
+
+    /**
+     * Returns the value of the @code{edgeStateManager} attribute.
+     * @return edgeStateManger The value of the @code{edgeStateManager} attribute.
+     */
+    public EdgeStateManager getEdgeStateManager() {
+        return edgeStateManager;
+    }
+
+    /**
+     * Sets the value of the @code{edgeStateManager} attribute.
+     * @param edgeStateManager The new value to assign to the @code{edgeStateManager} attribute.
+     */
+    public void setEdgeStateManager(EdgeStateManager edgeStateManager) {
+        this.edgeStateManager = edgeStateManager;
     }
 }
