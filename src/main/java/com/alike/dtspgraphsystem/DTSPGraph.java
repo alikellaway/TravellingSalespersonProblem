@@ -48,20 +48,29 @@ public class DTSPGraph implements Graph {
     private EdgeStateManager edgeStateManager;
 
     /**
+     * The default value for the @code{movementSpeed} attribute.
+     */
+    private static final int DEF_MOVEMENT_SPEED = 3;
+
+    /**
+     * The default value for the @code{delayPerStep} attribute.
+     */
+    private static final int DEF_DELAY_PER_STEP = 10;
+
+    /**
      * Constructs a new DTSP object.
      * @param graph The underlying graph object of the DTSP.
-     * @param movementSpeed The number value affecting the speed at which the nodes move.
      * @param stepRandomly Whether the nodes are moved using the stepRandomly method in the coordinate mover.
      * @param stepByVelocity Whether the nodes are moved using the stepByVelocity method in the coordinate mover.
      */
-    public DTSPGraph(TSPGraph graph, int movementSpeed, int delayPerStep, boolean stepRandomly, boolean stepByVelocity) {
-        cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), movementSpeed);
+    public DTSPGraph(TSPGraph graph, boolean stepRandomly, boolean stepByVelocity) {
+        cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), DEF_MOVEMENT_SPEED);
         setEdgeStateManager(new EdgeStateManager());
         this.graph = graph;
         stop(); // Assigns moving var to false.
         setSteppingRandomly(stepRandomly);
         setSteppingByVelocity(stepByVelocity);
-        setDelayPerStep(delayPerStep);
+        setDelayPerStep(DEF_DELAY_PER_STEP);
     }
 
     /**

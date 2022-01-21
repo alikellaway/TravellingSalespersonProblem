@@ -20,12 +20,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 1300;
+    public static final int COORDINATE_MAX_WIDTH = 1024;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 800;
+    public static final int COORDINATE_MAX_HEIGHT = 1024;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -94,13 +94,13 @@ public class Main extends Application {
 //        });
 //        bsT.start();
         // Ant Colony Optimisation Solver
-        Thread acosT = new Thread(() -> {
-            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
-            Solution solOutput = acos.runSolution(0);
-//            System.out.println(solOutput.getKey());
-//            System.out.println(solOutput.getValue());
-        });
-        acosT.start();
+//        Thread acosT = new Thread(() -> {
+//            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
+//            Solution solOutput = acos.runSolution(0);
+////            System.out.println(solOutput.getKey());
+////            System.out.println(solOutput.getValue());
+//        });
+//        acosT.start();
 
         // Hilbert fractal curve solver
 //        Thread hfcsT = new Thread(() -> {
@@ -146,7 +146,7 @@ public class Main extends Application {
 //            }
 //        });
 //        test.start();
-        DTSPGraph dg = new DTSPGraph(acosGraph, 3, 10, true, true);
+        DTSPGraph dg = new DTSPGraph(acosGraph, true, true);
         dg.move();
         launch(args);
     }
