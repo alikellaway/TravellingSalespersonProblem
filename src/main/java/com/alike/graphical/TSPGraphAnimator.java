@@ -122,14 +122,6 @@ public class TSPGraphAnimator extends AnimationTimer {
     }
 
     /**
-     * Returns the value of the @code{graphicsContext} attribute.
-     * @return @code{graphicsContext} The value of the @code{graphicsContext} attribute.
-     */
-    public GraphicsContext getGraphicsContext() {
-        return graphicsContext;
-    }
-
-    /**
      * Sets the value of the @code{graphicsContext} attribute to a new value.
      * @param graphicsContext The new value to assign the @code{graphicsContext}.
      */
