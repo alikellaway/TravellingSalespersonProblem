@@ -23,11 +23,6 @@ public class TSPEdgeContainer {
     private int editCount;
 
     /**
-     * Used to lock the object to avoid concurrency issues.
-     */
-    public final ReadWriteLock lock = new ReentrantReadWriteLock();
-
-    /**
      * Used to initialise a new empty @code{TSPEdgeContainer} object.
      */
     public TSPEdgeContainer() {
@@ -41,18 +36,14 @@ public class TSPEdgeContainer {
      * @throws EdgeSuperimpositionException Thrown if the edg already exists inside this edge object.
      */
     public void add(TSPEdge e) throws EdgeSuperimpositionException {
-        lock.writeLock().lock();
-        try {
-            if (edgeExists(e)) {
-                throw new EdgeSuperimpositionException("Tried to add an edge that already exists.");
-            } else {
-                edgeSet.add(e);
-                editCount++;
-            }
-        } finally {
-            lock.writeLock().unlock();
+        if (edgeExists(e)) {
+            throw new EdgeSuperimpositionException("Tried to add an edge that already exists.");
+        } else {
+            edgeSet.add(e);
+            editCount++;
         }
     }
+
 
     /**
      * Used to remove edges from this container.
