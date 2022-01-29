@@ -19,11 +19,6 @@ public class TSPNodeContainer {
     private ArrayList<TSPNode> nodeSet;
 
     /**
-     * The name of this node set (if applicable).
-     */
-    private String name;
-
-    /**
      * Used to initialise a new empty TSPNodeContainer object.
      */
     public TSPNodeContainer() {
@@ -83,7 +78,7 @@ public class TSPNodeContainer {
      * @param c The coordinates to check for occupation.
      * @return boolean true if the coordinates are occupied by a node, false if not.
      */
-    public boolean isCoordinateOccupied(Coordinate c) {
+    private boolean isCoordinateOccupied(Coordinate c) {
         for (TSPNode n : nodeSet) {
             if (n.getCoordinate().equals(c)) {
                 return true;
