@@ -32,7 +32,7 @@ public class ChristofidesSolver implements Solver {
         long startTime = System.nanoTime();
         // Construct a minimum spanning tree in graph (MST)
         try {
-            makeMinimumSpanningTree(delayPerStep);
+            constructMinimumSpanningTree(delayPerStep);
         } catch (EdgeToSelfException | InterruptedException | EdgeSuperimpositionException e) {
             e.printStackTrace();
         }
@@ -93,7 +93,7 @@ public class ChristofidesSolver implements Solver {
      * @throws EdgeSuperimpositionException Thrown if an attempt is made to create an edge that already exists.
      * @throws InterruptedException Thrown if the thread is interrupted.
      */
-    private void makeMinimumSpanningTree(int delayPerStep) throws EdgeToSelfException, EdgeSuperimpositionException, InterruptedException {
+    private void constructMinimumSpanningTree(int delayPerStep) throws EdgeToSelfException, EdgeSuperimpositionException, InterruptedException {
         graph.setAllNodesUnvisited();
         // Create and populate arrays containing which nodes are visited and not visited.
         ArrayList<TSPNode> unvisited = new ArrayList<>(graph.getNodeContainer().getNodeSet());
