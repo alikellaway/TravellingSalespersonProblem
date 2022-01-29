@@ -4,8 +4,6 @@ import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Used to manage a set of TSPEdge objects for use in TSPGraph objects.
@@ -126,7 +124,7 @@ public class TSPEdgeContainer {
 
     /**
      * Outputs this TSPEdgeContainer into a JSON format string.
-     * @return
+     * @return string The container as a string in json format.
      */
     @Override
     public String toString() {
