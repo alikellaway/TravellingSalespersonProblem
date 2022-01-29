@@ -1,4 +1,4 @@
-package com.alike.solutions;
+package com.alike.solvers;
 
 import com.alike.solution_helpers.Ant;
 import com.alike.solution_helpers.AtomicDouble;

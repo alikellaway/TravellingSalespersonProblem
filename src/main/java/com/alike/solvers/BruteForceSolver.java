@@ -1,4 +1,4 @@
-package com.alike.solutions;
+package com.alike.solvers;
 
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.Permuter;

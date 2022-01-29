@@ -3,7 +3,7 @@ package com.alike.solvertestsuite;
 import com.alike.customexceptions.CoordinateListException;
 import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.read_write.CoordinateListFileReader;
-import com.alike.solutions.Solver;
+import com.alike.solvers.Solver;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPNodeContainer;
 

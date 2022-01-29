@@ -3,7 +3,7 @@ package com.alike.solution_helpers;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NonExistentNodeException;
-import com.alike.solutions.AntColonyOptimizationSolver;
+import com.alike.solvers.AntColonyOptimizationSolver;
 import com.alike.tspgraphsystem.TSPEdge;
 import com.alike.tspgraphsystem.TSPEdgeContainer;
 import com.alike.tspgraphsystem.TSPNode;

@@ -1,10 +1,9 @@
 package com.alike;
 
 import com.alike.customexceptions.*;
-import com.alike.dtspgraphsystem.DTSPGraph;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solvertestsuite.Solution;
-import com.alike.solutions.*;
+import com.alike.solvers.*;
 import com.alike.tspgraphsystem.TSPGraph;
 import com.alike.tspgraphsystem.TSPGraphGenerator;
 import javafx.application.Application;

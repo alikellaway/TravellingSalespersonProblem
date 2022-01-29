@@ -5,5 +5,5 @@ com.alike.dtspgraphsystem
 com.alike.graphical
 com.alike.read_write
 com.alike.solution_helpers
-com.alike.solutions
+com.alike.solvers
 com.alike.tspgraphsystem

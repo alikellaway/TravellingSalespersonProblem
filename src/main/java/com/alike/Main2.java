@@ -4,20 +4,10 @@ import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.InvalidGraphException;
 import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.customexceptions.RadiusExceedingBoundaryException;
-import com.alike.dtspgraphsystem.DTSPGraph;
-import com.alike.dtspgraphsystem.EdgeStateManager;
-import com.alike.read_write.CoordinateListFileWriter;
-import com.alike.solutions.BruteForceSolver;
-import com.alike.solutions.HilbertFractalCurveSolver;
-import com.alike.solutions.NearestNeighbourSolver;
-import com.alike.solvertestsuite.TestSuite;
-import com.alike.solvertestsuite.TestSuiteResult;
 import com.alike.tspgraphsystem.TSPEdge;
-import com.alike.tspgraphsystem.TSPGraphGenerator;
 import com.alike.tspgraphsystem.TSPNode;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Main2 {
 

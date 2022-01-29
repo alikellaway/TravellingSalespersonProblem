@@ -1,4 +1,4 @@
-package com.alike.solutions;
+package com.alike.solvers;
 
 import com.alike.solvertestsuite.Solution;
 import com.alike.tspgraphsystem.TSPGraph;
