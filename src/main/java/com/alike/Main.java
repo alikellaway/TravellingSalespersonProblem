@@ -72,12 +72,8 @@ public class Main extends Application {
         /* Here is a list of example use cases of the solver methods. */
 //         Nearest neighbour solver
 //        Thread nnsT = new Thread(() -> {
-//            try {
-//                NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
-//                nns.runSolution(100);
-//            } catch (InvalidGraphException | InterruptedException | EdgeSuperimpositionException | EdgeToSelfException e) {
-//                e.printStackTrace();
-//            }
+//            NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
+//            nns.runSolution(100);
 //        });
 //        nnsT.start();
         // Brute force solver
@@ -113,15 +109,11 @@ public class Main extends Application {
 //        });
 //        hfcsT.start();
         // Christofide's algorithm solver
-//        Thread csT = new Thread(() -> {
-//            try {
-//                ChristofidesSolver cs = new ChristofidesSolver(csGraph);
-//                cs.runSolution(0);
-//            } catch (EdgeSuperimpositionException | EdgeToSelfException | NonExistentNodeException | InterruptedException | NodeSuperimpositionException | NoClosestNodeException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        csT.start();
+        Thread csT = new Thread(() -> {
+            ChristofidesSolver cs = new ChristofidesSolver(csGraph);
+            cs.runSolution(0);
+        });
+        csT.start();
         // Populate our graph file with the test graphs incl. random graphs, polygon graphs and irregular polygon graphs
 //        Thread test = new Thread(() -> {
 //            try {
@@ -146,8 +138,8 @@ public class Main extends Application {
 //            }
 //        });
 //        test.start();
-        DTSPGraph dg = new DTSPGraph(acosGraph, true, true);
-        dg.move();
+//        DTSPGraph dg = new DTSPGraph(acosGraph, true, true);
+//        dg.move();
         launch(args);
     }
 
@@ -166,11 +158,11 @@ public class Main extends Application {
 //        RepeatedFunctions.sleep(10);
 //        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, acosGraph,1, false);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, csGraph,1, false);
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);
-//        graphDrawer.start();
+        graphDrawer.start();
 //        curveDrawer.start();
         stage.setScene(scene);
         stage.show();
