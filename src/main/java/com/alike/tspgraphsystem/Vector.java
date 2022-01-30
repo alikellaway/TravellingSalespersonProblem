@@ -121,4 +121,12 @@ public class Vector {
     public void invertY() {
         setY(getY() * -1);
     }
+
+    /**
+     * Inverts both components of this vector.
+     */
+    public void invert() {
+        invertX();
+        invertY();
+    }
 }
