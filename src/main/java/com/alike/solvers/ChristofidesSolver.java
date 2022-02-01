@@ -4,8 +4,10 @@ import com.alike.customexceptions.*;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvertestsuite.Solution;
 import com.alike.tspgraphsystem.*;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Used to find a route through a @code{TSPGraph} using Christofide's algorithm.
@@ -198,5 +200,57 @@ public class ChristofidesSolver implements Solver {
     public void setGraph(TSPGraph graph) {
         RepeatedFunctions.validateGraph(graph);
         this.graph = graph;
+    }
+
+    private TSPEdgeContainer getMinimumWeightMatching() {
+        int nN = graph.getNumNodes();
+        TSPEdge[][] edgeLengthsMatrix = new TSPEdge[nN][nN];
+        // For each x,y in the matrix find the edge length between the nodes with ids x and y.
+        for (int row = 0; row < nN; row++) {
+            for (int col = 0; col < nN; col++) {
+                if (col > row) { // Nodes can't edge to themselves and since its symetrical we only need to check a few
+                    try { // Try and get the nodes
+                        TSPEdge e = new TSPEdge(
+                                graph.getNodeContainer().getNodeByID(row),
+                                graph.getNodeContainer().getNodeByID(col) // Doesn't matter which way round they are.
+                        );
+                        edgeLengthsMatrix[row][col] = e;
+                    } catch (NonExistentNodeException | EdgeToSelfException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    edgeLengthsMatrix[row][col] = null;
+                }
+            }
+        }
+        // Now we have all the important edge lengths we can sort them lowest to highest into an edge array.
+        ArrayList<TSPEdge> edges = new ArrayList<>();
+        for (TSPEdge[] row : edgeLengthsMatrix) {
+            for (TSPEdge e : row) {
+                if (e != null) {
+                    edges.add(e);
+                }
+            }
+        }
+        Collections.sort(edges); // They are now sorted lowest to highest by length as per the comparable implementation
+        // We now need to start constructing the matching from this sorted array.
+        // Todo since we already have sorted edges, we can now just choose each edge where a new node appears.
+        // To get the minimum matching we can choose the edges in order when nodes first appear. Afer the node has been
+        // visited, we can set it to visited and not select edges including it again.
+        TSPEdgeContainer matching = new TSPEdgeContainer();
+        boolean[] visited = new boolean[nN];
+        for (TSPEdge e : edges) {
+            int nodeIDa = e.getStartNode().getNodeID();
+            int nodeIDb = e.getEndNode().getNodeID();
+            if (!visited[nodeIDa] && !visited[nodeIDb]) { // If neither node
+                try {
+                    matching.add(e);
+                } catch (EdgeSuperimpositionException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+
     }
 }

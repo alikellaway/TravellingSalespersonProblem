@@ -22,12 +22,15 @@ public class Main2 {
 //        System.out.println(tsr.getTestsFailed() + " " + tsr.getTestsPassed());
 
 //        DTSPGraph dG = new DTSPGraph(TSPGraphGenerator.generateRandomGraph(5, false),true, true);
-        TSPNode n1 = new TSPNode(0,0);
-        TSPNode n2 = new TSPNode(5,5);
-
-        TSPEdge e = new TSPEdge(n1, n2);
-        System.out.println(e.containsNode(new TSPNode(0, 0)));
-
+//        TSPNode n1 = new TSPNode(0,0);
+//        TSPNode n2 = new TSPNode(5,5);
+//
+//        TSPEdge e = new TSPEdge(n1, n2);
+//        System.out.println(e.containsNode(new TSPNode(0, 0)));
+        boolean[] arr = new boolean[5];
+        for (boolean b : arr) {
+            System.out.println(b);
+        }
 
     }
 }

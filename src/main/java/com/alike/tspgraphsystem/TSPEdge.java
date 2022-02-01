@@ -6,7 +6,7 @@ import com.alike.customexceptions.EdgeToSelfException;
  * Used to link two TSPNodes together.
  * @author alike
  */
-public class TSPEdge {
+public class TSPEdge implements Comparable<TSPEdge> {
     /**
      * The node at which the edge starts (note: the edge does not start of finish, its just a naming convention).
      */
@@ -129,5 +129,23 @@ public class TSPEdge {
      */
     public boolean containsNode(TSPNode n) {
         return startNode.equals(n) || endNode.equals(n);
+    }
+
+    /**
+     * Outputs the length of this edge as a double.
+     * @return length The length of this edge as a double.
+     */
+    public double getLength() {
+        return startNode.getVectorTo(endNode).magnitude();
+    }
+
+    /**
+     * Used to compare the length of this edge to other edge objects.
+     * @param otherEdge The edge which we are comparing lengths to.
+     * @return int The required outputs as per the @code{Comparable} interface implementation.
+     */
+    @Override
+    public int compareTo(TSPEdge otherEdge) {
+        return Double.compare(this.getLength(), otherEdge.getLength());
     }
 }

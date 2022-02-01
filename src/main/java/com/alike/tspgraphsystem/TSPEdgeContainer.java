@@ -116,8 +116,7 @@ public class TSPEdgeContainer {
     public double getTotalLength() {
         double totalLength = 0;
         for (TSPEdge e : edgeSet) {
-            Vector v = e.getStartNode().getVectorTo(e.getEndNode());
-            totalLength+=v.magnitude();
+            totalLength += e.getLength();
         }
         return totalLength;
     }
