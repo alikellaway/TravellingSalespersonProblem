@@ -8,6 +8,7 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Used to find a route through a @code{TSPGraph} using Christofide's algorithm.
@@ -46,19 +47,16 @@ public class ChristofidesSolver implements Solver {
             e.printStackTrace();
         }
         // Find the best perfect matching we can
-        TSPEdgeContainer bestPerfectMatching = null;
-        try {
-            bestPerfectMatching = findBestPerfectMatching(subgraph);
-        } catch (EdgeSuperimpositionException | EdgeToSelfException | NoClosestNodeException e) {
-            e.printStackTrace();
-        }
+        assert subgraph != null;
+        graph.setEdgeContainer(getMinimumWeightMatching(subgraph));
+
         // Unite the MST and the matching
-        TSPEdgeContainer temp = graph.getEdgeContainer();
-        RepeatedFunctions.sleep(5000);
-        graph.setEdgeContainer(bestPerfectMatching);
-        RepeatedFunctions.sleep(1000);
-        graph.setEdgeContainer(temp);
-        graph.getEdgeContainer().absorb(bestPerfectMatching);
+//        TSPEdgeContainer temp = graph.getEdgeContainer();
+//        RepeatedFunctions.sleep(5000);
+//        graph.setEdgeContainer(bestPerfectMatching);
+//        RepeatedFunctions.sleep(1000);
+//        graph.setEdgeContainer(temp);
+//        graph.getEdgeContainer().absorb(bestPerfectMatching);
         // Now that every node has an even degree - we can calculate an Euler tour.
 
         long finishTime = System.nanoTime();
@@ -202,55 +200,69 @@ public class ChristofidesSolver implements Solver {
         this.graph = graph;
     }
 
-    private TSPEdgeContainer getMinimumWeightMatching() {
-        int nN = graph.getNumNodes();
-        TSPEdge[][] edgeLengthsMatrix = new TSPEdge[nN][nN];
-        // For each x,y in the matrix find the edge length between the nodes with ids x and y.
+    /**
+     * Returns a minimum weight perfect matching (I think) of a graph with an even number of vertexes by:
+     * 1. Calculate all edge lengths by creating a matrix of node IDs.
+     * 2. Ignore all the values to the left of and including the diagonal of the matrix starting in the top left corner
+     * and ending in the bottom right. We can do this because nodes don't map to themselves and edges are symmetrical.
+     * 3. Take the edges we haven't ignored and sort them by length.
+     * 4. Record which nodes we have included in the matching and search through our sorted list lowest to highest.
+     * 5. When we see an edge that has neither nodes visited we can add it to the matching.
+     * @param graph The graph of which we need a matching.
+     * @return matching The minimum weight perfect matching of the graph.
+     */
+    private TSPEdgeContainer getMinimumWeightMatching(TSPGraph graph) {
+        int nN = graph.getNumNodes(); // We need to know how many nodes there are.
+        // Check that our graph is legal for this method.
+        if (nN % 2 != 0) {
+            try {
+                throw new InvalidGraphException("Graph had " + nN + " nodes which is not even.");
+            } catch (InvalidGraphException e) {
+                e.printStackTrace();
+            }
+        }
+        ArrayList<TSPEdge> edges = new ArrayList<>();
+        // For each row,column in a square matrix, find the edge length between the nodes with ids row and column.
         for (int row = 0; row < nN; row++) {
             for (int col = 0; col < nN; col++) {
-                if (col > row) { // Nodes can't edge to themselves and since its symetrical we only need to check a few
-                    try { // Try and get the nodes
+                // Nodes can't edge to themselves, so don't check calculate where col == row.
+                // Edges are symmetrical, so don't calculate where col < row since we already calculated it earlier.
+                if (col > row) {
+                    try { // Try and get the nodes to construct an edge between them.
                         TSPEdge e = new TSPEdge(
                                 graph.getNodeContainer().getNodeByID(row),
                                 graph.getNodeContainer().getNodeByID(col) // Doesn't matter which way round they are.
                         );
-                        edgeLengthsMatrix[row][col] = e;
-                    } catch (NonExistentNodeException | EdgeToSelfException e) {
-                        e.printStackTrace();
+                        edges.add(e); // Put this edge in the matrix.
+                    } catch (NonExistentNodeException | EdgeToSelfException ignored) {
                     }
-                } else {
-                    edgeLengthsMatrix[row][col] = null;
                 }
             }
         }
-        // Now we have all the important edge lengths we can sort them lowest to highest into an edge array.
-        ArrayList<TSPEdge> edges = new ArrayList<>();
-        for (TSPEdge[] row : edgeLengthsMatrix) {
-            for (TSPEdge e : row) {
-                if (e != null) {
-                    edges.add(e);
-                }
-            }
-        }
-        Collections.sort(edges); // They are now sorted lowest to highest by length as per the comparable implementation
-        // We now need to start constructing the matching from this sorted array.
-        // Todo since we already have sorted edges, we can now just choose each edge where a new node appears.
-        // To get the minimum matching we can choose the edges in order when nodes first appear. Afer the node has been
-        // visited, we can set it to visited and not select edges including it again.
-        TSPEdgeContainer matching = new TSPEdgeContainer();
-        boolean[] visited = new boolean[nN];
+        // Now we have all the important edge lengths we can sort them lowest to highest
+        Collections.sort(edges); // Sorted using comparable implementation in TSPEdge class.
+        /* We now need to start constructing the matching from this sorted array. To get the minimum matching we can
+           choose the edges in order when node pairs first appear. Afer the nodes have been
+           visited, we can set them to visited and not select edges including either again. */
+        TSPEdgeContainer matching = new TSPEdgeContainer(); // This is where we will keep the edges in the matching.
+        HashMap<Integer, Boolean> visited = new HashMap<>(); // Map records which nodes are in matching
+        for (TSPEdge edge : edges) {
+            visited.put(edge.getStartNode().getNodeID(), false);
+            visited.put(edge.getEndNode().getNodeID(), false);
+        } // We now have one entry of nodeID:false for each node in the graph.
         for (TSPEdge e : edges) {
             int nodeIDa = e.getStartNode().getNodeID();
             int nodeIDb = e.getEndNode().getNodeID();
-            if (!visited[nodeIDa] && !visited[nodeIDb]) { // If neither node
+            if (!visited.get(nodeIDa) && !visited.get(nodeIDb)) { // If neither node is visited.
                 try {
                     matching.add(e);
+                    visited.put(nodeIDa, true);
+                    visited.put(nodeIDb, true);
                 } catch (EdgeSuperimpositionException ex) {
                     ex.printStackTrace();
                 }
             }
         }
-
-
+        return matching;
     }
 }

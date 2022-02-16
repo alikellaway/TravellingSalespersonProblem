@@ -89,13 +89,13 @@ public class Main extends Application {
 //        });
 //        bsT.start();
         // Ant Colony Optimisation Solver
-        Thread acosT = new Thread(() -> {
-            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
-            Solution solOutput = acos.runSolution(0);
-//            System.out.println(solOutput.getKey());
-//            System.out.println(solOutput.getValue());
-        });
-        acosT.start();
+//        Thread acosT = new Thread(() -> {
+//            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
+//            Solution solOutput = acos.runSolution(0);
+////            System.out.println(solOutput.getKey());
+////            System.out.println(solOutput.getValue());
+//        });
+//        acosT.start();
 
         // Hilbert fractal curve solver
 //        Thread hfcsT = new Thread(() -> {
@@ -108,11 +108,11 @@ public class Main extends Application {
 //        });
 //        hfcsT.start();
         // Christofide's algorithm solver
-//        Thread csT = new Thread(() -> {
-//            ChristofidesSolver cs = new ChristofidesSolver(csGraph);
-//            cs.runSolution(0);
-//        });
-//        csT.start();
+        Thread csT = new Thread(() -> {
+            ChristofidesSolver cs = new ChristofidesSolver(csGraph);
+            cs.runSolution(0);
+        });
+        csT.start();
         // Populate our graph file with the test graphs incl. random graphs, polygon graphs and irregular polygon graphs
 //        Thread test = new Thread(() -> {
 //            try {
@@ -157,7 +157,7 @@ public class Main extends Application {
 //        RepeatedFunctions.sleep(10);
 //        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, acosGraph,1, false);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, csGraph,1, false);
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);
