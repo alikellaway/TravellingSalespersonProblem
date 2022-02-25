@@ -1,14 +1,10 @@
 package com.alike.tspgraphsystem;
 
-import com.alike.customexceptions.EdgeSuperimpositionException;
-import com.alike.customexceptions.EdgeToSelfException;
-import com.alike.customexceptions.NodeSuperimpositionException;
+import com.alike.customexceptions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.scene.Node;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class used to represent and collate data on a travelling salesperson problem graph.
@@ -26,6 +22,8 @@ public class TSPGraph implements Graph {
      * The edges of this graph object (stored in an @code{edgeContainer} object for easier management).
      */
     private TSPEdgeContainer edgeContainer;
+
+    private double[][] edgeLengthMatrix;
 
     /**
      * Constructs a new graph with empty node and edge containers.
@@ -87,6 +85,22 @@ public class TSPGraph implements Graph {
     }
 
     /**
+     * Returns the value of the @code{edgeLengthMatrix} attribute.
+     * @return edgeLengthMatrix The value of the @code{edgeLengthMatrix} attribute.
+     */
+    public double[][] getEdgeLengthMatrix() {
+        return edgeLengthMatrix;
+    }
+
+    /**
+     * Sets the value of the @code{edgeLengthMatrix} attribute to a new value.
+     * @param edgeLengthMatrix The new value to assign to the @code{edgeLengthMatrix} attribute.
+     */
+    public void setEdgeLengthMatrix(double[][] edgeLengthMatrix) {
+        this.edgeLengthMatrix = edgeLengthMatrix;
+    }
+
+    /**
      * Used to represent a TSPGraph object as a string - output the object in JSON format.
      * @return String The TSPGraph represented as a JSON format string.
      */
@@ -124,5 +138,38 @@ public class TSPGraph implements Graph {
         graphCopy.setNodeContainer(new TSPNodeContainer(nodesCopy));
         graphCopy.setEdgeContainer(getEdgeContainer().copy());
         return graphCopy;
+    }
+
+    /**
+     * Call to construct a matrix containing all the edge lengths between each node in the graph. Method is not called
+     * automatically, so for a graph to have an edge length matrix value, this MUST be called.
+     * @throws NoNodeContainerException Thrown if the graph does not currently have a node container.
+     */
+    public void constructEdgeLengthMatrix() throws NoNodeContainerException {
+        if (nodeContainer == null) { // Check that we have nodes
+            throw new NoNodeContainerException("Tried to construct an edge length matrix on a " +
+                    "graph with no node container");
+        }
+        // Construct the edge matrix
+        int nN = getNumNodes();
+        double[][] edgeLengthMatrix = new double[nN][nN];
+        for (int y = 0; y < nN; y++) {
+            try {
+                Coordinate snPos = getNodeContainer().getNodeByID(y).getCoordinate();
+                for (int x = y; x < nN; x++) { // Since the graph is symmetrical, we can fill the matrix in one.
+                    if (x == y) { // If they are the same node, then the distance is null.
+                        edgeLengthMatrix[y][x] = 0; // Since nodes cannot occupy the same space, their distance cannot be 0
+                    } else {
+                        Coordinate enPos = getNodeContainer().getNodeByID(x).getCoordinate();
+                        edgeLengthMatrix[y][x] = snPos.getVectorTo(enPos).magnitude();
+                        edgeLengthMatrix[x][y] = snPos.getVectorTo(enPos).magnitude();
+                    }
+
+                }
+            } catch (NonExistentNodeException e) {
+                e.printStackTrace();
+            }
+        }
+        setEdgeLengthMatrix(edgeLengthMatrix);
     }
 }

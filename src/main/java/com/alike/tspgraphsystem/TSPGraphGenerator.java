@@ -123,10 +123,10 @@ public class TSPGraphGenerator {
     /**
      * Used to generate a random TSPGraph object with randomized node positions and randomized edges (if needed).
      * @param numNodes The number of nodes the random graph must have.
-     * @param addEdges Whether or not the method should output a graph with randomized edges already assigned.
+     * @param generateRandomEdges Whether or not the method should output a graph with randomized edges already assigned.
      * @return g A new randomized TSPGraph object.
      */
-    public static TSPGraph generateRandomGraph(int numNodes, boolean addEdges) {
+    public static TSPGraph generateRandomGraph(int numNodes, boolean generateRandomEdges ) {
         TSPNode.restartNodeCounter();
         // Create some random nodes
         TSPNodeContainer nSet = new TSPNodeContainer();
@@ -139,7 +139,7 @@ public class TSPGraphGenerator {
         }
         // Create an empty edge set.
         TSPEdgeContainer eSet = new TSPEdgeContainer();
-        if (addEdges) { // Fill with random edges using trial and error if edges are required.
+        if (generateRandomEdges) { // Fill with random edges using trial and error if edges are required.
             for (int x = 0; x < numNodes; x++) {
                 try {
                     eSet.add(new TSPEdge(nSet.getNodeSet().get(x), nSet.getNodeSet().get((x + 1) % numNodes)));

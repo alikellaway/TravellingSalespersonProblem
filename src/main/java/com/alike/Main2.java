@@ -1,11 +1,7 @@
 package com.alike;
 
-import com.alike.customexceptions.EdgeToSelfException;
-import com.alike.customexceptions.InvalidGraphException;
-import com.alike.customexceptions.NodeSuperimpositionException;
-import com.alike.customexceptions.RadiusExceedingBoundaryException;
-import com.alike.tspgraphsystem.TSPEdge;
-import com.alike.tspgraphsystem.TSPNode;
+import com.alike.customexceptions.*;
+import com.alike.tspgraphsystem.*;
 
 import java.io.IOException;
 
@@ -26,11 +22,12 @@ public class Main2 {
 //        TSPNode n2 = new TSPNode(5,5);
 //
 //        TSPEdge e = new TSPEdge(n1, n2);
-//        System.out.println(e.containsNode(new TSPNode(0, 0)));
-        boolean[] arr = new boolean[5];
-        for (boolean b : arr) {
-            System.out.println(b);
-        }
+////        System.out.println(e.containsNode(new TSPNode(0, 0)));
+//        boolean[] arr = new boolean[5];
+//        for (boolean b : arr) {
+//            System.out.println(b);
+//        }
+
 
     }
 }
