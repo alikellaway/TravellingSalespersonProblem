@@ -146,4 +146,8 @@ public class DTSPGraph implements Graph {
     public void setEdgeStateManager(EdgeStateManager edgeStateManager) {
         this.edgeStateManager = edgeStateManager;
     }
+
+    public TSPGraph getUnderlyingGraph() {
+        return this.graph;
+    }
 }

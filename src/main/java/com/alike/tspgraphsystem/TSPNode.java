@@ -162,7 +162,7 @@ public class TSPNode {
      * @return closestFoundNode The closest found node to this node.
      * @throws NoClosestNodeException Thrown if a closest node could not be found.
      */
-    public TSPNode getClosestNode(ArrayList<TSPNode> otherNodes) throws NoClosestNodeException {
+    public TSPNode getClosestNode(ArrayList<TSPNode> otherNodes, boolean unvisited) throws NoClosestNodeException {
         if (!otherNodes.contains(this)) {
             throw new NoClosestNodeException("This node was not found in the input list.");
         }
@@ -170,10 +170,12 @@ public class TSPNode {
         double distanceToClosestNode = Double.MAX_VALUE;
         for (TSPNode n : otherNodes) {
             if (!(this.equals(n))) {
-                double distance = this.getVectorTo(n).magnitude();
-                if (distance < distanceToClosestNode) {
-                    closestFoundNode = n;
-                    distanceToClosestNode = distance;
+                if ((unvisited && !n.isVisited()) || (!unvisited)) {
+                    double distance = this.getVectorTo(n).magnitude();
+                    if (distance < distanceToClosestNode) {
+                        closestFoundNode = n;
+                        distanceToClosestNode = distance;
+                    }
                 }
             }
         }
@@ -182,4 +184,5 @@ public class TSPNode {
         }
         return closestFoundNode;
     }
+
 }

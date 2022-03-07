@@ -3,6 +3,7 @@ package com.alike.solvers;
 import com.alike.Main;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
+import com.alike.customexceptions.NoClosestNodeException;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvertestsuite.Solution;
 import com.alike.tspgraphsystem.*;
@@ -112,7 +113,12 @@ public class NearestNeighbourSolver implements Solver {
      */
     private void traverseToNextClosestNode() throws EdgeSuperimpositionException, EdgeToSelfException {
         // Find the next closest unvisited node.
-        TSPNode nextNode = findClosestUnvistedNode();
+        TSPNode nextNode;
+        try {
+            nextNode = currentNode.getClosestNode(nodeContainer.getNodeSet(), true);
+        } catch (NoClosestNodeException e) {
+            nextNode = nodeContainer.getNodeSet().get(0);
+        }
         // Add an edge between the current node and the next closest node.
         edgeContainer.add(new TSPEdge(currentNode, nextNode));
         nextNode.setVisited(true); // Set that node to visited.

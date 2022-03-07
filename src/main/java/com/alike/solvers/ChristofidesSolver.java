@@ -183,7 +183,7 @@ public class ChristofidesSolver implements Solver {
         // For each node, find its closest node and create a pair out of them, then remove them from the unmatched
         for (int i = 0; i < unmatched.size(); i++) {
             TSPNode currNode = unmatched.get((i + startingIdx) % unmatched.size());
-            TSPNode closestNode = currNode.getClosestNode(unmatched);
+            TSPNode closestNode = currNode.getClosestNode(unmatched, false);
             matching.add(new TSPEdge(currNode, closestNode));
             unmatched.remove(currNode);
             unmatched.remove(closestNode);
