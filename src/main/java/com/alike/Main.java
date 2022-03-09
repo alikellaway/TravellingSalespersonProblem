@@ -1,11 +1,11 @@
 package com.alike;
 
 import com.alike.customexceptions.*;
-import com.alike.dtspgraphsystem.DynamicGraph;
+import com.alike.dynamicgraphsystem.DynamicGraph;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solvers.*;
-import com.alike.tspgraphsystem.GraphGenerator;
-import com.alike.tspgraphsystem.StaticGraph;
+import com.alike.staticgraphsystem.GraphGenerator;
+import com.alike.staticgraphsystem.StaticGraph;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;

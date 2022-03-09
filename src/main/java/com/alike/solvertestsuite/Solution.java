@@ -1,6 +1,6 @@
 package com.alike.solvertestsuite;
 
-import com.alike.tspgraphsystem.Graph;
+import com.alike.staticgraphsystem.Graph;
 
 /**
  * Used to represent solution outputs in a convenient way.

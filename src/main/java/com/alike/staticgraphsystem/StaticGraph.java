@@ -1,4 +1,4 @@
-package com.alike.tspgraphsystem;
+package com.alike.staticgraphsystem;
 
 import com.alike.customexceptions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;

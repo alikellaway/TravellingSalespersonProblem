@@ -9,11 +9,11 @@ module com.alike {
     exports com.alike.customexceptions;
     exports com.alike to com.fasterxml.jackson.databind, javafx.graphics;
     exports com.alike.graphical to javafx.graphics;
-    exports com.alike.tspgraphsystem to com.fasterxml.jackson.databind;
+    exports com.alike.staticgraphsystem to com.fasterxml.jackson.databind;
     exports com.alike.solution_helpers to com.fasterxml.jackson.databind, javafx.graphics;
     exports com.alike.solvers;
     exports com.alike.solvertestsuite to com.fasterxml.jackson.databind, javafx.graphics;
-    exports com.alike.dtspgraphsystem;
+    exports com.alike.dynamicgraphsystem;
 
 }
 

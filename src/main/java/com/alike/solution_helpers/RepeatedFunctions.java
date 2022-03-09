@@ -1,7 +1,7 @@
 package com.alike.solution_helpers;
 
 import com.alike.customexceptions.InvalidGraphException;
-import com.alike.tspgraphsystem.Graph;
+import com.alike.staticgraphsystem.Graph;
 
 /**
  * Class contains some useful functions that are repeated multiple times in the project (or have no obvious space).

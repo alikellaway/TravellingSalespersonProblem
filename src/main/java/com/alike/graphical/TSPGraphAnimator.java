@@ -1,6 +1,6 @@
 package com.alike.graphical;
 
-import com.alike.tspgraphsystem.*;
+import com.alike.staticgraphsystem.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

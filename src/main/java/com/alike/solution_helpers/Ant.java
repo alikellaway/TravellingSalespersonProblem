@@ -4,9 +4,9 @@ import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NonExistentNodeException;
 import com.alike.solvers.AntColonyOptimizationSolver;
-import com.alike.tspgraphsystem.Edge;
-import com.alike.tspgraphsystem.EdgeContainer;
-import com.alike.tspgraphsystem.Node;
+import com.alike.staticgraphsystem.Edge;
+import com.alike.staticgraphsystem.EdgeContainer;
+import com.alike.staticgraphsystem.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;

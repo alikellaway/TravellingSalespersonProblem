@@ -1,4 +1,4 @@
-package com.alike.tspgraphsystem;
+package com.alike.staticgraphsystem;
 
 import com.alike.Main;
 import com.alike.customexceptions.*;

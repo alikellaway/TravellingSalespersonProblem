@@ -1,8 +1,8 @@
-package com.alike.dtspgraphsystem;
+package com.alike.dynamicgraphsystem;
 
 import com.alike.customexceptions.EdgeToSelfException;
-import com.alike.tspgraphsystem.Edge;
-import com.alike.tspgraphsystem.Node;
+import com.alike.staticgraphsystem.Edge;
+import com.alike.staticgraphsystem.Node;
 
 import java.util.ArrayList;
 

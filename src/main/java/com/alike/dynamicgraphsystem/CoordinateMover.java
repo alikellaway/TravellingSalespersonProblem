@@ -1,8 +1,8 @@
-package com.alike.dtspgraphsystem;
+package com.alike.dynamicgraphsystem;
 
 import com.alike.Main;
-import com.alike.tspgraphsystem.Coordinate;
-import com.alike.tspgraphsystem.Vector;
+import com.alike.staticgraphsystem.Coordinate;
+import com.alike.staticgraphsystem.Vector;
 
 import java.util.ArrayList;
 import java.util.Random;

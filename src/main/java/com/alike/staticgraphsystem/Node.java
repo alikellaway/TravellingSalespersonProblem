@@ -1,4 +1,4 @@
-package com.alike.tspgraphsystem;
+package com.alike.staticgraphsystem;
 
 import com.alike.Main;
 import com.alike.customexceptions.NoClosestNodeException;
@@ -169,7 +169,8 @@ public class Node {
         Node closestFoundNode = null;
         double distanceToClosestNode = Double.MAX_VALUE;
         for (Node n : otherNodes) {
-            if (!(this.equals(n))) {
+            if (!(this.equals(n))) { // If its not this node.
+                // If the node needs to be unvisited and is not visited || the node does not need to be unvisited.
                 if ((unvisited && !n.isVisited()) || (!unvisited)) {
                     double distance = this.getVectorTo(n).magnitude();
                     if (distance < distanceToClosestNode) {

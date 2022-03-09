@@ -1,9 +1,6 @@
-package com.alike.tspgraphsystem;
-
-import com.alike.customexceptions.NodeSuperimpositionException;
+package com.alike.staticgraphsystem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 /**

@@ -1,4 +1,4 @@
-package com.alike.tspgraphsystem;
+package com.alike.staticgraphsystem;
 
 /**
  * @author alike

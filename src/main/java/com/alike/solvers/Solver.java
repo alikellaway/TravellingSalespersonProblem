@@ -1,7 +1,7 @@
 package com.alike.solvers;
 
 import com.alike.solvertestsuite.Solution;
-import com.alike.tspgraphsystem.StaticGraph;
+import com.alike.staticgraphsystem.StaticGraph;
 
 /**
  * Interface is used to ensure that Solver implementations can all successfully interact with the TestSuite.

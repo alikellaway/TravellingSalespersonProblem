@@ -6,7 +6,7 @@ import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NoClosestNodeException;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvertestsuite.Solution;
-import com.alike.tspgraphsystem.*;
+import com.alike.staticgraphsystem.*;
 import java.util.ArrayList;
 
 /**

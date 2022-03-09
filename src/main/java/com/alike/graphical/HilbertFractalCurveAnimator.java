@@ -3,7 +3,7 @@ package com.alike.graphical;
 import com.alike.Main;
 import com.alike.customexceptions.NonSquareCanvasException;
 import com.alike.solvers.HilbertFractalCurveSolver;
-import com.alike.tspgraphsystem.Coordinate;
+import com.alike.staticgraphsystem.Coordinate;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

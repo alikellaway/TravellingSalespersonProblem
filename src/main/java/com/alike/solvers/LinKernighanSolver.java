@@ -2,8 +2,8 @@ package com.alike.solvers;
 
 import com.alike.customexceptions.NoNodeContainerException;
 import com.alike.solvertestsuite.Solution;
-import com.alike.tspgraphsystem.EdgeContainer;
-import com.alike.tspgraphsystem.StaticGraph;
+import com.alike.staticgraphsystem.EdgeContainer;
+import com.alike.staticgraphsystem.StaticGraph;
 
 public class LinKernighanSolver implements Solver {
 

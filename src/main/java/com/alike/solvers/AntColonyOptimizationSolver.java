@@ -3,9 +3,9 @@ package com.alike.solvers;
 import com.alike.solution_helpers.Ant;
 import com.alike.solution_helpers.AtomicDouble;
 import com.alike.solvertestsuite.Solution;
-import com.alike.tspgraphsystem.EdgeContainer;
-import com.alike.tspgraphsystem.Node;
-import com.alike.tspgraphsystem.StaticGraph;
+import com.alike.staticgraphsystem.EdgeContainer;
+import com.alike.staticgraphsystem.Node;
+import com.alike.staticgraphsystem.StaticGraph;
 
 import java.util.Random;
 import java.util.concurrent.ExecutionException;

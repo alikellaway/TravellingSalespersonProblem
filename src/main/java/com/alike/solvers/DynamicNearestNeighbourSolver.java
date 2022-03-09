@@ -3,9 +3,9 @@ package com.alike.solvers;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NoClosestNodeException;
-import com.alike.dtspgraphsystem.DynamicGraph;
+import com.alike.dynamicgraphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.tspgraphsystem.*;
+import com.alike.staticgraphsystem.*;
 
 import java.util.ArrayList;
 
