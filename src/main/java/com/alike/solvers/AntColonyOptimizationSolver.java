@@ -3,9 +3,9 @@ package com.alike.solvers;
 import com.alike.solution_helpers.Ant;
 import com.alike.solution_helpers.AtomicDouble;
 import com.alike.solvertestsuite.Solution;
-import com.alike.tspgraphsystem.TSPEdgeContainer;
-import com.alike.tspgraphsystem.TSPGraph;
-import com.alike.tspgraphsystem.TSPNode;
+import com.alike.tspgraphsystem.EdgeContainer;
+import com.alike.tspgraphsystem.Node;
+import com.alike.tspgraphsystem.StaticGraph;
 
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Class uses the Ant colony optimisation algorithm to solve an optimised route through a TSPGraph object.
+ * Class uses the Ant colony optimisation algorithm to solve an optimised route through a StaticGraph object.
  * @author alike
  */
 public class AntColonyOptimizationSolver implements Solver {
@@ -22,14 +22,14 @@ public class AntColonyOptimizationSolver implements Solver {
     /**
      * The graph object this solver will be solving.
      */
-    private TSPGraph graph;
+    private StaticGraph graph;
 
     private static final double PROCESSING_CYCLE_PROBABILITY = 0.8;
 
     /**
      * An edge container in which the shortest found route is stored.
      */
-    private TSPEdgeContainer shortestRoute;
+    private EdgeContainer shortestRoute;
 
     /**
      * A matrix used to store the pheromones currently deposited on each edge between each node.
@@ -72,7 +72,7 @@ public class AntColonyOptimizationSolver implements Solver {
      * through a TSP graph.
      * @param graph The graph the solver will solve when @code{runSolution} is called.
      */
-    public AntColonyOptimizationSolver(TSPGraph graph) {
+    public AntColonyOptimizationSolver(StaticGraph graph) {
         setGraph(graph);
         setExecutorService(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
         setExecutorCompletionService(new ExecutorCompletionService<>(getExecutorService()));
@@ -91,7 +91,7 @@ public class AntColonyOptimizationSolver implements Solver {
     }
 
     /**
-     * Starts this solver object running the logic to find a route through the TSPGraph in the @code{graph} attribute.
+     * Starts this solver object running the logic to find a route through the StaticGraph in the @code{graph} attribute.
      * @param delayPerStep The delay each Ant will take before moving nodes.
      * @return output The results of the solution attempt.
      */
@@ -121,7 +121,7 @@ public class AntColonyOptimizationSolver implements Solver {
         while (activeAnts > 0) {
             try {
                 Ant ant = executorCompletionService.take().get();
-                TSPEdgeContainer currentRoute = ant.getRoute();
+                EdgeContainer currentRoute = ant.getRoute();
                 if (shortestRoute == null || currentRoute.getTotalLength()
                                                         < shortestRoute.getTotalLength()) {
                     shortestRoute = currentRoute;
@@ -139,7 +139,7 @@ public class AntColonyOptimizationSolver implements Solver {
      * Sets the @code{graph} attribute to a new value.
      * @param graph The new value ot assign to the @code{graph} attribute.
      */
-    public void setGraph(TSPGraph graph) {
+    public void setGraph(StaticGraph graph) {
         this.graph = graph;
     }
 
@@ -147,7 +147,7 @@ public class AntColonyOptimizationSolver implements Solver {
      * Returns the value of the @code{graph} attribute.
      * @return graph The value of the @code{graph} attribute.
      */
-    public TSPGraph getGraph() {
+    public StaticGraph getGraph() {
         return this.graph;
     }
 
@@ -183,9 +183,9 @@ public class AntColonyOptimizationSolver implements Solver {
         distanceMatrix = new double[numNodes][numNodes]; // Create a square matrix using the numNodes as side length
         // For each node, check the distance to every other node.
         for (int x = 0; x < numNodes; x++) {
-            TSPNode n1 = graph.getNodeContainer().getNodeSet().get(x);
+            Node n1 = graph.getNodeContainer().getNodeSet().get(x);
             for (int y = 0; y < numNodes; y++) {
-                TSPNode n2 = graph.getNodeContainer().getNodeSet().get(y);
+                Node n2 = graph.getNodeContainer().getNodeSet().get(y);
                 distanceMatrix[x][y] = n1.getVectorTo(n2).magnitude();
             }
         }

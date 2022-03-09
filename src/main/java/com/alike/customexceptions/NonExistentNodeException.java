@@ -1,7 +1,7 @@
 package com.alike.customexceptions;
 
 /**
- * Exception used to help identify when a solution has encountered a node ID that is not in an initialized TSPNode
+ * Exception used to help identify when a solution has encountered a node ID that is not in an initialized Node
  * object.
  * @author alike
  */

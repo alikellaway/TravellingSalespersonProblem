@@ -1,7 +1,7 @@
 package com.alike.solvers;
 
 import com.alike.solvertestsuite.Solution;
-import com.alike.tspgraphsystem.TSPGraph;
+import com.alike.tspgraphsystem.StaticGraph;
 
 /**
  * Interface is used to ensure that Solver implementations can all successfully interact with the TestSuite.
@@ -20,6 +20,6 @@ public interface Solver {
      * called.
      * @param graph The graph to assign the Solver's @code{graph} attribute.
      */
-    void setGraph(TSPGraph graph);
+    void setGraph(StaticGraph graph);
 
 }

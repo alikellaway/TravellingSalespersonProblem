@@ -8,43 +8,43 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Used to manage sets of nodes for use in TSPGraph objects.
+ * Used to manage sets of nodes for use in StaticGraph objects.
  * @author alike
  */
-public class TSPNodeContainer {
+public class NodeContainer {
 
     /**
      * The set of nodes that this container manages.
      */
-    private ArrayList<TSPNode> nodeSet;
+    private ArrayList<Node> nodeSet;
 
     /**
-     * Used to initialise a new empty TSPNodeContainer object.
+     * Used to initialise a new empty NodeContainer object.
      */
-    public TSPNodeContainer() {
+    public NodeContainer() {
         nodeSet = new ArrayList<>();
     }
 
     /**
-     * Used to initialise a new filled TSPNodeContainer.
+     * Used to initialise a new filled NodeContainer.
      * @param nodeSet The set of nodes that will populate the container.
      * @throws NodeSuperimpositionException Thrown if two nodes occupy the same coordinates in the input node set.
      */
-    public TSPNodeContainer(ArrayList<TSPNode> nodeSet) throws NodeSuperimpositionException {
+    public NodeContainer(ArrayList<Node> nodeSet) throws NodeSuperimpositionException {
         checkNodeSetForSuperimposition(nodeSet);
         setNodeSet(nodeSet);
         nodeSet.trimToSize();
     }
 
     /**
-     * Constructs a new TSPNodeContainer from a Coordinate array.
+     * Constructs a new NodeContainer from a Coordinate array.
      * @param cL An array of coordinates.
      * @throws NodeSuperimpositionException Thrown when an attempt is made to superimpose nodes.
      */
-    public TSPNodeContainer(Collection<Coordinate> cL) throws NodeSuperimpositionException {
+    public NodeContainer(Collection<Coordinate> cL) throws NodeSuperimpositionException {
         this.setNodeSet(new ArrayList<>());
         for (Coordinate c : cL) {
-            add(new TSPNode(c));
+            add(new Node(c));
         }
     }
 
@@ -54,7 +54,7 @@ public class TSPNodeContainer {
      * @throws NodeSuperimpositionException Thrown if the new node's coordinates are already occupied by a node already
      * in this container.
      */
-    public void add(TSPNode n) throws NodeSuperimpositionException {
+    public void add(Node n) throws NodeSuperimpositionException {
         if (!isCoordinateOccupied(n.getCoordinate())) {
             nodeSet.add(n);
             nodeSet.trimToSize();
@@ -68,7 +68,7 @@ public class TSPNodeContainer {
      * Used to remove a node from this container.
      * @param n The node to remove.
      */
-    public void remove(TSPNode n) {
+    public void remove(Node n) {
         nodeSet.remove(n);
         nodeSet.trimToSize();
     }
@@ -79,7 +79,7 @@ public class TSPNodeContainer {
      * @return boolean true if the coordinates are occupied by a node, false if not.
      */
     private boolean isCoordinateOccupied(Coordinate c) {
-        for (TSPNode n : nodeSet) {
+        for (Node n : nodeSet) {
             if (n.getCoordinate().equals(c)) {
                 return true;
             }
@@ -92,11 +92,11 @@ public class TSPNodeContainer {
      * @param nSet The node set to check.
      * @throws NodeSuperimpositionException Thrown if nodes where found to occupy the same coordinates.
      */
-    public void checkNodeSetForSuperimposition(ArrayList<TSPNode> nSet) throws NodeSuperimpositionException {
-        for (TSPNode n : nSet) {
+    public void checkNodeSetForSuperimposition(ArrayList<Node> nSet) throws NodeSuperimpositionException {
+        for (Node n : nSet) {
             for (int i = nSet.indexOf(n) + 1; i < nSet.size(); i++) {
                 if (n.getCoordinate().equals(nSet.get(i).getCoordinate())) {
-                    throw new NodeSuperimpositionException("Tried to initialise TSPNodeContainer with input array " +
+                    throw new NodeSuperimpositionException("Tried to initialise NodeContainer with input array " +
                             "containing superimposed nodes.");
                 }
             }
@@ -108,21 +108,21 @@ public class TSPNodeContainer {
      * @param nodeSet The new value to become the node set.
      * @throws NodeSuperimpositionException Thrown if the new node set contains nodes occupying the same coordinates.
      */
-    public void setNodeSet(ArrayList<TSPNode> nodeSet) throws NodeSuperimpositionException {
+    public void setNodeSet(ArrayList<Node> nodeSet) throws NodeSuperimpositionException {
         checkNodeSetForSuperimposition(nodeSet);
         this.nodeSet = nodeSet;
     }
 
     /**
      * Returns the value of the @code{nodeSet} attribute.
-     * @return nodeSet The value of the nodeSet attribute of this TSPNodeContainer object.
+     * @return nodeSet The value of the nodeSet attribute of this NodeContainer object.
      */
-    public ArrayList<TSPNode> getNodeSet() {
+    public ArrayList<Node> getNodeSet() {
         return nodeSet;
     }
 
     /**
-     * Used to represent this TSPNodeContainer object as a JSON format string.
+     * Used to represent this NodeContainer object as a JSON format string.
      * @return String This container as a JSON format string.
      */
     @Override
@@ -133,7 +133,7 @@ public class TSPNodeContainer {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return "Failed to load TSPNodeContainer object into JSON format.";
+        return "Failed to load NodeContainer object into JSON format.";
     }
 
     /**
@@ -141,7 +141,7 @@ public class TSPNodeContainer {
      * @return int[] An array containing all the node IDs of the nodes in the set of this container.
      */
     public ArrayList<Integer> getNodeIDs() {
-        ArrayList<TSPNode> nodes = getNodeSet();
+        ArrayList<Node> nodes = getNodeSet();
         ArrayList<Integer> nodeIDs = new ArrayList<>(nodes.size());
         for (int i = 0; i <= nodes.size() - 1; i++) {
              nodeIDs.add(nodes.get(i).getNodeID());
@@ -152,11 +152,11 @@ public class TSPNodeContainer {
     /**
      * Returns a node object given its unique identified (ID).
      * @param id The ID attribute of the node you wish to get.
-     * @return TSPNode The node with matching ID to input.
+     * @return Node The node with matching ID to input.
      * @throws NonExistentNodeException Thrown if the node was not found.
      */
-    public TSPNode getNodeByID(int id) throws NonExistentNodeException {
-        for (TSPNode n : getNodeSet()) {
+    public Node getNodeByID(int id) throws NonExistentNodeException {
+        for (Node n : getNodeSet()) {
             if (n.getNodeID() == id) {
                 return n;
             }
@@ -169,9 +169,9 @@ public class TSPNodeContainer {
      * @param getVisitedOrUnvisited The value of visited you would like the nodes of.
      * @return ouput The array list containing the nodes that had a matching value of visited.
      */
-    public ArrayList<TSPNode> getNodesWithVisitedState(boolean getVisitedOrUnvisited) {
-        ArrayList<TSPNode> output = new ArrayList<>();
-        for (TSPNode n : nodeSet) {
+    public ArrayList<Node> getNodesWithVisitedState(boolean getVisitedOrUnvisited) {
+        ArrayList<Node> output = new ArrayList<>();
+        for (Node n : nodeSet) {
             if (n.isVisited() == getVisitedOrUnvisited) {
                 output.add(n);
             }
@@ -185,7 +185,7 @@ public class TSPNodeContainer {
      */
     public ArrayList<Coordinate> getNodeCoordinates() {
         ArrayList<Coordinate> cL = new ArrayList<>();
-        for (TSPNode n : getNodeSet()) {
+        for (Node n : getNodeSet()) {
             cL.add(n.getCoordinate());
         }
         return cL;

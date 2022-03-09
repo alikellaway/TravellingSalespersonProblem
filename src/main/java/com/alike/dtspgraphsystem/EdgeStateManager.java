@@ -1,8 +1,8 @@
 package com.alike.dtspgraphsystem;
 
 import com.alike.customexceptions.EdgeToSelfException;
-import com.alike.tspgraphsystem.TSPEdge;
-import com.alike.tspgraphsystem.TSPNode;
+import com.alike.tspgraphsystem.Edge;
+import com.alike.tspgraphsystem.Node;
 
 import java.util.ArrayList;
 
@@ -29,9 +29,9 @@ public class EdgeStateManager {
      * @param endNode The node the edge goes to from the other input node.
      * @throws EdgeToSelfException Thrown if the input nodes have the same ID.
      */
-    public void takeOffline(TSPNode startNode, TSPNode endNode) throws EdgeToSelfException {
+    public void takeOffline(Node startNode, Node endNode) throws EdgeToSelfException {
         try {
-            String id = TSPEdge.generateEdgeID(startNode, endNode);
+            String id = Edge.generateEdgeID(startNode, endNode);
             if (!offlineEdges.contains(id)) { // If the edge is not already in there, add it.
                 offlineEdges.add(id);
             }
@@ -46,9 +46,9 @@ public class EdgeStateManager {
      * @param endNode The other node the edge is linking to.
      * @throws EdgeToSelfException Thrown if the input nodes have the same ID.
      */
-    public void takeOnline(TSPNode startNode, TSPNode endNode) throws EdgeToSelfException {
+    public void takeOnline(Node startNode, Node endNode) throws EdgeToSelfException {
         try {
-            String id = TSPEdge.generateEdgeID(startNode, endNode);
+            String id = Edge.generateEdgeID(startNode, endNode);
             offlineEdges.remove(id);
         } catch (EdgeToSelfException e) {
             throw new EdgeToSelfException("Tried to take an edge online between nodes with the same node IDs.");
@@ -63,9 +63,9 @@ public class EdgeStateManager {
      * @throws EdgeToSelfException Thrown if an attempt is made to check the status of an edge between nodes with the
      * same node IDs.
      */
-    public boolean isOffline(TSPNode startNode, TSPNode endNode) throws EdgeToSelfException {
+    public boolean isOffline(Node startNode, Node endNode) throws EdgeToSelfException {
         try {
-            String id = TSPEdge.generateEdgeID(startNode, endNode);
+            String id = Edge.generateEdgeID(startNode, endNode);
             return offlineEdges.contains(id);
         } catch (EdgeToSelfException e) {
             throw new EdgeToSelfException("Tried to check status of edge between nodes with the same node IDs.");

@@ -17,7 +17,7 @@ public class BruteForceSolver implements Solver {
     /**
      * The graph the solution will be running on.
      */
-    private TSPGraph graph;
+    private StaticGraph graph;
 
     /**
      * The @code{Permuter} object that will handle the permutation calculations of nodes for the solution to run.
@@ -36,9 +36,9 @@ public class BruteForceSolver implements Solver {
 
     /**
      * Used to initialise a new @code{BruteForceSolver} object.
-     * @param graph The TSPGraph that this solution will run on.
+     * @param graph The StaticGraph that this solution will run on.
      */
-    public BruteForceSolver(TSPGraph graph) {
+    public BruteForceSolver(StaticGraph graph) {
         setGraph(graph);
     }
 
@@ -48,7 +48,7 @@ public class BruteForceSolver implements Solver {
     /**
      * Starts the solution running on the @code{graph}
      * @param delayPerStep The time delay between checking different permutations (to slow the progress if required).
-     * @return Returns a pair object containing the TSPGraph (which contains the solution edge set) and its route
+     * @return Returns a pair object containing the StaticGraph (which contains the solution edge set) and its route
      * length.
      */
     public Solution runSolution(int delayPerStep) {
@@ -93,16 +93,16 @@ public class BruteForceSolver implements Solver {
      * @throws EdgeSuperimpositionException Thrown if two edges are added between the same nodes.
      * @throws NonExistentNodeException Thrown if a node ID is encountered that does not exist.
      */
-    private TSPEdgeContainer createEdgeContainerFromNodeSetPermutation(List<Integer> nodeIDs)
+    private EdgeContainer createEdgeContainerFromNodeSetPermutation(List<Integer> nodeIDs)
             throws EdgeSuperimpositionException, NonExistentNodeException, EdgeToSelfException {
-        TSPEdgeContainer edgeContainer = new TSPEdgeContainer();
-        TSPNodeContainer nodeContainer = graph.getNodeContainer();
+        EdgeContainer edgeContainer = new EdgeContainer();
+        NodeContainer nodeContainer = graph.getNodeContainer();
         int numNodes = nodeContainer.getNodeSet().size();
         for (int idx = 0; idx < nodeIDs.size(); idx++) {
-            TSPNode startNode = nodeContainer.getNodeByID(nodeIDs.get(idx));
+            Node startNode = nodeContainer.getNodeByID(nodeIDs.get(idx));
             int idxOfEndNode = (idx + 1) % numNodes;
-            TSPNode endNode = nodeContainer.getNodeByID(nodeIDs.get(idxOfEndNode));
-            TSPEdge newEdge = new TSPEdge(startNode, endNode);
+            Node endNode = nodeContainer.getNodeByID(nodeIDs.get(idxOfEndNode));
+            Edge newEdge = new Edge(startNode, endNode);
             edgeContainer.add(newEdge);
         }
         return edgeContainer;
@@ -112,7 +112,7 @@ public class BruteForceSolver implements Solver {
      * Sets the value @code{graph} attribute.
      * @param graph The new value to assign the @code{graph} attribute.
      */
-    public void setGraph(TSPGraph graph) {
+    public void setGraph(StaticGraph graph) {
         flushAttributes();
         RepeatedFunctions.validateGraph(graph);
         this.graph = graph;

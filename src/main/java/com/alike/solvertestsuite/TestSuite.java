@@ -4,8 +4,8 @@ import com.alike.customexceptions.CoordinateListException;
 import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.read_write.CoordinateListFileReader;
 import com.alike.solvers.Solver;
-import com.alike.tspgraphsystem.TSPGraph;
-import com.alike.tspgraphsystem.TSPNodeContainer;
+import com.alike.tspgraphsystem.NodeContainer;
+import com.alike.tspgraphsystem.StaticGraph;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class TestSuite {
     /**
      * Need to keep a reference to the current graph incase a test was failed while we were trying to solve it.
      */
-    private TSPGraph currentGraph = null;
+    private StaticGraph currentGraph = null;
 
     private int testNumber = 0;
 
@@ -45,8 +45,8 @@ public class TestSuite {
             testNumber++;
             try {
                 // Create the graph we want to test from file.
-                TSPNodeContainer nC = new TSPNodeContainer(reader.getNext());
-                TSPGraph graph = new TSPGraph(nC);
+                NodeContainer nC = new NodeContainer(reader.getNext());
+                StaticGraph graph = new StaticGraph(nC);
                 currentGraph = graph;
                 solver.setGraph(graph);
                 // Run the solution on this graph.

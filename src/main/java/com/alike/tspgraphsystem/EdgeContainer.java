@@ -6,14 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Used to manage a set of TSPEdge objects for use in TSPGraph objects.
+ * Used to manage a set of Edge objects for use in StaticGraph objects.
  * @author alike
  */
-public class TSPEdgeContainer {
+public class EdgeContainer {
     /**
-     * The collection of edges that are managed by this @code{TSPEdgeContainer} object.
+     * The collection of edges that are managed by this @code{EdgeContainer} object.
      */
-    private CopyOnWriteArrayList<TSPEdge> edgeSet;
+    private CopyOnWriteArrayList<Edge> edgeSet;
 
     /**
      * The number of times this edge container has been edited (for use during heuristic and optimisation algorithms)
@@ -21,19 +21,19 @@ public class TSPEdgeContainer {
     private int editCount;
 
     /**
-     * Used to initialise a new empty @code{TSPEdgeContainer} object.
+     * Used to initialise a new empty @code{EdgeContainer} object.
      */
-    public TSPEdgeContainer() {
+    public EdgeContainer() {
         edgeSet = new CopyOnWriteArrayList<>();
         editCount = 0;
     }
 
     /**
      * Used to add to the edge set in this edge container object.
-     * @param e A new TSPEdge object to add to this container.
+     * @param e A new Edge object to add to this container.
      * @throws EdgeSuperimpositionException Thrown if the edg already exists inside this edge object.
      */
-    public void add(TSPEdge e) throws EdgeSuperimpositionException {
+    public void add(Edge e) throws EdgeSuperimpositionException {
         if (edgeExists(e)) {
             throw new EdgeSuperimpositionException("Tried to add an edge that already exists.");
         } else {
@@ -47,7 +47,7 @@ public class TSPEdgeContainer {
      * Used to remove edges from this container.
      * @param e The edge to remove from this container.
      */
-    public void remove(TSPEdge e) {
+    public void remove(Edge e) {
         edgeSet.remove(e);
         editCount++;
     }
@@ -57,8 +57,8 @@ public class TSPEdgeContainer {
      * @param edgeSet The edge set to check.
      * @throws EdgeSuperimpositionException Thrown if the edge set has superimposed edges.
      */
-    private void checkEdgeSetForSuperimposition(CopyOnWriteArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
-        for (TSPEdge e : edgeSet) {
+    private void checkEdgeSetForSuperimposition(CopyOnWriteArrayList<Edge> edgeSet) throws EdgeSuperimpositionException {
+        for (Edge e : edgeSet) {
             for (int i = edgeSet.indexOf(e) + 1; i < edgeSet.size(); i++) {
                 if (e.equals(edgeSet.get(i))) {
                     throw new EdgeSuperimpositionException("Tried to initialise edge set with input array " +
@@ -73,17 +73,17 @@ public class TSPEdgeContainer {
      * @param edgeSet The new edge set to become the edge set of this container.
      * @throws EdgeSuperimpositionException Thrown if the input edge set has superimposed edges.
      */
-    public void setEdgeSet(CopyOnWriteArrayList<TSPEdge> edgeSet) throws EdgeSuperimpositionException {
+    public void setEdgeSet(CopyOnWriteArrayList<Edge> edgeSet) throws EdgeSuperimpositionException {
             checkEdgeSetForSuperimposition(edgeSet);
             this.edgeSet = edgeSet;
             editCount += edgeSet.size();
     }
 
     /**
-     * Returns the @code{edgeSet} attribute of this TSPEdgeContainer object.
+     * Returns the @code{edgeSet} attribute of this EdgeContainer object.
      * @return edgeSet The @code{edgeSet} attribute.
      */
-    public CopyOnWriteArrayList<TSPEdge> getEdgeSet() {
+    public CopyOnWriteArrayList<Edge> getEdgeSet() {
         return this.edgeSet;
     }
 
@@ -92,8 +92,8 @@ public class TSPEdgeContainer {
      * @param e The edge to check existance for.
      * @return boolean: true if the edge already exists in this container, false if it does not.
      */
-    private boolean edgeExists(TSPEdge e) {
-        for (TSPEdge edge : getEdgeSet()) {
+    private boolean edgeExists(Edge e) {
+        for (Edge edge : getEdgeSet()) {
             if (edge.equals(e)) {
                 return true;
             }
@@ -115,14 +115,14 @@ public class TSPEdgeContainer {
      */
     public double getTotalLength() {
         double totalLength = 0;
-        for (TSPEdge e : edgeSet) {
+        for (Edge e : edgeSet) {
             totalLength += e.getLength();
         }
         return totalLength;
     }
 
     /**
-     * Outputs this TSPEdgeContainer into a JSON format string.
+     * Outputs this EdgeContainer into a JSON format string.
      * @return string The container as a string in json format.
      */
     @Override
@@ -133,7 +133,7 @@ public class TSPEdgeContainer {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return "Failed to load TSPNodeContainer object into JSON format.";
+        return "Failed to load NodeContainer object into JSON format.";
     }
 
     /**
@@ -148,8 +148,8 @@ public class TSPEdgeContainer {
      * Used to add all the edges from the parameter container into this container
      * @param otherContainer The container to absorb.
      */
-    public void absorb(TSPEdgeContainer otherContainer) {
-        for (TSPEdge e : otherContainer.getEdgeSet()) {
+    public void absorb(EdgeContainer otherContainer) {
+        for (Edge e : otherContainer.getEdgeSet()) {
             try {
                 this.add(e);
             } catch (EdgeSuperimpositionException ignored) {
@@ -163,9 +163,9 @@ public class TSPEdgeContainer {
      * @return copy The copy of this edge container.
      * @throws EdgeSuperimpositionException Thrown if an edge superimpostion occurs when copying.
      */
-    public TSPEdgeContainer copy() throws EdgeSuperimpositionException {
-        TSPEdgeContainer copy = new TSPEdgeContainer();
-        for (TSPEdge e : getEdgeSet()) {
+    public EdgeContainer copy() throws EdgeSuperimpositionException {
+        EdgeContainer copy = new EdgeContainer();
+        for (Edge e : getEdgeSet()) {
             copy.add(e);
         }
         return copy;

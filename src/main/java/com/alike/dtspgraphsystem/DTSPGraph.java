@@ -2,10 +2,10 @@ package com.alike.dtspgraphsystem;
 
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.tspgraphsystem.Graph;
-import com.alike.tspgraphsystem.TSPGraph;
+import com.alike.tspgraphsystem.StaticGraph;
 
 /**
- * Class combines the @code{TSPGraph} and @code{CoordinateMover} classes to create a dynamic travelling salesperson
+ * Class combines the @code{StaticGraph} and @code{CoordinateMover} classes to create a dynamic travelling salesperson
  * problem graph where the nodes move.
  */
 public class DTSPGraph implements Graph {
@@ -40,7 +40,7 @@ public class DTSPGraph implements Graph {
     /**
      * A reference to the underlying graph object which this object is manipulating.
      */
-    private TSPGraph graph;
+    private StaticGraph graph;
 
     /**
      * The @code{EdgeStateManager} object that will be managing the status of edges (offline/online).
@@ -55,7 +55,12 @@ public class DTSPGraph implements Graph {
     /**
      * The default value for the @code{delayPerStep} attribute.
      */
-    private static final int DEF_DELAY_PER_STEP = 10;
+    private static final int DEF_DELAY_PER_STEP = 100;
+
+    /**
+     * Boolean describing whether this cm is able to listen to move and pause commands.
+     */
+    private volatile boolean awake;
 
     /**
      * Constructs a new DTSP object.
@@ -63,7 +68,7 @@ public class DTSPGraph implements Graph {
      * @param stepRandomly Whether the nodes are moved using the stepRandomly method in the coordinate mover.
      * @param stepByVelocity Whether the nodes are moved using the stepByVelocity method in the coordinate mover.
      */
-    public DTSPGraph(TSPGraph graph, boolean stepRandomly, boolean stepByVelocity) {
+    public DTSPGraph(StaticGraph graph, boolean stepRandomly, boolean stepByVelocity) {
         cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), DEF_MOVEMENT_SPEED);
         setEdgeStateManager(new EdgeStateManager());
         this.graph = graph;
@@ -71,6 +76,7 @@ public class DTSPGraph implements Graph {
         setSteppingRandomly(stepRandomly);
         setSteppingByVelocity(stepByVelocity);
         setDelayPerStep(DEF_DELAY_PER_STEP);
+        setAwake(false);
     }
 
     /**
@@ -90,26 +96,43 @@ public class DTSPGraph implements Graph {
     }
 
     /**
-     * Starts a thread that calls the step methods desired repeatedly until the @code{move} attribute becomes false.
+     * Sets the value of the @code{awake} attribute to true and starts the coordinate mover thread.
      */
-    public void move() {
-        moving = true;
+    public void wake() {
+        setAwake(true);
+        this.moving = false;
         Thread thread = new Thread(() -> {
-            while (moving) {
-                if (steppingRandomly) {
-                    cm.stepRandomly();
+            while (awake) {
+                while (moving) {
+                    if (steppingRandomly) {
+                        cm.stepRandomly();
+                    }
+                    if (steppingByVelocity) {
+                        cm.stepByVelocity();
+                    }
+                    RepeatedFunctions.sleep(delayPerStep);
                 }
-                if (steppingByVelocity) {
-                    cm.stepByVelocity();
-                }
-                RepeatedFunctions.sleep(delayPerStep);
             }
         });
         thread.start();
     }
 
     /**
-     * Sets the move attribute to false (which will stop the graphs movmement if it is already moving else nothing).
+     * Sets the value of the @code{awake} attribute to false which kills the mover thread.
+     */
+    public void kill() {
+        this.awake = false;
+    }
+
+    /**
+     * Sets the value of the @code{moving} attribute to true which will resume the coordinate's movement.
+      */
+    public void move() {
+        moving = true;
+    }
+
+    /**
+     * Sets the value of the @code{moving} attribute to false which will pause the coordinate's movement.
      */
     public void stop() {
         moving = false;
@@ -147,7 +170,11 @@ public class DTSPGraph implements Graph {
         this.edgeStateManager = edgeStateManager;
     }
 
-    public TSPGraph getUnderlyingGraph() {
+    public StaticGraph getUnderlyingGraph() {
         return this.graph;
+    }
+
+    public void setAwake(boolean awake) {
+        this.awake = awake;
     }
 }

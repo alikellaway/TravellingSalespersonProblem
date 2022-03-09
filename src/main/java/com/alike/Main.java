@@ -1,11 +1,11 @@
 package com.alike;
 
 import com.alike.customexceptions.*;
+import com.alike.dtspgraphsystem.DTSPGraph;
 import com.alike.graphical.TSPGraphAnimator;
-import com.alike.solvertestsuite.Solution;
 import com.alike.solvers.*;
-import com.alike.tspgraphsystem.TSPGraph;
-import com.alike.tspgraphsystem.TSPGraphGenerator;
+import com.alike.tspgraphsystem.GraphGenerator;
+import com.alike.tspgraphsystem.StaticGraph;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -46,25 +46,28 @@ public class Main extends Application {
      */
     private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
 
-    private static TSPGraph nnsGraph;
-    private static TSPGraph bsGraph;
-    private static TSPGraph acosGraph;
-    private static TSPGraph hfcsGraph;
-    private static TSPGraph csGraph;
-    private static TSPGraph polygonGraph;
+    private static StaticGraph nnsGraph;
+    private static StaticGraph bsGraph;
+    private static StaticGraph acosGraph;
+    private static StaticGraph hfcsGraph;
+    private static StaticGraph csGraph;
+    private static StaticGraph polygonGraph;
+    private static DTSPGraph dnnsGraph;
 
     private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
 
-    private static TSPGraph currentG = new TSPGraph(); // This graph was used for cylcing through node sets.
+    private static StaticGraph currentG = new StaticGraph(); // This graph was used for cylcing through node sets.
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException, RadiusExceedingBoundaryException {
         // Generate some graphs for testing and general use
-        nnsGraph = TSPGraphGenerator.generateRandomGraph(500, false);
-        bsGraph = TSPGraphGenerator.generateRandomGraph(8, false);
-        acosGraph = TSPGraphGenerator.generateRandomGraph(600, false);
-        hfcsGraph = TSPGraphGenerator.generateRandomGraph(50, false);
-        csGraph = TSPGraphGenerator.generateRandomGraph(100, false);
-        polygonGraph = TSPGraphGenerator.generateIrregularPolygonalGraph(9, 150, 200);
+        nnsGraph = GraphGenerator.generateRandomGraph(/*500*/ 5, false);
+        bsGraph = GraphGenerator.generateRandomGraph(8, false);
+        acosGraph = GraphGenerator.generateRandomGraph(600, false);
+        hfcsGraph = GraphGenerator.generateRandomGraph(50, false);
+        csGraph = GraphGenerator.generateRandomGraph(100, false);
+        polygonGraph = GraphGenerator.generateIrregularPolygonalGraph(9, 150, 200);
+        dnnsGraph = new DTSPGraph(nnsGraph, false, true);
+
 
         // Point the mover to the appropriate graph
 
@@ -79,7 +82,7 @@ public class Main extends Application {
 //        Thread bsT = new Thread(() -> {
 //           try {
 //               BruteForceSolver bs = new BruteForceSolver(bsGraph);
-//               Pair<TSPGraph, Double> solutionOutput = bs.runSolution(0);
+//               Pair<StaticGraph, Double> solutionOutput = bs.runSolution(0);
 //               System.out.println(solutionOutput.getKey());
 //               System.out.println(solutionOutput.getValue());
 //
@@ -108,11 +111,18 @@ public class Main extends Application {
 //        });
 //        hfcsT.start();
         // Christofide's algorithm solver
-        Thread csT = new Thread(() -> {
-            ChristofidesSolver cs = new ChristofidesSolver(csGraph);
-            cs.runSolution(0);
+//        Thread csT = new Thread(() -> {
+//            ChristofidesSolver cs = new ChristofidesSolver(csGraph);
+//            cs.runSolution(0);
+//        });
+//        csT.start();
+        // DNearset Neighbour Solver
+        Thread dnnsT = new Thread(() -> {
+            DynamicNearestNeighbourSolver dnns = new DynamicNearestNeighbourSolver(dnnsGraph);
+            dnns.runSolution(0);
         });
-        csT.start();
+        dnnsGraph.move();
+        dnnsT.start();
         // Populate our graph file with the test graphs incl. random graphs, polygon graphs and irregular polygon graphs
 //        Thread test = new Thread(() -> {
 //            try {
@@ -125,7 +135,7 @@ public class Main extends Application {
 //                    RepeatedFunctions.sleep(0);
 //                    ArrayList<Coordinate> cL = clfr.getNext();
 //                    Coordinate[] cA = cL.toArray(Coordinate[]::new);
-//                    currentG.setNodeContainer(new TSPNodeContainer(cA));
+//                    currentG.setNodeContainer(new NodeContainer(cA));
 //                    currentG.getEdgeContainer().clear();
 //                    NearestNeighbourSolver nns2 = new NearestNeighbourSolver(currentG);
 //                    nns2.runSolution(0);
@@ -157,7 +167,7 @@ public class Main extends Application {
 //        RepeatedFunctions.sleep(10);
 //        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, csGraph,1, false);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, dnnsGraph.getUnderlyingGraph(),1, false);
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);

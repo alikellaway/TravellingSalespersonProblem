@@ -2,15 +2,15 @@ package com.alike.solvers;
 
 import com.alike.customexceptions.NoNodeContainerException;
 import com.alike.solvertestsuite.Solution;
-import com.alike.tspgraphsystem.TSPEdgeContainer;
-import com.alike.tspgraphsystem.TSPGraph;
+import com.alike.tspgraphsystem.EdgeContainer;
+import com.alike.tspgraphsystem.StaticGraph;
 
 public class LinKernighanSolver implements Solver {
 
     /**
      * The graph which we are to solve.
      */
-    private TSPGraph graph;
+    private StaticGraph graph;
 
     /**
      * A reference to the edge matrix of the graph we are trying to solve.
@@ -20,9 +20,9 @@ public class LinKernighanSolver implements Solver {
     /**
      * The set of edges that is the current tour.
      */
-    private TSPEdgeContainer tour;
+    private EdgeContainer tour;
 
-    public LinKernighanSolver(TSPGraph graph) {
+    public LinKernighanSolver(StaticGraph graph) {
         setGraph(graph);
     }
 
@@ -42,7 +42,7 @@ public class LinKernighanSolver implements Solver {
      * @param graph The graph to assign the Solver's @code{graph} attribute.
      */
     @Override
-    public void setGraph(TSPGraph graph) {
+    public void setGraph(StaticGraph graph) {
         this.graph = graph;
     }
 
@@ -58,7 +58,7 @@ public class LinKernighanSolver implements Solver {
      * Sets the value of the @code{tour} attribute to a new value.
      * @param tour The new value to assign the @code{tour} attriubte.
      */
-    public void setTour(TSPEdgeContainer tour) {
+    public void setTour(EdgeContainer tour) {
         this.tour = tour;
     }
 }

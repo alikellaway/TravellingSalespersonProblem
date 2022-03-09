@@ -8,29 +8,29 @@ import java.util.ArrayList;
 
 /**
  * Class used to represent and collate data on a travelling salesperson problem graph.
- * TSPGraph.java
+ * StaticGraph.java
  * @author alike
  */
-public class TSPGraph implements Graph {
+public class StaticGraph implements Graph {
 
     /**
      * The nodes of this graph object (stored in a @code{nodeContainer} object for easier management).
      */
-    private TSPNodeContainer nodeContainer;
+    private NodeContainer nodeContainer;
 
     /**
      * The edges of this graph object (stored in an @code{edgeContainer} object for easier management).
      */
-    private TSPEdgeContainer edgeContainer;
+    private EdgeContainer edgeContainer;
 
     private double[][] edgeLengthMatrix;
 
     /**
      * Constructs a new graph with empty node and edge containers.
      */
-    public TSPGraph() {
-        setNodeContainer(new TSPNodeContainer());
-        setEdgeContainer(new TSPEdgeContainer());
+    public StaticGraph() {
+        setNodeContainer(new NodeContainer());
+        setEdgeContainer(new EdgeContainer());
     }
 
     /**
@@ -38,7 +38,7 @@ public class TSPGraph implements Graph {
      * @param nodeContainer The value that will become the @code{nodeContainer} attribute.
      * @param edgeContainer The value that will become the @code{edgeContainer} attribute.
      */
-    public TSPGraph(TSPNodeContainer nodeContainer, TSPEdgeContainer edgeContainer) {
+    public StaticGraph(NodeContainer nodeContainer, EdgeContainer edgeContainer) {
         setNodeContainer(nodeContainer);
         setEdgeContainer(edgeContainer);
     }
@@ -47,16 +47,16 @@ public class TSPGraph implements Graph {
      * Used to create a graph with no edges but with a node container.
      * @param nodeContainer The node container the graph will have as its node container.
      */
-    public TSPGraph(TSPNodeContainer nodeContainer) {
+    public StaticGraph(NodeContainer nodeContainer) {
         setNodeContainer(nodeContainer);
-        setEdgeContainer(new TSPEdgeContainer());
+        setEdgeContainer(new EdgeContainer());
     }
 
     /**
-     * Returns the @code{nodeContainer} attribute of the TSPGraph object.
-     * @return @code{nodeContainer} The @code{nodeContainer} attribute of the TSPGraph object.
+     * Returns the @code{nodeContainer} attribute of the StaticGraph object.
+     * @return @code{nodeContainer} The @code{nodeContainer} attribute of the StaticGraph object.
      */
-    public TSPNodeContainer getNodeContainer() {
+    public NodeContainer getNodeContainer() {
         return nodeContainer;
     }
 
@@ -64,15 +64,15 @@ public class TSPGraph implements Graph {
      * Sets the @code{nodeContainer} attribute to a new value.
      * @param nodeContainer The new value to become the @code{nodeContainer} attribute.
      */
-    public void setNodeContainer(TSPNodeContainer nodeContainer) {
+    public void setNodeContainer(NodeContainer nodeContainer) {
         this.nodeContainer = nodeContainer;
     }
 
     /**
-     * Returns the @code{edgeContainer} attribute of the TSPGraph object.
+     * Returns the @code{edgeContainer} attribute of the StaticGraph object.
      * @return @code{edgeContainer} The value of the @code{edgeContainer} attribute.
      */
-    public TSPEdgeContainer getEdgeContainer() {
+    public EdgeContainer getEdgeContainer() {
         return edgeContainer;
     }
 
@@ -80,7 +80,7 @@ public class TSPGraph implements Graph {
      * Sets the @code{edgeContainer} attribute to a new value.
      * @param edgeContainer The new value to assign to the @code{edgeContainer} attribute.
      */
-    public void setEdgeContainer(TSPEdgeContainer edgeContainer) {
+    public void setEdgeContainer(EdgeContainer edgeContainer) {
         this.edgeContainer = edgeContainer;
     }
 
@@ -101,8 +101,8 @@ public class TSPGraph implements Graph {
     }
 
     /**
-     * Used to represent a TSPGraph object as a string - output the object in JSON format.
-     * @return String The TSPGraph represented as a JSON format string.
+     * Used to represent a StaticGraph object as a string - output the object in JSON format.
+     * @return String The StaticGraph represented as a JSON format string.
      */
     @Override
     public String toString() {
@@ -112,12 +112,12 @@ public class TSPGraph implements Graph {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return "Failed to load TSPNodeContainer object into JSON format.";
+        return "Failed to load NodeContainer object into JSON format.";
     }
 
     /**
-     * Returns the number of nodes in the graph object's TSPNodeContainer object.
-     * @return int The number of TSPNode objects managed by the TSPGraph's TSPNodeContainer object.
+     * Returns the number of nodes in the graph object's NodeContainer object.
+     * @return int The number of Node objects managed by the StaticGraph's NodeContainer object.
      */
     public int getNumNodes() {
         return getNodeContainer().getNodeSet().size();
@@ -127,15 +127,15 @@ public class TSPGraph implements Graph {
      * Ensures all nodes are set to unvisited.
      */
     public void setAllNodesUnvisited() {
-        for (TSPNode n : getNodeContainer().getNodeSet()) {
+        for (Node n : getNodeContainer().getNodeSet()) {
             n.setVisited(false);
         }
     }
 
-    public TSPGraph copy() throws NodeSuperimpositionException, EdgeSuperimpositionException {
-        TSPGraph graphCopy = new TSPGraph();
-        ArrayList<TSPNode> nodesCopy = new ArrayList<>(getNodeContainer().getNodeSet());
-        graphCopy.setNodeContainer(new TSPNodeContainer(nodesCopy));
+    public StaticGraph copy() throws NodeSuperimpositionException, EdgeSuperimpositionException {
+        StaticGraph graphCopy = new StaticGraph();
+        ArrayList<Node> nodesCopy = new ArrayList<>(getNodeContainer().getNodeSet());
+        graphCopy.setNodeContainer(new NodeContainer(nodesCopy));
         graphCopy.setEdgeContainer(getEdgeContainer().copy());
         return graphCopy;
     }

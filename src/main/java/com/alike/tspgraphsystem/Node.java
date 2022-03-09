@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Used to represent nodes (cities) in the TSP.
  * @author alike
  */
-public class TSPNode {
+public class Node {
     /**
      * A record of the number of nodes initialised used to assign each node a unique ID.
      */
@@ -35,7 +35,7 @@ public class TSPNode {
      * @param x The x positional value of the node.
      * @param y The y positional valye of the node.
      */
-    public TSPNode(int x, int y) {
+    public Node(int x, int y) {
         Coordinate c = new Coordinate(x, y);
         setCoordinate(c);
         assignID();
@@ -45,7 +45,7 @@ public class TSPNode {
      * Initialises a node given a GraphSystem.Coordinate object.
      * @param c The GraphSystem.Coordinate to give the node object.
      */
-    public TSPNode(Coordinate c) {
+    public Node(Coordinate c) {
         setCoordinate(c);
         assignID();
     }
@@ -55,7 +55,7 @@ public class TSPNode {
      * @param otherNode The node to find a vector to.
      * @return Vector A vector describing the distance between this node and the parameter node.
      */
-    public Vector getVectorTo(TSPNode otherNode) {
+    public Vector getVectorTo(Node otherNode) {
         return coordinate.getVectorTo(otherNode.getCoordinate());
     }
 
@@ -76,8 +76,8 @@ public class TSPNode {
     }
 
     /**
-     * Used to represent the TSPNode as a string (in console or terminal).
-     * @return String The TSPNode object as a string.
+     * Used to represent the Node as a string (in console or terminal).
+     * @return String The Node object as a string.
      */
     @Override
     public String toString() {
@@ -93,16 +93,16 @@ public class TSPNode {
     }
 
     /**
-     * Used to generate a random TSPNode object with random coordinates within the parameters specified by the
+     * Used to generate a random Node object with random coordinates within the parameters specified by the
      * static final variables from the Main class.
-     * @return TSPNode A new TSPNode with random coordinate values.
+     * @return Node A new Node with random coordinate values.
      */
-    public static TSPNode generateRandomTSPNode() {
-        return new TSPNode(Coordinate.generateRandomCoordinate(Main.COORDINATE_MAX_WIDTH, Main.COORDINATE_MAX_HEIGHT));
+    public static Node generateRandomTSPNode() {
+        return new Node(Coordinate.generateRandomCoordinate(Main.COORDINATE_MAX_WIDTH, Main.COORDINATE_MAX_HEIGHT));
     }
 
     /**
-     * Used to check whether the TSPNode has been visited by an algorithm in this run.
+     * Used to check whether the Node has been visited by an algorithm in this run.
      * @return true: if the node has been visited, false: if the node has not been visited (by a solver)
      */
     public boolean isVisited() {
@@ -134,16 +134,16 @@ public class TSPNode {
     }
 
     /**
-     * Returns the value of the @code{x} attribute of the coordinate attribute of the TSPNode.
-     * @return x The value of the @code{x} attribute of the coordinate attribute of the TSPNode.
+     * Returns the value of the @code{x} attribute of the coordinate attribute of the Node.
+     * @return x The value of the @code{x} attribute of the coordinate attribute of the Node.
      */
     public double getX() {
         return getCoordinate().getX();
     }
 
     /**
-     * Returns the value of the @code{y} attribute of the coordinate attribute of the TSPNode.
-     * @return y The value of the @code{y} attribute of the coordinate attribute of the TSPNode.
+     * Returns the value of the @code{y} attribute of the coordinate attribute of the Node.
+     * @return y The value of the @code{y} attribute of the coordinate attribute of the Node.
      */
     public double getY() {
         return getCoordinate().getY();
@@ -162,13 +162,13 @@ public class TSPNode {
      * @return closestFoundNode The closest found node to this node.
      * @throws NoClosestNodeException Thrown if a closest node could not be found.
      */
-    public TSPNode getClosestNode(ArrayList<TSPNode> otherNodes, boolean unvisited) throws NoClosestNodeException {
+    public Node getClosestNode(ArrayList<Node> otherNodes, boolean unvisited) throws NoClosestNodeException {
         if (!otherNodes.contains(this)) {
             throw new NoClosestNodeException("This node was not found in the input list.");
         }
-        TSPNode closestFoundNode = null;
+        Node closestFoundNode = null;
         double distanceToClosestNode = Double.MAX_VALUE;
-        for (TSPNode n : otherNodes) {
+        for (Node n : otherNodes) {
             if (!(this.equals(n))) {
                 if ((unvisited && !n.isVisited()) || (!unvisited)) {
                     double distance = this.getVectorTo(n).magnitude();

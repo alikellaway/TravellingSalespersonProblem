@@ -20,29 +20,32 @@ public class DynamicNearestNeighbourSolver {
     /**
      * The node the algorithm is currently at.
      */
-    private TSPNode currentNode;
+    private Node currentNode;
 
     public DynamicNearestNeighbourSolver(DTSPGraph graph) {
         setGraph(graph);
     }
 
     public void runSolution(int delayPerStep) {
-        TSPNodeContainer nodeContainer = getGraph().getNodeContainer();
-        TSPEdgeContainer edgeContainer = getGraph().getEdgeContainer();
+        NodeContainer nodeContainer = getGraph().getNodeContainer();
+        EdgeContainer edgeContainer = getGraph().getEdgeContainer();
         getGraph().setAllNodesUnvisited();
         int maxEdges = nodeContainer.getNodeSet().size(); // The number of edges in a complete tour
+        graph.wake(); // Doesn't begin movement - just allows it to listen for pause/play commands.
         this.running = true;
+        this.currentNode = nodeContainer.getNodeSet().get(0);
         while (running) {
             try {
                 graph.stop();
-                TSPNode nextNode = findClosestUnvisitedNode();
+                Node nextNode = findClosestUnvisitedNode();
                 graph.move();
-                TSPEdge e = new TSPEdge(currentNode, nextNode);
+                Edge e = new Edge(currentNode, nextNode);
                 edgeContainer.add(e);
                 currentNode = nextNode;
                 // If we have filled delete the first added edge
                 if (edgeContainer.getEdgeSet().size() == maxEdges) {
                     edgeContainer.clear();
+                    getGraph().setAllNodesUnvisited();
                 } // TODO removing the first element is really inefficient - different data structure?
             } catch(NoClosestNodeException ignored) {
 
@@ -58,7 +61,7 @@ public class DynamicNearestNeighbourSolver {
      * Returns the value of the @code{graph} attribute of the DTSPGraph stored in this classes @code{graph} attribute.
      * @return graph The value of the @code{graph} attribute within the @code{graph} attribute of this class.
      */
-    public TSPGraph getGraph() {
+    public StaticGraph getGraph() {
         return graph.getUnderlyingGraph();
     }
 
@@ -83,8 +86,8 @@ public class DynamicNearestNeighbourSolver {
 
     }
 
-    private TSPNode findClosestUnvisitedNode() throws NoClosestNodeException {
-        ArrayList<TSPNode> set = getGraph().getNodeContainer().getNodeSet();
+    private Node findClosestUnvisitedNode() throws NoClosestNodeException {
+        ArrayList<Node> set = getGraph().getNodeContainer().getNodeSet();
         return currentNode.getClosestNode(set, true);
 
     }

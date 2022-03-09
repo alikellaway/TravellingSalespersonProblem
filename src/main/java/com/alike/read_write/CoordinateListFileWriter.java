@@ -5,7 +5,7 @@ import com.alike.customexceptions.InvalidGraphException;
 import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.customexceptions.RadiusExceedingBoundaryException;
 import com.alike.tspgraphsystem.Coordinate;
-import com.alike.tspgraphsystem.TSPGraphGenerator;
+import com.alike.tspgraphsystem.GraphGenerator;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -91,21 +91,21 @@ public class CoordinateListFileWriter {
         // Writes random graphs and adds them to the file.
         for (int n = 0; n < NUM_RANDOM_GRAPHS; n++) {
             appendCoordinateList(bw,
-                TSPGraphGenerator.generateRandomGraph(n + 3, false).getNodeContainer().getNodeCoordinates()
+                GraphGenerator.generateRandomGraph(n + 3, false).getNodeContainer().getNodeCoordinates()
             );
         }
         int xMax = Main.COORDINATE_MAX_WIDTH;
         int yMax = Main.COORDINATE_MAX_HEIGHT;
         // Writes the regular polygon graphs to the file
         for (int n = 0; n < NUM_REGULAR_POLYGON_GRAPHS; n++) {
-            appendCoordinateList(bw, TSPGraphGenerator.generateRegularPolygonalGraph(n + 3)
+            appendCoordinateList(bw, GraphGenerator.generateRegularPolygonalGraph(n + 3)
                     .getNodeContainer()
                     .getNodeCoordinates()
             );
         }
         // Writes the irregular polygon graphs to the file
         for (int n = 0; n < NUM_IRREGULAR_POLYGON_GRAPHS; n++) {
-            appendCoordinateList(bw, TSPGraphGenerator.generateIrregularPolygonalGraph(
+            appendCoordinateList(bw, GraphGenerator.generateIrregularPolygonalGraph(
                     n + 3, xMax, yMax
                 ).getNodeContainer().getNodeCoordinates()
             );

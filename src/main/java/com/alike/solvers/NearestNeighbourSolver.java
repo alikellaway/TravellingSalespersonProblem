@@ -18,19 +18,19 @@ public class NearestNeighbourSolver implements Solver {
     /**
      * A reference to the graph we are solving.
      */
-    private TSPGraph graph;
+    private StaticGraph graph;
     /**
      * A reference to the edge container we are operating within.
      */
-    private TSPEdgeContainer edgeContainer;
+    private EdgeContainer edgeContainer;
     /**
      * A reference to the node container we are operating on.
      */
-    private TSPNodeContainer nodeContainer;
+    private NodeContainer nodeContainer;
     /**
      * The node the algorithm is currently sitting on.
      */
-    private TSPNode currentNode;
+    private Node currentNode;
     /**
      * This records the number of nodes we have already visited. We do this so we don't have to repeatedly loop
      * through the list to check they've all been visited.
@@ -41,7 +41,7 @@ public class NearestNeighbourSolver implements Solver {
      * Constructor used to load a graph into the object, so that a solution can be run.
      * @param graph The graph to load into the NNS object.
      */
-    public NearestNeighbourSolver(TSPGraph graph) {
+    public NearestNeighbourSolver(StaticGraph graph) {
         RepeatedFunctions.validateGraph(graph);
         setGraph(graph);
     }
@@ -78,21 +78,21 @@ public class NearestNeighbourSolver implements Solver {
      * Method used to set the current node to a new node.
      * @param tspNode The new node to become the current node.
      */
-    private void setCurrentNode(TSPNode tspNode) {
+    private void setCurrentNode(Node tspNode) {
         this.currentNode = tspNode;
     }
 
     /**
      * This method is used to find the closest unvisited node to the current node.
-     * @return TSPNode The closest univisited node (or the starting node if no others are found).
+     * @return Node The closest univisited node (or the starting node if no others are found).
      */
-    private TSPNode findClosestUnvistedNode() {
+    private Node findClosestUnvistedNode() {
          // Generate our space to put our results
         double distanceToClosestFoundNode =  // We set the distance to be the maximum distance two nodes could away
                 Math.ceil(Math.sqrt(Math.pow(Main.COORDINATE_MAX_WIDTH, 2) + Math.pow(Main.COORDINATE_MAX_HEIGHT, 2)));
-        TSPNode closestFoundNode = null; // Keep a record of the closest found node
-        ArrayList<TSPNode> nodeSet = nodeContainer.getNodeSet(); // Get the set
-        for (TSPNode nodeBeingChecked : nodeSet) {
+        Node closestFoundNode = null; // Keep a record of the closest found node
+        ArrayList<Node> nodeSet = nodeContainer.getNodeSet(); // Get the set
+        for (Node nodeBeingChecked : nodeSet) {
             if (!nodeBeingChecked.isVisited() && nodeBeingChecked != currentNode) {
                 Vector v = currentNode.getVectorTo(nodeBeingChecked);
                 double mag = v.magnitude();
@@ -113,14 +113,14 @@ public class NearestNeighbourSolver implements Solver {
      */
     private void traverseToNextClosestNode() throws EdgeSuperimpositionException, EdgeToSelfException {
         // Find the next closest unvisited node.
-        TSPNode nextNode;
+        Node nextNode;
         try {
             nextNode = currentNode.getClosestNode(nodeContainer.getNodeSet(), true);
         } catch (NoClosestNodeException e) {
             nextNode = nodeContainer.getNodeSet().get(0);
         }
         // Add an edge between the current node and the next closest node.
-        edgeContainer.add(new TSPEdge(currentNode, nextNode));
+        edgeContainer.add(new Edge(currentNode, nextNode));
         nextNode.setVisited(true); // Set that node to visited.
         // System.out.println(nextNode.isVisited());
         setCurrentNode(nextNode); // Change the current node.
@@ -133,7 +133,7 @@ public class NearestNeighbourSolver implements Solver {
      * Sets the value of the @code{graph} attribute to a new value.
      * @param newGraph The new value to assign to the @code{graph} attribute.
      */
-    public void setGraph(TSPGraph newGraph) {
+    public void setGraph(StaticGraph newGraph) {
         RepeatedFunctions.validateGraph(newGraph);
         this.graph = newGraph;
         this.nodeContainer = newGraph.getNodeContainer();

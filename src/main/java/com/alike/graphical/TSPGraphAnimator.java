@@ -2,7 +2,6 @@ package com.alike.graphical;
 
 import com.alike.tspgraphsystem.*;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -31,7 +30,7 @@ public class TSPGraphAnimator extends AnimationTimer {
     /**
      * The graph which we are animating.
      */
-    private TSPGraph graph;
+    private StaticGraph graph;
 
     /**
      * The graphics context of the canvas object.
@@ -92,7 +91,7 @@ public class TSPGraphAnimator extends AnimationTimer {
      * @param canvas The canvas we will be drawing to.
      * @param editsPerRedraw The value to assign to the @code{editsPerRedraw} attribute.
      */
-    public TSPGraphAnimator(Stage stage, Canvas canvas, TSPGraph graph, int editsPerRedraw, boolean drawNodeIDs) {
+    public TSPGraphAnimator(Stage stage, Canvas canvas, StaticGraph graph, int editsPerRedraw, boolean drawNodeIDs) {
         setGraph(graph);
         setCanvas(canvas);
         setGraphicsContext(canvas.getGraphicsContext2D());
@@ -117,7 +116,7 @@ public class TSPGraphAnimator extends AnimationTimer {
      * Sets the @code{graph} attribute to a new value.
      * @param graph The new value to set the @code{graph} attribute to.
      */
-    public void setGraph(TSPGraph graph) {
+    public void setGraph(StaticGraph graph) {
         this.graph = graph;
     }
 
@@ -163,8 +162,8 @@ public class TSPGraphAnimator extends AnimationTimer {
         graphicsContext.setLineWidth(LINE_WIDTH);
         // graphicsContext.setLineDashes(5, 10); // Set lines to dotted
         // Draw lines
-        CopyOnWriteArrayList<TSPEdge> edges = graph.getEdgeContainer().getEdgeSet();
-        for (TSPEdge edge : edges) {
+        CopyOnWriteArrayList<Edge> edges = graph.getEdgeContainer().getEdgeSet();
+        for (Edge edge : edges) {
             drawEdge(edge);
         }
         // Design nodes
@@ -173,13 +172,13 @@ public class TSPGraphAnimator extends AnimationTimer {
         graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
         // graphicsContext.setLineDashes(); // Turns of dotted lines when outlining nodes
         // Draw nodes
-        for (TSPNode node : graph.getNodeContainer().getNodeSet()) {
+        for (Node node : graph.getNodeContainer().getNodeSet()) {
             drawNode(node);
         }
         // Number nodes
         if (numbered) {
             graphicsContext.setFill(LINE_COLOR);
-            for (TSPNode node: graph.getNodeContainer().getNodeSet()) {
+            for (Node node: graph.getNodeContainer().getNodeSet()) {
                 graphicsContext.fillText(Integer.toString(node.getNodeID()), node.getX(), node.getY() - 2);
             }
         }
@@ -189,7 +188,7 @@ public class TSPGraphAnimator extends AnimationTimer {
      * Draws an edge onto the current canvas.
      * @param edge The edge to be drawn onto the current canvas.
      */
-    private void drawEdge(TSPEdge edge) {
+    private void drawEdge(Edge edge) {
         Coordinate start = edge.getStartNode().getCoordinate();
         Coordinate end = edge.getEndNode().getCoordinate();
         Coordinate tempStart = new Coordinate(start.getX(), start.getY());
@@ -203,7 +202,7 @@ public class TSPGraphAnimator extends AnimationTimer {
      * Draws a node onto the current canvas.
      * @param node The node to be drawn on the current canvas.
      */
-    private void drawNode(TSPNode node) {
+    private void drawNode(Node node) {
         // Oval format : gc.fillOval(x, y, w, h)
         graphicsContext.fillOval(node.getX(), node.getY(), NODE_RADIUS * 2, NODE_RADIUS * 2); // Main node
         graphicsContext.strokeOval(node.getX(), node.getY(), NODE_RADIUS * 2, NODE_RADIUS * 2); // Node outline

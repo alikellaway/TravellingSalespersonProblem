@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
 
 /**
- * Class constructs hilbert fractal curves and then uses the path to solve a TSPGraph route.
+ * Class constructs hilbert fractal curves and then uses the path to solve a StaticGraph route.
  * @author alike
  */
 public class HilbertFractalCurveSolver implements Solver {
     /**
      * The graph which we are solving.
      */
-    private TSPGraph graph;
+    private StaticGraph graph;
 
     /**
      * The order of Hilbert curve to construct (how many iterations to do).
@@ -54,7 +54,7 @@ public class HilbertFractalCurveSolver implements Solver {
      * Used to construct a new @code{HilbertFractalCurveSolver} object.
      * @param graph The graph which we are solving.
      */
-    public HilbertFractalCurveSolver(TSPGraph graph) {
+    public HilbertFractalCurveSolver(StaticGraph graph) {
         validateCoordinateSpaceIsSquareOfSideLenPowerOf2();
         // Set our graph
         setGraph(graph);
@@ -116,12 +116,12 @@ public class HilbertFractalCurveSolver implements Solver {
      */
     public void constructRoute(int delayPerStep)
             throws EdgeSuperimpositionException, NodeMissedException, InterruptedException, EdgeToSelfException, HilbertCurveUnconstructedException {
-        ArrayList<TSPNode> nodesOrdered = getNodesOrdered();
-        TSPEdgeContainer container = new TSPEdgeContainer();
+        ArrayList<Node> nodesOrdered = getNodesOrdered();
+        EdgeContainer container = new EdgeContainer();
         graph.setEdgeContainer(container); // We do this here, so we can see the path as its being constructed
         for (int i = 0; i < nodesOrdered.size(); i++) {
             // Create the edge and add it
-            container.add(new TSPEdge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
+            container.add(new Edge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
             RepeatedFunctions.sleep(delayPerStep);
         }
     }
@@ -131,17 +131,17 @@ public class HilbertFractalCurveSolver implements Solver {
      * @return @code{nodesOrdered} A list containing the nodes in the order the hilbert curve hits them.
      * @throws NodeMissedException Thrown if the current hilbert curve misses nodes when used as the map.
      */
-    public ArrayList<TSPNode> getNodesOrdered() throws NodeMissedException, HilbertCurveUnconstructedException {
+    public ArrayList<Node> getNodesOrdered() throws NodeMissedException, HilbertCurveUnconstructedException {
         if (curveCoordinates == null || curveCoordinates.isEmpty()) {
             throw new HilbertCurveUnconstructedException("No curve constructed.");
         }
         // Find which nodes we want and put them in order according to the graph.
         // We copy the node array here so that we can remove the node from the list once we've found it.
-        ArrayList<TSPNode> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
-        ArrayList<TSPNode> nodesOrdered = new ArrayList<>();
+        ArrayList<Node> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
+        ArrayList<Node> nodesOrdered = new ArrayList<>();
         for (Coordinate c : curveCoordinates) {
             for (int i = 0; i < nodes.size(); i++) {
-                TSPNode n = nodes.get(i);
+                Node n = nodes.get(i);
                 if (n.getCoordinate().equals(c)) {
                     nodesOrdered.add(n);
                     nodes.remove(i); // Removing them as we go will speed it up as we advance
@@ -151,7 +151,7 @@ public class HilbertFractalCurveSolver implements Solver {
         // Check to see if we missed nodes - if so throw an exception.
         if (nodesOrdered.size() != graph.getNumNodes()) {
             StringBuilder sb = new StringBuilder("Node(s) missed: ");
-            for (TSPNode n : nodes) {
+            for (Node n : nodes) {
                 sb.append(n.toString()).append(", ");
             }
             sb.delete(sb.length()-2, sb.length()-1); // Remove the last comma
@@ -203,7 +203,7 @@ public class HilbertFractalCurveSolver implements Solver {
      * Sets the @code{graph} attribute to a new value.
      * @param graph The new value to become the @code{graph} attribute.
      */
-    public void setGraph(TSPGraph graph) {
+    public void setGraph(StaticGraph graph) {
         RepeatedFunctions.validateGraph(graph);
         this.graph = graph;
     }

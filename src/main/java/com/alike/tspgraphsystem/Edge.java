@@ -6,15 +6,15 @@ import com.alike.customexceptions.EdgeToSelfException;
  * Used to link two TSPNodes together.
  * @author alike
  */
-public class TSPEdge implements Comparable<TSPEdge> {
+public class Edge implements Comparable<Edge> {
     /**
      * The node at which the edge starts (note: the edge does not start of finish, its just a naming convention).
      */
-    private TSPNode startNode;
+    private Node startNode;
     /**
      * The node at which the edge ends (note: the edge does not start of finish, its just a naming convention).
      */
-    private TSPNode endNode;
+    private Node endNode;
 
     /**
      * The unique identifier of this edge's ID.
@@ -27,7 +27,7 @@ public class TSPEdge implements Comparable<TSPEdge> {
      * @param startNode The node at which the edge starts.
      * @param endNode The node at which the edge ends.
      */
-    public TSPEdge(TSPNode startNode, TSPNode endNode) throws EdgeToSelfException {
+    public Edge(Node startNode, Node endNode) throws EdgeToSelfException {
         if (startNode == endNode) {
             throw new EdgeToSelfException("Cannot create an edge between 1 node.");
         }
@@ -41,7 +41,7 @@ public class TSPEdge implements Comparable<TSPEdge> {
      * @param otherEdge The edge with which to check equality.
      * @return boolean: true if the edges join the same nodes, false if they do not.
      */
-    public boolean equals(TSPEdge otherEdge) {
+    public boolean equals(Edge otherEdge) {
         return this.getEdgeID().equalsIgnoreCase(otherEdge.getEdgeID());
     }
 
@@ -49,7 +49,7 @@ public class TSPEdge implements Comparable<TSPEdge> {
      * Returns the node this edge starts at.
      * @return startNode The edge this node starts at.
      */
-    public TSPNode getStartNode() {
+    public Node getStartNode() {
         return startNode;
     }
 
@@ -57,7 +57,7 @@ public class TSPEdge implements Comparable<TSPEdge> {
      * Sets the @code{startNode} attribute to a new value.
      * @param startNode The new value to assign to the @code{startNode} attribute.
      */
-    public void setStartNode(TSPNode startNode) {
+    public void setStartNode(Node startNode) {
         this.startNode = startNode;
     }
 
@@ -65,7 +65,7 @@ public class TSPEdge implements Comparable<TSPEdge> {
      * Returns the node this edge finishes on.
      * @return @code{endNode} The node this edge ends on.
      */
-    public TSPNode getEndNode() {
+    public Node getEndNode() {
         return endNode;
     }
 
@@ -73,7 +73,7 @@ public class TSPEdge implements Comparable<TSPEdge> {
      * Sets the @code{endNode} attribute to a new value.
      * @param endNode The new value to assign the @code{endNode} attribute.
      */
-    public void setEndNode(TSPNode endNode) {
+    public void setEndNode(Node endNode) {
         this.endNode = endNode;
     }
 
@@ -109,7 +109,7 @@ public class TSPEdge implements Comparable<TSPEdge> {
      * @param endNode The other node the edge is linking.
      * @return edgeID The ID of this edge.
      */
-    public static String generateEdgeID(TSPNode startNode, TSPNode endNode) throws EdgeToSelfException {
+    public static String generateEdgeID(Node startNode, Node endNode) throws EdgeToSelfException {
         int startID = startNode.getNodeID();
         int endID = endNode.getNodeID();
         if (startID == endID) {
@@ -127,7 +127,7 @@ public class TSPEdge implements Comparable<TSPEdge> {
      * @param n The node to check the edge for.
      * @return boolean true if the edge does touch the paramet node.
      */
-    public boolean containsNode(TSPNode n) {
+    public boolean containsNode(Node n) {
         return startNode.equals(n) || endNode.equals(n);
     }
 
@@ -145,7 +145,7 @@ public class TSPEdge implements Comparable<TSPEdge> {
      * @return int The required outputs as per the @code{Comparable} interface implementation.
      */
     @Override
-    public int compareTo(TSPEdge otherEdge) {
+    public int compareTo(Edge otherEdge) {
         return Double.compare(this.getLength(), otherEdge.getLength());
     }
 }

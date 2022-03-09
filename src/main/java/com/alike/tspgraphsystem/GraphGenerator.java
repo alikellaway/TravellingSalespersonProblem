@@ -4,9 +4,9 @@ import com.alike.Main;
 import com.alike.customexceptions.*;
 
 /**
- * Class contains functionality to generate TSPGraph objects of certain types or with certain properties.
+ * Class contains functionality to generate StaticGraph objects of certain types or with certain properties.
  */
-public class TSPGraphGenerator {
+public class GraphGenerator {
 
     /**
      * This number represents the fraction of the window the radius is for the circle generated in the regular
@@ -29,17 +29,17 @@ public class TSPGraphGenerator {
     /**
      * Uses parametric equations to retrieve points on a circle to generate regular polygonal graphs.
      * @param numCorners The number of corners our regular polygon will have.
-     * @return @code{TSPGraph} A new graph containing nodes arranged in the shape of a polygon.
+     * @return @code{StaticGraph} A new graph containing nodes arranged in the shape of a polygon.
      * @throws InvalidGraphException Thrown if the @code{numCorners} parameter is less than 3.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose another node.
      */
-    public static TSPGraph generateRegularPolygonalGraph(int numCorners) throws InvalidGraphException, NodeSuperimpositionException {
+    public static StaticGraph generateRegularPolygonalGraph(int numCorners) throws InvalidGraphException, NodeSuperimpositionException {
         if (numCorners < 3) { // Check the graph has at least 3 nodes.
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
         }
-        TSPNode.restartNodeCounter();
+        Node.restartNodeCounter();
         // Create a graph to populate
-        TSPGraph tspGraph = new TSPGraph();
+        StaticGraph staticGraph = new StaticGraph();
         // Calculate radius from width or height of screen of the screen (depends on which is smaller)
         int min = Math.min(Main.COORDINATE_MAX_WIDTH, Main.COORDINATE_MAX_HEIGHT);
         double r = min * CIRCLE_RADIUS_RATIO; // Chose 2.1 cos visibly pleasing
@@ -51,10 +51,10 @@ public class TSPGraphGenerator {
             int y = (int) (r * Math.cos(currentAngle) + Main.COORDINATE_MAX_HEIGHT/2);
             int x = (int) (r * Math.sin(currentAngle) + Main.COORDINATE_MAX_WIDTH/2);
             Coordinate c = new Coordinate(x, y);
-            tspGraph.getNodeContainer().add(new TSPNode(c));
+            staticGraph.getNodeContainer().add(new Node(c));
             currentAngle += angleStep;
         }
-        return tspGraph;
+        return staticGraph;
     }
 
 
@@ -63,13 +63,13 @@ public class TSPGraphGenerator {
      * @param numCorners The number of corners the polygon will have.
      * @param radiusX The maximum coordinate in the x direction.
      * @param radiusY The maximum coordinate in the y direction.
-     * @return tspGraph A @code{TSPGraph} that contains new nodes arranged as an irregular polygon.
+     * @return tspGraph A @code{StaticGraph} that contains new nodes arranged as an irregular polygon.
      * @throws InvalidGraphException Thrown if the input numCorners is less than 3.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose a node.
      * @throws RadiusExceedingBoundaryException Thrown if an attempt is made to stretch a polygon outside the display
      * area.
      */
-    public static TSPGraph generateIrregularPolygonalGraph(
+    public static StaticGraph generateIrregularPolygonalGraph(
             int numCorners, int radiusX, int radiusY
         ) throws InvalidGraphException, NodeSuperimpositionException, RadiusExceedingBoundaryException {
         if (numCorners < 3) { // Check the graph has at least 3 nodes.
@@ -84,9 +84,9 @@ public class TSPGraphGenerator {
 //            throw new RadiusExceedingBoundaryException("The radius of the polygon (" + radiusY + ") was too large in" +
 //                    " the y direction to be displayed as the maximum y diameter is " + Main.COORDINATE_MAX_HEIGHT);
 //        }
-        TSPNode.restartNodeCounter(); // We need the nodes in each graph to be numbered from 0.
+        Node.restartNodeCounter(); // We need the nodes in each graph to be numbered from 0.
         // Create a graph to populate
-        TSPGraph tspGraph = new TSPGraph();
+        StaticGraph staticGraph = new StaticGraph();
         // Note: 2Pi is the number of radians in a circle
         double maxRad = 2 * Math.PI;
         // Work our way around the circle in a step wise manner
@@ -114,42 +114,42 @@ public class TSPGraphGenerator {
                 c.setY(0);
             }
             // Add the coordinate to the container
-            tspGraph.getNodeContainer().add(new TSPNode(new Coordinate(x, y)));
+            staticGraph.getNodeContainer().add(new Node(new Coordinate(x, y)));
             currentAngle += angleStep; // Increment the angle
         }
-        return tspGraph;
+        return staticGraph;
     }
 
     /**
-     * Used to generate a random TSPGraph object with randomized node positions and randomized edges (if needed).
+     * Used to generate a random StaticGraph object with randomized node positions and randomized edges (if needed).
      * @param numNodes The number of nodes the random graph must have.
      * @param generateRandomEdges Whether or not the method should output a graph with randomized edges already assigned.
-     * @return g A new randomized TSPGraph object.
+     * @return g A new randomized StaticGraph object.
      */
-    public static TSPGraph generateRandomGraph(int numNodes, boolean generateRandomEdges ) {
-        TSPNode.restartNodeCounter();
+    public static StaticGraph generateRandomGraph(int numNodes, boolean generateRandomEdges ) {
+        Node.restartNodeCounter();
         // Create some random nodes
-        TSPNodeContainer nSet = new TSPNodeContainer();
+        NodeContainer nSet = new NodeContainer();
         for (int i = 0; i < numNodes; i++) {
             try {
-                nSet.add(TSPNode.generateRandomTSPNode());
+                nSet.add(Node.generateRandomTSPNode());
             } catch (NodeSuperimpositionException e) {
                 i--;
             }
         }
         // Create an empty edge set.
-        TSPEdgeContainer eSet = new TSPEdgeContainer();
+        EdgeContainer eSet = new EdgeContainer();
         if (generateRandomEdges) { // Fill with random edges using trial and error if edges are required.
             for (int x = 0; x < numNodes; x++) {
                 try {
-                    eSet.add(new TSPEdge(nSet.getNodeSet().get(x), nSet.getNodeSet().get((x + 1) % numNodes)));
+                    eSet.add(new Edge(nSet.getNodeSet().get(x), nSet.getNodeSet().get((x + 1) % numNodes)));
                 } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
                     x--;
                 }
             }
         }
-        // Construct a new TSPGraph object and return it.
-        TSPGraph g = new TSPGraph();
+        // Construct a new StaticGraph object and return it.
+        StaticGraph g = new StaticGraph();
         g.setNodeContainer(nSet);
         g.setEdgeContainer(eSet);
         return g;

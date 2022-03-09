@@ -17,12 +17,12 @@ public class Main2 {
 //        TestSuiteResult tsr = suite.runTest();
 //        System.out.println(tsr.getTestsFailed() + " " + tsr.getTestsPassed());
 
-//        DTSPGraph dG = new DTSPGraph(TSPGraphGenerator.generateRandomGraph(5, false),true, true);
-//        TSPNode n1 = new TSPNode(0,0);
-//        TSPNode n2 = new TSPNode(5,5);
+//        DTSPGraph dG = new DTSPGraph(GraphGenerator.generateRandomGraph(5, false),true, true);
+//        Node n1 = new Node(0,0);
+//        Node n2 = new Node(5,5);
 //
-//        TSPEdge e = new TSPEdge(n1, n2);
-////        System.out.println(e.containsNode(new TSPNode(0, 0)));
+//        Edge e = new Edge(n1, n2);
+////        System.out.println(e.containsNode(new Node(0, 0)));
 //        boolean[] arr = new boolean[5];
 //        for (boolean b : arr) {
 //            System.out.println(b);

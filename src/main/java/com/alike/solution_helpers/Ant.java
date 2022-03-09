@@ -4,9 +4,9 @@ import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NonExistentNodeException;
 import com.alike.solvers.AntColonyOptimizationSolver;
-import com.alike.tspgraphsystem.TSPEdge;
-import com.alike.tspgraphsystem.TSPEdgeContainer;
-import com.alike.tspgraphsystem.TSPNode;
+import com.alike.tspgraphsystem.Edge;
+import com.alike.tspgraphsystem.EdgeContainer;
+import com.alike.tspgraphsystem.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class Ant implements Callable<Ant> {
     /**
      * The edge container this ant will output.
      */
-    private TSPEdgeContainer route;
+    private EdgeContainer route;
 
     /**
      * The unique ID of this ant.
@@ -90,11 +90,11 @@ public class Ant implements Callable<Ant> {
         // Ant chooses a random node to start at.
         int startNodeID = ThreadLocalRandom.current().nextInt(numNodes);
         // Create space to store the nodes that the ant chooses to traverse as its route.
-        ArrayList<TSPNode> routeNodes = new ArrayList<>(numNodes);
+        ArrayList<Node> routeNodes = new ArrayList<>(numNodes);
         // We need to have a unique hashmap for every ant to know which nodes it has and hasn't visited.
-        HashMap<TSPNode, Boolean> visitedNodes = new HashMap<>(numNodes);
+        HashMap<Node, Boolean> visitedNodes = new HashMap<>(numNodes);
         // Initialise all nodes as false
-        for (TSPNode nd : acos.getGraph().getNodeContainer().getNodeSet()) {
+        for (Node nd : acos.getGraph().getNodeContainer().getNodeSet()) {
             visitedNodes.put(nd, false);
         }
         // Set initial node to visited
@@ -155,7 +155,7 @@ public class Ant implements Callable<Ant> {
      * @return @code{destinationNode} The node that has been chosen to visit next.
      * @throws NonExistentNodeException Thrown if a node ID is referenced but does not exist.
      */
-    private int getDestinationNode(int x, HashMap<TSPNode, Boolean> visitedNodes) throws NonExistentNodeException {
+    private int getDestinationNode(int x, HashMap<Node, Boolean> visitedNodes) throws NonExistentNodeException {
         int destinationNode = invalidNodeIdx;
         double random = ThreadLocalRandom.current().nextDouble();
         ArrayList<Double> transitionProbabilities = getTransitionProbabilities(x, visitedNodes);
@@ -177,7 +177,7 @@ public class Ant implements Callable<Ant> {
      * @return @code{transitionProbabilities} An ArrayList containing transitional probabilities for each node.
      * @throws NonExistentNodeException Thrown when a node ID is referenced but does not exist.
      */
-    private ArrayList<Double> getTransitionProbabilities(int x, HashMap<TSPNode, Boolean> visitedNodes) throws NonExistentNodeException {
+    private ArrayList<Double> getTransitionProbabilities(int x, HashMap<Node, Boolean> visitedNodes) throws NonExistentNodeException {
         // Create space for output
         ArrayList<Double> transitionProbabilities = new ArrayList<>(acos.getGraph().getNumNodes());
         // Populate with 0s
@@ -201,7 +201,7 @@ public class Ant implements Callable<Ant> {
      * @return @code{denominator} The denominator given these parameters.
      * @throws NonExistentNodeException Thrown if a node ID is referenced that does not exist.
      */
-    private double getTPDenominator(ArrayList<Double> transitionProbabilities, int x, HashMap<TSPNode, Boolean> visitedCities) throws NonExistentNodeException {
+    private double getTPDenominator(ArrayList<Double> transitionProbabilities, int x, HashMap<Node, Boolean> visitedCities) throws NonExistentNodeException {
         double denominator = 0.0;
         for (int y = 0; y < acos.getGraph().getNumNodes(); y++) { // Loop through the nodes
             if (!visitedCities.get(acos.getGraph().getNodeContainer().getNodeByID(y))) { // If the node is not visited
@@ -233,19 +233,19 @@ public class Ant implements Callable<Ant> {
     }
 
     /**
-     * Creates a @code{TSPEdgeContainer} object given an arraylist of nodes.
-     * @param routeNodes The ArrayList of nodes from which to construct a @code{TSPEdgeContainer}.
-     * @return @code{edgeContainer} The new @code{TSPEdgeContainer}.
-     * @throws EdgeSuperimpositionException Thrown if the @code{TSPEdgeContainer} object finds edges superimposed
+     * Creates a @code{EdgeContainer} object given an arraylist of nodes.
+     * @param routeNodes The ArrayList of nodes from which to construct a @code{EdgeContainer}.
+     * @return @code{edgeContainer} The new @code{EdgeContainer}.
+     * @throws EdgeSuperimpositionException Thrown if the @code{EdgeContainer} object finds edges superimposed
      * in the input set.
      */
-    private TSPEdgeContainer createEdgeContainerFromNodeSet(ArrayList<TSPNode> routeNodes) throws
+    private EdgeContainer createEdgeContainerFromNodeSet(ArrayList<Node> routeNodes) throws
                                                                 EdgeSuperimpositionException, EdgeToSelfException {
-        TSPEdgeContainer edgeContainer = new TSPEdgeContainer();
+        EdgeContainer edgeContainer = new EdgeContainer();
         for (int idx = 0; idx < routeNodes.size(); idx++) {
-            TSPNode startNode = routeNodes.get(idx);
-            TSPNode endNode = routeNodes.get((idx + 1) % routeNodes.size());
-            edgeContainer.add(new TSPEdge(startNode, endNode));
+            Node startNode = routeNodes.get(idx);
+            Node endNode = routeNodes.get((idx + 1) % routeNodes.size());
+            edgeContainer.add(new Edge(startNode, endNode));
         }
         return edgeContainer;
     }
@@ -254,7 +254,7 @@ public class Ant implements Callable<Ant> {
      * Returns the route the Ant took.
      * @return route The value of the @code{route} attribute.
      */
-    public TSPEdgeContainer getRoute() {
+    public EdgeContainer getRoute() {
         return route;
     }
 
