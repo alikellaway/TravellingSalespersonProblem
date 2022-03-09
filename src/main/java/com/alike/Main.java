@@ -1,7 +1,7 @@
 package com.alike;
 
 import com.alike.customexceptions.*;
-import com.alike.dtspgraphsystem.DTSPGraph;
+import com.alike.dtspgraphsystem.DynamicGraph;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solvers.*;
 import com.alike.tspgraphsystem.GraphGenerator;
@@ -52,7 +52,7 @@ public class Main extends Application {
     private static StaticGraph hfcsGraph;
     private static StaticGraph csGraph;
     private static StaticGraph polygonGraph;
-    private static DTSPGraph dnnsGraph;
+    private static DynamicGraph dnnsGraph;
 
     private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
 
@@ -66,7 +66,7 @@ public class Main extends Application {
         hfcsGraph = GraphGenerator.generateRandomGraph(50, false);
         csGraph = GraphGenerator.generateRandomGraph(100, false);
         polygonGraph = GraphGenerator.generateIrregularPolygonalGraph(9, 150, 200);
-        dnnsGraph = new DTSPGraph(nnsGraph, false, true);
+        dnnsGraph = new DynamicGraph(nnsGraph, false, true);
 
 
         // Point the mover to the appropriate graph
@@ -147,7 +147,7 @@ public class Main extends Application {
 //            }
 //        });
 //        test.start();
-//        DTSPGraph dg = new DTSPGraph(acosGraph, true, true);
+//        DynamicGraph dg = new DynamicGraph(acosGraph, true, true);
 //        dg.move();
         launch(args);
     }

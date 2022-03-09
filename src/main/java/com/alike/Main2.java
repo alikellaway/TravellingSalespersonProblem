@@ -17,7 +17,7 @@ public class Main2 {
 //        TestSuiteResult tsr = suite.runTest();
 //        System.out.println(tsr.getTestsFailed() + " " + tsr.getTestsPassed());
 
-//        DTSPGraph dG = new DTSPGraph(GraphGenerator.generateRandomGraph(5, false),true, true);
+//        DynamicGraph dG = new DynamicGraph(GraphGenerator.generateRandomGraph(5, false),true, true);
 //        Node n1 = new Node(0,0);
 //        Node n2 = new Node(5,5);
 //

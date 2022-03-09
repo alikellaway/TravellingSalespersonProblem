@@ -8,7 +8,7 @@ import com.alike.tspgraphsystem.StaticGraph;
  * Class combines the @code{StaticGraph} and @code{CoordinateMover} classes to create a dynamic travelling salesperson
  * problem graph where the nodes move.
  */
-public class DTSPGraph implements Graph {
+public class DynamicGraph implements Graph {
     /**
      * The mover that will be moving the nodes on the graph around.
      */
@@ -68,7 +68,7 @@ public class DTSPGraph implements Graph {
      * @param stepRandomly Whether the nodes are moved using the stepRandomly method in the coordinate mover.
      * @param stepByVelocity Whether the nodes are moved using the stepByVelocity method in the coordinate mover.
      */
-    public DTSPGraph(StaticGraph graph, boolean stepRandomly, boolean stepByVelocity) {
+    public DynamicGraph(StaticGraph graph, boolean stepRandomly, boolean stepByVelocity) {
         cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), DEF_MOVEMENT_SPEED);
         setEdgeStateManager(new EdgeStateManager());
         this.graph = graph;

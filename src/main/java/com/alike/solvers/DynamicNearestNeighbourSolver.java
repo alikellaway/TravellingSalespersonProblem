@@ -3,7 +3,7 @@ package com.alike.solvers;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NoClosestNodeException;
-import com.alike.dtspgraphsystem.DTSPGraph;
+import com.alike.dtspgraphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.tspgraphsystem.*;
 
@@ -13,7 +13,7 @@ public class DynamicNearestNeighbourSolver {
     /**
      * The dgraph this solver will solve.
      */
-    private DTSPGraph graph;
+    private DynamicGraph graph;
 
     private volatile boolean running;
 
@@ -22,7 +22,7 @@ public class DynamicNearestNeighbourSolver {
      */
     private Node currentNode;
 
-    public DynamicNearestNeighbourSolver(DTSPGraph graph) {
+    public DynamicNearestNeighbourSolver(DynamicGraph graph) {
         setGraph(graph);
     }
 
@@ -58,7 +58,7 @@ public class DynamicNearestNeighbourSolver {
 
 
     /**
-     * Returns the value of the @code{graph} attribute of the DTSPGraph stored in this classes @code{graph} attribute.
+     * Returns the value of the @code{graph} attribute of the DynamicGraph stored in this classes @code{graph} attribute.
      * @return graph The value of the @code{graph} attribute within the @code{graph} attribute of this class.
      */
     public StaticGraph getGraph() {
@@ -69,7 +69,7 @@ public class DynamicNearestNeighbourSolver {
      * Sets the value of the @code{graph} attribute.
      * @param graph The new value to assign the @code{graph} attribute.
      */
-    public void setGraph(DTSPGraph graph) {
+    public void setGraph(DynamicGraph graph) {
         this.graph = graph;
     }
 
