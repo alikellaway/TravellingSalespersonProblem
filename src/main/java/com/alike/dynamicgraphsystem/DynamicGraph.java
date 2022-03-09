@@ -55,7 +55,7 @@ public class DynamicGraph implements Graph {
     /**
      * The default value for the @code{delayPerStep} attribute.
      */
-    private static final int DEF_DELAY_PER_STEP = 100;
+    private static final int DEF_DELAY_PER_STEP = 10;
 
     /**
      * Boolean describing whether this cm is able to listen to move and pause commands.
@@ -102,7 +102,7 @@ public class DynamicGraph implements Graph {
         setAwake(true);
         this.moving = false;
         Thread thread = new Thread(() -> {
-            while (awake) {
+            while (this.awake) {
                 while (moving) {
                     if (steppingRandomly) {
                         cm.stepRandomly();
@@ -121,6 +121,7 @@ public class DynamicGraph implements Graph {
      * Sets the value of the @code{awake} attribute to false which kills the mover thread.
      */
     public void kill() {
+        stop();
         this.awake = false;
     }
 

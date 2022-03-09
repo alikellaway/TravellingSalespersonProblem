@@ -19,12 +19,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 1024;
+    public static final int COORDINATE_MAX_WIDTH = 900;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 1024;
+    public static final int COORDINATE_MAX_HEIGHT = 900;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -55,12 +55,13 @@ public class Main extends Application {
     private static DynamicGraph dnnsGraph;
 
     private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
+    private static DynamicNearestNeighbourSolver dnns;
 
     private static StaticGraph currentG = new StaticGraph(); // This graph was used for cylcing through node sets.
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException, RadiusExceedingBoundaryException {
         // Generate some graphs for testing and general use
-        nnsGraph = GraphGenerator.generateRandomGraph(/*500*/ 5, false);
+        nnsGraph = GraphGenerator.generateRandomGraph(10, false);
         bsGraph = GraphGenerator.generateRandomGraph(8, false);
         acosGraph = GraphGenerator.generateRandomGraph(600, false);
         hfcsGraph = GraphGenerator.generateRandomGraph(50, false);
@@ -118,10 +119,9 @@ public class Main extends Application {
 //        csT.start();
         // DNearset Neighbour Solver
         Thread dnnsT = new Thread(() -> {
-            DynamicNearestNeighbourSolver dnns = new DynamicNearestNeighbourSolver(dnnsGraph);
-            dnns.runSolution(0);
+            dnns = new DynamicNearestNeighbourSolver(dnnsGraph);
+            dnns.runSolution(100);
         });
-        dnnsGraph.move();
         dnnsT.start();
         // Populate our graph file with the test graphs incl. random graphs, polygon graphs and irregular polygon graphs
 //        Thread test = new Thread(() -> {
@@ -150,6 +150,9 @@ public class Main extends Application {
 //        DynamicGraph dg = new DynamicGraph(acosGraph, true, true);
 //        dg.move();
         launch(args);
+        dnns.kill();
+        dnnsGraph.kill();
+
     }
 
     @Override
