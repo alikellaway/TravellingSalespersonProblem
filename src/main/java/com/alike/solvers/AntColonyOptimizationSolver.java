@@ -24,7 +24,7 @@ public class AntColonyOptimizationSolver implements Solver {
      */
     private StaticGraph graph;
 
-    private static final double PROCESSING_CYCLE_PROBABILITY = 0.8;
+    public static final double PROCESSING_CYCLE_PROBABILITY = 0.8;
 
     /**
      * An edge container in which the shortest found route is stored.
@@ -66,6 +66,26 @@ public class AntColonyOptimizationSolver implements Solver {
      * The number of Ants the solver will simulate.
      */
     private int  numAnts = 900;
+
+    /**
+     * Parameter used to adjust the amount of pheromone deposited per traversal (0<Q<1).
+     */
+    private double q = 0.0005; // tsp = 0.0005 dtsp = 0.0004
+
+    /**
+     * A parameter used for adjusting the amount of pheromone evaporation (0<RHO<1).
+     */
+    private double rh0 = 0.2; // tsp = 0.2 dtsp = 0.9
+
+    /**
+     * A parameter used for controlling the influence of the pheremone trail (ALPHA>=0).
+     */
+    private double alpha = 0.01; // tsp = 0.01 dtsp = 0.02
+
+    /**
+     * A parameter used for controlling the influence of distance between origin and destination (BETA>=1).
+     */
+    private double beta = 9.5; // tsp = 9.5 dtsp = 11.5
 
     /**
      * Constructs a new Solver object which can run an ant colony optimisation solution implementation to find a route
@@ -113,11 +133,12 @@ public class AntColonyOptimizationSolver implements Solver {
         return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
     }
 
+
     /**
      * While Ants are still traversing, this method will check if they are completed and gets the result to see if it
      * is smaller than the current shortest route.
      */
-    private void processAnts() {
+    public void processAnts() {
         while (activeAnts > 0) {
             try {
                 Ant ant = executorCompletionService.take().get();
@@ -175,6 +196,18 @@ public class AntColonyOptimizationSolver implements Solver {
         this.executorCompletionService = executorCompletionService;
     }
 
+    public ExecutorCompletionService<Ant> getExecutorCompletionService() {
+        return executorCompletionService;
+    }
+
+    public int getActiveAnts() {
+        return activeAnts;
+    }
+
+    public void setActiveAnts(int activeAnts) {
+        this.activeAnts = activeAnts;
+    }
+
     /**
      * Fills the distance matrix with the distance of each node to each other node.
      */
@@ -214,6 +247,14 @@ public class AntColonyOptimizationSolver implements Solver {
     }
 
     /**
+     * Sets the value of the @code{distanceMatrix} attribute to a new value.
+     * @param newMatrix The new value to assign to the @code{distanceMatrix} attribute.
+     */
+    public void setDistanceMatrix(double[][] newMatrix) {
+        this.distanceMatrix = newMatrix;
+    }
+
+    /**
      * Returns the value of the @code{pheromoneLevelMatrix} attribute.
      * @return pheromoneLevelMatrix The value of the @code{pheromoneLevelMatrix} attribute.
      */
@@ -243,5 +284,41 @@ public class AntColonyOptimizationSolver implements Solver {
      */
     public void setNumAnts(int numAnts) {
         this.numAnts = numAnts;
+    }
+
+    public int getNumAnts() {
+        return this.numAnts;
+    }
+
+    public double getQ() {
+        return q;
+    }
+
+    public void setQ(double q) {
+        this.q = q;
+    }
+
+    public double getRh0() {
+        return rh0;
+    }
+
+    public void setRh0(double rh0) {
+        this.rh0 = rh0;
+    }
+
+    public double getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
+    }
+
+    public double getBeta() {
+        return beta;
+    }
+
+    public void setBeta(double beta) {
+        this.beta = beta;
     }
 }

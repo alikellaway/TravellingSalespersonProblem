@@ -53,9 +53,11 @@ public class Main extends Application {
     private static StaticGraph csGraph;
     private static StaticGraph polygonGraph;
     private static DynamicGraph dnnsGraph;
+    private static DynamicGraph dacosGraph;
 
     private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
     private static DynamicNearestNeighbourSolver dnns;
+    private static DynamicAntColonyOptimisationSolver dacos;
 
     private static StaticGraph currentG = new StaticGraph(); // This graph was used for cylcing through node sets.
 
@@ -68,6 +70,8 @@ public class Main extends Application {
         csGraph = GraphGenerator.generateRandomGraph(100, false);
         polygonGraph = GraphGenerator.generateIrregularPolygonalGraph(9, 150, 200);
         dnnsGraph = new DynamicGraph(nnsGraph, false, true);
+        dacosGraph = new DynamicGraph(GraphGenerator.generateRandomGraph(50, false)
+                , false, true);
 
 
         // Point the mover to the appropriate graph
@@ -118,11 +122,17 @@ public class Main extends Application {
 //        });
 //        csT.start();
         // DNearset Neighbour Solver
-        Thread dnnsT = new Thread(() -> {
-            dnns = new DynamicNearestNeighbourSolver(dnnsGraph);
-            dnns.runSolution(100);
+//        Thread dnnsT = new Thread(() -> {
+//            dnns = new DynamicNearestNeighbourSolver(dnnsGraph);
+//            dnns.runSolution(100);
+//        });
+//        dnnsT.start();
+        // DAcos Solver
+        Thread dacosT = new Thread(() -> {
+            dacos = new DynamicAntColonyOptimisationSolver(dacosGraph);
+            dacos.runSolution(10);
         });
-        dnnsT.start();
+        dacosT.start();
         // Populate our graph file with the test graphs incl. random graphs, polygon graphs and irregular polygon graphs
 //        Thread test = new Thread(() -> {
 //            try {
@@ -150,9 +160,8 @@ public class Main extends Application {
 //        DynamicGraph dg = new DynamicGraph(acosGraph, true, true);
 //        dg.move();
         launch(args);
-        dnns.kill();
-        dnnsGraph.kill();
-
+        dacos.kill();
+        dacosGraph.kill();
     }
 
     @Override
@@ -170,7 +179,7 @@ public class Main extends Application {
 //        RepeatedFunctions.sleep(10);
 //        }
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, dnnsGraph.getUnderlyingGraph(),1, false);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, dacosGraph.getUnderlyingGraph(),1, false);
 
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);

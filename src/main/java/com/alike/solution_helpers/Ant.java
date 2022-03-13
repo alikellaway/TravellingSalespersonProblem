@@ -49,25 +49,7 @@ public class Ant implements Callable<Ant> {
      */
     private static int numNodes;
 
-    /**
-     * Parameter used to adjust the amount of pheromone deposited per traversal (0<Q<1).
-     */
-    private static final double Q = 0.0005; // tsp = 0.0005 dtsp = 0.0004
 
-    /**
-     * A parameter used for adjusting the amount of pheromone evaporation (0<RHO<1).
-     */
-    private static final double RHO = 0.2; // tsp = 0.2 dtsp = 0.9
-
-    /**
-     * A parameter used for controlling the influence of the pheremone trail (ALPHA>=0).
-     */
-    private static final double ALPHA = 0.01; // tsp = 0.01 dtsp = 0.02
-
-    /**
-     * A parameter used for controlling the influence of distance between origin and destination (BETA>=1).
-     */
-    private static final double BETA = 9.5; // tsp = 9.5 dtsp = 11.5
 
     /**
      * Constructor initialises a new ant.
@@ -139,7 +121,7 @@ public class Ant implements Callable<Ant> {
         boolean flag = false;
         while (!flag) {
             double currentPheremoneLevel = acos.getPheromoneLevelMatrix()[x][y].doubleValue();
-            double updatedPheremoneLevel = (1 - RHO) * currentPheremoneLevel + Q/distance;
+            double updatedPheremoneLevel = (1 - acos.getRh0()) * currentPheremoneLevel + acos.getQ()/distance;
             if (updatedPheremoneLevel < 0) {
                 flag = acos.getPheromoneLevelMatrix()[x][y].compareAndSet(0);
             } else {
@@ -227,7 +209,7 @@ public class Ant implements Callable<Ant> {
         double pheromoneLevel = acos.getPheromoneLevelMatrix()[y][x].doubleValue();
         if (pheromoneLevel != 0.0) { // If pheromone level not 0
             // Recalculate pheromone level using the formula.
-            numerator = Math.pow(pheromoneLevel, ALPHA) * Math.pow(1/acos.getDistanceMatrix()[x][y], BETA);
+            numerator = Math.pow(pheromoneLevel, acos.getAlpha()) * Math.pow(1/acos.getDistanceMatrix()[x][y], acos.getBeta());
         }
         return numerator;
     }
