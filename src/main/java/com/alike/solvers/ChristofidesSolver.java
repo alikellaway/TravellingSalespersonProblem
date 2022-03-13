@@ -19,6 +19,10 @@ public class ChristofidesSolver implements Solver {
      */
     private StaticGraph graph;
 
+    /**
+     * Constructs a new @code{ChristofideSolver} object.
+     * @param graph The graph which this solver will solve.
+     */
     public ChristofidesSolver(StaticGraph graph) {
         setGraph(graph);
     }

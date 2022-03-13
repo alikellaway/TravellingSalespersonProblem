@@ -70,8 +70,8 @@ public class Main extends Application {
         csGraph = GraphGenerator.generateRandomGraph(100, false);
         polygonGraph = GraphGenerator.generateIrregularPolygonalGraph(9, 150, 200);
         dnnsGraph = new DynamicGraph(nnsGraph, false, true);
-        dacosGraph = new DynamicGraph(GraphGenerator.generateRandomGraph(50, false)
-                , false, true);
+        dacosGraph = new DynamicGraph(GraphGenerator.generateRandomGraph(10, false)
+                , true, true);
 
 
         // Point the mover to the appropriate graph
