@@ -5,6 +5,10 @@ package com.alike.customexceptions;
  * @author alike
  */
 public class NodeSuperimpositionException extends SuperimpositionException {
+    /**
+     * Constructs a new @code{NodeSuperimpositionException} object.
+     * @param message The message to be displayed when the stack trace is printed.
+     */
     public NodeSuperimpositionException(String message) {
         super(message);
     }

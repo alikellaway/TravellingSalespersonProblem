@@ -5,6 +5,10 @@ package com.alike.customexceptions;
  * @author alike
  */
 public class FractalDensityException extends Exception {
+    /**
+     * Constructs a new @code{FractalDensityException} object.
+     * @param msg The message to be displayed when the stack trace is printed.
+     */
     public FractalDensityException(String msg) {
         super(msg);
     }

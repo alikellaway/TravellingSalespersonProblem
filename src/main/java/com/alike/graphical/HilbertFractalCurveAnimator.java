@@ -168,7 +168,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
 
     /**
      * Returns the value of the @code{orderWeAreDrawing} attribute.
-     * @return @code{orderWeAreDrawing} The value of the @code{orderWeAreDrawing} attribute.
+     * @return orderWeAreDrawing The value of the @code{orderWeAreDrawing} attribute.
      */
     public int getOrderWeAreDrawing() {
         return this.orderWeAreDrawing;

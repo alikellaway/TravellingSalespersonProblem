@@ -46,6 +46,9 @@ public class NearestNeighbourSolver implements Solver {
         setGraph(graph);
     }
 
+    /**
+     * Constructs a new empty @code{NearestNeighbourSolver} object.
+     */
     public NearestNeighbourSolver() {
     }
 

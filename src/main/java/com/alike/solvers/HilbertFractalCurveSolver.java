@@ -81,10 +81,10 @@ public class HilbertFractalCurveSolver implements Solver {
             long solutionStartTime = System.nanoTime();
             try {// Try to construct the route.
                 constructRoute(delayPerStep);
-            } catch (EdgeSuperimpositionException | InterruptedException | HilbertCurveUnconstructedException e) {
+            } catch (HilbertCurveUnconstructedException e) {
                 // Construct route method through some error.
                 e.printStackTrace();
-            } catch (NodeMissedException | EdgeToSelfException e) {// On route failure, try again with higher order.
+            } catch (NodeMissedException e) {// On route failure, try again with higher order.
 //                order++;
 //                if (order == 11) { // Causes memory error
 
@@ -110,25 +110,28 @@ public class HilbertFractalCurveSolver implements Solver {
     /**
      * Constructs an edge container for the @code{graph} using the list output by @code{getNodesOrdered}.
      * @param delayPerStep The time wait after each edge addition (so we can see it draw if we want).
-     * @throws EdgeSuperimpositionException Thrown if an attempt is made to create an edge that already exists.
+     * @throws HilbertCurveUnconstructedException Thrown if this is run but no hilbert map has been constructed.
      * @throws NodeMissedException Thrown if a node is missed using the current hilbert curve as the map.
-     * @throws InterruptedException Thrown if the thread is interrupted.
+
      */
-    public void constructRoute(int delayPerStep)
-            throws EdgeSuperimpositionException, NodeMissedException, InterruptedException, EdgeToSelfException, HilbertCurveUnconstructedException {
-        ArrayList<Node> nodesOrdered = getNodesOrdered();
-        EdgeContainer container = new EdgeContainer();
-        graph.setEdgeContainer(container); // We do this here, so we can see the path as its being constructed
-        for (int i = 0; i < nodesOrdered.size(); i++) {
-            // Create the edge and add it
-            container.add(new Edge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
-            RepeatedFunctions.sleep(delayPerStep);
+    public void constructRoute(int delayPerStep) throws NodeMissedException, HilbertCurveUnconstructedException {
+        try {
+            ArrayList<Node> nodesOrdered = getNodesOrdered();
+            EdgeContainer container = new EdgeContainer();
+            graph.setEdgeContainer(container); // We do this here, so we can see the path as its being constructed
+            for (int i = 0; i < nodesOrdered.size(); i++) {
+                // Create the edge and add it
+                container.add(new Edge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
+                RepeatedFunctions.sleep(delayPerStep);
+            }
+        } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * Returns the nodes in an order using the current hilbert curve to map the nodes into an order.
-     * @return @code{nodesOrdered} A list containing the nodes in the order the hilbert curve hits them.
+     * @return nodesOrdered A list containing the nodes in the order the hilbert curve hits them.
      * @throws NodeMissedException Thrown if the current hilbert curve misses nodes when used as the map.
      */
     public ArrayList<Node> getNodesOrdered() throws NodeMissedException, HilbertCurveUnconstructedException {
@@ -210,7 +213,7 @@ public class HilbertFractalCurveSolver implements Solver {
 
     /**
      * Returns the value of the @code{curveCornerCoordinates} attribute.
-     * @return @code{curveCornerCoordinates} The value of the @code{curveCornerCoordinates} attribute.
+     * @return curveCornerCoordinates The value of the @code{curveCornerCoordinates} attribute.
      */
     public ArrayList<Coordinate> getCornerCoordinates() {
         return curveCornerCoordinates;

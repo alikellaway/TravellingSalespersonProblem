@@ -62,7 +62,7 @@ public class Permuter<T> {
 
     /**
      * Returns the next permutation in the list of permutations.
-     * @return @code{nextPerm} The next permutation in the list of permutations.
+     * @return nextPerm The next permutation in the list of permutations.
      * @throws PermutationExhaustionException Thrown if we exhaust the permutations in the list.
      */
     public List<T> getNextPermutation() throws PermutationExhaustionException {
@@ -97,6 +97,10 @@ public class Permuter<T> {
         }
     }
 
+    /**
+     * Returns the value of the @code{unseenPermutations} attribute.
+     * @return unseenPermutations The value of the @code{unseenPermutations} attribute.
+     */
     public boolean hasUnseenPermutations() {
         return this.unseenPermutations;
     }

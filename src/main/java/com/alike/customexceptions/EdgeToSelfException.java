@@ -5,6 +5,10 @@ package com.alike.customexceptions;
  * @author alike
  */
 public class EdgeToSelfException extends Exception {
+    /**
+     * Constructs a new @code{EdgeToSelfException} object.
+     * @param msg The message to be displayed when the stack trace is printed.
+     */
     public EdgeToSelfException(String msg) {
         super(msg);
     }

@@ -5,6 +5,10 @@ package com.alike.customexceptions;
  * @author alike
  */
 public class PermutationExhaustionException extends Exception {
+    /**
+     * Constructs a new @code{PermutationExhaustionException} object.
+     * @param msg The message to be displayed when the stack trace is printed.
+     */
     public PermutationExhaustionException(String msg) {
         super(msg);
     }

@@ -29,7 +29,7 @@ public class GraphGenerator {
     /**
      * Uses parametric equations to retrieve points on a circle to generate regular polygonal graphs.
      * @param numCorners The number of corners our regular polygon will have.
-     * @return @code{StaticGraph} A new graph containing nodes arranged in the shape of a polygon.
+     * @return StaticGraph A new graph containing nodes arranged in the shape of a polygon.
      * @throws InvalidGraphException Thrown if the @code{numCorners} parameter is less than 3.
      * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose another node.
      */

@@ -45,6 +45,7 @@ public class Solution {
      * Constructs a new test result object.
      * @param g The value to assign the @code{solutionGraph} attribute.
      * @param length The value to assign the @code{length} attribute.
+     * @param executionTime The time taken for the solution to be found.
      */
     public Solution(Graph g, Double length, Long executionTime) {
         setSolutionGraph(g);
@@ -54,7 +55,12 @@ public class Solution {
     }
 
 
-
+    /**
+     * Creates a solution object for failed test results. TODO: Make a new object called failed solution that has an interface?
+     * @param g The graph on which the solution was attempted.
+     * @param e The exception that caused the failure.
+     * @return nS The new solution object containing the information about the failed test result.
+     */
     public static Solution createFailedSolution(Graph g, Exception e) {
         Solution nS = new Solution(g, null, 0L);
         nS.setFailed();

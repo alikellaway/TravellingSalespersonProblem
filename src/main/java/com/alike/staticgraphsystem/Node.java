@@ -159,6 +159,7 @@ public class Node {
     /**
      * Finds the closest node to this node in the input array of nodes.
      * @param otherNodes The input array of node from which we will find a closest node.
+     * @param unvisited Whether the node found should be unvisited or not.
      * @return closestFoundNode The closest found node to this node.
      * @throws NoClosestNodeException Thrown if a closest node could not be found.
      */

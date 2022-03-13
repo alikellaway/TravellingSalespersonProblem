@@ -42,6 +42,9 @@ public class BruteForceSolver implements Solver {
         setGraph(graph);
     }
 
+    /**
+     * Constructs an empty @code{BruteForceSolver} object.
+     */
     public BruteForceSolver() {
     }
 

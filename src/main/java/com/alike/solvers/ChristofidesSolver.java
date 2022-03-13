@@ -171,21 +171,25 @@ public class ChristofidesSolver implements Solver {
     /**
      * Finds a perfect matching using a greedy algorithm given a starting node (only finds perfect matching if input
      * node set has an even number of nodes). Calculates starting from the node at the startingIdx in the graph's node
-     * set.
-     * @param graph The graph on which to find a perfect matching.
-     * @param startingIdx The index at which
-     * @return matching A TSPEdgeContianer containing the matching that arose from this starting index.
+     * set. Note: This creates a perfect but non-minimal matching!
+     * @param graph The graph for which to find a perfect matching.
+     * @param startingIdx The index from which to start the perfect matching.
+     * @return matching An @code{EdgeContainer} containing the edges of the perfect matching.
      */
-    public EdgeContainer findPerfectMatching(StaticGraph graph, int startingIdx) throws EdgeToSelfException, NoClosestNodeException, EdgeSuperimpositionException {
+    public EdgeContainer findPerfectMatching(StaticGraph graph, int startingIdx) {
         EdgeContainer matching = new EdgeContainer();
         ArrayList<Node> unmatched = new ArrayList<>(graph.getNodeContainer().getNodeSet());
-        // For each node, find its closest node and create a pair out of them, then remove them from the unmatched
-        for (int i = 0; i < unmatched.size(); i++) {
-            Node currNode = unmatched.get((i + startingIdx) % unmatched.size());
-            Node closestNode = currNode.getClosestNode(unmatched, false);
-            matching.add(new Edge(currNode, closestNode));
-            unmatched.remove(currNode);
-            unmatched.remove(closestNode);
+        try {
+            // For each node, find its closest node and create a pair out of them, then remove them from the unmatched
+            for (int i = 0; i < unmatched.size(); i++) {
+                Node currNode = unmatched.get((i + startingIdx) % unmatched.size());
+                Node closestNode = currNode.getClosestNode(unmatched, false);
+                matching.add(new Edge(currNode, closestNode));
+                unmatched.remove(currNode);
+                unmatched.remove(closestNode);
+            }
+        } catch (EdgeToSelfException | NoClosestNodeException | EdgeSuperimpositionException e) {
+            e.printStackTrace();
         }
         return matching;
     }

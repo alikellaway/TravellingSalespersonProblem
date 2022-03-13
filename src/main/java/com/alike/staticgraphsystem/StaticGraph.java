@@ -54,7 +54,7 @@ public class StaticGraph implements Graph {
 
     /**
      * Returns the @code{nodeContainer} attribute of the StaticGraph object.
-     * @return @code{nodeContainer} The @code{nodeContainer} attribute of the StaticGraph object.
+     * @return nodeContainer The @code{nodeContainer} attribute of the StaticGraph object.
      */
     public NodeContainer getNodeContainer() {
         return nodeContainer;
@@ -70,7 +70,7 @@ public class StaticGraph implements Graph {
 
     /**
      * Returns the @code{edgeContainer} attribute of the StaticGraph object.
-     * @return @code{edgeContainer} The value of the @code{edgeContainer} attribute.
+     * @return edgeContainer The value of the @code{edgeContainer} attribute.
      */
     public EdgeContainer getEdgeContainer() {
         return edgeContainer;
@@ -132,11 +132,19 @@ public class StaticGraph implements Graph {
         }
     }
 
-    public StaticGraph copy() throws NodeSuperimpositionException, EdgeSuperimpositionException {
+    /**
+     * Copies all the information in this graph object and outputs a new graph object with equal data.s
+     * @return graphCopy The copy of this graph.
+     */
+    public StaticGraph copy() {
         StaticGraph graphCopy = new StaticGraph();
         ArrayList<Node> nodesCopy = new ArrayList<>(getNodeContainer().getNodeSet());
-        graphCopy.setNodeContainer(new NodeContainer(nodesCopy));
-        graphCopy.setEdgeContainer(getEdgeContainer().copy());
+        try {
+            graphCopy.setNodeContainer(new NodeContainer(nodesCopy));
+            graphCopy.setEdgeContainer(getEdgeContainer().copy());
+        } catch (SuperimpositionException e) {
+            e.printStackTrace();
+        }
         return graphCopy;
     }
 
