@@ -28,7 +28,9 @@ public class TestSuite {
     private Solver solver;
 
     /**
-     * Need to keep a reference to the current graph incase a test was failed while we were trying to solve it.
+     * Need to keep a reference to the current graph in-case a test was failed while we were trying to solve it.
+     * Note: we don't need to keep this for passed tests, since solutions output by solvers already have a reference to
+     * the graph they were solved on.
      */
     private StaticGraph currentGraph = null;
 
@@ -50,9 +52,7 @@ public class TestSuite {
      * @return testSuiteResult A new @code{TestSuiteResult} object containing the information about the test.
      */
     public TestSuiteResult runTest() {
-        int testsPassed = 0;
-        int testsFailed = 0;
-        ArrayList<Solution> solutions = new ArrayList<>();
+        ArrayList<TestOutput> testResults = new ArrayList<>();
         while (reader.hasRemainingLines()) {
             testNumber++;
             try {
@@ -61,39 +61,24 @@ public class TestSuite {
                 StaticGraph graph = new StaticGraph(nC);
                 currentGraph = graph;
                 solver.setGraph(graph);
-                // Run the solution on this graph.
+                // Try to run the solution on this graph and output TestPass object.
                 Solution s = solver.runSolution(0);
-                s.setTestNumber(testNumber);
-                solutions.add(s);
-                currentGraph = null;
-                if (!s.testFailed()) {
-                    testsPassed++;
-                    System.out.println(s);
-                } else {
-                    testsFailed++;
-                    System.out.println(s);
-                }
-
+                testResults.add(new TestPass(s, testNumber));
+                currentGraph = null; // Reset the graph to null (in the case we are running this object b2b).
             } catch (IOException | NodeSuperimpositionException e) { // Thrown during file reading or graph creation.
                 e.printStackTrace();
-            } catch (NullPointerException e) { // Get next will return null as its last argument
-                if (solutions.isEmpty()) { // If we have no solutions then something went wrong.
-                    try {
-                        throw new CoordinateListException("Test could not find coordinate lists to test with.");
-                    } catch (CoordinateListException ex) {
-                        e.printStackTrace();
-                    }
+            } catch (NullPointerException e) { // reader.getNext() returns null at end of file
+                if (testResults.isEmpty()) { // If we have no test results then something went wrong.
+                    new CoordinateListException("Test could not find coordinate lists to test with.")
+                            .printStackTrace();
                 } // Otherwise, nothing went wrong - we can ignore the null pointer.
-            } catch (Exception e) {
-                Solution s = Solution.createFailedSolution(currentGraph, e);
-                s.setTestNumber(testNumber);
-                solutions.add(s);
-                testsFailed++;
-                System.out.println(s);
-//                e.printStackTrace();
+            } catch (Exception e) { // Test failed due to an exception that was none of the above.
+                testResults.add(new TestFail(e, testNumber));
+            } catch (Error e) { // Test failed due to an error, e.g., ran out of memory.
+                testResults.add(new TestFail(e, testNumber));
             }
         }
-        return new TestSuiteResult(solutions, testsPassed, testsFailed);
+        return new TestSuiteResult(testResults);
     }
 
     /**

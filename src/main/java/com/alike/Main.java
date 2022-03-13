@@ -70,20 +70,19 @@ public class Main extends Application {
         csGraph = GraphGenerator.generateRandomGraph(100, false);
         polygonGraph = GraphGenerator.generateIrregularPolygonalGraph(9, 150, 200);
         dnnsGraph = new DynamicGraph(nnsGraph, false, true);
-        dacosGraph = new DynamicGraph(GraphGenerator.generateRandomGraph(10, false)
-                , true, true);
-
-
-        // Point the mover to the appropriate graph
+        dacosGraph = new DynamicGraph(GraphGenerator.generateRandomGraph(10, false),
+                true, true);
 
         /* Here is a list of example use cases of the solver methods. */
-//         Nearest neighbour solver
+
+         /* Nearest neighbour solver. */
 //        Thread nnsT = new Thread(() -> {
 //            NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
 //            nns.runSolution(100);
 //        });
 //        nnsT.start();
-        // Brute force solver
+
+        /* Brute force solver. */
 //        Thread bsT = new Thread(() -> {
 //           try {
 //               BruteForceSolver bs = new BruteForceSolver(bsGraph);
@@ -96,7 +95,8 @@ public class Main extends Application {
 //           }
 //        });
 //        bsT.start();
-        // Ant Colony Optimisation Solver
+
+        /* Ant Colony Optimisation Solver. */
 //        Thread acosT = new Thread(() -> {
 //            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
 //            Solution solOutput = acos.runSolution(0);
@@ -105,7 +105,7 @@ public class Main extends Application {
 //        });
 //        acosT.start();
 
-        // Hilbert fractal curve solver
+        /* Hilbert fractal curve solver. */
 //        Thread hfcsT = new Thread(() -> {
 //            try {
 //                hfcs = new HilbertFractalCurveSolver(hfcsGraph);
@@ -115,31 +115,35 @@ public class Main extends Application {
 //            }
 //        });
 //        hfcsT.start();
-        // Christofide's algorithm solver
+
+        /* Christofide's algorithm solver. */
 //        Thread csT = new Thread(() -> {
 //            ChristofidesSolver cs = new ChristofidesSolver(csGraph);
 //            cs.runSolution(0);
 //        });
 //        csT.start();
-        // DNearset Neighbour Solver
+
+        /* Dynamic Nearest Neighbour Solver. */
 //        Thread dnnsT = new Thread(() -> {
 //            dnns = new DynamicNearestNeighbourSolver(dnnsGraph);
 //            dnns.runSolution(100);
 //        });
 //        dnnsT.start();
-        // DAcos Solver
+
+        /* Dynamic Ant Colony Optimisation Solver. */
         Thread dacosT = new Thread(() -> {
             dacos = new DynamicAntColonyOptimisationSolver(dacosGraph);
             dacos.runSolution(10);
         });
         dacosT.start();
-        // Populate our graph file with the test graphs incl. random graphs, polygon graphs and irregular polygon graphs
+
+        /* Example of using the test suite to test */
 //        Thread test = new Thread(() -> {
 //            try {
 //                // Use this code to repopulate the generated graphs file.
-////                CoordinateListFileWriter clfw = new CoordinateListFileWriter();
-////                clfw.populateFile();
-////                clfw.close();
+//                CoordinateListFileWriter clfw = new CoordinateListFileWriter();
+//                clfw.populateFile();
+//                clfw.close();
 //                CoordinateListFileReader clfr = new CoordinateListFileReader();
 //                while (true) {
 //                    RepeatedFunctions.sleep(0);
