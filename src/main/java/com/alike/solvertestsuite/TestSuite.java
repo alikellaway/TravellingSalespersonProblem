@@ -10,6 +10,11 @@ import com.alike.staticgraphsystem.StaticGraph;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Class used to test Static travelling salesman solutions against a set of pre-constructed graph problems.
+ * TestSuite.java
+ * @author alike
+ */
 public class TestSuite {
 
     /**
@@ -27,6 +32,9 @@ public class TestSuite {
      */
     private StaticGraph currentGraph = null;
 
+    /**
+     * The number of the test or test identifier.
+     */
     private int testNumber = 0;
 
     /**
@@ -37,6 +45,10 @@ public class TestSuite {
         setSolver(solver);
     }
 
+    /**
+     * Executes the test.
+     * @return testSuiteResult A new @code{TestSuiteResult} object containing the information about the test.
+     */
     public TestSuiteResult runTest() {
         int testsPassed = 0;
         int testsFailed = 0;

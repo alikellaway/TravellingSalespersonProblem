@@ -33,6 +33,10 @@ public class TestSuiteResult {
         setTestsFailed(testsFailed);
     }
 
+    /**
+     * Returns the value of the @code{testFailed} attribute.
+     * @return testsFailed The value of the @code{testsFailed} attribute.
+     */
     public int getTestsFailed() {
         return testsFailed;
     }
@@ -45,7 +49,10 @@ public class TestSuiteResult {
         this.testsFailed = testsFailed;
     }
 
-
+    /**
+     * Returns the value of the @code{testsPassed} attribute.
+     * @return testsPassed The value of the @code{testsPassed} attribute.
+     */
     public int getTestsPassed() {
         return testsPassed;
     }
@@ -58,6 +65,10 @@ public class TestSuiteResult {
         this.testsPassed = testsPassed;
     }
 
+    /**
+     * Returns the value of the @code{solutions} attribute.
+     * @return solutions The value of the @code{solutions} attribute.
+     */
     public ArrayList<Solution> getSolutions() {
         return solutions;
     }

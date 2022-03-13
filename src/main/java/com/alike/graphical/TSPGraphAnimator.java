@@ -87,9 +87,11 @@ public class TSPGraphAnimator extends AnimationTimer {
 
     /**
      * Used to initialise a TSPGraphAnimator object.
+     * @param stage The stage on which the @code{canvas} will be animated.
+     * @param canvas The canvas on which the @code{graph} will be animated.
      * @param graph The graph that will be animated.
-     * @param canvas The canvas we will be drawing to.
-     * @param editsPerRedraw The value to assign to the @code{editsPerRedraw} attribute.
+     * @param editsPerRedraw The number of edits accrued before the graph is redrawn.
+     * @param drawNodeIDs Whether or not the node numbers should be displayed in the drawing.
      */
     public TSPGraphAnimator(Stage stage, Canvas canvas, StaticGraph graph, int editsPerRedraw, boolean drawNodeIDs) {
         setGraph(graph);
@@ -154,6 +156,7 @@ public class TSPGraphAnimator extends AnimationTimer {
 
     /**
      * Draws the currently stored graph in its current state into the graphicsContext of the current canvas.
+     * @param numbered Whether or not node numbers should be displayed in the drawing.
      */
     public void drawGraph(boolean numbered) {
         clearCanvas(graphicsContext);
@@ -219,7 +222,7 @@ public class TSPGraphAnimator extends AnimationTimer {
 
     /**
      * Returns the value of the @code{drawNodeIDs} attribute.
-     * @return @code{drawNodeIds} The value of the @code{drawNodeIDs} attribute.
+     * @return drawNodeIDs The value of the @code{drawNodeIDs} attribute.
      */
     public boolean areDrawNodeIDs() {
         return drawNodeIDs;

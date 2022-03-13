@@ -6,4 +6,5 @@ com.alike.graphical
 com.alike.read_write
 com.alike.solution_helpers
 com.alike.solvers
+com.alike.solvertestsuite
 com.alike.staticgraphsystem

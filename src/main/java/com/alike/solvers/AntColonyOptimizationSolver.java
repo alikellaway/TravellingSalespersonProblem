@@ -196,14 +196,26 @@ public class AntColonyOptimizationSolver implements Solver {
         this.executorCompletionService = executorCompletionService;
     }
 
+    /**
+     * Returns the value of the @code{executorCompletionService} attribute.
+     * @return executorCompletionService The value of the @code{executorCompletionService} attribute.
+     */
     public ExecutorCompletionService<Ant> getExecutorCompletionService() {
         return executorCompletionService;
     }
 
+    /**
+     * Returns the value of the @code{activeAnts} attribute.
+     * @return activeAnts The value of the @code{activeAnts} attribute.
+     */
     public int getActiveAnts() {
         return activeAnts;
     }
 
+    /**
+     * Sets the @code{activeAnts} attribute to a new value.
+     * @param activeAnts The new value to assign the @code{activeAnts} attribute.
+     */
     public void setActiveAnts(int activeAnts) {
         this.activeAnts = activeAnts;
     }
@@ -286,38 +298,74 @@ public class AntColonyOptimizationSolver implements Solver {
         this.numAnts = numAnts;
     }
 
+    /**
+     * Returns the value of the @code{numAnts} attribute.
+     * @return numAnts The value of the @code{numAnts} attribute.
+     */
     public int getNumAnts() {
         return this.numAnts;
     }
 
+    /**
+     * Returns the value of the @code{q} attribute.
+     * @return q The value of the @code{q} attribute.
+     */
     public double getQ() {
         return q;
     }
 
+    /**
+     * Assigns a new value to the @code{q} attribute.
+     * @param q The new value to assign the @code{q} attribute.
+     */
     public void setQ(double q) {
         this.q = q;
     }
 
+    /**
+     * Returns the value of the @code{rh0} attribute.
+     * @return rh0 The value of the @code{rh0} attribute.
+     */
     public double getRh0() {
         return rh0;
     }
 
+    /**
+     * Assigns a new value to the @code{rh0} attribute.
+     * @param rh0 The new value to assign the @code{rh0} attribute.
+     */
     public void setRh0(double rh0) {
         this.rh0 = rh0;
     }
 
+    /**
+     * Returns the value of the @code{alpha} attribute.
+     * @return alpha The value of the @code{alpha} attribute.
+     */
     public double getAlpha() {
         return alpha;
     }
 
+    /**
+     * Sets the @code{alpha} attribute to a new value.
+     * @param alpha The value to assign the @code{alpha} attribute.
+     */
     public void setAlpha(double alpha) {
         this.alpha = alpha;
     }
 
+    /**
+     * Returns the value of the @code{beta} attribute.
+     * @return beta The value of the @code{beta} attribute.
+     */
     public double getBeta() {
         return beta;
     }
 
+    /**
+     * Sets the @code{beta} attribute to a new value.
+     * @param beta The new value to assign the @code{beta} attribute.
+     */
     public void setBeta(double beta) {
         this.beta = beta;
     }
