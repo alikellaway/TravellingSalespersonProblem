@@ -1,10 +1,11 @@
-package com.alike.solvers;
+package com.alike.dynamicsolvers;
 
 import com.alike.customexceptions.NoNodeContainerException;
 import com.alike.customexceptions.NonExistentNodeException;
 import com.alike.dynamicgraphsystem.DynamicGraph;
 import com.alike.solution_helpers.Ant;
 import com.alike.solution_helpers.RepeatedFunctions;
+import com.alike.solvers.AntColonyOptimizationSolver;
 import com.alike.staticgraphsystem.StaticGraph;
 
 import java.lang.reflect.ReflectPermission;

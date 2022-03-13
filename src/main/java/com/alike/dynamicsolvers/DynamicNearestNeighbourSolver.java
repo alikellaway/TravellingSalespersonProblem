@@ -1,4 +1,4 @@
-package com.alike.solvers;
+package com.alike.dynamicsolvers;
 
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;

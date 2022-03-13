@@ -2,6 +2,8 @@ package com.alike;
 
 import com.alike.customexceptions.*;
 import com.alike.dynamicgraphsystem.DynamicGraph;
+import com.alike.dynamicsolvers.DynamicAntColonyOptimisationSolver;
+import com.alike.dynamicsolvers.DynamicNearestNeighbourSolver;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solvers.*;
 import com.alike.staticgraphsystem.GraphGenerator;
