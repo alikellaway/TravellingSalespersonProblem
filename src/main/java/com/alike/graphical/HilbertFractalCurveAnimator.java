@@ -37,7 +37,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     /**
      * The series of coordinates that is our path.
      */
-    private ArrayList<Coordinate> path;
+    private Coordinate[] path;
 
     /**
      * A reference to the @code{HilbertFractalCurveSolver} object we will be animating.
@@ -94,10 +94,10 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         // Draw the lines from the graph that are after our progress counter but before the draw limit
         for (int i = 1 + progressCounter; i < drawLimit; i++) {
             // Design the line - vary the color with the path completion
-            float hue = map(HilbertFractalCurveSolver.order * i, path.size());
+            float hue = map(HilbertFractalCurveSolver.order * i, path.length);
             gc.setStroke(Color.hsb(hue, 1, 1, 2.0/HilbertFractalCurveSolver.order));
             try { // Draw the line
-                gc.strokeLine(path.get(i).getX(), path.get(i).getY(), path.get(i-1).getX(), path.get(i-1).getY());
+                gc.strokeLine(path[i].getX(), path[i].getY(), path[i - 1].getX(), path[i - 1].getY());
             } catch (IndexOutOfBoundsException ignored) {
             }
             progressCounter++;
@@ -105,8 +105,8 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         /* Draw limit describes what index we go up to in the path, here we increase it so we can go further in the
            next cycle. It is important it's the side length so the line is completed. */
         drawLimit += Main.COORDINATE_MAX_WIDTH;
-        if (drawLimit > path.size()) {
-            drawLimit = path.size();
+        if (drawLimit > path.length) {
+            drawLimit = path.length;
         }
     }
 
@@ -124,7 +124,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      * Sets the value of the @code{path} attribute to a new value.
      * @param newPath The new value to become the @code{path} attribute.
      */
-    private void setPath(ArrayList<Coordinate> newPath) {
+    private void setPath(Coordinate[] newPath) {
         this.path = newPath;
     }
 

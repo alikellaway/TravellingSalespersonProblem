@@ -64,7 +64,7 @@ public class TestSuite {
                 // Try to find a solution for the current graph using the solver; outputs: Solution||Fail
                 SolverOutput s = solver.runSolution(0);
                 testResults.add(new TestResult(s, testNumber));
-                currentGraph = null; // Reset the graph to null (in the case we are running this object b2b).
+                currentGraph = null; // Reset the graph to null (in the case we are running this object b2b) & destroys.
             } catch (IOException | NodeSuperimpositionException e) { // Thrown during file reading or graph creation.
                 e.printStackTrace();
             } catch (NullPointerException e) { // reader.getNext() returns null at end of file
