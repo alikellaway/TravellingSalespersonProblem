@@ -52,7 +52,7 @@ public class TestSuite {
      * @return testSuiteResult A new @code{TestSuiteResult} object containing the information about the test.
      */
     public TestSuiteResult runTest() {
-        ArrayList<TestOutput> testResults = new ArrayList<>();
+        ArrayList<TestResult> testResults = new ArrayList<>();
         while (reader.hasRemainingLines()) {
             testNumber++;
             try {
@@ -61,9 +61,9 @@ public class TestSuite {
                 StaticGraph graph = new StaticGraph(nC);
                 currentGraph = graph;
                 solver.setGraph(graph);
-                // Try to run the solution on this graph and output TestPass object.
-                Solution s = solver.runSolution(0);
-                testResults.add(new TestPass(s, testNumber));
+                // Try to find a solution for the current graph using the solver; outputs: Solution||Fail
+                SolverOutput s = solver.runSolution(0);
+                testResults.add(new TestResult(s, testNumber));
                 currentGraph = null; // Reset the graph to null (in the case we are running this object b2b).
             } catch (IOException | NodeSuperimpositionException e) { // Thrown during file reading or graph creation.
                 e.printStackTrace();
@@ -72,10 +72,6 @@ public class TestSuite {
                     new CoordinateListException("Test could not find coordinate lists to test with.")
                             .printStackTrace();
                 } // Otherwise, nothing went wrong - we can ignore the null pointer.
-            } catch (Exception e) { // Test failed due to an exception that was none of the above.
-                testResults.add(new TestFail(e, testNumber));
-            } catch (Error e) { // Test failed due to an error, e.g., ran out of memory.
-                testResults.add(new TestFail(e, testNumber));
             }
         }
         return new TestSuiteResult(testResults);

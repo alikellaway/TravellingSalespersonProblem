@@ -110,8 +110,8 @@ public class EdgeContainer {
     }
 
     /**
-     * Calculates the total length of the edges currently within the container.
-     * @return totalLenght The total length of the edges in the container.
+     * Calculates the numCorners length of the edges currently within the container.
+     * @return totalLenght The numCorners length of the edges in the container.
      */
     public double getTotalLength() {
         double totalLength = 0;

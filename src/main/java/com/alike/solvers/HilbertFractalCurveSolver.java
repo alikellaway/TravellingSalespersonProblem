@@ -5,13 +5,14 @@ import com.alike.customexceptions.*;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
+import com.alike.solvertestsuite.SolverOutput;
 import com.alike.staticgraphsystem.*;
 import java.util.ArrayList;
 
 import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
 
 /**
- * Class constructs hilbert fractal curves and then uses the path to solve a StaticGraph route.
+ * Class constructs a pseudo hilbert fractal curve and then overlays the curve onto a TSP to find an order of traversal.
  * @author alike
  */
 public class HilbertFractalCurveSolver implements Solver {
@@ -31,13 +32,12 @@ public class HilbertFractalCurveSolver implements Solver {
     private final int N = (int) Math.pow(2, order);
 
     /**
-     * The total number of points that will be drawn.
+     * The number of points that will be in a pseudo hilbert curve of order @code{order}.
      */
-    public final int total = N * N;
+    public final int numCorners = N * N; // Where n is 2^order.
 
     /**
-     * The series of coordinates that is used to draw the curve. It's the corners since we can use them to stroke lines
-     * on a canvas.
+     * The series of corners in the curve.
      */
     private static ArrayList<Coordinate> curveCornerCoordinates;
 
@@ -61,7 +61,6 @@ public class HilbertFractalCurveSolver implements Solver {
         setGraph(graph);
         // Construct the curve.
         constructHilbertFractalCurve();
-
     }
 
     /**
@@ -78,34 +77,47 @@ public class HilbertFractalCurveSolver implements Solver {
      * @return A pair containing the value of the @code{graph} attribute and a double - the length of its route.
      */
     public SolverOutput runSolution(int delayPerStep) {
-        try {
-            long solutionStartTime = System.nanoTime();
-            try {// Try to construct the route.
-                constructRoute(delayPerStep);
-            } catch (HilbertCurveUnconstructedException e) {
-                // Construct route method through some error.
-                e.printStackTrace();
-            } catch (NodeMissedException e) {// On route failure, try again with higher order.
-//                order++;
-//                if (order == 11) { // Causes memory error
-
-                    // While this is an odd way of writing it, it allows us to keep the solver implementing Solver.
-//                    try {
-//                        throw new FractalDensityException("Attempted to create Hilbert of order 12 which causes a memory" +
-//                                " exception.");
-//                    } catch (FractalDensityException ex) {
-                        return new Fail(e, graph);
-//                    }
-//                }
-//                // Start a new solution with a higher order.
-//                new HilbertFractalCurveSolver(graph).runSolution(delayPerStep); // Try again at a higher order
-            }
+        try { // Try to construct the route.
+            Runtime.getRuntime().gc(); // Reclaim as much memory as possible.
+            long startTime = System.nanoTime();
+            constructRoute(delayPerStep);
             long finishTime = System.nanoTime();
-            return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - solutionStartTime);
+            return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+        } catch (HilbertCurveUnconstructedException e) { // Tried to get a route without a constructed curve.
+            e.printStackTrace();
+            System.exit(1);
+        } /*catch (NodeMissedException e) {// On route failure, try again with higher order.
+                order++;
+                if (order == 11) { // Causes memory error
 
-        } catch (OutOfMemoryError error) {
-            return Solution.createFailedSolution(graph, error);
+            // While this is an odd way of writing it, it allows us to keep the solver implementing Solver.
+                    try {
+                        throw new FractalDensityException("Attempted to create Hilbert of order 12 which causes a memory" +
+                                " exception.");
+                    } catch (FractalDensityException ex) {
+            return new Fail(e, graph);
+                    }
+                }
+                // Start a new solution with a higher order.
+                new HilbertFractalCurveSolver(graph).runSolution(delayPerStep); // Try again at a higher order
+        }*/catch (Exception e) {
+            return new Fail(e, graph);
+        } catch (Error e) {
+            return new Fail(e, graph);
         }
+    }
+
+    /**
+     * Called to construct the hilbert curve and store it as a sequence of coordinates.
+     */
+    private void constructHilbertFractalCurve() {
+        // Calculate the hilbert curve corners and store them as a sequence of Coordinates
+        calculateHilbertCurveCornerCoordinates();
+        /* Need to get all the points that are covered by the lines that will join the corners since curveCornerCoordinates
+           only contains the points on the corners of the hilbert curve currently. */
+        calculateHilbertCurveLineCoordinates();
+        // Update progress in console - NB: at this point we have only a hilbert path around a coordinate space
+//        System.out.println("Order " + order + ", Coordinates reached: " + curveCoordinates.size());
     }
 
     /**
@@ -242,13 +254,15 @@ public class HilbertFractalCurveSolver implements Solver {
      * Used to calculate the coordinates of every corner on our hilbert curve.
      */
     private void calculateHilbertCurveCornerCoordinates() {
-        curveCornerCoordinates = new ArrayList<>();
-        for (int i = 0; i < total; i++) {
-            curveCornerCoordinates.add(getHilbertCorner(i));
+        curveCornerCoordinates = new ArrayList<>(); // Create space for them.
+        for (int i = 0; i < numCorners; i++) {
+            curveCornerCoordinates.add(getHilbertCorner(i)); // Get the coordinates for each corner
+            // Move the coordinates to be central.
             float len = (float) Main.WINDOW_MAX_WIDTH / N;
             curveCornerCoordinates.get(i).mult(len);
             curveCornerCoordinates.get(i).add(len/2, len/2);
         }
+        curveCornerCoordinates.trimToSize();
     }
 
     /**
@@ -276,19 +290,6 @@ public class HilbertFractalCurveSolver implements Solver {
                 // When we hit the end, do nothing.
             }
         }
-    }
-
-    /**
-     * Called to construct the hilbert curve and store it as a sequence of coordinates.
-     */
-    private void constructHilbertFractalCurve() {
-        // Calculate the hilbert curve corners and store them as a sequence of Coordinates
-        calculateHilbertCurveCornerCoordinates();
-        /* Need to get all the points that are covered by the lines that will join the corners since curveCornerCoordinates
-           only contains the points on the corners of the hilbert curve currently. */
-        calculateHilbertCurveLineCoordinates();
-        // Update progress in console - NB: at this point we have only a hilbert path around a coordinate space
-//        System.out.println("Order " + order + ", Coordinates reached: " + curveCoordinates.size());
     }
 }
 

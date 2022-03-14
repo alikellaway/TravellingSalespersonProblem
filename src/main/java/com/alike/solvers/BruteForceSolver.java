@@ -58,6 +58,7 @@ public class BruteForceSolver implements Solver {
      */
     public SolverOutput runSolution(int delayPerStep) {
         try { // Try to create a solution.
+            Runtime.getRuntime().gc(); // Reclaim as much memory as possible.
             long startTime = System.nanoTime();
             // While there are still permutations we haven't checked we wish to continue checking more.
             while (permuter.hasUnseenPermutations()) {
@@ -67,6 +68,7 @@ public class BruteForceSolver implements Solver {
                 } catch (PermutationExhaustionException | EdgeSuperimpositionException |
                         NonExistentNodeException | EdgeToSelfException e) {
                     e.printStackTrace();
+                    continue;
                 }
                 // Calculate the length of that route
                 double routeLength = graph.getEdgeContainer().getTotalLength();
@@ -77,6 +79,7 @@ public class BruteForceSolver implements Solver {
                         shortestFoundPerm = permuter.getCurrentPermutation(); // Do it this way to save memory
                     } catch (PermutationFocusException e) {
                         e.printStackTrace();
+                        continue;
                     }
                 }
                 RepeatedFunctions.sleep(delayPerStep);
