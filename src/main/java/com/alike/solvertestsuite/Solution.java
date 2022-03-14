@@ -5,7 +5,7 @@ import com.alike.staticgraphsystem.Graph;
 /**
  * Used to represent solution outputs in a convenient way.
  */
-public class Solution {
+public class Solution implements SolverOutput {
     /**
      * The graph output by the solution (i.e. the solutions final form).
      */
@@ -20,7 +20,6 @@ public class Solution {
      * The time taken to find this solution.
      */
     private Long executionTime;
-
 
     /**
      * Constructs a new test result object.
@@ -82,8 +81,6 @@ public class Solution {
         this.executionTime = executionTime;
     }
 
-
-
     /**
      * Used to turn this solution object into a string to be represented in console.
      * @return string The solution object as a string.
@@ -92,5 +89,10 @@ public class Solution {
     public String toString() {
         // Convert from ns to s is divide by 1bil
         return getRouteLength() + getExecutionTime() + "ns";
+    }
+
+    @Override
+    public boolean isFail() {
+        return false;
     }
 }

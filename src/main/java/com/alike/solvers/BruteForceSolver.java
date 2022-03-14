@@ -3,7 +3,9 @@ package com.alike.solvers;
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.Permuter;
 import com.alike.solution_helpers.RepeatedFunctions;
+import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
+import com.alike.solvertestsuite.SolverOutput;
 import com.alike.staticgraphsystem.*;
 import java.util.List;
 
@@ -54,38 +56,44 @@ public class BruteForceSolver implements Solver {
      * @return Returns a pair object containing the StaticGraph (which contains the solution edge set) and its route
      * length.
      */
-    public Solution runSolution(int delayPerStep) {
-        long startTime = System.nanoTime();
-        // While there are still permutations we haven't checked we wish to continue checking more.
-        while (permuter.hasUnseenPermutations()) {
-            // Set the graphs edges to be a new edge container containing the edges constructed from a permutation
-            try {
-                graph.setEdgeContainer(createEdgeContainerFromNodeSetPermutation(permuter.getNextPermutation()));
-            } catch (PermutationExhaustionException | EdgeSuperimpositionException |
-                    NonExistentNodeException | EdgeToSelfException e) {
-                e.printStackTrace();
-            }
-            // Calculate the length of that route
-            double routeLength = graph.getEdgeContainer().getTotalLength();
-            // Check if the route is the shortest route, if it is the record it.
-            if (routeLength < shortestFoundRoute) {
-                shortestFoundRoute = routeLength;
+    public SolverOutput runSolution(int delayPerStep) {
+        try { // Try to create a solution.
+            long startTime = System.nanoTime();
+            // While there are still permutations we haven't checked we wish to continue checking more.
+            while (permuter.hasUnseenPermutations()) {
+                // Set the graphs edges to be a new edge container containing the edges constructed from a permutation
                 try {
-                    shortestFoundPerm = permuter.getCurrentPermutation(); // Do it this way to save memory
-                } catch (PermutationFocusException e) {
+                    graph.setEdgeContainer(createEdgeContainerFromNodeSetPermutation(permuter.getNextPermutation()));
+                } catch (PermutationExhaustionException | EdgeSuperimpositionException |
+                        NonExistentNodeException | EdgeToSelfException e) {
                     e.printStackTrace();
                 }
+                // Calculate the length of that route
+                double routeLength = graph.getEdgeContainer().getTotalLength();
+                // Check if the route is the shortest route, if it is the record it.
+                if (routeLength < shortestFoundRoute) {
+                    shortestFoundRoute = routeLength;
+                    try {
+                        shortestFoundPerm = permuter.getCurrentPermutation(); // Do it this way to save memory
+                    } catch (PermutationFocusException e) {
+                        e.printStackTrace();
+                    }
+                }
+                RepeatedFunctions.sleep(delayPerStep);
             }
-            RepeatedFunctions.sleep(delayPerStep);
+            // Reset the edge container to the best we've found.
+            try {
+                graph.setEdgeContainer(createEdgeContainerFromNodeSetPermutation(shortestFoundPerm));
+            } catch (EdgeSuperimpositionException | NonExistentNodeException | EdgeToSelfException e) {
+                e.printStackTrace();
+            }
+            long finishTime = System.nanoTime();
+            return new Solution(graph, shortestFoundRoute, finishTime - startTime);
+        } catch (Exception e) { // Failed to create solution because of an un caught exception.
+            return new Fail(e, graph);
+        } catch (Error e) { // Failed to create solution due to an error.
+            return new Fail(e, graph);
         }
-        // Reset the edge container to the best we've found.
-        try {
-            graph.setEdgeContainer(createEdgeContainerFromNodeSetPermutation(shortestFoundPerm));
-        } catch (EdgeSuperimpositionException | NonExistentNodeException | EdgeToSelfException e) {
-            e.printStackTrace();
-        }
-        long finishTime = System.nanoTime();
-        return new Solution(graph, shortestFoundRoute, finishTime - startTime);
     }
 
     /**

@@ -1,7 +1,8 @@
 package com.alike.solvertestsuite;
 
-import com.alike.staticgraphsystem.Graph;
-
+/**
+ * Inteface is used to allow us to manage and interact with solver outputs, whether they failed or passed.
+ */
 public interface TestOutput {
     int getTestNumber();
     void setTestNumber(int testNumber);

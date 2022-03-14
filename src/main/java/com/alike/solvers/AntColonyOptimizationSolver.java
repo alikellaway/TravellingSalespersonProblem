@@ -2,7 +2,9 @@ package com.alike.solvers;
 
 import com.alike.solution_helpers.Ant;
 import com.alike.solution_helpers.AtomicDouble;
+import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
+import com.alike.solvertestsuite.SolverOutput;
 import com.alike.staticgraphsystem.EdgeContainer;
 import com.alike.staticgraphsystem.Node;
 import com.alike.staticgraphsystem.StaticGraph;
@@ -115,22 +117,28 @@ public class AntColonyOptimizationSolver implements Solver {
      * @param delayPerStep The delay each Ant will take before moving nodes.
      * @return output The results of the solution attempt.
      */
-    public Solution runSolution(int delayPerStep) {
-        long startTime = System.nanoTime();
-        setDelayPerStep(delayPerStep);
-        // Activate all ants
-        for (int x = 0; x < numAnts; x++) {
-            executorCompletionService.submit(new Ant(this));
-            activeAnts++;
-            if (Math.random() > PROCESSING_CYCLE_PROBABILITY) {
-                processAnts();
+    public SolverOutput runSolution(int delayPerStep) {
+        try {
+            long startTime = System.nanoTime();
+            setDelayPerStep(delayPerStep);
+            // Activate all ants
+            for (int x = 0; x < numAnts; x++) {
+                executorCompletionService.submit(new Ant(this));
+                activeAnts++;
+                if (Math.random() > PROCESSING_CYCLE_PROBABILITY) {
+                    processAnts();
+                }
             }
+            processAnts();
+            getExecutorService().shutdownNow();
+            System.out.println("All " + numAnts + " Ants have finished traversing!");
+            long finishTime = System.nanoTime();
+            return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+        } catch (Exception e) {
+            return new Fail(e, graph);
+        } catch (Error e) {
+            return new Fail(e, graph);
         }
-        processAnts();
-        getExecutorService().shutdownNow();
-        System.out.println("All " + numAnts + " Ants have finished traversing!");
-        long finishTime = System.nanoTime();
-        return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
     }
 
 

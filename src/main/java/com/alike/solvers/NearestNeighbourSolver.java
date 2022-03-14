@@ -5,7 +5,9 @@ import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NoClosestNodeException;
 import com.alike.solution_helpers.RepeatedFunctions;
+import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
+import com.alike.solvertestsuite.SolverOutput;
 import com.alike.staticgraphsystem.*;
 import java.util.ArrayList;
 
@@ -57,24 +59,31 @@ public class NearestNeighbourSolver implements Solver {
      * @return Returns the graph (with the solution in the edgeContainer) and a double describing how long the found
      * route was.
      */
-    public Solution runSolution(int delayPerStep) {
-        long startTime = System.nanoTime();
-        // Set our current node to be the first node in the list of nodes.
-        setCurrentNode(nodeContainer.getNodeSet().get(0));
-        currentNode.setVisited(true); // Set it as visited
-        numNodesVisited = 1; // Nodes visited is not 1 as we account for the last node when we visit it at the end.
-        // Execute the traversal steps
-        while (numNodesVisited < nodeContainer.getNodeSet().size() + 1) {
-            RepeatedFunctions.sleep(delayPerStep);
-            try {
-                traverseToNextClosestNode();
-            } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
-                e.printStackTrace();
+    public SolverOutput runSolution(int delayPerStep) {
+        try { // Try to create a solution.
+            long startTime = System.nanoTime();
+            // Set our current node to be the first node in the list of nodes.
+            setCurrentNode(nodeContainer.getNodeSet().get(0));
+            currentNode.setVisited(true); // Set it as visited
+            numNodesVisited = 1; // Nodes visited is not 1 as we account for the last node when we visit it at the end.
+            // Execute the traversal steps
+            while (numNodesVisited < nodeContainer.getNodeSet().size() + 1) {
+                RepeatedFunctions.sleep(delayPerStep);
+                try {
+                    traverseToNextClosestNode();
+                } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
+                    e.printStackTrace();
+                }
             }
+            // Output information about solve
+            long finishTime = System.nanoTime();
+            return new Solution(this.graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+        } catch (Exception e) { // Failed to create a solution due to an uncaught exception.
+            return new Fail(e, graph);
+        } catch (Error e) {
+            return new Fail(e, graph);
         }
-        // Output information about solve
-        long finishTime = System.nanoTime();
-        return new Solution(this.graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+
     }
 
     /**

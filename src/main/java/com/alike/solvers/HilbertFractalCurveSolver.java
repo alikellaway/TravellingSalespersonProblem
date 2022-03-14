@@ -3,6 +3,7 @@ package com.alike.solvers;
 import com.alike.Main;
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.RepeatedFunctions;
+import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
 import com.alike.staticgraphsystem.*;
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class HilbertFractalCurveSolver implements Solver {
      * @param delayPerStep Time to wait between adding edges to the graphs edge container (so we can see it drawn).
      * @return A pair containing the value of the @code{graph} attribute and a double - the length of its route.
      */
-    public Solution runSolution(int delayPerStep) {
+    public SolverOutput runSolution(int delayPerStep) {
         try {
             long solutionStartTime = System.nanoTime();
             try {// Try to construct the route.
@@ -93,7 +94,7 @@ public class HilbertFractalCurveSolver implements Solver {
 //                        throw new FractalDensityException("Attempted to create Hilbert of order 12 which causes a memory" +
 //                                " exception.");
 //                    } catch (FractalDensityException ex) {
-                        return Solution.createFailedSolution(graph, e);
+                        return new Fail(e, graph);
 //                    }
 //                }
 //                // Start a new solution with a higher order.
