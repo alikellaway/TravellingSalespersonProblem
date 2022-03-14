@@ -16,6 +16,10 @@ import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
  * @author alike
  */
 public class HilbertFractalCurveSolver implements Solver {
+    /*
+        NTS: The curve should be able to perfectly cover all 1047576 points in a 1024x1024 canvas using only
+        the corners in the order 10 curve. Likewise, it should be able to cover all 262144 points with an order 9 curve.
+     */
     /**
      * The graph which we are solving.
      */
@@ -64,7 +68,8 @@ public class HilbertFractalCurveSolver implements Solver {
     }
 
     /**
-     * Empty constructor so we can change the graph at a later time if we choose.
+     * Constructs new @code{HilbertFractalCurveSolver} object without a graph, so we can set one at a later time
+     * if we choose.
      */
     public HilbertFractalCurveSolver() {
         validateCoordinateSpaceIsSquareOfSideLenPowerOf2();
@@ -187,13 +192,14 @@ public class HilbertFractalCurveSolver implements Solver {
                                new Coordinate(1,1),
                                new Coordinate(1,0)};
         // Mask by 3 to find which quadrant the coordinate is in the order above.
-        int index = i & 3;
+        int index = i & 3; // Works by only caring about the last two bits of the number.
         Coordinate c = points[index];
-
+        // As we go up, we need to continue to check the bits and shift across.
         for (int j = 1; j < order; j++) {
-            int len = (int) Math.pow(2, j);
-            i = i >>> 2;
-            index = i & 3;
+            int len = (int) Math.pow(2, j); // The relative length of this order curve
+            i = i >>> 2; // Shift over and get the next two bits.
+            index = i & 3; // Mask by three again. (Think: which quadrant are we in in this order?)
+            // 0 and 2 remain the same, but 1 and 3 are swapped in the rotation
             if (index == 0) {
                 float temp = c.getX();
                 c.setX(c.getY());
@@ -255,9 +261,10 @@ public class HilbertFractalCurveSolver implements Solver {
         curveCornerCoordinates = new Coordinate[numCorners]; // Create space for them.
         for (int i = 0; i < numCorners; i++) {
             curveCornerCoordinates[i] = getHilbertCorner(i); // Get & insert coordinates for each corner
-            // Move the coordinates to be central.
+            // Change it from 0, 1 format to fit out window.
             float len = (float) Main.WINDOW_MAX_WIDTH / N;
             curveCornerCoordinates[i].mult(len);
+            // Moves it to the middle - good for animator
             curveCornerCoordinates[i].add(len/2, len/2);
         }
     }
