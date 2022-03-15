@@ -6,7 +6,7 @@ package com.alike.customexceptions;
  */
 public class NodeMissedException extends Exception {
 
-    public NodeMissedException(String msg, int numNodesMissed) {
+    public NodeMissedException(String msg) {
         super(msg);
     }
 }

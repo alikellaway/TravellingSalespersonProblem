@@ -138,7 +138,7 @@ public class Coordinate {
         if (!(o instanceof Coordinate c)) {
             return false;
         } // If not a coordinate
-        // If they have the same x and y values theyre equal
+        // If they have the same x and y values they're equal
         return this.getX() == c.getX() && this.getY() == c.getY();
     }
 

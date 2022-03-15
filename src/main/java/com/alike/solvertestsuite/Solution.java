@@ -99,4 +99,5 @@ public class Solution implements SolverOutput {
     public boolean isFail() {
         return false;
     }
+
 }
