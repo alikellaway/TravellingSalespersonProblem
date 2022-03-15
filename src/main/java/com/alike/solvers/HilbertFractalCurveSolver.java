@@ -18,7 +18,7 @@ import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
 public class HilbertFractalCurveSolver implements Solver {
     /*
         NTS: The curve should be able to perfectly cover all 1047576 points in a 1024x1024 canvas using only
-        the corners in the order 10 curve. Likewise, it should be able to cover all 262144 points with an order 9 curve.
+        the corners in the order 10 curve. Likewise, it should be able to cover all 262144 points with an order 9
      */
     /**
      * The graph which we are solving.
