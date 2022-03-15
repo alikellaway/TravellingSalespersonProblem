@@ -91,6 +91,10 @@ public class Solution implements SolverOutput {
         return getRouteLength() + " units long. Found in " + getExecutionTime() + "ns";
     }
 
+    /**
+     * Returns whether this solution output object is a fail object or not; in this case, false.
+     * @return false Returns false because this is a solution object.
+     */
     @Override
     public boolean isFail() {
         return false;
