@@ -88,7 +88,7 @@ public class Solution implements SolverOutput {
     @Override
     public String toString() {
         // Convert from ns to s is divide by 1bil
-        return getRouteLength() + getExecutionTime() + "ns";
+        return getRouteLength() + " units long. Found in " + getExecutionTime() + "ns";
     }
 
     @Override
