@@ -15,6 +15,7 @@ import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
 
 /**
  * Animates a Hilbert fractal curve generated inside a @code{HilbertFractalCurveSolver} onto a java fx canvas.
+ * Class extends AnimationTimer so the drawing of the curve can be animated out rather than just printed.
  * @author alike
  */
 public class HilbertFractalCurveAnimator extends AnimationTimer {
@@ -45,16 +46,9 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     private HilbertFractalCurveSolver hfcs;
 
     /**
-     * Used to check if the order of the graph has changed while we are drawing (we need to reset the progress counter
-     * to 0 if it has)
+     * The number of coordinates drawn on the line each loop of the animator (smaller is slower).
      */
-    private int orderWeAreDrawing;
-
-    /**
-     * This number will cap the maximum order that can be drawn by the animator (as a solver may try to push it further)
-     * My computer struggles to draw any  higher than 9, however, this cap may vary on your computer.
-     */
-    private final int order_limit = 9;
+    private int drawStep = Main.COORDINATE_MAX_WIDTH; // Chose this value randomly.
 
     /**
      * Used to construct a new @code{HilbertFractalCurveAnimator} object.
@@ -66,7 +60,6 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         checkCanvas(canvas); // Check the canvas is valid
         setGc(canvas.getGraphicsContext2D());
         setHfcs(hfcs);
-        setOrderWeAreDrawing(HilbertFractalCurveSolver.order);
         setPath(hfcs.getCornerCoordinates());
     }
 
@@ -84,27 +77,19 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      * it is called rather than redrawing the whole line (so it is faster).
      */
     private void draw() {
-        /* We must check if the hfcs hasn't changed its order during our drawing process which may happen as its
-        run solution method is recursive. My PC struggles to draw any order above 9 so that's the limit. */
-        if (getOrderWeAreDrawing() != HilbertFractalCurveSolver.order && HilbertFractalCurveSolver.order <= order_limit) {
-            progressCounter = 0;
-            path = hfcs.getCornerCoordinates();
-            gc.clearRect(0,0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        }
         // Draw the lines from the graph that are after our progress counter but before the draw limit
         for (int i = 1 + progressCounter; i < drawLimit; i++) {
             // Design the line - vary the color with the path completion
-            float hue = map(HilbertFractalCurveSolver.order * i, path.length);
-            gc.setStroke(Color.hsb(hue, 1, 1, 2.0/HilbertFractalCurveSolver.order));
+            float hue = map(hfcs.getOrder() * i, path.length);
+            gc.setStroke(Color.hsb(hue, 1, 1, 2.0/hfcs.getOrder()));
             try { // Draw the line
                 gc.strokeLine(path[i].getX(), path[i].getY(), path[i - 1].getX(), path[i - 1].getY());
             } catch (IndexOutOfBoundsException ignored) {
             }
             progressCounter++;
         }
-        /* Draw limit describes what index we go up to in the path, here we increase it so we can go further in the
-           next cycle. It is important it's the side length so the line is completed. */
-        drawLimit += Main.COORDINATE_MAX_WIDTH;
+        /* Advance the draw limit further, so next frame can draw more. */
+        drawLimit += drawStep;
         if (drawLimit > path.length) {
             drawLimit = path.length;
         }
@@ -158,19 +143,4 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         this.hfcs = hfcs;
     }
 
-    /**
-     * Sets the @code{orderWeAreDrawing} attribute to a new value.
-     * @param orderWeAreDrawing The new value to become the @code{orderWeAreDrawing} attribute.
-     */
-    public void setOrderWeAreDrawing(int orderWeAreDrawing) {
-        this.orderWeAreDrawing = orderWeAreDrawing;
-    }
-
-    /**
-     * Returns the value of the @code{orderWeAreDrawing} attribute.
-     * @return orderWeAreDrawing The value of the @code{orderWeAreDrawing} attribute.
-     */
-    public int getOrderWeAreDrawing() {
-        return this.orderWeAreDrawing;
-    }
 }

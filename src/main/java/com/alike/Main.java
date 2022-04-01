@@ -24,12 +24,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 256;
+    public static final int COORDINATE_MAX_WIDTH = 1024;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 256;
+    public static final int COORDINATE_MAX_HEIGHT = 1024;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -114,10 +114,6 @@ public class Main extends Application {
         Thread hfcsT = new Thread(() -> {
             hfcs = new HilbertFractalCurveSolver(hfcsGraph);
             SolverOutput pf = hfcs.runSolution(10);
-//            hfcs.getCornerCoordinates().
-            System.out.println(hfcs.getCornerCoordinates().length);
-
-            System.out.println(pf.toString());
         });
         hfcsT.start();
 

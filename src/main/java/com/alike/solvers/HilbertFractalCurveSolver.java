@@ -28,32 +28,23 @@ public class HilbertFractalCurveSolver implements Solver {
     /**
      * The order of Hilbert curve to construct (how many iterations to do).
      */
-    public static int order = 8;
+    private int order;
 
     /**
      * The number of sectors that the fractal will be broken into (e.g. quadrants at order 2).
      */
-    private final int N = (int) Math.pow(2, order);
+    private int N = (int) Math.pow(2, order);
 
     /**
      * The number of points that will be in a pseudo hilbert curve of order @code{order}.
      */
-    public final int numCorners = N * N; // Where n is 2^order.
+    private int numCorners = (int) Math.pow(N, 2); // Where n is 2^order.
 
     /**
      * The series of corners in the curve.
      */
     private Coordinate[] curveCornerCoordinates; // Don't initialise yet, as its usually very large.
 
-    /**
-     * All the coordinates the curve travels through (not just the corners).
-     */
-    private static ArrayList<Coordinate> curveCoordinates = new ArrayList<>();
-
-//    /**
-//     * Used to pass the start time to the end solution (if we needed to recursively solve).
-//     */
-//    private static Long solutionStartTime = null;
 
     /**
      * Used to construct a new @code{HilbertFractalCurveSolver} object.
@@ -64,23 +55,8 @@ public class HilbertFractalCurveSolver implements Solver {
         // Set our graph
         setGraph(graph);
         // Construct the curve.
-        constructHilbertFractalCurve();
-        // Check if curve has duplicates.
-        System.out.println(RepeatedFunctions.hasDuplicates(getCornerCoordinates()));
-        // Find the minimum and maximum x and y values for the coordinates in the list.
-        int xM = Integer.MIN_VALUE;
-        int yM = Integer.MIN_VALUE;
-        int xU = Integer.MAX_VALUE;
-        int yU = Integer.MAX_VALUE;
-        for (Coordinate c : curveCornerCoordinates) {
-            int x = c.getX();
-            int y = c.getY();
-            if (x > xM) xM = x;
-            if (x < xU) xU = x;
-            if (y > yM) yM = y;
-            if (y < yU) yU = y;
-        }
-        System.out.println(xM + " " + xU + " " + yM + " " + yU);
+        setValues();
+        constructHilbertCurve();
     }
 
     /**
@@ -89,7 +65,8 @@ public class HilbertFractalCurveSolver implements Solver {
      */
     public HilbertFractalCurveSolver() {
         validateCoordinateSpaceIsSquareOfSideLenPowerOf2();
-        constructHilbertFractalCurve();
+        setValues();
+        constructHilbertCurve();
     }
 
     /**
@@ -104,41 +81,11 @@ public class HilbertFractalCurveSolver implements Solver {
             constructRoute(delayPerStep);
             long finishTime = System.nanoTime();
             return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
-        } /* catch (HilbertCurveUnconstructedException e) { // Tried to get a route without a constructed curve.
-            e.printStackTrace();
-        } catch (NodeMissedException e) {// On route failure, try again with higher order.
-                order++;
-                if (order == 11) { // Causes memory error
-
-            // While this is an odd way of writing it, it allows us to keep the solver implementing Solver.
-                    try {
-                        throw new FractalDensityException("Attempted to create Hilbert of order 12 which causes a memory" +
-                                " exception.");
-                    } catch (FractalDensityException ex) {
-            return new Fail(e, graph);
-                    }
-                }
-                // Start a new solution with a higher order.
-                new HilbertFractalCurveSolver(graph).runSolution(delayPerStep); // Try again at a higher order
-        }*/catch (Exception e) {
+        } catch (Exception e) {
             return new Fail(e, graph);
         } catch (Error e) {
             return new Fail(e, graph);
         }
-    }
-
-    /**
-     * Called to construct the hilbert curve and store it as a sequence of coordinates.
-     */
-    private void constructHilbertFractalCurve() {
-        // Calculate the hilbert curve corners and store them as a sequence of Coordinates
-        calculateHilbertCurveCornerCoordinates();
-        /* Need to get all the points that are covered by the lines that will join the corners since
-           curveCornerCoordinates only contains the points on the corners of the hilbert curve currently. */
-//        System.out.println(curveCornerCoordinates.length);
-//        calculateHilbertCurveLineCoordinates();
-        // Update progress in console - NB: at this point we have only a hilbert path around a coordinate space
-        // System.out.println("Order " + order + ", Coordinates reached: " + curveCoordinates.size());
     }
 
     /**
@@ -175,15 +122,16 @@ public class HilbertFractalCurveSolver implements Solver {
         // We copy the node array here so that we can remove the node from the list once we've found it.
         ArrayList<Node> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
         ArrayList<Node> nodesOrdered = new ArrayList<>();
-//        for (Coordinate c : curveCornerCoordinates) {
-//            for (int i = 0; i < nodes.size(); i++) {
-//                Node n = nodes.get(i);
-//                if (n.getCoordinate().equals(c)) {
-//                    nodesOrdered.add(n);
-//                    nodes.remove(i); // Removing them as we go will speed it up as we advance
-//                }
-//            }
-//        }
+        for (Coordinate c : curveCornerCoordinates) {
+            for (int i = 0; i < nodes.size(); i++) {
+                Node n = nodes.get(i);
+                if (n.getCoordinate().equals(c)) {
+                    nodesOrdered.add(n);
+                    nodes.remove(i); // Removing them as we go will speed it up as we advance
+                    break;
+                }
+            }
+        }
         // Check to see if we missed nodes - if so throw an exception.
         if (nodesOrdered.size() != graph.getNumNodes()) {
             StringBuilder sb = new StringBuilder("Node(s) missed: ");
@@ -234,7 +182,6 @@ public class HilbertFractalCurveSolver implements Solver {
                 c.setX(c.getX() + len);
             }
         }
-        System.out.println(c);
         return c;
     }
 
@@ -276,43 +223,53 @@ public class HilbertFractalCurveSolver implements Solver {
     /**
      * Used to calculate the coordinates of every corner on our hilbert curve.
      */
-    private void calculateHilbertCurveCornerCoordinates() {
+    private void constructHilbertCurve() {
         curveCornerCoordinates = new Coordinate[numCorners]; // Create space for them.
         for (int i = 0; i < numCorners; i++) {
             curveCornerCoordinates[i] = getHilbertCorner(i); // Get & insert coordinates for each corner
             // Change it from 0, 1 format to fit out window.
-            float len = (float) Main.WINDOW_MAX_WIDTH / N;
+            float len = (float) Main.COORDINATE_MAX_WIDTH / N;
             curveCornerCoordinates[i].mult(len);
             // Moves it to the middle - good for animator
-//            curveCornerCoordinates[i].add(len/2, len/2);
+            // curveCornerCoordinates[i].add(len/2, len/2);
         }
     }
 
-    /**
-     * Uses the generated corners to calculate all the corners touched by the line between each corner.
-     */
-    private void calculateHilbertCurveLineCoordinates() {
-        curveCoordinates = new ArrayList<>();
-        for (int pathIdx = 0; pathIdx < numCorners; pathIdx++) {
-            // Get our two coordinates to find the ones between.
-            Coordinate thisCo = curveCornerCoordinates[pathIdx];
-            curveCoordinates.add(thisCo);
-            try {
-                Coordinate nextCo = curveCornerCoordinates[pathIdx + 1];
-                // Get the coordinates the line between them will go through.
-                if (thisCo.getVectorTo(nextCo).isHorizontal()) { // The gaps are always horizontal or vertical
-                    for (int i = thisCo.getX() + 1; i < nextCo.getX(); i++) {
-                        curveCoordinates.add(new Coordinate(i, thisCo.getY()));
-                    }
-                } else { // Was a vertical line
-                    for (int i = thisCo.getY() + 1; i < nextCo.getY(); i++) {
-                        curveCoordinates.add(new Coordinate(i, thisCo.getX()));
-                    }
-                }
-            } catch (IndexOutOfBoundsException e) {
-                // When we hit the end, do nothing.
-            }
-        }
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public int getN() {
+        return N;
+    }
+
+    public void setN(int n) {
+        N = n;
+    }
+
+    public int getNumCorners() {
+        return numCorners;
+    }
+
+    public void setNumCorners(int numCorners) {
+        this.numCorners = numCorners;
+    }
+
+    private void setValues() {
+
+        /* The number of corners in a hilbert curve of a given order has
+         *  (2^order)^2 corners. Since we try to fill the space, we can
+         *  deduce our order given we know how many pixels we need to fill.
+         *  i.e. width^2 = (2^order)^2
+         *  i.e. width = 2^order */
+        setOrder((int) (Math.log(Main.COORDINATE_MAX_WIDTH)/Math.log(2))); // Java has no log2(x)
+        // We also know that N is our side length given that N = 2 ^ order
+        setN(Main.COORDINATE_MAX_WIDTH);
+        setNumCorners((int) Math.pow(getN(), 2));
     }
 }
 
