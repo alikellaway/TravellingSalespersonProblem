@@ -5,7 +5,10 @@ package com.alike.customexceptions;
  * @author alike
  */
 public class NodeMissedException extends Exception {
-
+    /**
+     * Constructs a new @code{NodeMissedException) object.
+     * @param msg The message to be displayed in the stack trace.
+     */
     public NodeMissedException(String msg) {
         super(msg);
     }
