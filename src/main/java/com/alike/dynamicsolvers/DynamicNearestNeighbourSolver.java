@@ -11,13 +11,13 @@ import java.util.ArrayList;
 
 /**
  * Class uses the nearest neighbour (or greedy) algorithm repeatedly at a set interval to give a route through
- * the moving nodes of a dynamic graph.
+ * the moving nodes of a dynamic dgraph.
  */
 public class DynamicNearestNeighbourSolver {
     /**
      * The dgraph this solver will solve.
      */
-    private DynamicGraph graph;
+    private DynamicGraph dgraph;
 
     /**
      * A reference to the node container this class is operating on.
@@ -49,10 +49,10 @@ public class DynamicNearestNeighbourSolver {
      * @param graph The @code{DynamicGraph} we will be solving.
      */
     public DynamicNearestNeighbourSolver(DynamicGraph graph) {
-        setGraph(graph);
-        setNodeContainer(getGraph().getNodeContainer());
-        setEdgeContainer(getGraph().getEdgeContainer());
-        getGraph().setAllNodesUnvisited();
+        setDgraph(graph);
+        setNodeContainer(getDgraph().getNodeContainer());
+        setEdgeContainer(getDgraph().getEdgeContainer());
+        getDgraph().setAllNodesUnvisited();
         setRunning(false);
         setOrigin(nodeContainer.getNodeSet().get(0)); // The node from which we always start.
     }
@@ -60,16 +60,16 @@ public class DynamicNearestNeighbourSolver {
     /**
      * Used to being the solution's process. Once running, it will continue to resolve the dgraph repeatedly with an
      * interval of @code{delayPerStep} per solve.
-     * @param delayPerStep The time delay between each route recalculation.
+     * @param delayPerSolve The time delay between each route recalculation.
      */
-    public void runSolution(int delayPerStep) {
-        graph.wake(); // Doesn't begin movement - just allows it to listen for pause/play commands.
+    public void runSolution(int delayPerSolve) {
+        dgraph.wake(); // Doesn't begin movement - just allows it to listen for pause/play commands.
         int maxEdges = nodeContainer.getNodeSet().size(); // The number of edges in a complete tour
         setRunning(true); // Another thread can set this volatile to false and stop the execution.
         setCurrentNode(origin);
         while (running) {
             try {
-                graph.stop(); // Pause graph movement, so we can calculate distances between nodes.
+                dgraph.stop(); // Pause dgraph movement, so we can calculate distances between nodes.
                 currentNode.setVisited(true); // Set where we are to "visited".
                 Node nextNode; // Space for the next node.
                 if (!(edgeContainer.getEdgeSet().size() == maxEdges - 1)) {
@@ -77,16 +77,16 @@ public class DynamicNearestNeighbourSolver {
                 } else {
                     nextNode = getOrigin(); // If we have completed a tour, go back to origin.
                 }
-                graph.move(); // Resume graph movement.
+                dgraph.move(); // Resume dgraph movement.
                 // Construct the edge between where we are and next node.
                 edgeContainer.add(new Edge(currentNode, nextNode));
                 // Move head.
                 setCurrentNode(nextNode);
                 // If we have completed a tour delete the first added edge
                 if (edgeContainer.getEdgeSet().size() == maxEdges) {
-                    RepeatedFunctions.sleep(delayPerStep); // We wait before we clear and recalculate.
+                    RepeatedFunctions.sleep(delayPerSolve); // We wait before we clear and recalculate.
                     edgeContainer.clear(); // Clear
-                    getGraph().setAllNodesUnvisited();
+                    getDgraph().setAllNodesUnvisited();
                 }
             } catch(NoClosestNodeException ignored) { // Happens everytime we complete a route.
             } catch (EdgeToSelfException | EdgeSuperimpositionException e) {
@@ -110,7 +110,7 @@ public class DynamicNearestNeighbourSolver {
     private Node findClosestUnvisitedNode() throws NoClosestNodeException {
         Node closestFound = null;
         double shortestDist = Double.MAX_VALUE;
-        ArrayList<Node> set = getGraph().getNodeContainer().getNodeSet();
+        ArrayList<Node> set = getDgraph().getNodeContainer().getNodeSet();
         for (Node n : set) {
             if (!n.equals(getOrigin()) && !n.equals(currentNode) && !n.isVisited()) { // If its not the origin or the start node.
                 double dist = currentNode.getVectorTo(n).magnitude();
@@ -126,19 +126,19 @@ public class DynamicNearestNeighbourSolver {
     }
 
     /**
-     * Returns the value of the @code{graph} attribute of the DynamicGraph stored in this classes @code{graph} attribute.
-     * @return graph The value of the @code{graph} attribute within the @code{graph} attribute of this class.
+     * Returns the value of the @code{dgraph} attribute of the DynamicGraph stored in this classes @code{dgraph} attribute.
+     * @return dgraph The value of the @code{dgraph} attribute within the @code{dgraph} attribute of this class.
      */
-    public StaticGraph getGraph() {
-        return graph.getUnderlyingGraph();
+    public StaticGraph getDgraph() {
+        return dgraph.getUnderlyingGraph();
     }
 
     /**
-     * Sets the value of the @code{graph} attribute.
-     * @param graph The new value to assign the @code{graph} attribute.
+     * Sets the value of the @code{dgraph} attribute.
+     * @param dgraph The new value to assign the @code{dgraph} attribute.
      */
-    public void setGraph(DynamicGraph graph) {
-        this.graph = graph;
+    public void setDgraph(DynamicGraph dgraph) {
+        this.dgraph = dgraph;
     }
 
     /**
@@ -158,10 +158,10 @@ public class DynamicNearestNeighbourSolver {
     }
 
     /**
-     * Stops this solver from repeatedly solving the underlying graph.
+     * Stops this solver from repeatedly solving the underlying dgraph.
      */
     public void kill() {
-        this.running = false;
+        setRunning(false);
     }
 
     /**

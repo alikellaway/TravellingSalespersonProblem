@@ -3,6 +3,7 @@ package com.alike;
 import com.alike.customexceptions.*;
 import com.alike.dynamicgraphsystem.DynamicGraph;
 import com.alike.dynamicsolvers.DynamicAntColonyOptimisationSolver;
+import com.alike.dynamicsolvers.DynamicHilbertFractalCurveSolver;
 import com.alike.dynamicsolvers.DynamicNearestNeighbourSolver;
 import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
@@ -59,10 +60,12 @@ public class Main extends Application {
     private static StaticGraph polygonGraph;
     private static DynamicGraph dnnsGraph;
     private static DynamicGraph dacosGraph;
+    private static DynamicGraph dhfcsGraph;
 
     private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
     private static DynamicNearestNeighbourSolver dnns;
     private static DynamicAntColonyOptimisationSolver dacos;
+    private static DynamicHilbertFractalCurveSolver dhfcs;
 
     private static StaticGraph currentG = new StaticGraph(); // This graph was used for cylcing through node sets.
 
@@ -71,12 +74,13 @@ public class Main extends Application {
         nnsGraph = GraphGenerator.generateRandomGraph(10, false);
         bsGraph = GraphGenerator.generateRandomGraph(8, false);
         acosGraph = GraphGenerator.generateRandomGraph(600, false);
-        hfcsGraph = GraphGenerator.generateRandomGraph(50, false);
+        hfcsGraph = GraphGenerator.generateRandomGraph(100, false);
         csGraph = GraphGenerator.generateRandomGraph(100, false);
         polygonGraph = GraphGenerator.generateIrregularPolygonalGraph(9, 150, 200);
         dnnsGraph = new DynamicGraph(nnsGraph, false, true);
         dacosGraph = new DynamicGraph(GraphGenerator.generateRandomGraph(10, false),
                 false, true);
+        dhfcsGraph = new DynamicGraph(hfcsGraph, true, true);
 
         /* Here is a list of example use cases of the solver methods. */
 
@@ -111,11 +115,11 @@ public class Main extends Application {
 //        acosT.start();
 
         /* Hilbert fractal curve solver. */
-        Thread hfcsT = new Thread(() -> {
-            hfcs = new HilbertFractalCurveSolver(hfcsGraph);
-            SolverOutput pf = hfcs.runSolution(10);
-        });
-        hfcsT.start();
+//        Thread hfcsT = new Thread(() -> {
+//            hfcs = new HilbertFractalCurveSolver(hfcsGraph);
+//            SolverOutput pf = hfcs.runSolution(10);
+//        });
+//        hfcsT.start();
 
         /* Christofide's algorithm solver. */
 //        Thread csT = new Thread(() -> {
@@ -137,6 +141,13 @@ public class Main extends Application {
 //            dacos.runSolution(10);
 //        });
 //        dacosT.start();
+
+        /* Dynamic Hilbert Curve Solver. */
+        Thread dhcsT = new Thread(() -> {
+            dhfcs = new DynamicHilbertFractalCurveSolver(dhfcsGraph);
+            dhfcs.runSolution(10);
+        });
+        dhcsT.start();
 
         /* Example of using the test suite to test */
 //        Thread test = new Thread(() -> {
@@ -162,11 +173,22 @@ public class Main extends Application {
 //            }
 //        });
 //        test.start();
+
 //        DynamicGraph dg = new DynamicGraph(acosGraph, true, true);
 //        dg.move();
+        //        hfcs = new HilbertFractalCurveSolver(); // Generates a curve
+//        while (hfcs == null) {
+//            RepeatedFunctions.sleep(10);
+//        }
+        while (dhfcs == null) {
+            RepeatedFunctions.sleep(1);
+        }
         launch(args);
 //        dacos.kill();
 //        dacosGraph.kill();
+        dhfcs.kill();
+        dhfcsGraph.kill();
+
     }
 
     @Override
@@ -180,11 +202,7 @@ public class Main extends Application {
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         // Wait for the curve to be created - there is a waiting time while the path is being generated 1st time
-//        hfcs = new HilbertFractalCurveSolver(); // Generates a curve
-        while (hfcs == null) {
-            RepeatedFunctions.sleep(10);
-        }
-        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, hfcs);
+        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, dhfcs.getHfcs());
         TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, hfcsGraph,1, false);
 
         root.getChildren().add(canvas);
