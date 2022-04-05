@@ -63,6 +63,16 @@ public class DynamicGraph implements Graph {
     private volatile boolean awake;
 
     /**
+     * Boolean describing whether this dynamic graph is currently having its length recorded and averaged.
+     */
+    private volatile boolean recordingLength;
+
+    /**
+     * A double representing the average route length during this DTSPs life-time.
+     */
+    private double averageRouteLength;
+
+    /**
      * Constructs a new DTSP object.
      * @param graph The underlying graph object of the DTSP.
      * @param stepRandomly Whether the nodes are moved using the stepRandomly method in the coordinate mover.
@@ -96,7 +106,8 @@ public class DynamicGraph implements Graph {
     }
 
     /**
-     * Sets the value of the @code{awake} attribute to true and starts the coordinate mover thread.
+     * Sets the value of the @code{awake} attribute to true and starts the coordinate mover thread. This state allows
+     * this object to listen for move and stop commands that resume or pause movement of the nodes.
      */
     public void wake() {
         setAwake(true);
@@ -111,6 +122,7 @@ public class DynamicGraph implements Graph {
                         cm.stepByVelocity();
                     }
                     RepeatedFunctions.sleep(delayPerStep);
+                    updateAverageRouteLength();
                 }
             }
         });
@@ -171,11 +183,43 @@ public class DynamicGraph implements Graph {
         this.edgeStateManager = edgeStateManager;
     }
 
+    /**
+     * Returns the value of the @code{graph} attribute.
+     * @return graph The value of the @code{graph} attribute.
+     */
     public StaticGraph getUnderlyingGraph() {
         return this.graph;
     }
 
+    /**
+     * Sets the value of the @code{awake} attribute.
+     * @param awake The new value to assign the @code{awake} attribute.
+     */
     public void setAwake(boolean awake) {
         this.awake = awake;
+    }
+
+    /**
+     * Returns the value of the @code{recordingLength} attribute.
+     * @return recordingLength The value of the @code{recordingLength} attribute.
+     */
+    public boolean isRecordingLength() {
+        return this.recordingLength;
+    }
+
+    /**
+     * Sets the value of the @code{recordingLength} attribute.
+     * @param recordingLength The new value to assign the @code{recordingLength} attribute.
+     */
+    public void setRecordingLength(boolean recordingLength) {
+        this.recordingLength = recordingLength;
+    }
+
+    /**
+     * Updates the @code{averageRouteLength} attribute so that it is up-to-date.
+     */
+    private void updateAverageRouteLength() {
+        double currentLength = getUnderlyingGraph().getEdgeContainer().getTotalLength();
+        this.averageRouteLength = (this.averageRouteLength + currentLength) / 2;
     }
 }

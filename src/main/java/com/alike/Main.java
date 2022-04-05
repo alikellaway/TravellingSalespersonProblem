@@ -25,12 +25,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 1024;
+    public static final int COORDINATE_MAX_WIDTH = 512;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 1024;
+    public static final int COORDINATE_MAX_HEIGHT = 512;
 
     /**
      * The maximum width value the window and canvas can be given.

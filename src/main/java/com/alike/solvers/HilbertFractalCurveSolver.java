@@ -123,12 +123,15 @@ public class HilbertFractalCurveSolver implements Solver {
         ArrayList<Node> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
         ArrayList<Node> nodesOrdered = new ArrayList<>();
         for (Coordinate c : curveCornerCoordinates) {
-            for (int i = 0; i < nodes.size(); i++) {
+            /* To speed up this process, we remove node objects from the nodes arr as they are found.
+             * .remove() causes all following elements in the arr to be shifted by one if they element removed was not
+             * at the end. => traverse backwards so always purging end element. */
+            for (int i = nodes.size() - 1; i >= 0; i--) {
                 Node n = nodes.get(i);
                 if (n.getCoordinate().equals(c)) {
                     nodesOrdered.add(n);
                     nodes.remove(i); // Removing them as we go will speed it up as we advance
-                    break;
+                    break; // Don't continue looping through the nodes if we found one.
                 }
             }
         }
