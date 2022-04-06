@@ -49,8 +49,6 @@ public class Ant implements Callable<Ant> {
      */
     private static int numNodes;
 
-
-
     /**
      * Constructor initialises a new ant.
      * @param acos A reference to the @code{AntColonyOptimizationSolver} object this ant is working for.
@@ -80,32 +78,31 @@ public class Ant implements Callable<Ant> {
             visitedNodes.put(nd, false);
         }
         // Set initial node to visited
-        visitedNodes.replace(acos.getGraph().getNodeContainer().getNodeByID(startNodeID), true);
+        visitedNodes.put(acos.getGraph().getNodeContainer().getNodeByID(startNodeID), true);
         double routeLength = 0.0; // Need to actively record the route length to adjust pheromone levels.
         int numVisitedNodes = 0; // Record the number of nodes the ant has visited.
-        int x = startNodeID; // Copy start node ID as an index for use in matrices.
-        int y = invalidNodeIdx; // Define the current destination node as invalid (we haven't found it yet).
+        int currentNode = startNodeID; // Copy start node ID as an index for use in matrices.
+        int destinationNode = invalidNodeIdx; // Define the current destination node as invalid (we haven't found it yet).
         // Get the new destination node
-        if (numNodes != numVisitedNodes) {
-            y = getDestinationNode(x, visitedNodes);
+        if (numVisitedNodes != numNodes) {
+            destinationNode = getDestinationNode(currentNode, visitedNodes);
         }
         // While destination node is not invalid we can add the next destination node to our route.
-        while (y != invalidNodeIdx) {
-            routeNodes.add(acos.getGraph().getNodeContainer().getNodeByID(x)); // Add destination node to route.
+        while (destinationNode != invalidNodeIdx) {
+            routeNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNode)); // Add destination node to route.
             numVisitedNodes++;
-            routeLength += acos.getDistanceMatrix()[x][y];
-            adjustPheremoneLevel(x, y, routeLength); // Adjust pheromone levels of the edge we just traversed.
-            visitedNodes.replace(acos.getGraph().getNodeContainer().getNodeByID(y), true); // Set to visited in hashmap
-            x = y; // Destination node is now the current node.
+            routeLength += acos.getDistanceMatrix()[currentNode][destinationNode];
+            adjustPheremoneLevel(currentNode, destinationNode, routeLength); // Adjust pheromone levels of the edge we just traversed.
+            visitedNodes.put(acos.getGraph().getNodeContainer().getNodeByID(destinationNode), true); // Set to visited in hashmap
+            currentNode = destinationNode; // Destination node is now the current node.
             if (numVisitedNodes != numNodes) { // If we haven't visited all nodes
-                y = getDestinationNode(x, visitedNodes); // Get the next destination node
+                destinationNode = getDestinationNode(currentNode, visitedNodes); // Get the next destination node
             } else {
-                y = invalidNodeIdx; // Otherwise reset y to be invalidNodeIdx
+                destinationNode = invalidNodeIdx; // Otherwise reset destination to be invalidNodeIdx
             }
             Thread.sleep(acos.getDelayPerStep());
         }
-        // routeLength += acos.getDistanceMatrix()[x][startNodeID];
-        routeNodes.add(acos.getGraph().getNodeContainer().getNodeByID(x)); // Add the final node to our route
+        routeNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNode)); // Add the final node to our route
         // Add our startNode again here?
         route = createEdgeContainerFromNodeSet(routeNodes); // Construct an edge container using the routeNodes array.
         return this;
@@ -118,30 +115,35 @@ public class Ant implements Callable<Ant> {
      * @param distance The distance between these two nodes.
      */
     private void adjustPheremoneLevel(int x, int y, double distance) {
-        boolean flag = false;
-        while (!flag) {
-            double currentPheremoneLevel = acos.getPheromoneLevelMatrix()[x][y].doubleValue();
-            double updatedPheremoneLevel = (1 - acos.getRh0()) * currentPheremoneLevel + acos.getQ()/distance;
-            if (updatedPheremoneLevel < 0) {
-                flag = acos.getPheromoneLevelMatrix()[x][y].compareAndSet(0);
-            } else {
-                flag = acos.getPheromoneLevelMatrix()[x][y].compareAndSet(updatedPheremoneLevel);
+        boolean done = false;
+        while (!done) {
+            double currentPheromoneLevel = acos.getPheromoneLevelMatrix()[x][y].doubleValue();
+            double updatedPheromoneLevel = (1 - acos.getRh0()) * currentPheromoneLevel + (acos.getQ()/distance);
+            if (updatedPheromoneLevel < 0.0) { // If all the pheromone has evaporated between nodes x and y.
+                done = acos.getPheromoneLevelMatrix()[x][y].compareAndSet(0); // Reset to 0
+            } else { // Otherwise set the pheromone level to the newly updated level.
+                done = acos.getPheromoneLevelMatrix()[x][y].compareAndSet(updatedPheromoneLevel);
             }
         }
     }
 
     /**
      * Chooses the next destination node.
-     * @param x The current node.
+     * @param currNode The current node.
      * @param visitedNodes A hashmap containing whether we have or haven't visited nodes.
      * @return @code{destinationNode} The node that has been chosen to visit next.
      * @throws NonExistentNodeException Thrown if a node ID is referenced but does not exist.
      */
-    private int getDestinationNode(int x, HashMap<Node, Boolean> visitedNodes) throws NonExistentNodeException {
+    private int getDestinationNode(int currNode, HashMap<Node, Boolean> visitedNodes) throws NonExistentNodeException {
         int destinationNode = invalidNodeIdx;
+        // A list containing probabilities of moving to other nodes from the current node.
+        ArrayList<Double> transitionProbabilities = getTransitionProbabilities(currNode, visitedNodes);
+        /* Try to find a next node by choosing a random number and selecting a node with a transitional probability
+           higher than it. If we didnt find one, lower the random number by some amount (note this is unpredictable and
+           will not always return the highest probability node.
+         */
         double random = ThreadLocalRandom.current().nextDouble();
-        ArrayList<Double> transitionProbabilities = getTransitionProbabilities(x, visitedNodes);
-        for (int y = 0; y < acos.getGraph().getNumNodes(); y++) {
+        for (int y = 0; y < numNodes; y++) {
             if (transitionProbabilities.get(y) > random) {
                 destinationNode = y;
                 break;
@@ -154,12 +156,12 @@ public class Ant implements Callable<Ant> {
 
     /**
      * Gets the transition probabilities to each node from the current node.
-     * @param x The index of the current node.
+     * @param currentNodeID The index of the current node.
      * @param visitedNodes The hashmap containing whether we have visited each node.
      * @return @code{transitionProbabilities} An ArrayList containing transitional probabilities for each node.
      * @throws NonExistentNodeException Thrown when a node ID is referenced but does not exist.
      */
-    private ArrayList<Double> getTransitionProbabilities(int x, HashMap<Node, Boolean> visitedNodes) throws NonExistentNodeException {
+    private ArrayList<Double> getTransitionProbabilities(int currentNodeID, HashMap<Node, Boolean> visitedNodes) throws NonExistentNodeException {
         // Create space for output
         ArrayList<Double> transitionProbabilities = new ArrayList<>(acos.getGraph().getNumNodes());
         // Populate with 0s
@@ -167,9 +169,9 @@ public class Ant implements Callable<Ant> {
             transitionProbabilities.add(0.0);
         }
         // Get the denominator of the function
-        double denominator = getTPDenominator(transitionProbabilities, x, visitedNodes);
+        double denominator = getTPDenominator(transitionProbabilities, currentNodeID, visitedNodes);
         // Set the transition probability values to new values using the denominator.
-        for (int y = 0; y < acos.getGraph().getNumNodes(); y++) {
+        for (int y = 0; y < numNodes; y++) {
             transitionProbabilities.set(y, transitionProbabilities.get(y)/denominator);
         }
         return transitionProbabilities;
@@ -185,7 +187,7 @@ public class Ant implements Callable<Ant> {
      */
     private double getTPDenominator(ArrayList<Double> transitionProbabilities, int x, HashMap<Node, Boolean> visitedCities) throws NonExistentNodeException {
         double denominator = 0.0;
-        for (int y = 0; y < acos.getGraph().getNumNodes(); y++) { // Loop through the nodes
+        for (int y = 0; y < numNodes; y++) { // Loop through the nodes
             if (!visitedCities.get(acos.getGraph().getNodeContainer().getNodeByID(y))) { // If the node is not visited
                 if (x == y) { // If its the node we are currently on, set the probability to 0 (or get stuck).
                     transitionProbabilities.set(y, 0.0);
@@ -208,7 +210,6 @@ public class Ant implements Callable<Ant> {
         double numerator = 0.0;
         double pheromoneLevel = acos.getPheromoneLevelMatrix()[y][x].doubleValue();
         if (pheromoneLevel != 0.0) { // If pheromone level not 0
-            // Recalculate pheromone level using the formula.
             numerator = Math.pow(pheromoneLevel, acos.getAlpha()) * Math.pow(1/acos.getDistanceMatrix()[x][y], acos.getBeta());
         }
         return numerator;

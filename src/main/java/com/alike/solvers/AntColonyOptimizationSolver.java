@@ -10,10 +10,7 @@ import com.alike.staticgraphsystem.Node;
 import com.alike.staticgraphsystem.StaticGraph;
 
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * Class uses the Ant colony optimisation algorithm to solve an optimised route through a StaticGraph object.
@@ -26,6 +23,9 @@ public class AntColonyOptimizationSolver implements StaticSolver {
      */
     private StaticGraph graph;
 
+    /**
+     * This number is used to dictate when we wait for all ants to finish before sending new ones.
+     */
     public static final double PROCESSING_CYCLE_PROBABILITY = 0.8;
 
     /**
@@ -125,13 +125,12 @@ public class AntColonyOptimizationSolver implements StaticSolver {
             for (int x = 0; x < numAnts; x++) {
                 executorCompletionService.submit(new Ant(this));
                 activeAnts++;
-                if (Math.random() > PROCESSING_CYCLE_PROBABILITY) {
+                if (ThreadLocalRandom.current().nextDouble() > PROCESSING_CYCLE_PROBABILITY) {
                     processAnts();
                 }
             }
-            processAnts();
+            processAnts(); // Finish all ants that haven't been processed yet.
             getExecutorService().shutdownNow();
-            System.out.println("All " + numAnts + " Ants have finished traversing!");
             long finishTime = System.nanoTime();
             return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
         } catch (Exception e) {
@@ -139,6 +138,15 @@ public class AntColonyOptimizationSolver implements StaticSolver {
         } catch (Error e) {
             return new Fail(e, graph);
         }
+    }
+
+    /**
+     * Sends a single ant to the completion service makes it complete its task.
+     */
+    public void sendAnt() {
+        executorCompletionService.submit(new Ant(this));
+        activeAnts++;
+        processAnts();
     }
 
 
@@ -149,18 +157,19 @@ public class AntColonyOptimizationSolver implements StaticSolver {
     public void processAnts() {
         while (activeAnts > 0) {
             try {
-                Ant ant = executorCompletionService.take().get();
+                Ant ant = executorCompletionService.take().get(); // Pick up an ant
                 EdgeContainer currentRoute = ant.getRoute();
+                // Check if the route found was shorter than the shortest thus far.
                 if (shortestRoute == null || currentRoute.getTotalLength()
                                                         < shortestRoute.getTotalLength()) {
                     shortestRoute = currentRoute;
-                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
+//                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
                     graph.setEdgeContainer(shortestRoute);
                 }
+                activeAnts--;
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-            activeAnts--;
         }
     }
 
