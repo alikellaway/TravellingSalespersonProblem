@@ -5,7 +5,7 @@ import com.alike.solvertestsuite.SolverOutput;
 import com.alike.staticgraphsystem.StaticGraph;
 
 /**
- * Interface is used to ensure that Solver implementations can all successfully interact with the TestSuite.
+ * Interface is used to ensure that Solver implementations can all successfully interact with the StaticTestSuite.
  */
 public interface Solver {
     /**

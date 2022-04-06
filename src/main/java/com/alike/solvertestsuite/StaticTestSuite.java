@@ -12,10 +12,10 @@ import java.util.ArrayList;
 
 /**
  * Class used to test Static travelling salesman solutions against a set of pre-constructed graph problems.
- * TestSuite.java
+ * StaticTestSuite.java
  * @author alike
  */
-public class TestSuite {
+public class StaticTestSuite {
 
     /**
      * The reader object we'll be using to obtain the test graphs.
@@ -40,10 +40,10 @@ public class TestSuite {
     private int testNumber = 0;
 
     /**
-     * Used to create an instance of the TestSuite class.
+     * Used to create an instance of the StaticTestSuite class.
      * @param solver The solver object we will be testing.
      */
-    public TestSuite(Solver solver) {
+    public StaticTestSuite(Solver solver) {
         setSolver(solver);
     }
 

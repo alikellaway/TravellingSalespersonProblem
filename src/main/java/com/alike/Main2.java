@@ -12,7 +12,7 @@ public class Main2 {
 //        cw.populateFile();
 //        cw.close();
 ////
-//        TestSuite suite = new TestSuite(new NearestNeighbourSolver());
+//        StaticTestSuite suite = new StaticTestSuite(new NearestNeighbourSolver());
 //        TestSuiteResult tsr = suite.runTest();
 //        System.out.println(tsr.getTestsFailed() + " " + tsr.getTestsPassed());
 
