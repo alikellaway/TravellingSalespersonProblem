@@ -26,7 +26,6 @@ public class CoordinateMover {
      */
     private Vector[] coordinateVelocities = null;
 
-
     /**
      * The random object used to generate the random components of the class.
      */

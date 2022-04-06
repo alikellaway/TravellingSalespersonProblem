@@ -25,12 +25,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 512;
+    public static final int COORDINATE_MAX_WIDTH = 1024;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 512;
+    public static final int COORDINATE_MAX_HEIGHT = 1024;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -52,15 +52,15 @@ public class Main extends Application {
      */
     private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
 
-    private static StaticGraph nnsGraph;
-    private static StaticGraph bsGraph;
-    private static StaticGraph acosGraph;
-    private static StaticGraph hfcsGraph;
-    private static StaticGraph csGraph;
-    private static StaticGraph polygonGraph;
-    private static DynamicGraph dnnsGraph;
-    private static DynamicGraph dacosGraph;
-    private static DynamicGraph dhfcsGraph;
+    /* Each of these is a graph that's the subject of a solver in the use case examples. */
+    private static StaticGraph nnsGraph; // Nearest Neighbour graph
+    private static StaticGraph bsGraph; // Brute force search graph
+    private static StaticGraph acosGraph; // Ant colony optimisation graph
+    private static StaticGraph hfcsGraph; // Hilbert fractal curve graph
+    private static StaticGraph csGraph; // Christofies solver graph
+    private static DynamicGraph dnnsGraph; // Dynamic nearest neighbour
+    private static DynamicGraph dacosGraph; // Dynamic ant colony optimisation
+    private static DynamicGraph dhfcsGraph; // Dynamic hilbert fractal curve.
 
     private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
     private static DynamicNearestNeighbourSolver dnns;
@@ -76,7 +76,6 @@ public class Main extends Application {
         acosGraph = GraphGenerator.generateRandomGraph(600, false);
         hfcsGraph = GraphGenerator.generateRandomGraph(100, false);
         csGraph = GraphGenerator.generateRandomGraph(100, false);
-        polygonGraph = GraphGenerator.generateIrregularPolygonalGraph(9, 150, 200);
         dnnsGraph = new DynamicGraph(nnsGraph, false, true);
         dacosGraph = new DynamicGraph(GraphGenerator.generateRandomGraph(10, false),
                 false, true);
@@ -193,18 +192,19 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws InterruptedException, NonSquareCanvasException, InvalidGraphException, NodeSuperimpositionException {
+        // Give the name to the window.
         stage.setTitle(STAGE_TITLE);
-        Group root = new Group();
 
+        Group root = new Group();
         Scene scene = new Scene(root, WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         scene.setFill(BACK_GROUND_COLOR);
 
+        // We need a canvas to display the graphs.
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
+        // If displaying hilbert curves, we need a canvas for that too.
         Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
-        // Wait for the curve to be created - there is a waiting time while the path is being generated 1st time
         HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, dhfcs.getHfcs());
         TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, hfcsGraph,1, false);
-
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);
         graphDrawer.start();
