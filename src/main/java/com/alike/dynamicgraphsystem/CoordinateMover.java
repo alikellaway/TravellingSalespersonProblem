@@ -29,7 +29,14 @@ public class CoordinateMover {
     /**
      * The random object used to generate the random components of the class.
      */
-    private final Random rand = new Random();;
+    private final Random rand = new Random();
+
+    /**
+     * This enum is used to represent directions in the following code.
+     */
+    private enum Direction {
+        UP, UPRIGHT, RIGHT, DOWNRIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT, NONE;
+    }
 
     /**
      * Creates a new CoordinateMover object.
@@ -49,23 +56,6 @@ public class CoordinateMover {
     }
 
     /**
-     * Moves a coordinate to one of the surrounding coordinates (randomly). Coordinates will not hit the edge i.e. will
-     * not overflow and will not bounce of the edge.
-     */
-    private void stepRandomly(int speed) { // We can use recursion here to make the particle move more per tick.
-        for (Coordinate coordinate : coordinates) {
-            // Get the possible directions
-            int[] possibleDirections = getPossibleDirections(coordinate);
-            // Choose a random direction by choosing a random index and move the coordinate in that direction.
-            int dirInt = possibleDirections[rand.nextInt(possibleDirections.length)];
-            moveCoordinateAStep(coordinate, dirInt);
-        }
-        if (speed != 0) {
-            stepRandomly(speed - 1);
-        }
-    }
-
-    /**
      * Moves each coordinate in @code{coordinates} by their value in @code{coordinateVelocities} (matched by index).
      */
     public void stepByVelocity() {
@@ -74,13 +64,21 @@ public class CoordinateMover {
             coordinateVelocities = new Vector[coordinates.size()];
             for (int i = 0; i < coordinates.size(); i++) {
                 // Produces velocities with integer numbers
-                coordinateVelocities[i] = generateRandomVector(movementSpeed); // This takes into account the speed.
+                coordinateVelocities[i] = Vector.randomVector(movementSpeed); // This takes into account the speed.
             }
         }
         // Start the movement
         for (int i = 0; i < coordinates.size(); i++) { // Move each coordinate
             moveCoordinateByAVector(coordinates.get(i), coordinateVelocities[i]);
         }
+    }
+
+    /**
+     * Sets the value of the @code{coordinates} attribute to a new value.
+     * @param coordinates The new value to assign to the @code{coordinates} value.
+     */
+    public void setCoordinates(ArrayList<Coordinate> coordinates) {
+        this.coordinates = coordinates;
     }
 
     /**
@@ -92,7 +90,7 @@ public class CoordinateMover {
         // Do the x component of the vector first.
         if (v.getX() < 0) { // The vector is moving the coordinate left.
             for (int x = 0; x < v.getX() * -1; x++) {
-                moveCoordinateAStep(c, 6); // decrement x (move it left)
+                moveCoordinateAStep(c, Direction.LEFT); // decrement x (move it left)
                 // If we hit the left wall then we need to invert the velocity's x component and skip.
                 if (c.getX() <= 0) {
                     v.invertX();
@@ -101,7 +99,7 @@ public class CoordinateMover {
             }
         } else { // The vector is moving the coordinate right.
             for (int x = 0; x < v.getX(); x++) {
-                moveCoordinateAStep(c, 2); // Increment x (move it right).
+                moveCoordinateAStep(c, Direction.RIGHT); // Increment x (move it right).
                 // If we hit the right wall then we need to invert the velocity's x component and stop.
                 if (c.getX() >= Main.COORDINATE_MAX_WIDTH) {
                     v.invertX();
@@ -112,7 +110,7 @@ public class CoordinateMover {
         // Do the y component of the vector.
         if (v.getY() < 0) { // The vector is moving the coordinate upwards.
             for (int y = 0; y < v.getY() * -1; y++) {
-                moveCoordinateAStep(c, 0); // Decrement y (move it upwards).
+                moveCoordinateAStep(c, Direction.UP); // Decrement y (move it upwards).
                 // If we hit the top wall then we need to invert the velocity's y component and skip.
                 if (c.getY() <= 0) {
                     v.invertY();
@@ -121,7 +119,7 @@ public class CoordinateMover {
             }
         } else { // The vector is moving the coordinate downwards.
             for (int y = 0; y < v.getY(); y++) {
-                moveCoordinateAStep(c, 4); // Increment y (move it upwards).
+                moveCoordinateAStep(c, Direction.DOWN); // Increment y (move it down).
                 // If we hit the bottom wall then we need to invert the velocity's y component and skip.
                 if (c.getY() >= Main.COORDINATE_MAX_HEIGHT) {
                     v.invertY();
@@ -132,11 +130,20 @@ public class CoordinateMover {
     }
 
     /**
-     * Sets the value of the @code{coordinates} attribute to a new value.
-     * @param coordinates The new value to assign to the @code{coordinates} value.
+     * Moves a coordinate to one of the surrounding coordinates (randomly). Coordinates will not hit the edge i.e. will
+     * not overflow and will not bounce of the edge.
      */
-    public void setCoordinates(ArrayList<Coordinate> coordinates) {
-        this.coordinates = coordinates;
+    private void stepRandomly(int speed) { // We can use recursion here to make the particle move more per tick.
+        for (Coordinate coordinate : coordinates) {
+            // Get the possible directions
+            Direction[] possibleDirections = getPossibleDirections(coordinate);
+            // Choose a random Direction by choosing a random index and move the coordinate in that Direction.
+            Direction dir = possibleDirections[rand.nextInt(possibleDirections.length)];
+            moveCoordinateAStep(coordinate, dir);
+        }
+        if (speed != 0) {
+            stepRandomly(speed - 1);
+        }
     }
 
     /**
@@ -175,93 +182,90 @@ public class CoordinateMover {
         return coordinate.getX() >= Main.COORDINATE_MAX_WIDTH;
     }
 
+
+
     /**
      * Deduces which of the 8 possible directions a coordinate can step to.
      * @param c The coordinate to check possible directions for.
-     * @return int[] A list of the possible directions.
+     * @return int[] A list of the possible directions represented as an integer array.
      */
-    private int[] getPossibleDirections(Coordinate c) {
-        // Get a direction
-            /*
-                When choosing a direction from a coordinate, it can be one of the 8 surrounding coordinates. Direction
-                0 is directly up, 1 is to the top right, 2 is to the right and so on until direction 7 is to the top
-                left. A coordinate can also not move which will add -1 to the direction list (this is always possible)
-             */
-        int[] possibleDirections; // If unobstructed then all are available.
+    private Direction[] getPossibleDirections(Coordinate c) {
+        /*
+            When choosing a Direction from a coordinate, it can be one of the 8 surrounding coordinates. Direction
+            0 is directly up, 1 is to the top right, 2 is to the right and so on until Direction 7 is to the top
+            left. A coordinate can also not move which will add -1 to the Direction list (this is always possible)
+         */
+        Direction[] possibleDirections; // If unobstructed then all are available.
         // Top left check
         if (coordinateTouchingLeftEdge(c) && coordinateTouchingTopEdge(c)) {
-            possibleDirections = new int[]{-1, 2, 3, 4}; // Can only move right, right down, down.
-            // Top right check
+            possibleDirections = new Direction[]{Direction.NONE, Direction.RIGHT, Direction.DOWNRIGHT, Direction.DOWN}; // Can only move right, right down, down.
+        // Top right check
         } else if (coordinateTouchingTopEdge(c) && coordinateTouchingRightEdge(c)) {
-            possibleDirections = new int[]{-1, 4, 5, 6}; // Can only move down, left down, left.
-            // Bottom right check
+            possibleDirections = new Direction[]{Direction.NONE, Direction.DOWN, Direction.DOWN_LEFT, Direction.LEFT}; // Can only move down, left down, left.
+        // Bottom right check
         } else if (coordinateTouchingRightEdge(c) && coordinateTouchingBottomEdge(c)) {
-            possibleDirections = new int[]{-1, 0, 6, 7}; // Can only move up, left, up left.
-            // Bottom left check
+            possibleDirections = new Direction[]{Direction.NONE, Direction.UP, Direction.LEFT, Direction.UP_LEFT}; // Can only move up, left, up left.
+        // Bottom left check
         } else if (coordinateTouchingLeftEdge(c) && coordinateTouchingBottomEdge(c)) {
-            possibleDirections = new int[]{-1, 0, 1, 2}; // Can only move up, up right, right.
-            // Top edge check
+            possibleDirections = new Direction[]{Direction.NONE, Direction.UP, Direction.UPRIGHT, Direction.RIGHT}; // Can only move up, up right, right.
+        // Top edge check
         } else if (coordinateTouchingTopEdge(c)) {
-            possibleDirections = new int[]{-1, 2, 3, 4, 5, 6};
-            // Right edge check
+            possibleDirections = new Direction[]{Direction.NONE, Direction.RIGHT, Direction.DOWNRIGHT, Direction.DOWN, Direction.DOWN_LEFT, Direction.LEFT};
+        // Right edge check
         } else if (coordinateTouchingRightEdge(c)) {
-            possibleDirections = new int[]{-1, 0, 4, 5, 6, 7};
-            // Bottom edge check
+            possibleDirections = new Direction[]{Direction.NONE, Direction.UP, Direction.DOWN, Direction.DOWN_LEFT, Direction.RIGHT, Direction.UPRIGHT};
+        // Bottom edge check
         } else if (coordinateTouchingBottomEdge(c)) {
-            possibleDirections = new int[]{-1, 0, 1, 2, 6, 7};
-            // Left edge check
+            possibleDirections = new Direction[]{Direction.NONE, Direction.UP, Direction.UPRIGHT, Direction.RIGHT, Direction.LEFT, Direction.UP_LEFT};
+        // Left edge check
         } else if (coordinateTouchingLeftEdge(c)) {
-            possibleDirections = new int[]{-1, 0, 1, 2, 3, 4};
-        } // Not obstructed
-        else {
-            possibleDirections = new int[]{-1, 0, 1, 2, 3, 4, 5, 6, 7};
+            possibleDirections = new Direction[]{Direction.NONE, Direction.UP, Direction.UPRIGHT, Direction.RIGHT, Direction.DOWNRIGHT, Direction.DOWN};
+        // Not obstructed
+        } else {
+            possibleDirections = new Direction[]{Direction.NONE, Direction.UP, Direction.UPRIGHT, Direction.RIGHT, Direction.DOWNRIGHT, Direction.DOWN, Direction.DOWN_LEFT, Direction.LEFT, Direction.UP_LEFT};
         }
         return possibleDirections;
     }
 
     /**
-     * Shifts an input coordinate in one unit in a given direction.
-     * @param currC The coordinate to adjust.
-     * @param directionInt The direction in which to adjust the coordinate.
+     * Shifts an input coordinate in one unit in a given Direction.
+     * @param c The coordinate to adjust.
+     * @param direction The Direction in which to adjust the coordinate.
      */
-    private void moveCoordinateAStep(Coordinate currC, int directionInt) {
-        switch(directionInt) {
-            case -1:
+    private void moveCoordinateAStep(Coordinate c, Direction direction) {
+        switch(direction) {
+            case NONE:
                 // The coordinate did not move - do nothing
                 break;
-            case 0: // Moving straight up
-                currC.setY(currC.getY() - 1);
+            case UP: // Moving straight up
+                c.setY(c.getY() - 1);
                 break;
-            case 1: // Moving up right
-                currC.setX(currC.getX() + 1);
-                currC.setY(currC.getY() - 1);
+            case UPRIGHT: // Moving up right
+                c.setX(c.getX() + 1);
+                c.setY(c.getY() - 1);
                 break;
-            case 2: // Moving right
-                currC.setX(currC.getX() + 1);
+            case RIGHT: // Moving right
+                c.setX(c.getX() + 1);
                 break;
-            case 3: // Moving down right
-                currC.setX(currC.getX() + 1);
-                currC.setY(currC.getY() + 1);
+            case DOWNRIGHT: // Moving down right
+                c.setX(c.getX() + 1);
+                c.setY(c.getY() + 1);
                 break;
-            case 4: // Moving down
-                currC.setY(currC.getY() + 1);
+            case DOWN: // Moving down
+                c.setY(c.getY() + 1);
                 break;
-            case 5: // Moving down left
-                currC.setX(currC.getX() - 1);
-                currC.setY(currC.getY() + 1);
+            case DOWN_LEFT: // Moving down left
+                c.setX(c.getX() - 1);
+                c.setY(c.getY() + 1);
                 break;
-            case 6: // Moving left
-                currC.setX(currC.getX() - 1);
+            case LEFT: // Moving left
+                c.setX(c.getX() - 1);
                 break;
-            case 7: // Moving up left
-                currC.setX(currC.getX() - 1);
-                currC.setY(currC.getY() - 1);
+            case UP_LEFT: // Moving up left
+                c.setX(c.getX() - 1);
+                c.setY(c.getY() - 1);
                 break;
         }
-    }
-
-    public int getMovementSpeed() {
-        return movementSpeed;
     }
 
     /**
@@ -273,15 +277,10 @@ public class CoordinateMover {
     }
 
     /**
-     * Returns a random vector that has a magnitude of the input magnitude by using a randomly generated angle and
-     * parametric equations to get a vector with a magnitude of the radius of a circle. It then rounds these.
-     * @param magnitude The required magnitude of the output vector.
-     * @return Vector A new randomized vector that has a magnitude close to the input magnitude.
+     * Sets the value of the @code{coordinateVelocities} attribute to a new value.
+     * @param coordinateVelocities The new value to assign the @code{coordinateVelocities} attribute.
      */
-    private Vector generateRandomVector(double magnitude) {
-        double angle = rand.nextDouble(2.0 * Math.PI);
-        double vX = Math.round(magnitude * Math.cos(angle));
-        double vY = Math.round(magnitude * Math.sin(angle));
-        return new Vector(vX, vY);
+    public void setCoordinateVelocities(Vector[] coordinateVelocities) {
+        this.coordinateVelocities = coordinateVelocities;
     }
 }

@@ -1,5 +1,7 @@
 package com.alike.staticgraphsystem;
 
+import java.util.Random;
+
 /**
  * @author alike
  * Class used to represent Vectors in code and holds relevant Vector manipulation logic.
@@ -128,5 +130,19 @@ public class Vector {
     public void invert() {
         invertX();
         invertY();
+    }
+
+    /**
+     * Returns a random vector that has a magnitude of the input magnitude by using a randomly generated angle and
+     * parametric equations to get a vector with a magnitude of the radius of a circle. It then rounds these.
+     * @param magnitude The required magnitude of the output vector.
+     * @return Vector A new randomized vector that has a magnitude close to the input magnitude.
+     */
+    public static Vector randomVector(double magnitude) {
+        Random rand = new Random();
+        double angle = rand.nextDouble(2.0 * Math.PI);
+        double vX = Math.round(magnitude * Math.cos(angle));
+        double vY = Math.round(magnitude * Math.sin(angle));
+        return new Vector(vX, vY);
     }
 }
