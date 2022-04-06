@@ -15,7 +15,7 @@ import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
  * Class constructs a pseudo hilbert fractal curve and then overlays the curve onto a TSP to find an order of traversal.
  * @author alike
  */
-public class HilbertFractalCurveSolver implements Solver {
+public class HilbertFractalCurveSolver implements StaticSolver {
     /*
         NTS: The curve should be able to perfectly cover all 1047576 points in a 1024x1024 canvas using only
         the corners in the order 10 curve. Likewise, it should be able to cover all 262144 points with an order 9

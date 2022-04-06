@@ -150,12 +150,27 @@ public class NodeContainer {
     }
 
     /**
-     * Returns a node object given its unique identified (ID).
+     * Returns a node object given its unique identified (ID). Knowing that the set is always ordered, we can just
+     * retrieve by index.
      * @param id The ID attribute of the node you wish to get.
      * @return Node The node with matching ID to input.
      * @throws NonExistentNodeException Thrown if the node was not found.
      */
     public Node getNodeByID(int id) throws NonExistentNodeException {
+        Node n = getNodeSet().get(id);
+        if (n.getNodeID() != id) {
+            throw new NonExistentNodeException("No node found with ID: " + id + " (" + getNodeSet().toString() + ")");
+        }
+        return n;
+    }
+
+    /**
+     * Returns a node object given its ID, if this container is not ordered (should never be the case).
+     * @param id The ID to find.
+     * @return n The node found with a matching ID.
+     * @throws NonExistentNodeException Thrown if no node was found with a matching ID.
+     */
+    public Node getNodeByIdSearch(int id) throws NonExistentNodeException {
         for (Node n : getNodeSet()) {
             if (n.getNodeID() == id) {
                 return n;

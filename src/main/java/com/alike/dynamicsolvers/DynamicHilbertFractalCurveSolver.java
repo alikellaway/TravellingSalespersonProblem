@@ -2,10 +2,14 @@ package com.alike.dynamicsolvers;
 
 import com.alike.dynamicgraphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
+import com.alike.solution_helpers.Timer;
+import com.alike.solvers.DynamicSolver;
 import com.alike.solvers.HilbertFractalCurveSolver;
+import com.alike.solvertestsuite.DynamicSolution;
+import com.alike.solvertestsuite.SolverOutput;
 import com.alike.staticgraphsystem.StaticGraph;
 
-public class DynamicHilbertFractalCurveSolver {
+public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
     /**
      * A reference to the @code{HilbertFractalCurveSolver} object that will be repeatedly solving the graph.
      */
@@ -45,6 +49,23 @@ public class DynamicHilbertFractalCurveSolver {
                 e.printStackTrace();
             }
         }
+    }
+
+    public SolverOutput runSolution(int runTime, int delayPerSolve) {
+        dgraph.wake(); // Listen for start stop commands.
+        Timer t = new Timer();
+        t.time(runTime);
+        while (t.isTiming()) {
+            try {
+                dgraph.stop();
+                hfcs.runSolution(0);
+                dgraph.move();
+                RepeatedFunctions.sleep(delayPerSolve);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return new DynamicSolution(dgraph.getAverageRouteLength(), runTime);
     }
 
     public HilbertFractalCurveSolver getHfcs() {

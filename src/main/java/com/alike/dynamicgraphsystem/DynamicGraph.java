@@ -130,7 +130,7 @@ public class DynamicGraph implements Graph {
     }
 
     /**
-     * Sets the value of the @code{awake} attribute to false which kills the mover thread.
+     * Sets the value of the @code{awake} attribute to false which kills the mover's listener thread.
      */
     public void kill() {
         stop();
@@ -200,26 +200,14 @@ public class DynamicGraph implements Graph {
     }
 
     /**
-     * Returns the value of the @code{recordingLength} attribute.
-     * @return recordingLength The value of the @code{recordingLength} attribute.
-     */
-    public boolean isRecordingLength() {
-        return this.recordingLength;
-    }
-
-    /**
-     * Sets the value of the @code{recordingLength} attribute.
-     * @param recordingLength The new value to assign the @code{recordingLength} attribute.
-     */
-    public void setRecordingLength(boolean recordingLength) {
-        this.recordingLength = recordingLength;
-    }
-
-    /**
      * Updates the @code{averageRouteLength} attribute so that it is up-to-date.
      */
     private void updateAverageRouteLength() {
         double currentLength = getUnderlyingGraph().getEdgeContainer().getTotalLength();
         this.averageRouteLength = (this.averageRouteLength + currentLength) / 2;
+    }
+
+    public double getAverageRouteLength() {
+        return averageRouteLength;
     }
 }

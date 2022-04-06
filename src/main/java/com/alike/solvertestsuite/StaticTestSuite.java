@@ -3,7 +3,7 @@ package com.alike.solvertestsuite;
 import com.alike.customexceptions.CoordinateListException;
 import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.read_write.CoordinateListFileReader;
-import com.alike.solvers.Solver;
+import com.alike.solvers.StaticSolver;
 import com.alike.staticgraphsystem.NodeContainer;
 import com.alike.staticgraphsystem.StaticGraph;
 
@@ -25,7 +25,7 @@ public class StaticTestSuite {
     /**
      * The solver object being tested by this test suite.
      */
-    private Solver solver;
+    private StaticSolver solver;
 
     /**
      * Need to keep a reference to the current graph in-case a test was failed while we were trying to solve it.
@@ -43,7 +43,7 @@ public class StaticTestSuite {
      * Used to create an instance of the StaticTestSuite class.
      * @param solver The solver object we will be testing.
      */
-    public StaticTestSuite(Solver solver) {
+    public StaticTestSuite(StaticSolver solver) {
         setSolver(solver);
     }
 
@@ -81,7 +81,7 @@ public class StaticTestSuite {
      * Sets the value of the @code{solver} attribute to a new value.
      * @param solver The new value to assign to the @code{solver} attribute.
      */
-    public void setSolver(Solver solver) {
+    public void setSolver(StaticSolver solver) {
         this.solver = solver;
     }
 }

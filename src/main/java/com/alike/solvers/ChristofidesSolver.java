@@ -13,7 +13,7 @@ import java.util.HashMap;
  * Used to find a route through a @code{StaticGraph} using Christofide's algorithm.
  * @author alike
  */
-public class ChristofidesSolver implements Solver {
+public class ChristofidesSolver implements StaticSolver {
     /**
      * The @code{StaticGraph} we are solving.
      */

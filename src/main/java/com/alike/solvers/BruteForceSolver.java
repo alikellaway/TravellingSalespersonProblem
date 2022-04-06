@@ -14,7 +14,7 @@ import java.util.List;
  * of node orders and traversing them all to find the shortest route.
  * @author alike
  */
-public class BruteForceSolver implements Solver {
+public class BruteForceSolver implements StaticSolver {
 
     /**
      * The graph the solution will be running on.

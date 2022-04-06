@@ -1,11 +1,17 @@
 package com.alike.solvertestsuite;
 
-public class DSolution implements SolverOutput {
-
+public class DynamicSolution implements SolverOutput {
+    /**
+     * The averageLength attribute of the DTSP object after the solution has been run for a certain time period.
+     */
     private double averageLength;
+
+    /**
+     * The time period for which the solver was solving.
+     */
     private double timePeriod;
 
-    public DSolution(double averageLength, double timePeriod) {
+    public DynamicSolution(double averageLength, double timePeriod) {
         setAverageLength(averageLength);
         setTimePeriod(timePeriod);
     }
@@ -29,5 +35,14 @@ public class DSolution implements SolverOutput {
     @Override
     public boolean isFail() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getAverageLength());
+        sb.append(", ");
+        sb.append(getTimePeriod());
+        return sb.toString();
     }
 }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @author alike
  * @version 1.0
  */
-public class NearestNeighbourSolver implements Solver {
+public class NearestNeighbourSolver implements StaticSolver {
     /**
      * A reference to the graph we are solving.
      */

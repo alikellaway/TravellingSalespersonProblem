@@ -3,7 +3,7 @@ package com.alike.solvertestsuite;
 import com.alike.staticgraphsystem.Graph;
 
 /**
- * Solver classes will output these objects from their runSolution methods to indicate that the solver failed to find
+ * StaticSolver classes will output these objects from their runSolution methods to indicate that the solver failed to find
  * a solution.
  * @author alike
  */

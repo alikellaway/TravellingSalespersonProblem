@@ -5,7 +5,7 @@ import com.alike.solvertestsuite.Solution;
 import com.alike.staticgraphsystem.EdgeContainer;
 import com.alike.staticgraphsystem.StaticGraph;
 
-public class LinKernighanSolver implements Solver {
+public class LinKernighanSolver implements StaticSolver {
 
     /**
      * The graph which we are to solve.
@@ -39,7 +39,7 @@ public class LinKernighanSolver implements Solver {
 
     /**
      * Sets the @code{graph} attribute to a new value.
-     * @param graph The graph to assign the Solver's @code{graph} attribute.
+     * @param graph The graph to assign the StaticSolver's @code{graph} attribute.
      */
     @Override
     public void setGraph(StaticGraph graph) {

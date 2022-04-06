@@ -1,7 +1,7 @@
 package com.alike.solvertestsuite;
 
 import com.alike.dynamicgraphsystem.DynamicGraph;
-import com.alike.solvers.Solver;
+import com.alike.solvers.StaticSolver;
 import com.alike.staticgraphsystem.StaticGraph;
 
 public class DynamicTestSuite {
@@ -13,22 +13,28 @@ public class DynamicTestSuite {
     /**
      * A reference to the solver that is being used to solve the dynamic graph during the current test.
      */
-    private Solver solver;
+    private StaticSolver solver;
 
-    public DynamicTestSuite(Solver solver) {
+    private volatile boolean timerRunning;
+
+    private int timerLengthMs;
+
+    public DynamicTestSuite(StaticSolver solver) {
         setDgraph(new DynamicGraph(new StaticGraph(), false, true));
         setSolver(solver);
     }
 
-    public SolverOutput runSolution() {
+    /*public SolverOutput runSolution() {
 
-    }
+    }*/
 
     public void setDgraph(DynamicGraph dgraph) {
         this.dgraph = dgraph;
     }
 
-    public void setSolver(Solver solver) {
+    public void setSolver(StaticSolver solver) {
         this.solver = solver;
     }
+
+
 }
