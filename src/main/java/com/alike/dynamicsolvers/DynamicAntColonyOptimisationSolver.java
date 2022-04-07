@@ -37,7 +37,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      * @param dgraph The @code{DynamicGraph} object this object will be used to solve.
      */
     public DynamicAntColonyOptimisationSolver(DynamicGraph dgraph) {
-        setDgraph(dgraph);
+        setGraph(dgraph);
         setGraph(dgraph.getUnderlyingGraph());
         getDgraph().wake();
         acos = new AntColonyOptimizationSolver(graph);
