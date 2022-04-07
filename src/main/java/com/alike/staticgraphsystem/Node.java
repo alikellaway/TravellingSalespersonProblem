@@ -187,4 +187,11 @@ public class Node {
         return closestFoundNode;
     }
 
+    /**
+     * Used to decrease the @code{numNodes} attribute by one NB: This method is very unsafe and will cause havoc if
+     * not used properly!
+     */
+    public static void decrementNumNodes() {
+        numNodes--;
+    }
 }
