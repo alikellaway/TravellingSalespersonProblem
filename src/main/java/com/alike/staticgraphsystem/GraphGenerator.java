@@ -123,20 +123,29 @@ public class GraphGenerator {
     /**
      * Used to generate a random StaticGraph object with randomized node positions and randomized edges (if needed).
      * @param numNodes The number of nodes the random graph must have.
-     * @param generateRandomEdges Whether or not the method should output a graph with randomized edges already assigned.
+     * @param generateRandomEdges Whether the method should output a graph with randomized edges already assigned.
      * @return g A new randomized StaticGraph object.
      */
     public static StaticGraph generateRandomGraph(int numNodes, boolean generateRandomEdges ) {
         Node.restartNodeCounter();
         // Create some random nodes
         NodeContainer nSet = new NodeContainer();
-        for (int i = 0; i < numNodes; i++) {
+        while (nSet.getNodeSet().size() != numNodes) {
+            Node newNode = Node.generateRandomTSPNode();
             try {
-                nSet.add(Node.generateRandomTSPNode());
+                nSet.add(newNode);
             } catch (NodeSuperimpositionException e) {
-                i--;
+                /* We failed to add the node in because it clashed with something already in the plane.
+                * We need to regenerate a node without incrementing the node counter in the node class. */
+                Node.decrementNumNodes();
+                // If the plane is completely full, then we want to terminate.
+                if (nSet.getNodeSet().size() == Main.COORDINATE_MAX_WIDTH * Main.COORDINATE_MAX_HEIGHT) {
+                    e.printStackTrace();
+                }
             }
         }
+
+        nSet.trimToSize();
         // Create an empty edge set.
         EdgeContainer eSet = new EdgeContainer();
         if (generateRandomEdges) { // Fill with random edges using trial and error if edges are required.
