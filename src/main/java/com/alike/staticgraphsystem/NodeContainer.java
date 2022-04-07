@@ -159,7 +159,7 @@ public class NodeContainer {
     public Node getNodeByID(int id) throws NonExistentNodeException {
         Node n = getNodeSet().get(id);
         if (n.getNodeID() != id) {
-            throw new NonExistentNodeException("No node found with ID: " + id + " (" + getNodeSet().toString() + ")");
+            n = getNodeByIdSearch(id);
         }
         return n;
     }
@@ -206,5 +206,10 @@ public class NodeContainer {
         return cL;
     }
 
-
+    /**
+     * Used to call the underlying array lists trimeToSize() method.
+     */
+    public void trimToSize() {
+        this.nodeSet.trimToSize();
+    }
 }
