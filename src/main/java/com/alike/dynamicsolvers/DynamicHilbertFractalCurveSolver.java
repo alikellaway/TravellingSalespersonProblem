@@ -32,7 +32,7 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
 
     public DynamicHilbertFractalCurveSolver(DynamicGraph dgraph) {
         setGraph(dgraph.getUnderlyingGraph());
-        setDgraph(dgraph);
+        setGraph(dgraph);
         setHfcs(new HilbertFractalCurveSolver(getGraph()));
     }
 
@@ -80,12 +80,13 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
         return dgraph;
     }
 
-    public void setDgraph(DynamicGraph dgraph) {
-        this.dgraph = dgraph;
-    }
-
     public StaticGraph getGraph() {
         return graph;
+    }
+
+    @Override
+    public void setGraph(DynamicGraph dgraph) {
+        this.dgraph = dgraph;
     }
 
     public void setGraph(StaticGraph graph) {

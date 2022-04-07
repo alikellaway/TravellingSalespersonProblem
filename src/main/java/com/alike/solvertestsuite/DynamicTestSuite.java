@@ -1,8 +1,12 @@
 package com.alike.solvertestsuite;
 
 import com.alike.dynamicgraphsystem.DynamicGraph;
+import com.alike.solvers.DynamicSolver;
 import com.alike.solvers.StaticSolver;
 import com.alike.staticgraphsystem.StaticGraph;
+import com.alike.staticgraphsystem.Vector;
+
+import java.util.ArrayList;
 
 public class DynamicTestSuite {
     /**
@@ -13,26 +17,29 @@ public class DynamicTestSuite {
     /**
      * A reference to the solver that is being used to solve the dynamic graph during the current test.
      */
-    private StaticSolver solver;
-
-    private volatile boolean timerRunning;
+    private DynamicSolver solver;
 
     private int timerLengthMs;
 
-    public DynamicTestSuite(StaticSolver solver) {
+    public DynamicTestSuite(DynamicSolver solver) {
         setDgraph(new DynamicGraph(new StaticGraph(), false, true));
         setSolver(solver);
     }
 
-    /*public SolverOutput runSolution() {
+    private runTest(DynamicGraph dgraph, ArrayList<Vector> initVelocities) {
+        solver.setGraph(dgraph);
+        dgraph.
+    }
 
-    }*/
+    private DynamicGraph loadGraph() {
+
+    }
 
     public void setDgraph(DynamicGraph dgraph) {
         this.dgraph = dgraph;
     }
 
-    public void setSolver(StaticSolver solver) {
+    public void setSolver(DynamicSolver solver) {
         this.solver = solver;
     }
 

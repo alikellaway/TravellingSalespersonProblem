@@ -155,19 +155,20 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     }
 
     /**
-     * Sets the @code{dgraph} attribute to a new value.
-     * @param dgraph The new value to assign the @code{dgraph} attribute.
-     */
-    public void setDgraph(DynamicGraph dgraph) {
-        this.dgraph = dgraph;
-    }
-
-    /**
      * Returns the value of the @code{graph} attribute.
      * @return graph The value of the @code{graph} attribute.
      */
     public StaticGraph getGraph() {
         return graph;
+    }
+
+    /**
+     * Sets the @code{dgraph} attribute to a new value.
+     * @param dgraph The new value to assign the @code{dgraph} attribute.
+     */
+    @Override
+    public void setGraph(DynamicGraph dgraph) {
+        this.dgraph = dgraph;
     }
 
     /**
