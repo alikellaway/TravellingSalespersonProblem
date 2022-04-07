@@ -72,16 +72,19 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         draw();
     }
 
+    private int period = 0;
+
     /**
      * Draws the hilbert curve in hfcs onto the canvas. This works by drawing a little more of the line on each time
      * it is called rather than redrawing the whole line (so it is faster).
      */
     private void draw() {
         // Draw the lines from the graph that are after our progress counter but before the draw limit
-        for (int i = 1 + progressCounter; i < drawLimit; i++) {
+        for (int i = 1 + progressCounter; i < drawLimit; i++) { // Start at one so we can draw backwards.
             // Design the line - vary the color with the path completion
-            float hue = map(hfcs.getOrder() * i, path.length);
-            gc.setStroke(Color.hsb(hue, 1, 1, 2.0/hfcs.getOrder()));
+            int hue = map(period*i, path.length);
+//            gc.setStroke(Color.hsb(hue, 1, 1, 2.0/hfcs.getOrder()));
+            gc.setStroke(Color.grayRgb(hue, 0.5D));
             try { // Draw the line
                 gc.strokeLine(path[i].getX(), path[i].getY(), path[i - 1].getX(), path[i - 1].getY());
             } catch (IndexOutOfBoundsException ignored) {
@@ -93,16 +96,19 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         if (drawLimit > path.length) {
             drawLimit = path.length;
         }
+        period++;
+        period = (int) Math.pow(period, period);
     }
 
     /**
      * Maps a value to a fraction of 360 to find a HSB colour (we assume the minimum value i could be is 0).
-     * @param i The input value.
-     * @param iMax The maximum value the input value could be.
+     * @param coordinateIndex The index of the part coordinate we are colouring in the path.
+     * @param maxIndex The length of the path.
      * @return float The value as a color between 0 and 360.
      */
-    private float map(float i, float iMax) {
-        return (i/iMax) * 360; // Note that when using the hue value in the hsb method, it will loop round to red
+    private int map(float coordinateIndex, float maxIndex) {
+        return Math.abs((int) ((int) (255.0 * (coordinateIndex/maxIndex))) % 255);
+//        return (int) (i/iMax) * 360; // Note that when using the hue value in the hsb method, it will loop round to red
     }
 
     /**
