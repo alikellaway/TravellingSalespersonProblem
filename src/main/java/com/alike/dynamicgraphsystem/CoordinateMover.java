@@ -83,6 +83,7 @@ public class CoordinateMover {
      * @param v The vector by which to move the coordinate.
      */
     private void moveCoordinateByAVector(Coordinate c, Vector v) {
+        // TODO Must be a way to make this not move right angles: loop?
         // Do the x component of the vector first.
         if (v.getX() < 0) { // The vector is moving the coordinate left.
             for (int x = 0; x < v.getX() * -1; x++) {
