@@ -96,32 +96,6 @@ public class NearestNeighbourSolver implements StaticSolver {
     }
 
     /**
-     * This method is used to find the closest unvisited node to the current node.
-     * @return Node The closest univisited node (or the starting node if no others are found).
-     */
-    private Node findClosestUnvistedNode() {
-         // Generate our space to put our results
-        double distanceToClosestFoundNode =  // We set the distance to be the maximum distance two nodes could away
-                Math.ceil(Math.sqrt(Math.pow(Main.COORDINATE_MAX_WIDTH, 2) + Math.pow(Main.COORDINATE_MAX_HEIGHT, 2)));
-        Node closestFoundNode = null; // Keep a record of the closest found node
-        ArrayList<Node> nodeSet = nodeContainer.getNodeSet(); // Get the set
-        for (Node nodeBeingChecked : nodeSet) {
-            if (!nodeBeingChecked.isVisited() && nodeBeingChecked != currentNode) {
-                Vector v = currentNode.getVectorTo(nodeBeingChecked);
-                double mag = v.magnitude();
-                if (mag < distanceToClosestFoundNode) {
-                    distanceToClosestFoundNode = mag;
-                    closestFoundNode = nodeBeingChecked;
-                }
-            }
-        }
-        if (closestFoundNode == null) { // Means the end of the graphs - loop back to beginning.
-            closestFoundNode = nodeSet.get(0);
-        }
-        return closestFoundNode;
-    }
-
-    /**
      * Extends the route by moving to the next closest node (by distance) or to the start node if all nodes are visited.
      */
     private void traverseToNextClosestNode() throws EdgeSuperimpositionException, EdgeToSelfException {
