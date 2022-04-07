@@ -36,7 +36,6 @@ public class DynamicGraph implements Graph {
      */
     private int delayPerStep;
 
-
     /**
      * A reference to the underlying graph object which this object is manipulating.
      */
@@ -63,11 +62,6 @@ public class DynamicGraph implements Graph {
     private volatile boolean awake;
 
     /**
-     * Boolean describing whether this dynamic graph is currently having its length recorded and averaged.
-     */
-    private volatile boolean recordingLength;
-
-    /**
      * A double representing the average route length during this DTSPs life-time.
      */
     private double averageRouteLength;
@@ -81,7 +75,18 @@ public class DynamicGraph implements Graph {
     public DynamicGraph(StaticGraph graph, boolean stepRandomly, boolean stepByVelocity) {
         cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), DEF_MOVEMENT_SPEED);
         setEdgeStateManager(new EdgeStateManager());
-        this.graph = graph;
+        setGraph(graph);
+        stop(); // Assigns moving var to false.
+        setSteppingRandomly(stepRandomly);
+        setSteppingByVelocity(stepByVelocity);
+        setDelayPerStep(DEF_DELAY_PER_STEP);
+        setAwake(false);
+    }
+
+    public DynamicGraph(StaticGraph graph, boolean stepRandomly, boolean stepByVelocity, int movementSpeed) {
+        cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), movementSpeed);
+        setEdgeStateManager(new EdgeStateManager());
+        setGraph(graph);
         stop(); // Assigns moving var to false.
         setSteppingRandomly(stepRandomly);
         setSteppingByVelocity(stepByVelocity);
@@ -184,7 +189,31 @@ public class DynamicGraph implements Graph {
     }
 
     /**
-     * Returns the value of the @code{graph} attribute.
+     * Updates the @code{averageRouteLength} attribute so that it is up-to-date.
+     */
+    private void updateAverageRouteLength() {
+        double currentLength = getUnderlyingGraph().getEdgeContainer().getTotalLength();
+        this.averageRouteLength = (this.averageRouteLength + currentLength) / 2;
+    }
+
+    /**
+     * Returns the value of the @code{averageRouteLength} attribute.
+     * @return averageRouteLength The value of the @code{averageRouteLength} attribute.
+     */
+    public double getAverageRouteLength() {
+        return this.averageRouteLength;
+    }
+
+    /**
+     * Sets the value of the @code{graph} attribute to a new value.
+     * @param graph The new value to assign the @code{graph} attribute.
+     */
+    public void setGraph(StaticGraph graph) {
+        this.graph = graph;
+    }
+
+    /**
+     * Returns the value of the @code{graph} attribute (essentially getGraph(){}).
      * @return graph The value of the @code{graph} attribute.
      */
     public StaticGraph getUnderlyingGraph() {
@@ -197,17 +226,5 @@ public class DynamicGraph implements Graph {
      */
     public void setAwake(boolean awake) {
         this.awake = awake;
-    }
-
-    /**
-     * Updates the @code{averageRouteLength} attribute so that it is up-to-date.
-     */
-    private void updateAverageRouteLength() {
-        double currentLength = getUnderlyingGraph().getEdgeContainer().getTotalLength();
-        this.averageRouteLength = (this.averageRouteLength + currentLength) / 2;
-    }
-
-    public double getAverageRouteLength() {
-        return averageRouteLength;
     }
 }

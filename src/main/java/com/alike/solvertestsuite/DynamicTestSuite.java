@@ -21,14 +21,19 @@ public class DynamicTestSuite {
 
     private int timerLengthMs;
 
+    private int delayPerSolve;
+
     public DynamicTestSuite(DynamicSolver solver) {
         setDgraph(new DynamicGraph(new StaticGraph(), false, true));
         setSolver(solver);
     }
 
-    private runTest(DynamicGraph dgraph, ArrayList<Vector> initVelocities) {
+
+
+    private SolverOutput runTest(DynamicGraph dgraph, ArrayList<Vector> initVelocities) {
         solver.setGraph(dgraph);
-        dgraph.
+        SolverOutput so = solver.runSolution(timerLengthMs, delayPerSolve);
+        return so;
     }
 
     private DynamicGraph loadGraph() {
