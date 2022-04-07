@@ -8,6 +8,7 @@ import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.staticgraphsystem.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
 
@@ -115,6 +116,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      * @throws NodeMissedException Thrown if the current hilbert curve misses nodes when used as the map.
      */
     public ArrayList<Node> getNodesOrdered() throws NodeMissedException, HilbertCurveUnconstructedException {
+
         if (curveCornerCoordinates == null || curveCornerCoordinates.length == 0) {
             throw new HilbertCurveUnconstructedException("No curve constructed.");
         }
@@ -135,6 +137,28 @@ public class HilbertFractalCurveSolver implements StaticSolver {
                 }
             }
         }
+//        Node[] nodesInOrder = new Node[graph.getNumNodes()];
+//        int nextNodeFoundsIndexFrontToBack = 0;
+//        int nextNodeFoundsIndexBackToFront = graph.getNumNodes() - 1;
+//        for (int hci = 0; hci < numCorners/2; hci++) { // Hilbert coordinate index. Can div 2 since always even.
+//            int oI = numCorners - hci - 1; // Opposite index (the one at the other end).
+//            // For each node, check if it equals either the coordinate at the front or the back.
+//            for (int nI = nodes.size() - 1; nI >= 0; nI--) { // Node index
+//                Coordinate nC = nodes.get(nI).getCoordinate(); // Node's coordinate
+//                if (nC.equals(curveCornerCoordinates[hci])) { // The node has the coordinates of the front curve coord.
+//                    nodesInOrder[nextNodeFoundsIndexFrontToBack] = nodes.get(nI);
+//                    nodes.remove(nI);
+//                    nextNodeFoundsIndexFrontToBack++;
+//                    continue;
+//                }
+//                if (nC.equals(curveCornerCoordinates[oI])) { // The node has the coordinates of the back curve coord.
+//                    nodesInOrder[nextNodeFoundsIndexBackToFront] = nodes.get(nI);
+//                    nodes.remove(nI);
+//                    nextNodeFoundsIndexBackToFront--;
+//                }
+//            }
+//        }
+//        nodesOrdered = new ArrayList<>(List.of(nodesInOrder));
         // Check to see if we missed nodes - if so throw an exception.
         if (nodesOrdered.size() != graph.getNumNodes()) {
             StringBuilder sb = new StringBuilder("Node(s) missed: ");

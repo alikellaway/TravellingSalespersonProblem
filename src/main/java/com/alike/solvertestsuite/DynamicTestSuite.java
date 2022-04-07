@@ -36,9 +36,9 @@ public class DynamicTestSuite {
         return so;
     }
 
-    private DynamicGraph loadGraph() {
-
-    }
+//    private DynamicGraph loadGraph() {
+//
+//    }
 
     public void setDgraph(DynamicGraph dgraph) {
         this.dgraph = dgraph;
