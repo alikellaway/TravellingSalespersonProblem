@@ -70,41 +70,41 @@ public class Ant implements Callable<Ant> {
         // Ant chooses a random node to start at.
         int startNodeID = ThreadLocalRandom.current().nextInt(numNodes);
         // Create space to store the nodes that the ant chooses to traverse as its route.
-        ArrayList<Node> routeNodes = new ArrayList<>(numNodes);
+        ArrayList<Node> orderedNodes = new ArrayList<>(numNodes);
         // We need to have a unique hashmap for every ant to know which nodes it has and hasn't visited.
-        HashMap<Node, Boolean> visitedNodes = new HashMap<>(numNodes);
+        HashMap<Node, Boolean> nodesVisitationLog = new HashMap<>(numNodes);
         // Initialise all nodes as false
         for (Node nd : acos.getGraph().getNodeContainer().getNodeSet()) {
-            visitedNodes.put(nd, false);
+            nodesVisitationLog.put(nd, false);
         }
         // Set initial node to visited
-        visitedNodes.put(acos.getGraph().getNodeContainer().getNodeByID(startNodeID), true);
+        nodesVisitationLog.put(acos.getGraph().getNodeContainer().getNodeByID(startNodeID), true);
         double routeLength = 0.0; // Need to actively record the route length to adjust pheromone levels.
         int numVisitedNodes = 0; // Record the number of nodes the ant has visited.
         int currentNode = startNodeID; // Copy start node ID as an index for use in matrices.
         int destinationNode = invalidNodeIdx; // Define the current destination node as invalid (we haven't found it yet).
         // Get the new destination node
         if (numVisitedNodes != numNodes) {
-            destinationNode = getDestinationNode(currentNode, visitedNodes);
+            destinationNode = getDestinationNode(currentNode, nodesVisitationLog);
         }
         // While destination node is not invalid we can add the next destination node to our route.
         while (destinationNode != invalidNodeIdx) {
-            routeNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNode)); // Add destination node to route.
+            orderedNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNode)); // Add destination node to route.
             numVisitedNodes++;
             routeLength += acos.getDistanceMatrix()[currentNode][destinationNode];
             adjustPheremoneLevel(currentNode, destinationNode, routeLength); // Adjust pheromone levels of the edge we just traversed.
-            visitedNodes.put(acos.getGraph().getNodeContainer().getNodeByID(destinationNode), true); // Set to visited in hashmap
+            nodesVisitationLog.put(acos.getGraph().getNodeContainer().getNodeByID(destinationNode), true); // Set to visited in hashmap
             currentNode = destinationNode; // Destination node is now the current node.
             if (numVisitedNodes != numNodes) { // If we haven't visited all nodes
-                destinationNode = getDestinationNode(currentNode, visitedNodes); // Get the next destination node
+                destinationNode = getDestinationNode(currentNode, nodesVisitationLog); // Get the next destination node
             } else {
                 destinationNode = invalidNodeIdx; // Otherwise reset destination to be invalidNodeIdx
             }
-            Thread.sleep(acos.getDelayPerStep());
+            RepeatedFunctions.sleep(acos.getDelayPerStep());
         }
-        routeNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNode)); // Add the final node to our route
+//        orderedNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNode)); // Add the final node to our route
         // Add our startNode again here?
-        route = createEdgeContainerFromNodeSet(routeNodes); // Construct an edge container using the routeNodes array.
+        route = createEdgeContainerFromNodeSet(orderedNodes); // Construct an edge container using the routeNodes array.
         return this;
     }
 
