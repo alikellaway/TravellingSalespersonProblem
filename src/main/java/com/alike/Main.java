@@ -26,12 +26,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 1024;
+    public static final int COORDINATE_MAX_WIDTH = 512;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 1024;
+    public static final int COORDINATE_MAX_HEIGHT = 512;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -74,13 +74,13 @@ public class Main extends Application {
         // Generate some graphs for testing and general use
         nnsGraph = GraphGenerator.generateRandomGraph(10, false);
         bsGraph = GraphGenerator.generateRandomGraph(8, false);
-        acosGraph = GraphGenerator.generateRandomGraph(500, false);
+        acosGraph = GraphGenerator.generateRandomGraph(10, false);
         hfcsGraph = GraphGenerator.generateRandomGraph(100, false);
         csGraph = GraphGenerator.generateRandomGraph(100, false);
         dnnsGraph = new DynamicGraph(nnsGraph, false, true);
         dacosGraph = new DynamicGraph(acosGraph,
                 false, true);
-        dhfcsGraph = new DynamicGraph(hfcsGraph, true, true);
+        dhfcsGraph = new DynamicGraph(hfcsGraph, false, true);
 
         /* Here is a list of example use cases of the solver methods. */
 
@@ -136,19 +136,19 @@ public class Main extends Application {
 //        dnnsT.start();
 
         /* Dynamic Ant Colony Optimisation solver. */
-//        Thread dacosT = new Thread(() -> {
-//            dacos = new DynamicAntColonyOptimisationSolver(dacosGraph);
-//            dacos.runSolution(10);
-//        });
-//        dacosT.start();
+        Thread dacosT = new Thread(() -> {
+            dacos = new DynamicAntColonyOptimisationSolver(dacosGraph);
+            dacos.runSolution(10);
+        });
+        dacosT.start();
 
         /* Dynamic Hilbert Curve solver. */
-        Thread dhcsT = new Thread(() -> {
-            dhfcs = new DynamicHilbertFractalCurveSolver(dhfcsGraph);
-            dhfcs.runSolution( 0);
-//            System.out.println(ds.toString());
-        });
-        dhcsT.start();
+//        Thread dhcsT = new Thread(() -> {
+//            dhfcs = new DynamicHilbertFractalCurveSolver(dhfcsGraph);
+//            dhfcs.runSolution( 0);
+////            System.out.println(ds.toString());
+//        });
+//        dhcsT.start();
 
         /* Example of using the test suite to test */
 //        Thread test = new Thread(() -> {
@@ -181,14 +181,14 @@ public class Main extends Application {
 //        while (hfcs == null) {
 //            RepeatedFunctions.sleep(10);
 //        }
-        while (dhfcs == null) {
-            RepeatedFunctions.sleep(1);
-        }
+//        while (dhfcs == null) {
+//            RepeatedFunctions.sleep(1);
+//        }
         launch(args);
-//        dacos.kill();
-//        dacosGraph.kill();
-        dhfcs.kill();
-        dhfcsGraph.kill();
+        dacos.kill();
+        dacosGraph.kill();
+//        dhfcs.kill();
+//        dhfcsGraph.kill();
 //        dnns.kill();
 //        dnnsGraph.kill();
     }
@@ -206,12 +206,12 @@ public class Main extends Application {
         Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         // If displaying hilbert curves, we need a canvas for that too.
         Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
-        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, dhfcs.getHfcs());
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, hfcsGraph,1, false);
+//        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, dhfcs.getHfcs());
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, acosGraph,1, false);
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);
         graphDrawer.start();
-        curveDrawer.start();
+//        curveDrawer.start();
         stage.setScene(scene);
         stage.show();
     }

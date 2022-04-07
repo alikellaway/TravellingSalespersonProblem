@@ -41,7 +41,7 @@ public class Ant implements Callable<Ant> {
     /**
      * A state used to verify when certain events have or haven't happened.
      */
-    private static final int invalidNodeIdx = -1;
+    private static final int INVALID_NODE_IDX = -1;
 
     /**
      * Storing the number of nodes statically to more efficiently use this value (before we had each ant checking it
@@ -66,63 +66,75 @@ public class Ant implements Callable<Ant> {
      * @throws EdgeSuperimpositionException Thrown when an edge is superimposed on another inside an edge container.
      */
     @Override
-    public Ant call() throws NonExistentNodeException, EdgeSuperimpositionException, InterruptedException, EdgeToSelfException {
+    public Ant call() {
         // Ant chooses a random node to start at.
         int startNodeID = ThreadLocalRandom.current().nextInt(numNodes);
         // Create space to store the nodes that the ant chooses to traverse as its route.
         ArrayList<Node> orderedNodes = new ArrayList<>(numNodes);
         // We need to have a unique hashmap for every ant to know which nodes it has and hasn't visited.
-        HashMap<Node, Boolean> nodesVisitationLog = new HashMap<>(numNodes);
+        HashMap<Integer, Boolean> nodesVisitationLog = new HashMap<>(numNodes);
         // Initialise all nodes as false
         for (Node nd : acos.getGraph().getNodeContainer().getNodeSet()) {
-            nodesVisitationLog.put(nd, false);
+            nodesVisitationLog.put(nd.getNodeID(), false);
         }
         // Set initial node to visited
-        nodesVisitationLog.put(acos.getGraph().getNodeContainer().getNodeByID(startNodeID), true);
+        nodesVisitationLog.put(startNodeID, true);
         double routeLength = 0.0; // Need to actively record the route length to adjust pheromone levels.
         int numVisitedNodes = 0; // Record the number of nodes the ant has visited.
-        int currentNode = startNodeID; // Copy start node ID as an index for use in matrices.
-        int destinationNode = invalidNodeIdx; // Define the current destination node as invalid (we haven't found it yet).
+        int currentNodeId = startNodeID; // Copy start node ID as an index for use in matrices.
+        int destinationNodeId = INVALID_NODE_IDX; // Define the current destination node as invalid (we haven't found it yet).
         // Get the new destination node
         if (numVisitedNodes != numNodes) {
-            destinationNode = getDestinationNode(currentNode, nodesVisitationLog);
+            try {
+                destinationNodeId = getDestinationNode(currentNodeId, nodesVisitationLog);
+            } catch (NonExistentNodeException e) {
+                e.printStackTrace();
+            }
         }
         // While destination node is not invalid we can add the next destination node to our route.
-        while (destinationNode != invalidNodeIdx) {
-            orderedNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNode)); // Add destination node to route.
-            numVisitedNodes++;
-            routeLength += acos.getDistanceMatrix()[currentNode][destinationNode];
-            adjustPheremoneLevel(currentNode, destinationNode, routeLength); // Adjust pheromone levels of the edge we just traversed.
-            nodesVisitationLog.put(acos.getGraph().getNodeContainer().getNodeByID(destinationNode), true); // Set to visited in hashmap
-            currentNode = destinationNode; // Destination node is now the current node.
-            if (numVisitedNodes != numNodes) { // If we haven't visited all nodes
-                destinationNode = getDestinationNode(currentNode, nodesVisitationLog); // Get the next destination node
-            } else {
-                destinationNode = invalidNodeIdx; // Otherwise reset destination to be invalidNodeIdx
+        while (destinationNodeId != INVALID_NODE_IDX) {
+            try {
+                orderedNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNodeId)); // Add destination node to route.
+                numVisitedNodes++;
+                routeLength += acos.getDistanceMatrix()[currentNodeId][destinationNodeId];
+                adjustPheremoneLevel(currentNodeId, destinationNodeId, routeLength); // Adjust pheromone levels of the edge we just traversed.
+                nodesVisitationLog.put(destinationNodeId, true); // Set to visited in hashmap
+                currentNodeId = destinationNodeId; // Destination node is now the current node.
+                if (numVisitedNodes != numNodes) { // If we haven't visited all nodes
+                    destinationNodeId = getDestinationNode(currentNodeId, nodesVisitationLog); // Get the next destination node
+                } else {
+                    destinationNodeId = INVALID_NODE_IDX; // Otherwise reset destination to be INVALID_NODE_IDX
+                }
+            } catch (NonExistentNodeException e) {
+                e.printStackTrace();
             }
             RepeatedFunctions.sleep(acos.getDelayPerStep());
         }
-//        orderedNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNode)); // Add the final node to our route
+        try {
+            orderedNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNodeId)); // Add the final node to our route
+        } catch (NonExistentNodeException e) {
+
+        }
         // Add our startNode again here?
-        route = createEdgeContainerFromNodeSet(orderedNodes); // Construct an edge container using the routeNodes array.
+        route = createRouteFromNodeSet(orderedNodes); // Construct an edge container using the routeNodes array.
         return this;
     }
 
     /**
      * Adjusts the pheromone level in the matrix of the ACOS object.
-     * @param x The start node ID of the edge which we are adjusting the pheromone levels of.
-     * @param y The end node ID of the edge which we are adjusting the pheromone levels of.
+     * @param currentNodeId The start node ID of the edge which we are adjusting the pheromone levels of.
+     * @param destinationNodeId The end node ID of the edge which we are adjusting the pheromone levels of.
      * @param distance The distance between these two nodes.
      */
-    private void adjustPheremoneLevel(int x, int y, double distance) {
+    private void adjustPheremoneLevel(int currentNodeId, int destinationNodeId, double distance) {
         boolean done = false;
         while (!done) {
-            double currentPheromoneLevel = acos.getPheromoneLevelMatrix()[x][y].doubleValue();
+            double currentPheromoneLevel = acos.getPheromoneLevelMatrix()[currentNodeId][destinationNodeId].doubleValue();
             double updatedPheromoneLevel = (1 - acos.getRh0()) * currentPheromoneLevel + (acos.getQ()/distance);
             if (updatedPheromoneLevel < 0.0) { // If all the pheromone has evaporated between nodes x and y.
-                done = acos.getPheromoneLevelMatrix()[x][y].compareAndSet(0); // Reset to 0
+                done = acos.getPheromoneLevelMatrix()[currentNodeId][destinationNodeId].compareAndSet(0); // Reset to 0
             } else { // Otherwise set the pheromone level to the newly updated level.
-                done = acos.getPheromoneLevelMatrix()[x][y].compareAndSet(updatedPheromoneLevel);
+                done = acos.getPheromoneLevelMatrix()[currentNodeId][destinationNodeId].compareAndSet(updatedPheromoneLevel);
             }
         }
     }
@@ -134,8 +146,8 @@ public class Ant implements Callable<Ant> {
      * @return @code{destinationNode} The node that has been chosen to visit next.
      * @throws NonExistentNodeException Thrown if a node ID is referenced but does not exist.
      */
-    private int getDestinationNode(int currNode, HashMap<Node, Boolean> visitedNodes) throws NonExistentNodeException {
-        int destinationNode = invalidNodeIdx;
+    private int getDestinationNode(int currNode, HashMap<Integer, Boolean> visitedNodes) throws NonExistentNodeException {
+        int destinationNode = INVALID_NODE_IDX;
         // A list containing probabilities of moving to other nodes from the current node.
         ArrayList<Double> transitionProbabilities = getTransitionProbabilities(currNode, visitedNodes);
         /* Try to find a next node by choosing a random number and selecting a node with a transitional probability
@@ -161,7 +173,7 @@ public class Ant implements Callable<Ant> {
      * @return @code{transitionProbabilities} An ArrayList containing transitional probabilities for each node.
      * @throws NonExistentNodeException Thrown when a node ID is referenced but does not exist.
      */
-    private ArrayList<Double> getTransitionProbabilities(int currentNodeID, HashMap<Node, Boolean> visitedNodes) throws NonExistentNodeException {
+    private ArrayList<Double> getTransitionProbabilities(int currentNodeID, HashMap<Integer, Boolean> visitedNodes) throws NonExistentNodeException {
         // Create space for output
         ArrayList<Double> transitionProbabilities = new ArrayList<>(acos.getGraph().getNumNodes());
         // Populate with 0s
@@ -183,13 +195,12 @@ public class Ant implements Callable<Ant> {
      * @param x The ID of the current node.
      * @param visitedCities The hashmap containing information on the nodes whether they've been visited or not.
      * @return @code{denominator} The denominator given these parameters.
-     * @throws NonExistentNodeException Thrown if a node ID is referenced that does not exist.
      */
-    private double getTPDenominator(ArrayList<Double> transitionProbabilities, int x, HashMap<Node, Boolean> visitedCities) throws NonExistentNodeException {
+    private double getTPDenominator(ArrayList<Double> transitionProbabilities, int x, HashMap<Integer, Boolean> visitedCities) {
         double denominator = 0.0;
         for (int y = 0; y < numNodes; y++) { // Loop through the nodes
-            if (!visitedCities.get(acos.getGraph().getNodeContainer().getNodeByID(y))) { // If the node is not visited
-                if (x == y) { // If its the node we are currently on, set the probability to 0 (or get stuck).
+            if (!visitedCities.get(y)) { // If the node is not visited
+                if (x == y) { // If it's the node we are currently on, set the probability to 0 (or get stuck).
                     transitionProbabilities.set(y, 0.0);
                 } else { // If not, then set the probability to the output of getTPNumerator().
                     transitionProbabilities.set(y, getTPNumerator(x, y));
@@ -208,7 +219,7 @@ public class Ant implements Callable<Ant> {
      */
     private double getTPNumerator(int x, int y) {
         double numerator = 0.0;
-        double pheromoneLevel = acos.getPheromoneLevelMatrix()[y][x].doubleValue();
+        double pheromoneLevel = acos.getPheromoneLevelMatrix()[x][y].doubleValue();
         if (pheromoneLevel != 0.0) { // If pheromone level not 0
             numerator = Math.pow(pheromoneLevel, acos.getAlpha()) * Math.pow(1/acos.getDistanceMatrix()[x][y], acos.getBeta());
         }
@@ -216,19 +227,20 @@ public class Ant implements Callable<Ant> {
     }
 
     /**
-     * Creates a @code{EdgeContainer} object given an arraylist of nodes.
+     * Creates a @code{EdgeContainer} object containing a complete route given an arraylist of nodes.
      * @param routeNodes The ArrayList of nodes from which to construct a @code{EdgeContainer}.
      * @return @code{edgeContainer} The new @code{EdgeContainer}.
-     * @throws EdgeSuperimpositionException Thrown if the @code{EdgeContainer} object finds edges superimposed
-     * in the input set.
      */
-    private EdgeContainer createEdgeContainerFromNodeSet(ArrayList<Node> routeNodes) throws
-                                                                EdgeSuperimpositionException, EdgeToSelfException {
+    private EdgeContainer createRouteFromNodeSet(ArrayList<Node> routeNodes) {
         EdgeContainer edgeContainer = new EdgeContainer();
-        for (int idx = 0; idx < routeNodes.size(); idx++) {
-            Node startNode = routeNodes.get(idx);
-            Node endNode = routeNodes.get((idx + 1) % routeNodes.size());
-            edgeContainer.add(new Edge(startNode, endNode));
+        try {
+            for (int idx = 0; idx < routeNodes.size(); idx++) {
+                Node startNode = routeNodes.get(idx);
+                Node endNode = routeNodes.get((idx + 1) % routeNodes.size());
+                edgeContainer.add(new Edge(startNode, endNode));
+            }
+        } catch (EdgeToSelfException | EdgeSuperimpositionException e) {
+            e.printStackTrace();
         }
         return edgeContainer;
     }

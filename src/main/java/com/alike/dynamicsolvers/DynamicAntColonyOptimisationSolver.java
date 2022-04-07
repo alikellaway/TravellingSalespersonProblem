@@ -52,47 +52,51 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      * Method called to make this solver object solve it's dgraph until the @code{running} attribute is turned to false.
      * @param delayPerSolve The delay between each solve.
      */
-//    public void runSolution(int delayPerSolve) {
-//        acos.setDelayPerStep(0);
-//        dgraph.move();
-//        running = true;
-//        while (running) {
-//            // Recalculate edge lengths so the ant has an accurate representation.
-//            dgraph.stop();
-//            try {
-//                graph.constructEdgeLengthMatrix();
-//                acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-//            } catch (NoNodeContainerException e) {
-//                e.printStackTrace();
-//            }
-//            dgraph.move();
-//            // Add the new ant
-//            acos.getExecutorCompletionService().submit(new Ant(acos));
-//            acos.setActiveAnts(acos.getActiveAnts() + 1);
-//            // See if the ant found a shorter route.
-//            acos.processAnts();
-//            RepeatedFunctions.sleep(delayPerSolve);
-//        }
-//    }
     public void runSolution(int delayPerSolve) {
         acos.setDelayPerStep(0);
         dgraph.move();
         running = true;
         while (running) {
+            // Recalculate edge lengths so the ant has an accurate representation.
+            dgraph.stop();
             try {
-                dgraph.stop(); // Stop the graph moving
-                // Update the distances for the ant about to go.
                 graph.constructEdgeLengthMatrix();
                 acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-                // Send the ant
-                acos.sendAnt();
-                dgraph.move(); // Resume movement
-                RepeatedFunctions.sleep(delayPerSolve);
             } catch (NoNodeContainerException e) {
                 e.printStackTrace();
             }
+            dgraph.move();
+            // Add the new ant
+            acos.getExecutorCompletionService().submit(new Ant(acos));
+            acos.setActiveAnts(acos.getActiveAnts() + 1);
+            // See if the ant found a shorter route.
+            acos.processAnts();
+            RepeatedFunctions.sleep(delayPerSolve);
         }
     }
+//    public void runSolution(int delayPerSolve) {
+//        acos.setDelayPerStep(0);
+//        dgraph.move();
+//        running = true;
+//        while (running) {
+//            dgraph.stop(); // Stop the graph moving
+//            try {
+//                // Update the distances for the ant about to go.
+//                graph.constructEdgeLengthMatrix();
+//                acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
+//                acos.setNumAnts(100);
+//                acos.runSolution(0);
+//                // Send the ant
+////                acos.sendAnt();
+////                dgraph.move(); // Resume movement
+////                RepeatedFunctions.sleep(delayPerSolve);
+//            } catch (NoNodeContainerException e) {
+//                e.printStackTrace();
+//            }
+//            dgraph.move();
+//            RepeatedFunctions.sleep(delayPerSolve);
+//        }
+//    }
 //    public void runSolution(int delayPerSolve) {
 //        acos.setDelayPerStep(0);
 //        dgraph.move();
