@@ -61,11 +61,7 @@ public class CoordinateMover {
     public void stepByVelocity() {
         // If the list of velocities is not yet populated then initialise it and fill it with random velocities.
         if (coordinateVelocities == null) {
-            coordinateVelocities = new Vector[coordinates.size()];
-            for (int i = 0; i < coordinates.size(); i++) {
-                // Produces velocities with integer numbers
-                coordinateVelocities[i] = Vector.randomVector(movementSpeed); // This takes into account the speed.
-            }
+            coordinateVelocities = Vector.randomVectors(coordinates.size(), movementSpeed);
         }
         // Start the movement
         for (int i = 0; i < coordinates.size(); i++) { // Move each coordinate

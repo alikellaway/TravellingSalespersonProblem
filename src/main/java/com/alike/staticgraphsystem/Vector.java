@@ -1,6 +1,7 @@
 package com.alike.staticgraphsystem;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author alike
@@ -139,10 +140,23 @@ public class Vector {
      * @return Vector A new randomized vector that has a magnitude close to the input magnitude.
      */
     public static Vector randomVector(double magnitude) {
-        Random rand = new Random();
-        double angle = rand.nextDouble(2.0 * Math.PI);
+        double angle = ThreadLocalRandom.current().nextDouble(2.0 * Math.PI);
         double vX = Math.round(magnitude * Math.cos(angle));
         double vY = Math.round(magnitude * Math.sin(angle));
         return new Vector(vX, vY);
+    }
+
+    /**
+     * Used to generate an array of specified length of random vectors with a specified magnitude.
+     * @param num The number of vectors to generate.
+     * @param magnitude The magnitude of each vector in the output.
+     * @return vectors An array containing @code{num} randomized vectors of magnitude @code{magnitude}.
+     */
+    public static Vector[] randomVectors(int num, int magnitude) {
+        Vector[] vectors = new Vector[num];
+        for (int i = 0; i < num; i++) {
+            vectors[i] = randomVector(magnitude);
+        }
+        return vectors;
     }
 }
