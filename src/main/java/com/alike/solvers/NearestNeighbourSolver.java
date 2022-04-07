@@ -61,16 +61,18 @@ public class NearestNeighbourSolver implements StaticSolver {
      */
     public SolverOutput runSolution(int delayPerStep) {
         try { // Try to create a solution.
+            graph.setAllNodesUnvisited(); // Make sure all nodes are in unvisited state
+            graph.getEdgeContainer().clear(); // Make sure edge set is empty
             long startTime = System.nanoTime();
-            // Set our current node to be the first node in the list of nodes.
-            setCurrentNode(nodeContainer.getNodeSet().get(0));
+            // Set our current node to be the first node in the list of nodes (could choose any).
+            setCurrentNode(nodeContainer.getNodeSet().get(0)); // Current node is 0th
             currentNode.setVisited(true); // Set it as visited
-            numNodesVisited = 1; // Nodes visited is not 1 as we account for the last node when we visit it at the end.
+            numNodesVisited = 1;
             // Execute the traversal steps
-            while (numNodesVisited < nodeContainer.getNodeSet().size() + 1) {
-                RepeatedFunctions.sleep(delayPerStep);
+            while (numNodesVisited <= nodeContainer.getNodeSet().size()) {
                 try {
                     traverseToNextClosestNode();
+                    RepeatedFunctions.sleep(delayPerStep);
                 } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
                     e.printStackTrace();
                 }
@@ -83,7 +85,6 @@ public class NearestNeighbourSolver implements StaticSolver {
         } catch (Error e) {
             return new Fail(e, graph);
         }
-
     }
 
     /**
@@ -121,14 +122,14 @@ public class NearestNeighbourSolver implements StaticSolver {
     }
 
     /**
-     * Traverse the algorithm to the next closes node.
+     * Extends the route by moving to the next closest node (by distance) or to the start node if all nodes are visited.
      */
     private void traverseToNextClosestNode() throws EdgeSuperimpositionException, EdgeToSelfException {
         // Find the next closest unvisited node.
         Node nextNode;
         try {
             nextNode = currentNode.getClosestNode(nodeContainer.getNodeSet(), true);
-        } catch (NoClosestNodeException e) {
+        } catch (NoClosestNodeException e) { // If we didn't find one, we have exhausted nodes, loop back to beginning
             nextNode = nodeContainer.getNodeSet().get(0);
         }
         // Add an edge between the current node and the next closest node.
@@ -137,9 +138,7 @@ public class NearestNeighbourSolver implements StaticSolver {
         // System.out.println(nextNode.isVisited());
         setCurrentNode(nextNode); // Change the current node.
         numNodesVisited++;
-        // Debug verbosity
-        // System.out.println("Travelled to: " + currentNode.toString() + ", " + nextNode.getNodeID() + ", " + numNodesVisited);
-    }
+    } // TODO this is not the most efficient way of doing this, better would be to remove nodes as we've visited them
 
     /**
      * Sets the value of the @code{graph} attribute to a new value.

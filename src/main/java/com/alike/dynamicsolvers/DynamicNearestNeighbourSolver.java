@@ -5,6 +5,10 @@ import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NoClosestNodeException;
 import com.alike.dynamicgraphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
+import com.alike.solution_helpers.Timer;
+import com.alike.solvers.NearestNeighbourSolver;
+import com.alike.solvertestsuite.DynamicSolution;
+import com.alike.solvertestsuite.SolverOutput;
 import com.alike.staticgraphsystem.*;
 
 import java.util.ArrayList;
@@ -44,55 +48,54 @@ public class DynamicNearestNeighbourSolver {
      */
     private Node currentNode;
 
+    private NearestNeighbourSolver nns;
+
     /**
      * Used to construct a new @code{DynamicNearestNeighbourSolver} object.
-     * @param graph The @code{DynamicGraph} we will be solving.
+     * @param dgraph The @code{DynamicGraph} we will be solving.
      */
-    public DynamicNearestNeighbourSolver(DynamicGraph graph) {
-        setDgraph(graph);
+    public DynamicNearestNeighbourSolver(DynamicGraph dgraph) {
+        setDgraph(dgraph);
         setNodeContainer(getDgraph().getNodeContainer());
         setEdgeContainer(getDgraph().getEdgeContainer());
         getDgraph().setAllNodesUnvisited();
         setRunning(false);
         setOrigin(nodeContainer.getNodeSet().get(0)); // The node from which we always start.
+        nns = new NearestNeighbourSolver(dgraph.getUnderlyingGraph());
     }
 
     /**
      * Used to being the solution's process. Once running, it will continue to resolve the dgraph repeatedly with an
-     * interval of @code{delayPerStep} per solve.
+     * interval of @code{delayPerStep} per solve until the @code{running} attribute is changed to false.
      * @param delayPerSolve The time delay between each route recalculation.
      */
     public void runSolution(int delayPerSolve) {
         dgraph.wake(); // Doesn't begin movement - just allows it to listen for pause/play commands.
-        int maxEdges = nodeContainer.getNodeSet().size(); // The number of edges in a complete tour
         setRunning(true); // Another thread can set this volatile to false and stop the execution.
-        setCurrentNode(origin);
         while (running) {
+            dgraph.stop(); // Pause dgraph movement, so we can calculate distances between nodes.
+            nns.runSolution(0);
+            dgraph.move(); // Resume dgraph movement.
+            RepeatedFunctions.sleep(delayPerSolve);
+            dgraph.getUnderlyingGraph().getEdgeContainer().clear();
+        }
+    }
+
+    public SolverOutput runSolution(int runTime, int delayPerSolve) {
+        dgraph.wake(); // Listen for start stop commands.
+        Timer t = new Timer();
+        t.time(runTime);
+        while (t.isTiming()) {
             try {
-                dgraph.stop(); // Pause dgraph movement, so we can calculate distances between nodes.
-                currentNode.setVisited(true); // Set where we are to "visited".
-                Node nextNode; // Space for the next node.
-                if (!(edgeContainer.getEdgeSet().size() == maxEdges - 1)) {
-                    nextNode = findClosestUnvisitedNode(); // If we haven't completed a tour, find the next closest.
-                } else {
-                    nextNode = getOrigin(); // If we have completed a tour, go back to origin.
-                }
-                dgraph.move(); // Resume dgraph movement.
-                // Construct the edge between where we are and next node.
-                edgeContainer.add(new Edge(currentNode, nextNode));
-                // Move head.
-                setCurrentNode(nextNode);
-                // If we have completed a tour delete the first added edge
-                if (edgeContainer.getEdgeSet().size() == maxEdges) {
-                    RepeatedFunctions.sleep(delayPerSolve); // We wait before we clear and recalculate.
-                    edgeContainer.clear(); // Clear
-                    getDgraph().setAllNodesUnvisited();
-                }
-            } catch(NoClosestNodeException ignored) { // Happens everytime we complete a route.
-            } catch (EdgeToSelfException | EdgeSuperimpositionException e) {
+                dgraph.stop();
+                nns.runSolution(0);
+                dgraph.move();
+                RepeatedFunctions.sleep(delayPerSolve);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        return new DynamicSolution(dgraph.getAverageRouteLength(), runTime);
     }
 
     /**

@@ -129,18 +129,18 @@ public class Main extends Application {
 //        csT.start();
 
         /* Dynamic Nearest Neighbour StaticSolver. */
-//        Thread dnnsT = new Thread(() -> {
-//            dnns = new DynamicNearestNeighbourSolver(dnnsGraph);
-//            dnns.runSolution(100);
-//        });
-//        dnnsT.start();
+        Thread dnnsT = new Thread(() -> {
+            dnns = new DynamicNearestNeighbourSolver(dnnsGraph);
+            System.out.println(dnns.runSolution(2000,10));
+        });
+        dnnsT.start();
 
         /* Dynamic Ant Colony Optimisation StaticSolver. */
-        Thread dacosT = new Thread(() -> {
-            dacos = new DynamicAntColonyOptimisationSolver(dacosGraph);
-            dacos.runSolution(10);
-        });
-        dacosT.start();
+//        Thread dacosT = new Thread(() -> {
+//            dacos = new DynamicAntColonyOptimisationSolver(dacosGraph);
+//            dacos.runSolution(10);
+//        });
+//        dacosT.start();
 
         /* Dynamic Hilbert Curve StaticSolver. */
 //        Thread dhcsT = new Thread(() -> {
@@ -185,11 +185,12 @@ public class Main extends Application {
 //            RepeatedFunctions.sleep(1);
 //        }
         launch(args);
-        dacos.kill();
-        dacosGraph.kill();
+//        dacos.kill();
+//        dacosGraph.kill();
 //        dhfcs.kill();
 //        dhfcsGraph.kill();
-
+        dnns.kill();
+        dnnsGraph.kill();
     }
 
     @Override
@@ -206,7 +207,7 @@ public class Main extends Application {
         // If displaying hilbert curves, we need a canvas for that too.
         Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
 //        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, dhfcs.getHfcs());
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, acosGraph,1, false);
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, nnsGraph,1, false);
         root.getChildren().add(canvas);
         root.getChildren().add(canvas1);
         graphDrawer.start();

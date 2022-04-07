@@ -43,6 +43,7 @@ public class DynamicSolution implements SolverOutput {
         sb.append(getAverageLength());
         sb.append(", ");
         sb.append(getTimePeriod());
+        sb.append("ms");
         return sb.toString();
     }
 }
