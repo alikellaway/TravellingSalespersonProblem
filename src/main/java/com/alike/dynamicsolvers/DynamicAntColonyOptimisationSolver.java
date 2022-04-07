@@ -52,28 +52,29 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      * Method called to make this solver object solve it's dgraph until the @code{running} attribute is turned to false.
      * @param delayPerSolve The delay between each solve.
      */
-    public void runSolution(int delayPerSolve) {
-        acos.setDelayPerStep(0);
-        dgraph.move();
-        running = true;
-        while (running) {
-            // Recalculate edge lengths so the ant has an accurate representation.
-            dgraph.stop();
-            try {
-                graph.constructEdgeLengthMatrix();
-                acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-            } catch (NoNodeContainerException e) {
-                e.printStackTrace();
-            }
-            dgraph.move();
-            // Add the new ant
-            acos.getExecutorCompletionService().submit(new Ant(acos));
-            acos.setActiveAnts(acos.getActiveAnts() + 1);
-            // See if the ant found a shorter route.
-            acos.processAnts();
-            RepeatedFunctions.sleep(delayPerSolve);
-        }
-    }
+//    public void runSolution(int delayPerSolve) {
+//        acos.setDelayPerStep(0);
+//        dgraph.move();
+//        running = true;
+//        while (running) {
+//            // Recalculate edge lengths so the ant has an accurate representation.
+//            dgraph.stop();
+//            try {
+//                graph.constructEdgeLengthMatrix();
+//                acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
+//            } catch (NoNodeContainerException e) {
+//                e.printStackTrace();
+//            }
+//            dgraph.move();
+//            // Add the new ant
+//            acos.getExecutorCompletionService().submit(new Ant(acos));
+//            acos.setActiveAnts(acos.getActiveAnts() + 1);
+//            // See if the ant found a shorter route.
+//            acos.processAnts();
+//            RepeatedFunctions.sleep(delayPerSolve);
+//        }
+//    }
+
 //    public void runSolution(int delayPerSolve) {
 //        acos.setDelayPerStep(0);
 //        dgraph.move();
@@ -97,18 +98,26 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
 //            RepeatedFunctions.sleep(delayPerSolve);
 //        }
 //    }
-//    public void runSolution(int delayPerSolve) {
-//        acos.setDelayPerStep(0);
-//        dgraph.move();
-//        running = true;
-//        while (running) {
-//            // Recalculate edge lengths so the ant has an accurate representation.
-//            dgraph.stop();
-//            solve();
-//            dgraph.move();
-//
-//        }
-//    }
+
+    public void runSolution(int delayPerSolve) {
+        acos.setDelayPerStep(0);
+        dgraph.move();
+        running = true;
+        while (running) {
+            // Recalculate edge lengths so the ant has an accurate representation.
+            dgraph.stop();
+            dgraph.getUnderlyingGraph().getEdgeContainer().clear();
+            try {
+                graph.constructEdgeLengthMatrix();
+            } catch (NoNodeContainerException e) {
+                e.printStackTrace();
+            }
+            acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
+            acos.runSolution(0);
+            dgraph.move();
+            RepeatedFunctions.sleep(delayPerSolve);
+        }
+    }
 
     /**
      * Used to actually run solution.

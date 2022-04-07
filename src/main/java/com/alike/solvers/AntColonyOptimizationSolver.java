@@ -163,7 +163,7 @@ public class AntColonyOptimizationSolver implements StaticSolver {
                 if (shortestRoute == null || currentRoute.getTotalLength()
                                                         < shortestRoute.getTotalLength()) {
                     shortestRoute = currentRoute;
-//                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
+                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
                     graph.setEdgeContainer(shortestRoute);
                 }
                 activeAnts--;
