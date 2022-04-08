@@ -5,6 +5,7 @@ import com.alike.solution_helpers.AtomicDouble;
 import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
+import com.alike.solvertestsuite.Stopwatch;
 import com.alike.staticgraphsystem.EdgeContainer;
 import com.alike.staticgraphsystem.Node;
 import com.alike.staticgraphsystem.StaticGraph;
@@ -67,7 +68,7 @@ public class AntColonyOptimizationSolver implements StaticSolver {
     /**
      * The number of Ants the solver will simulate.
      */
-    private int  numAnts = 900;
+    private int  numAnts = 100;
 
     /**
      * Parameter used to adjust the amount of pheromone deposited per traversal (0<Q<1).
@@ -119,7 +120,8 @@ public class AntColonyOptimizationSolver implements StaticSolver {
      */
     public SolverOutput runSolution(int delayPerStep) {
         try {
-            long startTime = System.nanoTime();
+            Stopwatch sw = new Stopwatch();
+            sw.start();
             setDelayPerStep(delayPerStep);
             // Activate all ants
             for (int x = 0; x < numAnts; x++) {
@@ -131,8 +133,8 @@ public class AntColonyOptimizationSolver implements StaticSolver {
             }
             processAnts(); // Finish all ants that haven't been processed yet.
             getExecutorService().shutdownNow();
-            long finishTime = System.nanoTime();
-            return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+            sw.stop();
+            return new Solution(graph, graph.getEdgeContainer().getTotalLength(), sw.getTimeNs());
         } catch (Exception e) {
             return new Fail(e, graph);
         } catch (Error e) {
@@ -140,13 +142,21 @@ public class AntColonyOptimizationSolver implements StaticSolver {
         }
     }
 
-    /**
-     * Sends a single ant to the completion service makes it complete its task.
-     */
-    public void sendAnt() {
-        executorCompletionService.submit(new Ant(this));
-        activeAnts++;
-        processAnts();
+    public void sendAnts(int numAnts, int delayPerStep) {
+        try {
+            setDelayPerStep(delayPerStep);
+            // Activate all ants
+            for (int x = 0; x < numAnts; x++) {
+                executorCompletionService.submit(new Ant(this));
+                activeAnts++;
+                if (ThreadLocalRandom.current().nextDouble() > PROCESSING_CYCLE_PROBABILITY) {
+                    processAnts();
+                }
+            }
+            processAnts(); // Finish all ants that haven't been processed yet.
+        } catch (Exception | Error e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -163,7 +173,7 @@ public class AntColonyOptimizationSolver implements StaticSolver {
                 if (shortestRoute == null || currentRoute.getTotalLength()
                                                         < shortestRoute.getTotalLength()) {
                     shortestRoute = currentRoute;
-                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
+//                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
                     graph.setEdgeContainer(shortestRoute);
                 }
                 activeAnts--;

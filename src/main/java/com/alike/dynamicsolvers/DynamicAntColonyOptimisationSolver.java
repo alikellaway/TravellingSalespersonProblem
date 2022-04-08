@@ -42,10 +42,10 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         getDgraph().wake();
         acos = new AntColonyOptimizationSolver(graph);
         // Set you values to allow the path to react quickly.
-        acos.setAlpha(0.02);
-        acos.setBeta(11.5);
-        acos.setRh0(0.9);
-        acos.setQ(0.0004);
+//        acos.setAlpha(0.02);
+//        acos.setBeta(11.5);
+//        acos.setRh0(0.9);
+//        acos.setQ(0.0004);
     }
 
     /**
@@ -106,17 +106,18 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         while (running) {
             // Recalculate edge lengths so the ant has an accurate representation.
             dgraph.stop();
-            dgraph.getUnderlyingGraph().getEdgeContainer().clear();
+//            dgraph.getUnderlyingGraph().getEdgeContainer().clear();
             try {
                 graph.constructEdgeLengthMatrix();
             } catch (NoNodeContainerException e) {
                 e.printStackTrace();
             }
             acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-            acos.runSolution(0);
+            acos.sendAnts(100, 0);
             dgraph.move();
             RepeatedFunctions.sleep(delayPerSolve);
         }
+        acos.getExecutorService().shutdown();
     }
 
     /**
@@ -197,7 +198,6 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      * thread pool.
      */
     public void kill() {
-        acos.getExecutorService().shutdown();
         this.running = false;
     }
 }
