@@ -11,6 +11,7 @@ import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvers.*;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
+import com.alike.staticgraphsystem.Graph;
 import com.alike.staticgraphsystem.GraphGenerator;
 import com.alike.staticgraphsystem.StaticGraph;
 import javafx.application.Application;
@@ -26,12 +27,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 512;
+    public static final int COORDINATE_MAX_WIDTH = 1024;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 512;
+    public static final int COORDINATE_MAX_HEIGHT = 1024;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -53,102 +54,126 @@ public class Main extends Application {
      */
     private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
 
-    /* Each of these is a graph that's the subject of a solver in the use case examples. */
-    private static StaticGraph nnsGraph; // Nearest Neighbour graph
-    private static StaticGraph bsGraph; // Brute force search graph
-    private static StaticGraph acosGraph; // Ant colony optimisation graph
-    private static StaticGraph hfcsGraph; // Hilbert fractal curve graph
-    private static StaticGraph csGraph; // Christofies solver graph
-    private static DynamicGraph dnnsGraph; // Dynamic nearest neighbour
-    private static DynamicGraph dacosGraph; // Dynamic ant colony optimisation
-    private static DynamicGraph dhfcsGraph; // Dynamic hilbert fractal curve.
+    /**
+     * A reference to the graph that is currently being solved.
+     */
+    private static StaticGraph activeGraph;
 
-    private static HilbertFractalCurveSolver hfcs; // Need to be able to see for graph animator
+    /**
+     * A reference to the dynamic graph that might currently be being solved.
+     */
+    private static DynamicGraph dactiveGraph;
+
+    /**
+     * References to solvers that need to be accessed from the main start method.
+     */
+    private static HilbertFractalCurveSolver hfcs;
     private static DynamicNearestNeighbourSolver dnns;
     private static DynamicAntColonyOptimisationSolver dacos;
     private static DynamicHilbertFractalCurveSolver dhfcs;
 
-    private static StaticGraph currentG = new StaticGraph(); // This graph was used for cylcing through node sets.
+    /**
+     * enum used to determine which solver will be used during the program run.
+     */
+    private enum Mode {
+        NNS, BF, ACO, HFC, CA, DNNS, DACO, DHFC
+    }
+
+    /**
+     * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
+     */
+    private static final Mode mode = Mode.ACO;
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException, RadiusExceedingBoundaryException {
-        // Generate some graphs for testing and general use
-        nnsGraph = GraphGenerator.generateRandomGraph(10, false);
-        bsGraph = GraphGenerator.generateRandomGraph(8, false);
-        acosGraph = GraphGenerator.generateRandomGraph(10, false);
-        hfcsGraph = GraphGenerator.generateRandomGraph(100, false);
-        csGraph = GraphGenerator.generateRandomGraph(100, false);
-        dnnsGraph = new DynamicGraph(nnsGraph, false, true);
-        dacosGraph = new DynamicGraph(acosGraph,
-                false, true);
-        dhfcsGraph = new DynamicGraph(hfcsGraph, false, true);
+
+        // Generate the graph - NB: This code is suboptimal and an adaptation of prior spaghettis
+        switch (mode) {
+            case NNS -> activeGraph = GraphGenerator.generateRandomGraph(10, false);
+            case BF -> activeGraph = GraphGenerator.generateRandomGraph(8, false);
+            case ACO -> activeGraph = GraphGenerator.generateRandomGraph(1000, false);
+            case HFC -> activeGraph = GraphGenerator.generateRandomGraph(100, false);
+            case CA -> activeGraph = GraphGenerator.generateRandomGraph(101, false);
+            case DNNS -> {
+                activeGraph = GraphGenerator.generateRandomGraph(50, false);
+                dactiveGraph = new DynamicGraph(activeGraph, false, true);
+            }
+            case DACO -> {
+                activeGraph = GraphGenerator.generateRandomGraph(210, false);
+                dactiveGraph = new DynamicGraph(activeGraph,false, true);
+            }
+            case DHFC -> {
+                activeGraph = GraphGenerator.generateRandomGraph(310, false);
+                dactiveGraph = new DynamicGraph(activeGraph, false, true);
+            }
+        }
 
         /* Here is a list of example use cases of the solver methods. */
-
-         /* Nearest neighbour solver. */
-//        Thread nnsT = new Thread(() -> {
-//            NearestNeighbourSolver nns = new NearestNeighbourSolver(nnsGraph);
-//            nns.runSolution(100);
-//        });
-//        nnsT.start();
-
-        /* Brute force solver. */
-//        Thread bsT = new Thread(() -> {
-//           try {
-//               BruteForceSolver bs = new BruteForceSolver(bsGraph);
-//               Pair<StaticGraph, Double> solutionOutput = bs.runSolution(0);
-//               System.out.println(solutionOutput.getKey());
-//               System.out.println(solutionOutput.getValue());
-//
-//           } catch (PermutationExhaustionException | EdgeSuperimpositionException | PermutationFocusException | NonExistentNodeException | InterruptedException | EdgeToSelfException e) {
-//               e.printStackTrace();
-//           }
-//        });
-//        bsT.start();
-
-        /* Ant Colony Optimisation StaticSolver. */
-//        Thread acosT = new Thread(() -> {
-//            AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(acosGraph);
-//            Solution solOutput = acos.runSolution(0);
-////            System.out.println(solOutput.getKey());
-////            System.out.println(solOutput.getValue());
-//        });
-//        acosT.start();
-
-        /* Hilbert fractal curve solver. */
-//        Thread hfcsT = new Thread(() -> {
-//            hfcs = new HilbertFractalCurveSolver(hfcsGraph);
-//            SolverOutput pf = hfcs.runSolution(10);
-//        });
-//        hfcsT.start();
-
-        /* Christofide's algorithm solver. */
-//        Thread csT = new Thread(() -> {
-//            ChristofidesSolver cs = new ChristofidesSolver(csGraph);
-//            cs.runSolution(0);
-//        });
-//        csT.start();
-
-        /* Dynamic Nearest Neighbour solver. */
-//        Thread dnnsT = new Thread(() -> {
-//            dnns = new DynamicNearestNeighbourSolver(dnnsGraph);
-//            System.out.println(dnns.runSolution(2000,10));
-//        });
-//        dnnsT.start();
-
-        /* Dynamic Ant Colony Optimisation solver. */
-        Thread dacosT = new Thread(() -> {
-            dacos = new DynamicAntColonyOptimisationSolver(dacosGraph);
-            dacos.runSolution(10);
-        });
-        dacosT.start();
-
-        /* Dynamic Hilbert Curve solver. */
-//        Thread dhcsT = new Thread(() -> {
-//            dhfcs = new DynamicHilbertFractalCurveSolver(dhfcsGraph);
-//            dhfcs.runSolution( 0);
-////            System.out.println(ds.toString());
-//        });
-//        dhcsT.start();
+        switch (mode) {
+            case NNS -> {
+                /* Nearest neighbour solver. */
+                Thread nnsT = new Thread(() -> {
+                    NearestNeighbourSolver nns = new NearestNeighbourSolver(activeGraph);
+                    nns.runSolution(100);
+                });
+                nnsT.start();
+            }
+            case BF -> {
+                /* Brute force solver. */
+                Thread bsT = new Thread(() -> {
+                    BruteForceSolver bs = new BruteForceSolver(activeGraph);
+                    bs.runSolution(0);
+                });
+                bsT.start();
+            }
+            case ACO -> {
+                /* Ant Colony Optimisation StaticSolver. */
+                Thread acosT = new Thread(() -> {
+                    AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(activeGraph);
+                    acos.runSolution(0);
+                });
+                acosT.start();
+            }
+            case HFC -> {
+                /* Hilbert fractal curve solver. */
+                Thread hfcsT = new Thread(() -> {
+                    hfcs = new HilbertFractalCurveSolver(activeGraph);
+                    hfcs.runSolution(10);
+                });
+                hfcsT.start();
+            }
+            case CA -> {
+                /* Christofide's algorithm solver. */
+                Thread csT = new Thread(() -> {
+                    ChristofidesSolver cs = new ChristofidesSolver(activeGraph);
+                    cs.runSolution(0);
+                });
+                csT.start();
+            }
+            case DNNS -> {
+                /* Dynamic Nearest Neighbour solver. */
+                Thread dnnsT = new Thread(() -> {
+                    dnns = new DynamicNearestNeighbourSolver(dactiveGraph);
+                    dnns.runSolution(10);
+                });
+                dnnsT.start();
+            }
+            case DACO -> {
+                /* Dynamic Ant Colony Optimisation solver. */
+                Thread dacosT = new Thread(() -> {
+                    dacos = new DynamicAntColonyOptimisationSolver(dactiveGraph);
+                    dacos.runSolution(10);
+                });
+                dacosT.start();
+            }
+            case DHFC -> {
+                /* Dynamic Hilbert Curve solver. */
+                Thread dhcsT = new Thread(() -> {
+                    dhfcs = new DynamicHilbertFractalCurveSolver(dactiveGraph);
+                    dhfcs.runSolution(0);
+                });
+                dhcsT.start();
+            }
+        }
 
         /* Example of using the test suite to test */
 //        Thread test = new Thread(() -> {
@@ -175,43 +200,64 @@ public class Main extends Application {
 //        });
 //        test.start();
 
-//        DynamicGraph dg = new DynamicGraph(acosGraph, true, true);
-//        dg.move();
-        //        hfcs = new HilbertFractalCurveSolver(); // Generates a curve
-//        while (hfcs == null) {
-//            RepeatedFunctions.sleep(10);
-//        }
-//        while (dhfcs == null) {
-//            RepeatedFunctions.sleep(1);
-//        }
+        // We have to wait for the hilbert curve to be constructed before we can do anything else.
+        switch (mode) {
+            case DHFC -> {
+                while (dhfcs == null) {
+                    RepeatedFunctions.sleep(1);
+                }
+            }
+            case HFC -> {
+                while (hfcs == null) {
+                    RepeatedFunctions.sleep(1);
+                }
+            }
+        }
+        // Start the window
         launch(args);
-        dacos.kill();
-        dacosGraph.kill();
-//        dhfcs.kill();
-//        dhfcsGraph.kill();
-//        dnns.kill();
-//        dnnsGraph.kill();
+        // Kill the graph and the solver after we close the program window.
+        switch (mode) {
+            case DACO -> {
+                dacos.kill();
+                dactiveGraph.kill();
+            }
+            case DHFC -> {
+                dhfcs.kill();
+                dactiveGraph.kill();
+            }
+            case DNNS -> {
+                dnns.kill();
+                dactiveGraph.kill();
+            }
+        }
     }
 
     @Override
     public void start(Stage stage) throws InterruptedException, NonSquareCanvasException, InvalidGraphException, NodeSuperimpositionException {
         // Give the name to the window.
         stage.setTitle(STAGE_TITLE);
-
         Group root = new Group();
         Scene scene = new Scene(root, WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         scene.setFill(BACK_GROUND_COLOR);
-
         // We need a canvas to display the graphs.
-        Canvas canvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
+        Canvas graphCanvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         // If displaying hilbert curves, we need a canvas for that too.
-        Canvas canvas1 = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
-//        HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(canvas, dhfcs.getHfcs());
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, canvas1, acosGraph,1, false);
-        root.getChildren().add(canvas);
-        root.getChildren().add(canvas1);
+        Canvas curveCanvas = new Canvas(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
+        // Add the canvases to the group
+        root.getChildren().add(curveCanvas);
+        root.getChildren().add(graphCanvas);
+        // Start the graph drawer thread.
+        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, graphCanvas, activeGraph,1, false);
         graphDrawer.start();
-//        curveDrawer.start();
+        // Start the curve drawer thread (if needed).
+        if (mode == Mode.DHFC) {
+            HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(curveCanvas, dhfcs.getHfcs());
+            curveDrawer.start();
+        } else if (mode == Mode.HFC) {
+            HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(curveCanvas, hfcs);
+            curveDrawer.start();
+        }
+        // Display
         stage.setScene(scene);
         stage.show();
     }
