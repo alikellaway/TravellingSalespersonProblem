@@ -153,10 +153,14 @@ public class StaticGraph implements Graph {
      * automatically, so for a graph to have an edge length matrix value, this MUST be called.
      * @throws NoNodeContainerException Thrown if the graph does not currently have a node container.
      */
-    public void constructEdgeLengthMatrix() throws NoNodeContainerException {
+    public void constructEdgeLengthMatrix() {
         if (nodeContainer == null) { // Check that we have nodes
-            throw new NoNodeContainerException("Tried to construct an edge length matrix on a " +
-                    "graph with no node container");
+            try { // Don't want this error being passed upwards. Throw and stop here.
+                throw new NoNodeContainerException("Tried to construct an edge length matrix on a " +
+                        "graph with no node container");
+            } catch (NoNodeContainerException e) {
+                e.printStackTrace();
+            }
         }
         // Construct the edge matrix
         int nN = getNumNodes();

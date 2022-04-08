@@ -28,12 +28,10 @@ public class LinKernighanSolver implements StaticSolver {
 
     @Override
     public Solution runSolution(int delayPerStep) {
-        try {
-            graph.constructEdgeLengthMatrix(); // Construct a matrix containing the complete graph.
-            setEdgeMatrix(graph.getEdgeLengthMatrix());
-        } catch(NoNodeContainerException e) {
-            e.printStackTrace();
-        }
+
+        graph.constructEdgeLengthMatrix(); // Construct a matrix containing the complete graph.
+        setEdgeMatrix(graph.getEdgeLengthMatrix());
+
         return null;
     }
 
