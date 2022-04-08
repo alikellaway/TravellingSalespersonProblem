@@ -107,11 +107,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
             // Recalculate edge lengths so the ant has an accurate representation.
             dgraph.stop();
 //            dgraph.getUnderlyingGraph().getEdgeContainer().clear();
-            try {
-                graph.constructEdgeLengthMatrix();
-            } catch (NoNodeContainerException e) {
-                e.printStackTrace();
-            }
+            graph.constructEdgeLengthMatrix(); // Reconstruct the edge matrix, since it has changed.
             acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
             acos.sendAnts(100, 0);
             dgraph.move();
@@ -120,21 +116,6 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         acos.getExecutorService().shutdown();
     }
 
-    /**
-     * Used to actually run solution.
-     */
-    private void solve() {
-        try {
-            graph.constructEdgeLengthMatrix();
-            acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-            acos.getExecutorCompletionService().submit(new Ant(acos));
-            acos.setActiveAnts(acos.getActiveAnts() + 1);
-            // See if the ant found a shorter route.
-            acos.processAnts();
-        } catch (NoNodeContainerException e) {
-            e.printStackTrace();
-        }
-    }
 
     public SolverOutput runSolution(int runTime, int delayPerStep) {
         acos.setDelayPerStep(delayPerStep);
@@ -144,12 +125,10 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         while (t.isTiming()) {
             // Recalculate edge lengths so the ant has an accurate representation.
             dgraph.stop();
-            try {
-                graph.constructEdgeLengthMatrix();
-                acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-            } catch (NoNodeContainerException e) {
-                e.printStackTrace();
-            }
+
+            graph.constructEdgeLengthMatrix();
+            acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
+
             dgraph.move();
             // Add the new ant
             acos.getExecutorCompletionService().submit(new Ant(acos));

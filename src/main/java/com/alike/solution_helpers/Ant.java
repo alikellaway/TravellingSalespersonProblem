@@ -156,11 +156,19 @@ public class Ant implements Callable<Ant> {
          */
         double random = ThreadLocalRandom.current().nextDouble();
         for (int y = 0; y < numNodes; y++) {
-            if (transitionProbabilities.get(y) > random) {
+            if (transitionProbabilities.get(y) > random && !visitedNodes.get(y)) {
                 destinationNode = y;
                 break;
             } else {
                 random -= transitionProbabilities.get(y);
+            }
+        }
+        // If we didnt select one, but still havent visited all, visit the first one we can.
+        if (!allVisited(visitedNodes) && destinationNode == INVALID_NODE_IDX) {
+            for (int y = 0; y < numNodes; y++) {
+                if (!visitedNodes.get(y)) {
+                    destinationNode = y;
+                }
             }
         }
         return destinationNode;
@@ -299,5 +307,19 @@ public class Ant implements Callable<Ant> {
      */
     public static void setNumNodes(int numNodes) {
         Ant.numNodes = numNodes;
+    }
+
+    /**
+     * Checks if all the nodes have been visited.
+     * @param visitationLog The hashmap containing whether nodes have been visited.
+     * @return boolean true if all nodes have been visited, false if not.
+     */
+    private boolean allVisited(HashMap<Integer, Boolean> visitationLog) {
+        for (int i = 0; i <= numNodes-1; i++) {
+            if (!visitationLog.get(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

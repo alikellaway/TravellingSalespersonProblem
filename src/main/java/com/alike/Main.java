@@ -82,7 +82,7 @@ public class Main extends Application {
     /**
      * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
      */
-    private static final Mode mode = Mode.ACO;
+    private static final Mode mode = Mode.DACO;
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException, RadiusExceedingBoundaryException {
 
@@ -98,7 +98,7 @@ public class Main extends Application {
                 dactiveGraph = new DynamicGraph(activeGraph, false, true);
             }
             case DACO -> {
-                activeGraph = GraphGenerator.generateRandomGraph(210, false);
+                activeGraph = GraphGenerator.generateRandomGraph(1000, false);
                 dactiveGraph = new DynamicGraph(activeGraph,false, true);
             }
             case DHFC -> {
