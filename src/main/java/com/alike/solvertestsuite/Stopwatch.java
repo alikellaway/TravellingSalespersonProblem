@@ -46,6 +46,22 @@ public class Stopwatch {
     }
 
     /**
+     * Returns the time this stop watch was running for in micro-seconds.
+     * @return micro-seconds The time elapsed in micro-seconds.
+     */
+    public long getTimeMus() {
+        return getTimeNs()/1000;
+    }
+
+    /**
+     * Returns the time this stop watch was running for in milliseconds.
+     * @return milliseconds The time elapsed in milliseconds.
+     */
+    public long getTimeMs() {
+        return getTimeMus()/1000;
+    }
+
+    /**
      * Returns the value of the @code{startTime} attribute.
      * @return startTime The value of the @code{startTime} attribute.
      */
