@@ -122,43 +122,19 @@ public class HilbertFractalCurveSolver implements StaticSolver {
         }
         // Find which nodes we want and put them in order according to the graph.
         // We copy the node array here so that we can remove the node from the list once we've found it.
-        ArrayList<Node> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
+
         ArrayList<Node> nodesOrdered = new ArrayList<>();
+        ArrayList<Node> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
         for (Coordinate c : curveCornerCoordinates) {
-            /* To speed up this process, we remove node objects from the nodes arr as they are found.
-             * .remove() causes all following elements in the arr to be shifted by one if they element removed was not
-             * at the end. => traverse backwards so always purging end element. */
-            for (int i = nodes.size() - 1; i >= 0; i--) {
+            for (int i = 0; i < nodes.size(); i++) {
                 Node n = nodes.get(i);
-                if (n.getCoordinate().equals(c)) {
+                if (n.getCoordinate().match(c)) {
                     nodesOrdered.add(n);
                     nodes.remove(i); // Removing them as we go will speed it up as we advance
                     break; // Don't continue looping through the nodes if we found one.
                 }
             }
         }
-//        Node[] nodesInOrder = new Node[graph.getNumNodes()];
-//        int nextNodeFoundsIndexFrontToBack = 0;
-//        int nextNodeFoundsIndexBackToFront = graph.getNumNodes() - 1;
-//        for (int hci = 0; hci < numCorners/2; hci++) { // Hilbert coordinate index. Can div 2 since always even.
-//            int oI = numCorners - hci - 1; // Opposite index (the one at the other end).
-//            // For each node, check if it equals either the coordinate at the front or the back.
-//            for (int nI = nodes.size() - 1; nI >= 0; nI--) { // Node index
-//                Coordinate nC = nodes.get(nI).getCoordinate(); // Node's coordinate
-//                if (nC.equals(curveCornerCoordinates[hci])) { // The node has the coordinates of the front curve coord.
-//                    nodesInOrder[nextNodeFoundsIndexFrontToBack] = nodes.get(nI);
-//                    nodes.remove(nI);
-//                    nextNodeFoundsIndexFrontToBack++;
-//                    continue;
-//                }
-//                if (nC.equals(curveCornerCoordinates[oI])) { // The node has the coordinates of the back curve coord.
-//                    nodesInOrder[nextNodeFoundsIndexBackToFront] = nodes.get(nI);
-//                    nodes.remove(nI);
-//                    nextNodeFoundsIndexBackToFront--;
-//                }
-//            }
-//        }
-//        nodesOrdered = new ArrayList<>(List.of(nodesInOrder));
         // Check to see if we missed nodes - if so throw an exception.
         if (nodesOrdered.size() != graph.getNumNodes()) {
             StringBuilder sb = new StringBuilder("Node(s) missed: ");

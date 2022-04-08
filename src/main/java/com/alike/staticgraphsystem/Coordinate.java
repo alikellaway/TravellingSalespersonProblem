@@ -26,6 +26,11 @@ public class Coordinate {
     private static final String STORAGE_FORMAT_COORDINATE_LIST_DELIMETER = ";";
 
     /**
+     * This coordinate hashed into a string.
+     */
+    private int hash;
+
+    /**
      * Initialises a new coordinate.
      * @param x The x value of the new coordinate.
      * @param y The y value of the new coordinate.
@@ -180,5 +185,18 @@ public class Coordinate {
             sfCl.append(c.toStorageFormat()).append(STORAGE_FORMAT_COORDINATE_LIST_DELIMETER); // Write each coordinate in
         }
         return sfCl.substring(0, sfCl.length() - 1);
+    }
+
+    /**
+     * Used to check if a coordinate has matching x and y values to this one.
+     * @param c The coordinate to check for a match.
+     * @return boolean True if this and the other coordinates x and y components match.
+     */
+    public boolean match(Coordinate c) {
+        return this.getX() == c.getX() && this.getY() == c.getY();
+    }
+
+    private void updateHash() {
+        this.hash = Integer.getInteger(String.valueOf(this.x) + y);
     }
 }
