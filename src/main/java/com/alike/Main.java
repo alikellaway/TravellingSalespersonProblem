@@ -9,9 +9,6 @@ import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvers.*;
-import com.alike.solvertestsuite.DynamicSolution;
-import com.alike.solvertestsuite.SolverOutput;
-import com.alike.staticgraphsystem.Graph;
 import com.alike.staticgraphsystem.GraphGenerator;
 import com.alike.staticgraphsystem.StaticGraph;
 import javafx.application.Application;
@@ -106,6 +103,7 @@ public class Main extends Application {
                 dactiveGraph = new DynamicGraph(activeGraph, false, true);
             }
         }
+        /* I am making a change */
 
         /* Here is a list of example use cases of the solver methods. */
         switch (mode) {
@@ -128,7 +126,7 @@ public class Main extends Application {
             case ACO -> {
                 /* Ant Colony Optimisation StaticSolver. */
                 Thread acosT = new Thread(() -> {
-                    AntColonyOptimizationSolver acos = new AntColonyOptimizationSolver(activeGraph);
+                    AntColonyOptimisationSolver acos = new AntColonyOptimisationSolver(activeGraph);
                     acos.runSolution(0);
                 });
                 acosT.start();
