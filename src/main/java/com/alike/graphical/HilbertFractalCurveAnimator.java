@@ -3,13 +3,11 @@ package com.alike.graphical;
 import com.alike.Main;
 import com.alike.customexceptions.NonSquareCanvasException;
 import com.alike.solvers.HilbertFractalCurveSolver;
-import com.alike.staticgraphsystem.Coordinate;
+import com.alike.graphsystem.Coordinate;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
 
 import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
 

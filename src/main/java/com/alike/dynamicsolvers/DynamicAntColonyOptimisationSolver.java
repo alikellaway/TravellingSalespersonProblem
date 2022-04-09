@@ -1,13 +1,13 @@
 package com.alike.dynamicsolvers;
 
-import com.alike.dynamicgraphsystem.DynamicGraph;
+import com.alike.graphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.Timer;
 import com.alike.solvers.AntColonyOptimisationSolver;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.solvertestsuite.Stopwatch;
-import com.alike.staticgraphsystem.StaticGraph;
+import com.alike.graphsystem.StaticGraph;
 
 public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     /**

@@ -1,6 +1,5 @@
-package com.alike.staticgraphsystem;
+package com.alike.graphsystem;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**

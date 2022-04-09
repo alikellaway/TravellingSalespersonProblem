@@ -1,12 +1,9 @@
 package com.alike.solution_helpers;
 
 import com.alike.customexceptions.InvalidGraphException;
-import com.alike.staticgraphsystem.Graph;
+import com.alike.graphsystem.Graph;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * Class contains some useful functions that are repeated multiple times in the project (or have no obvious space).

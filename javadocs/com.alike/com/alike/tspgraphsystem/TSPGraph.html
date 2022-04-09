@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2022-01-18">
-<meta name="description" content="declaration: module: com.alike, package: com.alike.staticgraphsystem, class: TSPGraph">
+<meta name="description" content="declaration: module: com.alike, package: com.alike.graphsystem, class: TSPGraph">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -69,11 +69,11 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="module-label-in-type">Module</span>&nbsp;<a href="../../../module-summary.html">com.alike</a></div>
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.alike.staticgraphsystem</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.alike.graphsystem</a></div>
 <h1 title="Class TSPGraph" class="title">Class TSPGraph</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.alike.staticgraphsystem.StaticGraph</div>
+<div class="inheritance">com.alike.graphsystem.StaticGraph</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
@@ -96,8 +96,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Constructs a new graph with empty node and edge containers.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.alike.staticgraphsystem.NodeContainer,com.alike.staticgraphsystem.TSPEdgeContainer)" class="member-name-link">TSPGraph</a><wbr>(<a href="TSPNodeContainer.html" title="class in com.alike.staticgraphsystem">TSPNodeContainer</a>&nbsp;nodeContainer,
- <a href="TSPEdgeContainer.html" title="class in com.alike.staticgraphsystem">TSPEdgeContainer</a>&nbsp;edgeContainer)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.alike.graphsystem.NodeContainer,com.alike.graphsystem.TSPEdgeContainer)" class="member-name-link">TSPGraph</a><wbr>(<a href="TSPNodeContainer.html" title="class in com.alike.graphsystem">TSPNodeContainer</a>&nbsp;nodeContainer,
+ <a href="TSPEdgeContainer.html" title="class in com.alike.graphsystem">TSPEdgeContainer</a>&nbsp;edgeContainer)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructs a new graph object given a node container and an edge container.</div>
 </div>
@@ -115,15 +115,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TSPGraph.html" title="class in com.alike.staticgraphsystem">TSPGraph</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TSPGraph.html" title="class in com.alike.graphsystem">TSPGraph</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TSPEdgeContainer.html" title="class in com.alike.staticgraphsystem">TSPEdgeContainer</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TSPEdgeContainer.html" title="class in com.alike.graphsystem">TSPEdgeContainer</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEdgeContainer()" class="member-name-link">getEdgeContainer</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the @code{edgeContainer} attribute of the TSPGraph object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TSPNodeContainer.html" title="class in com.alike.staticgraphsystem">TSPNodeContainer</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TSPNodeContainer.html" title="class in com.alike.graphsystem">TSPNodeContainer</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNodeContainer()" class="member-name-link">getNodeContainer</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the @code{nodeContainer} attribute of the TSPGraph object.</div>
@@ -139,12 +139,12 @@ loadScripts(document, 'script');</script>
 <div class="block">Ensures all nodes are set to unvisited.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEdgeContainer(com.alike.staticgraphsystem.TSPEdgeContainer)" class="member-name-link">setEdgeContainer</a><wbr>(<a href="TSPEdgeContainer.html" title="class in com.alike.staticgraphsystem">TSPEdgeContainer</a>&nbsp;edgeContainer)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEdgeContainer(com.alike.graphsystem.TSPEdgeContainer)" class="member-name-link">setEdgeContainer</a><wbr>(<a href="TSPEdgeContainer.html" title="class in com.alike.graphsystem">TSPEdgeContainer</a>&nbsp;edgeContainer)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the @code{edgeContainer} attribute to a new value.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNodeContainer(com.alike.staticgraphsystem.TSPNodeContainer)" class="member-name-link">setNodeContainer</a><wbr>(<a href="TSPNodeContainer.html" title="class in com.alike.staticgraphsystem">TSPNodeContainer</a>&nbsp;nodeContainer)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNodeContainer(com.alike.graphsystem.TSPNodeContainer)" class="member-name-link">setNodeContainer</a><wbr>(<a href="TSPNodeContainer.html" title="class in com.alike.graphsystem">TSPNodeContainer</a>&nbsp;nodeContainer)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the @code{nodeContainer} attribute to a new value.</div>
 </div>
@@ -178,10 +178,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(com.alike.staticgraphsystem.NodeContainer,com.alike.staticgraphsystem.TSPEdgeContainer)">
+<section class="detail" id="&lt;init&gt;(com.alike.graphsystem.NodeContainer,com.alike.graphsystem.TSPEdgeContainer)">
 <h3>TSPGraph</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">TSPGraph</span><wbr><span class="parameters">(<a href="TSPNodeContainer.html" title="class in com.alike.staticgraphsystem">TSPNodeContainer</a>&nbsp;nodeContainer,
- <a href="TSPEdgeContainer.html" title="class in com.alike.staticgraphsystem">TSPEdgeContainer</a>&nbsp;edgeContainer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">TSPGraph</span><wbr><span class="parameters">(<a href="TSPNodeContainer.html" title="class in com.alike.graphsystem">TSPNodeContainer</a>&nbsp;nodeContainer,
+ <a href="TSPEdgeContainer.html" title="class in com.alike.graphsystem">TSPEdgeContainer</a>&nbsp;edgeContainer)</span></div>
 <div class="block">Constructs a new graph object given a node container and an edge container.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNodeContainer()">
 <h3>getNodeContainer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TSPNodeContainer.html" title="class in com.alike.staticgraphsystem">TSPNodeContainer</a></span>&nbsp;<span class="element-name">getNodeContainer</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TSPNodeContainer.html" title="class in com.alike.graphsystem">TSPNodeContainer</a></span>&nbsp;<span class="element-name">getNodeContainer</span>()</div>
 <div class="block">Returns the @code{nodeContainer} attribute of the TSPGraph object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -209,9 +209,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setNodeContainer(com.alike.staticgraphsystem.TSPNodeContainer)">
+<section class="detail" id="setNodeContainer(com.alike.graphsystem.TSPNodeContainer)">
 <h3>setNodeContainer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setNodeContainer</span><wbr><span class="parameters">(<a href="TSPNodeContainer.html" title="class in com.alike.staticgraphsystem">TSPNodeContainer</a>&nbsp;nodeContainer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setNodeContainer</span><wbr><span class="parameters">(<a href="TSPNodeContainer.html" title="class in com.alike.graphsystem">TSPNodeContainer</a>&nbsp;nodeContainer)</span></div>
 <div class="block">Sets the @code{nodeContainer} attribute to a new value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -222,7 +222,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getEdgeContainer()">
 <h3>getEdgeContainer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TSPEdgeContainer.html" title="class in com.alike.staticgraphsystem">TSPEdgeContainer</a></span>&nbsp;<span class="element-name">getEdgeContainer</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TSPEdgeContainer.html" title="class in com.alike.graphsystem">TSPEdgeContainer</a></span>&nbsp;<span class="element-name">getEdgeContainer</span>()</div>
 <div class="block">Returns the @code{edgeContainer} attribute of the TSPGraph object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -230,9 +230,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setEdgeContainer(com.alike.staticgraphsystem.TSPEdgeContainer)">
+<section class="detail" id="setEdgeContainer(com.alike.graphsystem.TSPEdgeContainer)">
 <h3>setEdgeContainer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setEdgeContainer</span><wbr><span class="parameters">(<a href="TSPEdgeContainer.html" title="class in com.alike.staticgraphsystem">TSPEdgeContainer</a>&nbsp;edgeContainer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setEdgeContainer</span><wbr><span class="parameters">(<a href="TSPEdgeContainer.html" title="class in com.alike.graphsystem">TSPEdgeContainer</a>&nbsp;edgeContainer)</span></div>
 <div class="block">Sets the @code{edgeContainer} attribute to a new value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -274,7 +274,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TSPGraph.html" title="class in com.alike.staticgraphsystem">TSPGraph</a></span>&nbsp;<span class="element-name">copy</span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TSPGraph.html" title="class in com.alike.graphsystem">TSPGraph</a></span>&nbsp;<span class="element-name">copy</span>()
               throws <span class="exceptions"><a href="../customexceptions/NodeSuperimpositionException.html" title="class in com.alike.customexceptions">NodeSuperimpositionException</a>,
 <a href="../customexceptions/EdgeSuperimpositionException.html" title="class in com.alike.customexceptions">EdgeSuperimpositionException</a></span></div>
 <dl class="notes">

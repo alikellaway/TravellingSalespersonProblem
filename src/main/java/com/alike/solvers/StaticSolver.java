@@ -1,8 +1,7 @@
 package com.alike.solvers;
 
-import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
-import com.alike.staticgraphsystem.StaticGraph;
+import com.alike.graphsystem.StaticGraph;
 
 /**
  * Interface is used to ensure that StaticSolver implementations can all successfully interact with the StaticTestSuite.

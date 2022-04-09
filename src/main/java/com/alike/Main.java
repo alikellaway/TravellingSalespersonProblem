@@ -1,7 +1,7 @@
 package com.alike;
 
 import com.alike.customexceptions.*;
-import com.alike.dynamicgraphsystem.DynamicGraph;
+import com.alike.graphsystem.DynamicGraph;
 import com.alike.dynamicsolvers.DynamicAntColonyOptimisationSolver;
 import com.alike.dynamicsolvers.DynamicHilbertFractalCurveSolver;
 import com.alike.dynamicsolvers.DynamicNearestNeighbourSolver;
@@ -9,8 +9,8 @@ import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvers.*;
-import com.alike.staticgraphsystem.GraphGenerator;
-import com.alike.staticgraphsystem.StaticGraph;
+import com.alike.graphsystem.GraphGenerator;
+import com.alike.graphsystem.StaticGraph;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;

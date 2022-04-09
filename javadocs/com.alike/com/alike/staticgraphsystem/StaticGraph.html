@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2022-03-13">
-<meta name="description" content="declaration: module: com.alike, package: com.alike.staticgraphsystem, class: StaticGraph">
+<meta name="description" content="declaration: module: com.alike, package: com.alike.graphsystem, class: StaticGraph">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -69,21 +69,21 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="module-label-in-type">Module</span>&nbsp;<a href="../../../module-summary.html">com.alike</a></div>
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.alike.staticgraphsystem</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.alike.graphsystem</a></div>
 <h1 title="Class StaticGraph" class="title">Class StaticGraph</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.alike.staticgraphsystem.StaticGraph</div>
+<div class="inheritance">com.alike.graphsystem.StaticGraph</div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="Graph.html" title="interface in com.alike.staticgraphsystem">Graph</a></code></dd>
+<dd><code><a href="Graph.html" title="interface in com.alike.graphsystem">Graph</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">StaticGraph</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem">Graph</a></span></div>
+implements <a href="Graph.html" title="interface in com.alike.graphsystem">Graph</a></span></div>
 <div class="block">Class used to represent and collate data on a travelling salesperson problem graph.
  StaticGraph.java</div>
 </section>
@@ -101,12 +101,12 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 <div class="col-last even-row-color">
 <div class="block">Constructs a new graph with empty node and edge containers.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.alike.staticgraphsystem.NodeContainer)" class="member-name-link">StaticGraph</a><wbr>(<a href="NodeContainer.html" title="class in com.alike.staticgraphsystem">NodeContainer</a>&nbsp;nodeContainer)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.alike.graphsystem.NodeContainer)" class="member-name-link">StaticGraph</a><wbr>(<a href="NodeContainer.html" title="class in com.alike.graphsystem">NodeContainer</a>&nbsp;nodeContainer)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Used to create a graph with no edges but with a node container.</div>
 </div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.alike.staticgraphsystem.NodeContainer,com.alike.staticgraphsystem.EdgeContainer)" class="member-name-link">StaticGraph</a><wbr>(<a href="NodeContainer.html" title="class in com.alike.staticgraphsystem">NodeContainer</a>&nbsp;nodeContainer,
- <a href="EdgeContainer.html" title="class in com.alike.staticgraphsystem">EdgeContainer</a>&nbsp;edgeContainer)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.alike.graphsystem.NodeContainer,com.alike.graphsystem.EdgeContainer)" class="member-name-link">StaticGraph</a><wbr>(<a href="NodeContainer.html" title="class in com.alike.graphsystem">NodeContainer</a>&nbsp;nodeContainer,
+ <a href="EdgeContainer.html" title="class in com.alike.graphsystem">EdgeContainer</a>&nbsp;edgeContainer)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructs a new graph object given a node container and an edge container.</div>
 </div>
@@ -129,12 +129,12 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Call to construct a matrix containing all the edge lengths between each node in the graph.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Copies all the information in this graph object and outputs a new graph object with equal data.s</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EdgeContainer.html" title="class in com.alike.staticgraphsystem">EdgeContainer</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EdgeContainer.html" title="class in com.alike.graphsystem">EdgeContainer</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEdgeContainer()" class="member-name-link">getEdgeContainer</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the @code{edgeContainer} attribute of the StaticGraph object.</div>
@@ -144,7 +144,7 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the @code{edgeLengthMatrix} attribute.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="NodeContainer.html" title="class in com.alike.staticgraphsystem">NodeContainer</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="NodeContainer.html" title="class in com.alike.graphsystem">NodeContainer</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNodeContainer()" class="member-name-link">getNodeContainer</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the @code{nodeContainer} attribute of the StaticGraph object.</div>
@@ -160,7 +160,7 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 <div class="block">Ensures all nodes are set to unvisited.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEdgeContainer(com.alike.staticgraphsystem.EdgeContainer)" class="member-name-link">setEdgeContainer</a><wbr>(<a href="EdgeContainer.html" title="class in com.alike.staticgraphsystem">EdgeContainer</a>&nbsp;edgeContainer)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEdgeContainer(com.alike.graphsystem.EdgeContainer)" class="member-name-link">setEdgeContainer</a><wbr>(<a href="EdgeContainer.html" title="class in com.alike.graphsystem">EdgeContainer</a>&nbsp;edgeContainer)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the @code{edgeContainer} attribute to a new value.</div>
 </div>
@@ -170,7 +170,7 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 <div class="block">Sets the value of the @code{edgeLengthMatrix} attribute to a new value.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNodeContainer(com.alike.staticgraphsystem.NodeContainer)" class="member-name-link">setNodeContainer</a><wbr>(<a href="NodeContainer.html" title="class in com.alike.staticgraphsystem">NodeContainer</a>&nbsp;nodeContainer)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNodeContainer(com.alike.graphsystem.NodeContainer)" class="member-name-link">setNodeContainer</a><wbr>(<a href="NodeContainer.html" title="class in com.alike.graphsystem">NodeContainer</a>&nbsp;nodeContainer)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the @code{nodeContainer} attribute to a new value.</div>
 </div>
@@ -204,10 +204,10 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(com.alike.staticgraphsystem.NodeContainer,com.alike.staticgraphsystem.EdgeContainer)">
+<section class="detail" id="&lt;init&gt;(com.alike.graphsystem.NodeContainer,com.alike.graphsystem.EdgeContainer)">
 <h3>StaticGraph</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">StaticGraph</span><wbr><span class="parameters">(<a href="NodeContainer.html" title="class in com.alike.staticgraphsystem">NodeContainer</a>&nbsp;nodeContainer,
- <a href="EdgeContainer.html" title="class in com.alike.staticgraphsystem">EdgeContainer</a>&nbsp;edgeContainer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">StaticGraph</span><wbr><span class="parameters">(<a href="NodeContainer.html" title="class in com.alike.graphsystem">NodeContainer</a>&nbsp;nodeContainer,
+ <a href="EdgeContainer.html" title="class in com.alike.graphsystem">EdgeContainer</a>&nbsp;edgeContainer)</span></div>
 <div class="block">Constructs a new graph object given a node container and an edge container.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -217,9 +217,9 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(com.alike.staticgraphsystem.NodeContainer)">
+<section class="detail" id="&lt;init&gt;(com.alike.graphsystem.NodeContainer)">
 <h3>StaticGraph</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">StaticGraph</span><wbr><span class="parameters">(<a href="NodeContainer.html" title="class in com.alike.staticgraphsystem">NodeContainer</a>&nbsp;nodeContainer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">StaticGraph</span><wbr><span class="parameters">(<a href="NodeContainer.html" title="class in com.alike.graphsystem">NodeContainer</a>&nbsp;nodeContainer)</span></div>
 <div class="block">Used to create a graph with no edges but with a node container.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -238,7 +238,7 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 <li>
 <section class="detail" id="getNodeContainer()">
 <h3>getNodeContainer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NodeContainer.html" title="class in com.alike.staticgraphsystem">NodeContainer</a></span>&nbsp;<span class="element-name">getNodeContainer</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NodeContainer.html" title="class in com.alike.graphsystem">NodeContainer</a></span>&nbsp;<span class="element-name">getNodeContainer</span>()</div>
 <div class="block">Returns the @code{nodeContainer} attribute of the StaticGraph object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -247,9 +247,9 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 </section>
 </li>
 <li>
-<section class="detail" id="setNodeContainer(com.alike.staticgraphsystem.NodeContainer)">
+<section class="detail" id="setNodeContainer(com.alike.graphsystem.NodeContainer)">
 <h3>setNodeContainer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setNodeContainer</span><wbr><span class="parameters">(<a href="NodeContainer.html" title="class in com.alike.staticgraphsystem">NodeContainer</a>&nbsp;nodeContainer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setNodeContainer</span><wbr><span class="parameters">(<a href="NodeContainer.html" title="class in com.alike.graphsystem">NodeContainer</a>&nbsp;nodeContainer)</span></div>
 <div class="block">Sets the @code{nodeContainer} attribute to a new value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -260,7 +260,7 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 <li>
 <section class="detail" id="getEdgeContainer()">
 <h3>getEdgeContainer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EdgeContainer.html" title="class in com.alike.staticgraphsystem">EdgeContainer</a></span>&nbsp;<span class="element-name">getEdgeContainer</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EdgeContainer.html" title="class in com.alike.graphsystem">EdgeContainer</a></span>&nbsp;<span class="element-name">getEdgeContainer</span>()</div>
 <div class="block">Returns the @code{edgeContainer} attribute of the StaticGraph object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -269,9 +269,9 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 </section>
 </li>
 <li>
-<section class="detail" id="setEdgeContainer(com.alike.staticgraphsystem.EdgeContainer)">
+<section class="detail" id="setEdgeContainer(com.alike.graphsystem.EdgeContainer)">
 <h3>setEdgeContainer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setEdgeContainer</span><wbr><span class="parameters">(<a href="EdgeContainer.html" title="class in com.alike.staticgraphsystem">EdgeContainer</a>&nbsp;edgeContainer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setEdgeContainer</span><wbr><span class="parameters">(<a href="EdgeContainer.html" title="class in com.alike.graphsystem">EdgeContainer</a>&nbsp;edgeContainer)</span></div>
 <div class="block">Sets the @code{edgeContainer} attribute to a new value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -321,7 +321,7 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 <div class="block">Returns the number of nodes in the graph object's NodeContainer object.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="Graph.html#getNumNodes()">getNumNodes</a></code>&nbsp;in interface&nbsp;<code><a href="Graph.html" title="interface in com.alike.staticgraphsystem">Graph</a></code></dd>
+<dd><code><a href="Graph.html#getNumNodes()">getNumNodes</a></code>&nbsp;in interface&nbsp;<code><a href="Graph.html" title="interface in com.alike.graphsystem">Graph</a></code></dd>
 <dt>Returns:</dt>
 <dd>int The number of Node objects managed by the StaticGraph's NodeContainer object.</dd>
 </dl>
@@ -337,7 +337,7 @@ implements <a href="Graph.html" title="interface in com.alike.staticgraphsystem"
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a></span>&nbsp;<span class="element-name">copy</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a></span>&nbsp;<span class="element-name">copy</span>()</div>
 <div class="block">Copies all the information in this graph object and outputs a new graph object with equal data.s</div>
 <dl class="notes">
 <dt>Returns:</dt>

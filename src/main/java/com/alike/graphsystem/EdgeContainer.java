@@ -1,4 +1,4 @@
-package com.alike.staticgraphsystem;
+package com.alike.graphsystem;
 
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -4,9 +4,9 @@ import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NonExistentNodeException;
 import com.alike.solvers.AntColonyOptimisationSolver;
-import com.alike.staticgraphsystem.Edge;
-import com.alike.staticgraphsystem.EdgeContainer;
-import com.alike.staticgraphsystem.Node;
+import com.alike.graphsystem.Edge;
+import com.alike.graphsystem.EdgeContainer;
+import com.alike.graphsystem.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,8 +62,6 @@ public class Ant implements Callable<Ant> {
     /**
      * The code that the Ant runs when the thread pool calls it.
      * @return this Itself so we can access necessary information from the Ant.
-     * @throws NonExistentNodeException Thrown when a node is searched for but does not exist.
-     * @throws EdgeSuperimpositionException Thrown when an edge is superimposed on another inside an edge container.
      */
     @Override
     public Ant call() {
@@ -112,9 +110,7 @@ public class Ant implements Callable<Ant> {
         }
         try {
             orderedNodes.add(acos.getGraph().getNodeContainer().getNodeByID(currentNodeId)); // Add the final node to our route
-        } catch (NonExistentNodeException e) {
-
-        }
+        } catch (NonExistentNodeException ignored) {}
         // Add our startNode again here?
         route = createRouteFromNodeSet(orderedNodes); // Construct an edge container using the routeNodes array.
         return this;
@@ -181,7 +177,7 @@ public class Ant implements Callable<Ant> {
      * @return @code{transitionProbabilities} An ArrayList containing transitional probabilities for each node.
      * @throws NonExistentNodeException Thrown when a node ID is referenced but does not exist.
      */
-    private ArrayList<Double> getTransitionProbabilities(int currentNodeID, HashMap<Integer, Boolean> visitedNodes) throws NonExistentNodeException {
+    private ArrayList<Double> getTransitionProbabilities(int currentNodeID, HashMap<Integer, Boolean> visitedNodes) {
         // Create space for output
         ArrayList<Double> transitionProbabilities = new ArrayList<>(acos.getGraph().getNumNodes());
         // Populate with 0s

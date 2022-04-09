@@ -1,8 +1,6 @@
-package com.alike.dynamicgraphsystem;
+package com.alike.graphsystem;
 
 import com.alike.Main;
-import com.alike.staticgraphsystem.Coordinate;
-import com.alike.staticgraphsystem.Vector;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -35,7 +33,7 @@ public class CoordinateMover {
      * This enum is used to represent directions in the following code.
      */
     private enum Direction {
-        UP, UPRIGHT, RIGHT, DOWNRIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT, NONE;
+        UP, UPRIGHT, RIGHT, DOWNRIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT, NONE
     }
 
     /**

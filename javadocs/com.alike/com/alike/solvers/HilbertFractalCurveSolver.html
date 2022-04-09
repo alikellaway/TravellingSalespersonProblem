@@ -122,7 +122,7 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <div class="col-last even-row-color">
 <div class="block">Empty constructor so we can change the graph at a later time if we choose.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.alike.staticgraphsystem.StaticGraph)" class="member-name-link">HilbertFractalCurveSolver</a><wbr>(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a>&nbsp;graph)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.alike.graphsystem.StaticGraph)" class="member-name-link">HilbertFractalCurveSolver</a><wbr>(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a>&nbsp;graph)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Used to construct a new @code{HilbertFractalCurveSolver} object.</div>
 </div>
@@ -145,12 +145,12 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Constructs an edge container for the @code{graph} using the list output by @code{getNodesOrdered}.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../staticgraphsystem/Coordinate.html" title="class in com.alike.staticgraphsystem">Coordinate</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../staticgraphsystem/Coordinate.html" title="class in com.alike.graphsystem">Coordinate</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCornerCoordinates()" class="member-name-link">getCornerCoordinates</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the @code{curveCornerCoordinates} attribute.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNodesOrdered()" class="member-name-link">getNodesOrdered</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the nodes in an order using the current hilbert curve to map the nodes into an order.</div>
@@ -161,7 +161,7 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <div class="block">Used to instruct @code{this} to find a route around the @code{graph} attribute.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setGraph(com.alike.staticgraphsystem.StaticGraph)" class="member-name-link">setGraph</a><wbr>(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a>&nbsp;graph)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setGraph(com.alike.graphsystem.StaticGraph)" class="member-name-link">setGraph</a><wbr>(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a>&nbsp;graph)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the @code{graph} attribute to a new value.</div>
 </div>
@@ -205,9 +205,9 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.alike.staticgraphsystem.StaticGraph)">
+<section class="detail" id="&lt;init&gt;(com.alike.graphsystem.StaticGraph)">
 <h3>HilbertFractalCurveSolver</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">HilbertFractalCurveSolver</span><wbr><span class="parameters">(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a>&nbsp;graph)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">HilbertFractalCurveSolver</span><wbr><span class="parameters">(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a>&nbsp;graph)</span></div>
 <div class="block">Used to construct a new @code{HilbertFractalCurveSolver} object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -264,7 +264,7 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <li>
 <section class="detail" id="getNodesOrdered()">
 <h3>getNodesOrdered</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&gt;</span>&nbsp;<span class="element-name">getNodesOrdered</span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&gt;</span>&nbsp;<span class="element-name">getNodesOrdered</span>()
                                 throws <span class="exceptions"><a href="../customexceptions/NodeMissedException.html" title="class in com.alike.customexceptions">NodeMissedException</a>,
 <a href="../customexceptions/HilbertCurveUnconstructedException.html" title="class in com.alike.customexceptions">HilbertCurveUnconstructedException</a></span></div>
 <div class="block">Returns the nodes in an order using the current hilbert curve to map the nodes into an order.</div>
@@ -278,13 +278,13 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 </section>
 </li>
 <li>
-<section class="detail" id="setGraph(com.alike.staticgraphsystem.StaticGraph)">
+<section class="detail" id="setGraph(com.alike.graphsystem.StaticGraph)">
 <h3>setGraph</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setGraph</span><wbr><span class="parameters">(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a>&nbsp;graph)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setGraph</span><wbr><span class="parameters">(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a>&nbsp;graph)</span></div>
 <div class="block">Sets the @code{graph} attribute to a new value.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="Solver.html#setGraph(com.alike.staticgraphsystem.StaticGraph)">setGraph</a></code>&nbsp;in interface&nbsp;<code><a href="Solver.html" title="interface in com.alike.solvers">Solver</a></code></dd>
+<dd><code><a href="Solver.html#setGraph(com.alike.graphsystem.StaticGraph)">setGraph</a></code>&nbsp;in interface&nbsp;<code><a href="Solver.html" title="interface in com.alike.solvers">Solver</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>graph</code> - The new value to become the @code{graph} attribute.</dd>
 </dl>
@@ -293,7 +293,7 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <li>
 <section class="detail" id="getCornerCoordinates()">
 <h3>getCornerCoordinates</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../staticgraphsystem/Coordinate.html" title="class in com.alike.staticgraphsystem">Coordinate</a>&gt;</span>&nbsp;<span class="element-name">getCornerCoordinates</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../staticgraphsystem/Coordinate.html" title="class in com.alike.graphsystem">Coordinate</a>&gt;</span>&nbsp;<span class="element-name">getCornerCoordinates</span>()</div>
 <div class="block">Returns the value of the @code{curveCornerCoordinates} attribute.</div>
 <dl class="notes">
 <dt>Returns:</dt>

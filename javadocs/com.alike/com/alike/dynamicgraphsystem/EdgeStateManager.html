@@ -73,7 +73,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class EdgeStateManager" class="title">Class EdgeStateManager</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.alike.dynamicgraphsystem.EdgeStateManager</div>
+<div class="inheritance">com.alike.graphsystem.EdgeStateManager</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
@@ -116,8 +116,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the value of the @code{offlineEdges} attribute.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isOffline(com.alike.staticgraphsystem.Node,com.alike.staticgraphsystem.Node)" class="member-name-link">isOffline</a><wbr>(<a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;startNode,
- <a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;endNode)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isOffline(com.alike.graphsystem.Node,com.alike.graphsystem.Node)" class="member-name-link">isOffline</a><wbr>(<a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;startNode,
+ <a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;endNode)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Used to check if an edge is currently offline.</div>
 </div>
@@ -127,14 +127,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the @code{offlineEdges} attribute to a new value.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeOffline(com.alike.staticgraphsystem.Node,com.alike.staticgraphsystem.Node)" class="member-name-link">takeOffline</a><wbr>(<a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;startNode,
- <a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;endNode)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeOffline(com.alike.graphsystem.Node,com.alike.graphsystem.Node)" class="member-name-link">takeOffline</a><wbr>(<a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;startNode,
+ <a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;endNode)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Takes an edge offline given a start node and and end node.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeOnline(com.alike.staticgraphsystem.Node,com.alike.staticgraphsystem.Node)" class="member-name-link">takeOnline</a><wbr>(<a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;startNode,
- <a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;endNode)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeOnline(com.alike.graphsystem.Node,com.alike.graphsystem.Node)" class="member-name-link">takeOnline</a><wbr>(<a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;startNode,
+ <a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;endNode)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Removes an edge from the offlineEdges list.</div>
 </div>
@@ -176,10 +176,10 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="takeOffline(com.alike.staticgraphsystem.Node,com.alike.staticgraphsystem.Node)">
+<section class="detail" id="takeOffline(com.alike.graphsystem.Node,com.alike.graphsystem.Node)">
 <h3>takeOffline</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">takeOffline</span><wbr><span class="parameters">(<a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;startNode,
- <a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;endNode)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">takeOffline</span><wbr><span class="parameters">(<a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;startNode,
+ <a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;endNode)</span>
                  throws <span class="exceptions"><a href="../customexceptions/EdgeToSelfException.html" title="class in com.alike.customexceptions">EdgeToSelfException</a></span></div>
 <div class="block">Takes an edge offline given a start node and and end node.</div>
 <dl class="notes">
@@ -192,10 +192,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="takeOnline(com.alike.staticgraphsystem.Node,com.alike.staticgraphsystem.Node)">
+<section class="detail" id="takeOnline(com.alike.graphsystem.Node,com.alike.graphsystem.Node)">
 <h3>takeOnline</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">takeOnline</span><wbr><span class="parameters">(<a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;startNode,
- <a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;endNode)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">takeOnline</span><wbr><span class="parameters">(<a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;startNode,
+ <a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;endNode)</span>
                 throws <span class="exceptions"><a href="../customexceptions/EdgeToSelfException.html" title="class in com.alike.customexceptions">EdgeToSelfException</a></span></div>
 <div class="block">Removes an edge from the offlineEdges list.</div>
 <dl class="notes">
@@ -208,10 +208,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="isOffline(com.alike.staticgraphsystem.Node,com.alike.staticgraphsystem.Node)">
+<section class="detail" id="isOffline(com.alike.graphsystem.Node,com.alike.graphsystem.Node)">
 <h3>isOffline</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isOffline</span><wbr><span class="parameters">(<a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;startNode,
- <a href="../staticgraphsystem/Node.html" title="class in com.alike.staticgraphsystem">Node</a>&nbsp;endNode)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isOffline</span><wbr><span class="parameters">(<a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;startNode,
+ <a href="../staticgraphsystem/Node.html" title="class in com.alike.graphsystem">Node</a>&nbsp;endNode)</span>
                   throws <span class="exceptions"><a href="../customexceptions/EdgeToSelfException.html" title="class in com.alike.customexceptions">EdgeToSelfException</a></span></div>
 <div class="block">Used to check if an edge is currently offline.</div>
 <dl class="notes">

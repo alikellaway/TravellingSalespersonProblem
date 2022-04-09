@@ -1,11 +1,8 @@
 package com.alike.solvertestsuite;
 
-import com.alike.dynamicgraphsystem.DynamicGraph;
+import com.alike.graphsystem.DynamicGraph;
 import com.alike.dynamicsolvers.DynamicSolver;
-import com.alike.staticgraphsystem.StaticGraph;
-import com.alike.staticgraphsystem.Vector;
-
-import java.util.ArrayList;
+import com.alike.graphsystem.StaticGraph;
 
 public class DynamicTestSuite {
     /**

@@ -1,4 +1,4 @@
-package com.alike.staticgraphsystem;
+package com.alike.graphsystem;
 
 /**
  * An interface such that we can handle @code{StaticGraphs} and @code{DynamicGraphs} simultaneously.
@@ -6,7 +6,6 @@ package com.alike.staticgraphsystem;
 public interface Graph {
     /**
      * Returns the number of nodes in the graph.
-     * @returns numNodes The number of nodes in the graph.
      */
     int getNumNodes();
 }

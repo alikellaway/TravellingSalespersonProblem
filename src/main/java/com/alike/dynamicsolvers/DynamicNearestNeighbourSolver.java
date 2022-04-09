@@ -1,16 +1,14 @@
 package com.alike.dynamicsolvers;
 
-import com.alike.customexceptions.EdgeSuperimpositionException;
-import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NoClosestNodeException;
-import com.alike.dynamicgraphsystem.DynamicGraph;
+import com.alike.graphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.Timer;
 import com.alike.solvers.NearestNeighbourSolver;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.solvertestsuite.Stopwatch;
-import com.alike.staticgraphsystem.*;
+import com.alike.graphsystem.*;
 
 import java.util.ArrayList;
 

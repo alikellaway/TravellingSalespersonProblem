@@ -3,7 +3,7 @@ package com.alike.solvers;
 import com.alike.customexceptions.*;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvertestsuite.Solution;
-import com.alike.staticgraphsystem.*;
+import com.alike.graphsystem.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

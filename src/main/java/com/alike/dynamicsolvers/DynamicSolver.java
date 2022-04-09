@@ -1,8 +1,8 @@
 package com.alike.dynamicsolvers;
 
-import com.alike.dynamicgraphsystem.DynamicGraph;
+import com.alike.graphsystem.DynamicGraph;
 import com.alike.solvertestsuite.SolverOutput;
-import com.alike.staticgraphsystem.Graph;
+import com.alike.graphsystem.Graph;
 
 public interface DynamicSolver {
     Graph getGraph();

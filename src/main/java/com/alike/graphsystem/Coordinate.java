@@ -1,4 +1,4 @@
-package com.alike.staticgraphsystem;
+package com.alike.graphsystem;
 
 import java.util.ArrayList;
 import java.util.Random;

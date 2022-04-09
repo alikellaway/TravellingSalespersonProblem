@@ -1,8 +1,6 @@
-package com.alike.dynamicgraphsystem;
+package com.alike.graphsystem;
 
 import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.staticgraphsystem.Graph;
-import com.alike.staticgraphsystem.StaticGraph;
 
 /**
  * Class combines the @code{StaticGraph} and @code{CoordinateMover} classes to create a dynamic travelling salesperson

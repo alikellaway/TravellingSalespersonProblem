@@ -1,6 +1,6 @@
 package com.alike.read_write;
 
-import com.alike.staticgraphsystem.Coordinate;
+import com.alike.graphsystem.Coordinate;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

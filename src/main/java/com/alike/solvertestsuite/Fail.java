@@ -1,6 +1,6 @@
 package com.alike.solvertestsuite;
 
-import com.alike.staticgraphsystem.Graph;
+import com.alike.graphsystem.Graph;
 
 /**
  * StaticSolver classes will output these objects from their runSolution methods to indicate that the solver failed to find

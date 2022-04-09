@@ -4,8 +4,8 @@ import com.alike.Main;
 import com.alike.customexceptions.InvalidGraphException;
 import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.customexceptions.RadiusExceedingBoundaryException;
-import com.alike.staticgraphsystem.Coordinate;
-import com.alike.staticgraphsystem.GraphGenerator;
+import com.alike.graphsystem.Coordinate;
+import com.alike.graphsystem.GraphGenerator;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

@@ -6,9 +6,9 @@ import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.solvertestsuite.Stopwatch;
-import com.alike.staticgraphsystem.EdgeContainer;
-import com.alike.staticgraphsystem.Node;
-import com.alike.staticgraphsystem.StaticGraph;
+import com.alike.graphsystem.EdgeContainer;
+import com.alike.graphsystem.Node;
+import com.alike.graphsystem.StaticGraph;
 
 import java.util.Random;
 import java.util.concurrent.*;

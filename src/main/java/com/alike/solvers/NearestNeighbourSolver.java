@@ -7,7 +7,7 @@ import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
-import com.alike.staticgraphsystem.*;
+import com.alike.graphsystem.*;
 
 /**
  * This class takes a graph object as a parameter, and will create a TSP route using the 'Nearest Neighbour Algorithm'.

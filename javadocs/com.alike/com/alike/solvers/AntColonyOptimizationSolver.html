@@ -115,7 +115,7 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <div class="col-last even-row-color">
 <div class="block">An empty constructor so that we can set the graph at a later time.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.alike.staticgraphsystem.StaticGraph)" class="member-name-link">AntColonyOptimizationSolver</a><wbr>(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a>&nbsp;graph)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.alike.graphsystem.StaticGraph)" class="member-name-link">AntColonyOptimizationSolver</a><wbr>(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a>&nbsp;graph)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructs a new Solver object which can run an ant colony optimisation solution implementation to find a route
  through a TSP graph.</div>
@@ -169,7 +169,7 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the @code{executorService} attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGraph()" class="member-name-link">getGraph</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the @code{graph} attribute.</div>
@@ -241,7 +241,7 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <div class="block">Sets the value of the @code{executorService} attribute to a new value.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setGraph(com.alike.staticgraphsystem.StaticGraph)" class="member-name-link">setGraph</a><wbr>(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a>&nbsp;graph)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setGraph(com.alike.graphsystem.StaticGraph)" class="member-name-link">setGraph</a><wbr>(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a>&nbsp;graph)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the @code{graph} attribute to a new value.</div>
 </div>
@@ -300,9 +300,9 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.alike.staticgraphsystem.StaticGraph)">
+<section class="detail" id="&lt;init&gt;(com.alike.graphsystem.StaticGraph)">
 <h3>AntColonyOptimizationSolver</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AntColonyOptimizationSolver</span><wbr><span class="parameters">(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a>&nbsp;graph)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AntColonyOptimizationSolver</span><wbr><span class="parameters">(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a>&nbsp;graph)</span></div>
 <div class="block">Constructs a new Solver object which can run an ant colony optimisation solution implementation to find a route
  through a TSP graph.</div>
 <dl class="notes">
@@ -350,13 +350,13 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 </section>
 </li>
 <li>
-<section class="detail" id="setGraph(com.alike.staticgraphsystem.StaticGraph)">
+<section class="detail" id="setGraph(com.alike.graphsystem.StaticGraph)">
 <h3>setGraph</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setGraph</span><wbr><span class="parameters">(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a>&nbsp;graph)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setGraph</span><wbr><span class="parameters">(<a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a>&nbsp;graph)</span></div>
 <div class="block">Sets the @code{graph} attribute to a new value.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="Solver.html#setGraph(com.alike.staticgraphsystem.StaticGraph)">setGraph</a></code>&nbsp;in interface&nbsp;<code><a href="Solver.html" title="interface in com.alike.solvers">Solver</a></code></dd>
+<dd><code><a href="Solver.html#setGraph(com.alike.graphsystem.StaticGraph)">setGraph</a></code>&nbsp;in interface&nbsp;<code><a href="Solver.html" title="interface in com.alike.solvers">Solver</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>graph</code> - The new value ot assign to the @code{graph} attribute.</dd>
 </dl>
@@ -365,7 +365,7 @@ implements <a href="Solver.html" title="interface in com.alike.solvers">Solver</
 <li>
 <section class="detail" id="getGraph()">
 <h3>getGraph</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.staticgraphsystem">StaticGraph</a></span>&nbsp;<span class="element-name">getGraph</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../staticgraphsystem/StaticGraph.html" title="class in com.alike.graphsystem">StaticGraph</a></span>&nbsp;<span class="element-name">getGraph</span>()</div>
 <div class="block">Returns the value of the @code{graph} attribute.</div>
 <dl class="notes">
 <dt>Returns:</dt>

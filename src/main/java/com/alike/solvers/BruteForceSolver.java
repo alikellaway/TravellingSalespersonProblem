@@ -6,7 +6,7 @@ import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
-import com.alike.staticgraphsystem.*;
+import com.alike.graphsystem.*;
 import java.util.List;
 
 /**

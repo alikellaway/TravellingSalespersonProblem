@@ -4,8 +4,8 @@ import com.alike.customexceptions.CoordinateListException;
 import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.read_write.CoordinateListFileReader;
 import com.alike.solvers.StaticSolver;
-import com.alike.staticgraphsystem.NodeContainer;
-import com.alike.staticgraphsystem.StaticGraph;
+import com.alike.graphsystem.NodeContainer;
+import com.alike.graphsystem.StaticGraph;
 
 import java.io.IOException;
 import java.util.ArrayList;
