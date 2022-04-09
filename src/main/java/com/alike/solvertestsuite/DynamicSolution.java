@@ -1,49 +1,79 @@
 package com.alike.solvertestsuite;
 
+/**
+ * DynamicSolution objects can be used to represent the output of a DynamicSolver objects solutions.
+ * @author alike
+ */
 public class DynamicSolution implements SolverOutput {
     /**
-     * The averageLength attribute of the DTSP object after the solution has been run for a certain time period.
+     * The average length of the route yielded by a solver.
      */
-    private double averageLength;
+    private double avgLength;
 
     /**
-     * The time period for which the solver was solving.
+     * Average solve time.
      */
-    private double timePeriod;
+    private long avgSolveTime;
 
-    public DynamicSolution(double averageLength, double timePeriod) {
-        setAverageLength(averageLength);
-        setTimePeriod(timePeriod);
+    /**
+     * Initialises a new @code{DynamicSolution} object.
+     * @param averageLength The average route length of all the solutions yielded by a @code{DynamicSolver}.
+     * @param avgSolveTime The average time taken for a @code{DynamicSolver} to yield each solution.
+     */
+    public DynamicSolution(double averageLength, long avgSolveTime) {
+        setAvgLength(averageLength);
+        setAvgSolveTime(avgSolveTime);
     }
 
-    public double getAverageLength() {
-        return averageLength;
+    /**
+     * Returns the value of the @code{avgLength} attribute.
+     * @return avgLength The value of the @code{avgLength} attribute.
+     */
+    public double getAvgLength() {
+        return avgLength;
     }
 
-    public void setAverageLength(double averageLength) {
-        this.averageLength = averageLength;
+    /**
+     * Assigns the value of the @code{avgLength} attribute.
+     * @param avgLength The new value to assign the @code{avgLength} attribute.
+     */
+    public void setAvgLength(double avgLength) {
+        this.avgLength = avgLength;
     }
 
-    public double getTimePeriod() {
-        return timePeriod;
+    /**
+     * Returns the value of the @code{avgSolveTime} attribute.
+     * @return avgSoleTime The value of the @code{avgSolveTime} attribute.
+     */
+    public long getAvgSolveTime() {
+        return avgSolveTime;
     }
 
-    public void setTimePeriod(double timePeriod) {
-        this.timePeriod = timePeriod;
+    /**
+     * Assigns the value of the @code{avgSolveTime} attribute.
+     * @param avgSolveTime The new value to assign the @code{avgSoleTime} attribute.
+     */
+    public void setAvgSolveTime(long avgSolveTime) {
+        this.avgSolveTime = avgSolveTime;
     }
 
+    /**
+     * Returns whether this @code{SolverOutput} object is of type @code{Fail}.
+     * @return false This object is not a @code{Fail}.
+     */
     @Override
     public boolean isFail() {
         return false;
     }
 
+    /**
+     * Returns a string representation of this object and the information in it.
+     * @return string This object as a string.
+     */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getAverageLength());
-        sb.append(", ");
-        sb.append(getTimePeriod());
-        sb.append("ms");
-        return sb.toString();
+        return getAvgLength() + ", " + getAvgSolveTime() + "ms";
     }
+
+
 }
