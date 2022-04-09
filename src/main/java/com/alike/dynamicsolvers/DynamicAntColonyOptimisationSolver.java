@@ -1,12 +1,9 @@
 package com.alike.dynamicsolvers;
 
-import com.alike.customexceptions.NoNodeContainerException;
 import com.alike.dynamicgraphsystem.DynamicGraph;
-import com.alike.solution_helpers.Ant;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.Timer;
 import com.alike.solvers.AntColonyOptimizationSolver;
-import com.alike.solvers.DynamicSolver;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.solvertestsuite.Stopwatch;
@@ -47,6 +44,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         setGraph(dgraph.getUnderlyingGraph());
         getDgraph().wake();
         acos = new AntColonyOptimizationSolver(graph);
+        acos.setDelayPerStep(0);
         // Set you values to allow the path to react quickly.
         /*acos.setAlpha(0.02);
         acos.setBeta(11.5);
@@ -59,8 +57,8 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      * @param delayPerSolve The time to wait between each solve.
      * @return DynamicSolution A @code{SolverOutput} object containing information about the solution.
      */
-    public DynamicSolution runSolution(int delayPerSolve) {
-        acos.setDelayPerStep(0);
+    @Override
+    public SolverOutput startSolving(int delayPerSolve) {
         dgraph.move();
         running = true;
         Stopwatch watch = new Stopwatch();
@@ -90,13 +88,49 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      * @param delayPerSolve The time the solver should wait between each solve.
      * @return DynamicSolution The result of the solver running over that period of time.
      */
-    public SolverOutput runSolution(int runTime, int delayPerSolve) {
+    @Override
+    public SolverOutput solveForTime(int runTime, int delayPerSolve) {
         Thread th = new Thread(() -> {
             new Timer().time(runTime, false); // Makes this thread wait until the timer is up
             running = false;
         });
         th.start();
-        return runSolution(delayPerSolve);
+        return startSolving(delayPerSolve);
+    }
+
+    /**
+     * Begins the solver solving the @code{dgraph} until it has solved the graph the input number of times.
+     * @param numSolves The number of times the graph should be solved.
+     * @param delayPerSolve The time delay between each solve.
+     * @return DynamicSolution The information about the dynamic solver's solving.
+     * @throws IllegalArgumentException
+     */
+    @Override
+    public SolverOutput calculateSolutions(int numSolves, int delayPerSolve) throws IllegalArgumentException {
+        if (numSolves == 0) {
+            throw new IllegalArgumentException("Cannot complete 0 solves.");
+        }
+        dgraph.move();
+        running = true;
+        Stopwatch watch = new Stopwatch();
+        long totalTime = 0;
+        int completedSolves = 0;
+        while (completedSolves <= numSolves) {
+            dgraph.stop();
+            watch.start();
+            // Recalculate edge lengths so the ant has an accurate representation.
+            graph.constructEdgeLengthMatrix(); // Reconstruct the edge matrix, since it has changed.
+            acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
+            // Run the ants
+            acos.sendAnts(numAntsPerSolve);
+            totalTime += watch.getTimeNs(); // Also stops the stopwatch
+            watch.clear(); // Eradicate the values from the watch.
+            completedSolves++;
+            dgraph.move();
+            RepeatedFunctions.sleep(delayPerSolve);
+        }
+        acos.getExecutorService().shutdown();
+        return new DynamicSolution(dgraph.getAverageRouteLength(), totalTime/completedSolves);
     }
 
     /**

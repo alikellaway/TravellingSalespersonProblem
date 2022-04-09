@@ -9,6 +9,7 @@ import com.alike.solution_helpers.Timer;
 import com.alike.solvers.NearestNeighbourSolver;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
+import com.alike.solvertestsuite.Stopwatch;
 import com.alike.staticgraphsystem.*;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * Class uses the nearest neighbour (or greedy) algorithm repeatedly at a set interval to give a route through
  * the moving nodes of a dynamic dgraph.
  */
-public class DynamicNearestNeighbourSolver {
+public class DynamicNearestNeighbourSolver implements DynamicSolver {
     /**
      * The dgraph this solver will solve.
      */
@@ -65,37 +66,77 @@ public class DynamicNearestNeighbourSolver {
     }
 
     /**
-     * Used to being the solution's process. Once running, it will continue to resolve the dgraph repeatedly with an
-     * interval of @code{delayPerStep} per solve until the @code{running} attribute is changed to false.
+     * Starts the solver solving the dgraph repeatedly with an interval of @code{delayPerStep} per solve until
+     * the @code{running} attribute is changed to false.
      * @param delayPerSolve The time delay between each route recalculation.
      */
-    public void runSolution(int delayPerSolve) {
+    @Override
+    public SolverOutput startSolving(int delayPerSolve) {
         dgraph.wake(); // Doesn't begin movement - just allows it to listen for pause/play commands.
         setRunning(true); // Another thread can set this volatile to false and stop the execution.
+        Stopwatch sw = new Stopwatch();
+        long totalTime = 0;
+        int numSolves = 0;
         while (running) {
             dgraph.stop(); // Pause dgraph movement, so we can calculate distances between nodes.
+            sw.start();
             nns.runSolution(0);
+            totalTime += sw.getTimeNs();
+            sw.clear();
+            numSolves++;
             dgraph.move(); // Resume dgraph movement.
             RepeatedFunctions.sleep(delayPerSolve);
             dgraph.getUnderlyingGraph().getEdgeContainer().clear();
         }
+        return new DynamicSolution(dgraph.getAverageRouteLength(), totalTime/numSolves);
     }
 
-    public SolverOutput runSolution(int runTime, int delayPerSolve) {
-        dgraph.wake(); // Listen for start stop commands.
-        Timer t = new Timer();
-        t.time(runTime);
-        while (t.isTiming()) {
-            try {
-                dgraph.stop();
-                nns.runSolution(0);
-                dgraph.move();
-                RepeatedFunctions.sleep(delayPerSolve);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    /**
+     * Use this method to make this solver repeatedly solve a dynamic graph until the specified number of milliseconds (runTime)
+     * has elapsed.
+     * @param runTime The number of milliseconds this solver should solve for.
+     * @param delayPerSolve The delay in between each solve.
+     * @return DynamicSolution Returns a dynamic solution containing the information yielded from this run.
+     */
+    @Override
+    public SolverOutput solveForTime(int runTime, int delayPerSolve) {
+        Thread th = new Thread(() -> {
+            new Timer().time(runTime, false);
+            running = false;
+        });
+        th.start();
+        return startSolving(delayPerSolve);
+    }
+
+    /**
+     *
+     * @param numSolves
+     * @param delayPerSolve
+     * @return
+     * @throws IllegalArgumentException
+     */
+    @Override
+    public SolverOutput calculateSolutions(int numSolves, int delayPerSolve) throws IllegalArgumentException {
+        if (numSolves == 0) {
+            throw new IllegalArgumentException("Cannot complete 0 solves.");
         }
-        return new DynamicSolution(dgraph.getAverageRouteLength(), runTime);
+        dgraph.wake(); // Doesn't begin movement - just allows it to listen for pause/play commands.
+        setRunning(true); // Another thread can set this volatile to false and stop the execution.
+        Stopwatch sw = new Stopwatch();
+        long totalTime = 0;
+        int completedSolves = 0;
+        while (completedSolves <= numSolves) {
+            dgraph.stop(); // Pause dgraph movement, so we can calculate distances between nodes.
+            sw.start();
+            nns.runSolution(0);
+            totalTime += sw.getTimeNs();
+            sw.clear();
+            completedSolves++;
+            dgraph.move(); // Resume dgraph movement.
+            RepeatedFunctions.sleep(delayPerSolve);
+            dgraph.getUnderlyingGraph().getEdgeContainer().clear();
+        }
+        return new DynamicSolution(dgraph.getAverageRouteLength(), totalTime/completedSolves);
     }
 
     /**
@@ -197,5 +238,23 @@ public class DynamicNearestNeighbourSolver {
      */
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    /**
+     * Returns the value of the @code{dgraph} attribute.
+     * @return dgraph The value of the @code{dgraph} attribute.
+     */
+    @Override
+    public Graph getGraph() {
+        return dgraph;
+    }
+
+    /**
+     * Assigns the value of the @code{dgraph} attribute.
+     * @param dgraph The new value to assign the @code{dgraph} attribute.
+     */
+    @Override
+    public void setGraph(DynamicGraph dgraph) {
+        this.dgraph = dgraph;
     }
 }
