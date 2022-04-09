@@ -1,8 +1,7 @@
 package com.alike.solvertestsuite;
 
 import com.alike.dynamicgraphsystem.DynamicGraph;
-import com.alike.solvers.DynamicSolver;
-import com.alike.solvers.StaticSolver;
+import com.alike.dynamicsolvers.DynamicSolver;
 import com.alike.staticgraphsystem.StaticGraph;
 import com.alike.staticgraphsystem.Vector;
 
@@ -19,22 +18,34 @@ public class DynamicTestSuite {
      */
     private DynamicSolver solver;
 
-    private int timerLengthMs;
+    /**
+     * The number of times a solver should solve the dynamic graph before outputting it's results.
+     */
+    private int numSolves = 100;
 
+    /**
+     * The amount of time a solver should wait (allow the nodes to shift) before solving the graph again.
+     */
     private int delayPerSolve;
+
+    /**
+     * The stopwatch object used to gather time and test length data.
+     */
+    private Stopwatch stopwatch;
 
     public DynamicTestSuite(DynamicSolver solver) {
         setDgraph(new DynamicGraph(new StaticGraph(), false, true));
         setSolver(solver);
+        setStopwatch(new Stopwatch());
     }
 
-
-
-    private SolverOutput runTest(DynamicGraph dgraph, ArrayList<Vector> initVelocities) {
-        solver.setGraph(dgraph);
-        SolverOutput so = solver.runSolution(timerLengthMs, delayPerSolve);
-        return so;
-    }
+//    private SolverOutput runTest(DynamicGraph dgraph, ArrayList<Vector> initVelocities) {
+//        solver.setGraph(dgraph);
+//        stopwatch.start();
+//        SolverOutput so = solver.runSolution(numSolves, delayPerSolve);
+//        stopwatch.stop();
+//        return so;
+//    }
 
 //    private DynamicGraph loadGraph() {
 //
@@ -48,5 +59,11 @@ public class DynamicTestSuite {
         this.solver = solver;
     }
 
-
+    /**
+     * Assigns the value of the @code{stopwatch} attribute.
+     * @param sw The new value to assign the @code{stopwatch} attribute.
+     */
+    public void setStopwatch(Stopwatch sw) {
+        this.stopwatch = sw;
+    }
 }
