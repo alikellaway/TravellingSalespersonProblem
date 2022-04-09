@@ -98,7 +98,7 @@ public class Main extends Application {
                 dactiveGraph = new DynamicGraph(activeGraph, false, true);
             }
             case DACO -> {
-                activeGraph = GraphGenerator.generateRandomGraph(1000, false);
+                activeGraph = GraphGenerator.generateRandomGraph(51, false);
                 dactiveGraph = new DynamicGraph(activeGraph,false, true);
             }
             case DHFC -> {
@@ -153,7 +153,7 @@ public class Main extends Application {
                 /* Dynamic Nearest Neighbour solver. */
                 Thread dnnsT = new Thread(() -> {
                     dnns = new DynamicNearestNeighbourSolver(dactiveGraph);
-                    dnns.runSolution(10);
+                    dnns.startSolving(10);
                 });
                 dnnsT.start();
             }
@@ -161,7 +161,7 @@ public class Main extends Application {
                 /* Dynamic Ant Colony Optimisation solver. */
                 Thread dacosT = new Thread(() -> {
                     dacos = new DynamicAntColonyOptimisationSolver(dactiveGraph);
-                    dacos.runSolution(10);
+                    dacos.startSolving(10);
                 });
                 dacosT.start();
             }
@@ -169,7 +169,7 @@ public class Main extends Application {
                 /* Dynamic Hilbert Curve solver. */
                 Thread dhcsT = new Thread(() -> {
                     dhfcs = new DynamicHilbertFractalCurveSolver(dactiveGraph);
-                    dhfcs.runSolution(0);
+//                    dhfcs.runSolution(0);
                 });
                 dhcsT.start();
             }
