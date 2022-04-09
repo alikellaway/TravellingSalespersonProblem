@@ -17,7 +17,7 @@ import java.util.concurrent.*;
  * Class uses the Ant colony optimisation algorithm to solve an optimised route through a StaticGraph object.
  * @author alike
  */
-public class AntColonyOptimizationSolver implements StaticSolver {
+public class AntColonyOptimisationSolver implements StaticSolver {
 
     /**
      * The graph object this solver will be solving.
@@ -95,7 +95,7 @@ public class AntColonyOptimizationSolver implements StaticSolver {
      * through a TSP graph.
      * @param graph The graph the solver will solve when @code{runSolution} is called.
      */
-    public AntColonyOptimizationSolver(StaticGraph graph) {
+    public AntColonyOptimisationSolver(StaticGraph graph) {
         setGraph(graph);
         setExecutorService(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
         setExecutorCompletionService(new ExecutorCompletionService<>(getExecutorService()));
@@ -106,7 +106,7 @@ public class AntColonyOptimizationSolver implements StaticSolver {
     /**
      * An empty constructor so that we can set the graph at a later time.
      */
-    public AntColonyOptimizationSolver() {
+    public AntColonyOptimisationSolver() {
         setExecutorService(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
         setExecutorCompletionService(new ExecutorCompletionService<>(getExecutorService()));
         initialiseDistances();

@@ -3,7 +3,7 @@ package com.alike.solution_helpers;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NonExistentNodeException;
-import com.alike.solvers.AntColonyOptimizationSolver;
+import com.alike.solvers.AntColonyOptimisationSolver;
 import com.alike.staticgraphsystem.Edge;
 import com.alike.staticgraphsystem.EdgeContainer;
 import com.alike.staticgraphsystem.Node;
@@ -19,9 +19,9 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Ant implements Callable<Ant> {
     /**
-     * A reference to the @code{AntColonyOptimizationSolver} object this ant will be working in.
+     * A reference to the @code{AntColonyOptimisationSolver} object this ant will be working in.
      */
-    private AntColonyOptimizationSolver acos;
+    private AntColonyOptimisationSolver acos;
 
     /**
      * The edge container this ant will output.
@@ -51,9 +51,9 @@ public class Ant implements Callable<Ant> {
 
     /**
      * Constructor initialises a new ant.
-     * @param acos A reference to the @code{AntColonyOptimizationSolver} object this ant is working for.
+     * @param acos A reference to the @code{AntColonyOptimisationSolver} object this ant is working for.
      */
-    public Ant(AntColonyOptimizationSolver acos) {
+    public Ant(AntColonyOptimisationSolver acos) {
         setAcos(acos); // Set the sovler reference
         assignAntID(); // Give the ant a unique id
         setNumNodes(getAcos().getGraph().getNumNodes());
@@ -273,7 +273,7 @@ public class Ant implements Callable<Ant> {
      * Returns the value of the @code{acos} attribute.
      * @return acos The value of the @code{acod} attribute.
      */
-    public AntColonyOptimizationSolver getAcos() {
+    public AntColonyOptimisationSolver getAcos() {
         return acos;
     }
 
@@ -281,7 +281,7 @@ public class Ant implements Callable<Ant> {
      * Sets the value of the @code{acos} to a new value.
      * @param acos The new value to become the @code{acos} attribute.
      */
-    public void setAcos(AntColonyOptimizationSolver acos) {
+    public void setAcos(AntColonyOptimisationSolver acos) {
         this.acos = acos;
     }
 

@@ -3,7 +3,7 @@ package com.alike.dynamicsolvers;
 import com.alike.dynamicgraphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.Timer;
-import com.alike.solvers.AntColonyOptimizationSolver;
+import com.alike.solvers.AntColonyOptimisationSolver;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.solvertestsuite.Stopwatch;
@@ -21,9 +21,9 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     private StaticGraph graph;
 
     /**
-     * A reference to an @code{AntColonyOptimizationSolver} that will be used to repeatedly solve the @code{dgraph}.
+     * A reference to an @code{AntColonyOptimisationSolver} that will be used to repeatedly solve the @code{dgraph}.
      */
-    private final AntColonyOptimizationSolver acos;
+    private final AntColonyOptimisationSolver acos;
 
     /**
      * A boolean describing whether this solver is currently solving a @code{dgraph} or not. (true if solving)
@@ -43,7 +43,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         setGraph(dgraph);
         setGraph(dgraph.getUnderlyingGraph());
         getDgraph().wake();
-        acos = new AntColonyOptimizationSolver(graph);
+        acos = new AntColonyOptimisationSolver(graph);
         acos.setDelayPerStep(0);
         // Set you values to allow the path to react quickly.
         /*acos.setAlpha(0.02);
