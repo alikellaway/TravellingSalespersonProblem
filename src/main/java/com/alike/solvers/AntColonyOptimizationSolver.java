@@ -133,7 +133,6 @@ public class AntColonyOptimizationSolver implements StaticSolver {
             }
             processAnts(); // Finish all ants that haven't been processed yet.
             getExecutorService().shutdownNow();
-            sw.stop();
             return new Solution(graph, graph.getEdgeContainer().getTotalLength(), sw.getTimeNs());
         } catch (Exception e) {
             return new Fail(e, graph);
@@ -142,9 +141,13 @@ public class AntColonyOptimizationSolver implements StaticSolver {
         }
     }
 
-    public void sendAnts(int numAnts, int delayPerStep) {
+    /**
+     * Used to send the specified number of ants onto the graph.
+     * @param numAnts The number of Ants to send out onto the graph.
+     */
+    public void sendAnts(int numAnts) {
         try {
-            setDelayPerStep(delayPerStep);
+            setDelayPerStep(0);
             // Activate all ants
             for (int x = 0; x < numAnts; x++) {
                 executorCompletionService.submit(new Ant(this));

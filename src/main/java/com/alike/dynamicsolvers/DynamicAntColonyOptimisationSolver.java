@@ -9,6 +9,7 @@ import com.alike.solvers.AntColonyOptimizationSolver;
 import com.alike.solvers.DynamicSolver;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
+import com.alike.solvertestsuite.Stopwatch;
 import com.alike.staticgraphsystem.StaticGraph;
 
 public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
@@ -33,6 +34,11 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     private volatile boolean running;
 
     /**
+     * The number of ants sent per solve of the dynamic graph.
+     */
+    private final int numAntsPerSolve = 100;
+
+    /**
      * Initialises a new @code{DynamicAntColonyOptimisationSolver} object.
      * @param dgraph The @code{DynamicGraph} object this object will be used to solve.
      */
@@ -42,103 +48,57 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         getDgraph().wake();
         acos = new AntColonyOptimizationSolver(graph);
         // Set you values to allow the path to react quickly.
-//        acos.setAlpha(0.02);
-//        acos.setBeta(11.5);
-//        acos.setRh0(0.9);
-//        acos.setQ(0.0004);
+        /*acos.setAlpha(0.02);
+        acos.setBeta(11.5);
+        acos.setRh0(0.9);
+        acos.setQ(0.0004);*/
     }
 
     /**
-     * Method called to make this solver object solve it's dgraph until the @code{running} attribute is turned to false.
-     * @param delayPerSolve The delay between each solve.
+     * Continuously solves the dgraph until @code{running} is changed to false.
+     * @param delayPerSolve The time to wait between each solve.
+     * @return DynamicSolution A @code{SolverOutput} object containing information about the solution.
      */
-//    public void runSolution(int delayPerSolve) {
-//        acos.setDelayPerStep(0);
-//        dgraph.move();
-//        running = true;
-//        while (running) {
-//            // Recalculate edge lengths so the ant has an accurate representation.
-//            dgraph.stop();
-//            try {
-//                graph.constructEdgeLengthMatrix();
-//                acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-//            } catch (NoNodeContainerException e) {
-//                e.printStackTrace();
-//            }
-//            dgraph.move();
-//            // Add the new ant
-//            acos.getExecutorCompletionService().submit(new Ant(acos));
-//            acos.setActiveAnts(acos.getActiveAnts() + 1);
-//            // See if the ant found a shorter route.
-//            acos.processAnts();
-//            RepeatedFunctions.sleep(delayPerSolve);
-//        }
-//    }
-
-//    public void runSolution(int delayPerSolve) {
-//        acos.setDelayPerStep(0);
-//        dgraph.move();
-//        running = true;
-//        while (running) {
-//            dgraph.stop(); // Stop the graph moving
-//            try {
-//                // Update the distances for the ant about to go.
-//                graph.constructEdgeLengthMatrix();
-//                acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-//                acos.setNumAnts(100);
-//                acos.runSolution(0);
-//                // Send the ant
-////                acos.sendAnt();
-////                dgraph.move(); // Resume movement
-////                RepeatedFunctions.sleep(delayPerSolve);
-//            } catch (NoNodeContainerException e) {
-//                e.printStackTrace();
-//            }
-//            dgraph.move();
-//            RepeatedFunctions.sleep(delayPerSolve);
-//        }
-//    }
-
-    public void runSolution(int delayPerSolve) {
+    public DynamicSolution runSolution(int delayPerSolve) {
         acos.setDelayPerStep(0);
         dgraph.move();
         running = true;
+        Stopwatch watch = new Stopwatch();
+        long totalTime = 0;
+        int numSolves = 0;
         while (running) {
-            // Recalculate edge lengths so the ant has an accurate representation.
             dgraph.stop();
-//            dgraph.getUnderlyingGraph().getEdgeContainer().clear();
+            watch.start();
+            // Recalculate edge lengths so the ant has an accurate representation.
             graph.constructEdgeLengthMatrix(); // Reconstruct the edge matrix, since it has changed.
             acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-            acos.sendAnts(100, 0);
+            // Run the ants
+            acos.sendAnts(numAntsPerSolve);
+            totalTime += watch.getTimeNs(); // Also stops the stopwatch
+            watch.clear(); // Eradicate the values from the watch.
+            numSolves++;
             dgraph.move();
             RepeatedFunctions.sleep(delayPerSolve);
         }
         acos.getExecutorService().shutdown();
+        return new DynamicSolution(dgraph.getAverageRouteLength(), totalTime/numSolves);
     }
 
-
-    public SolverOutput runSolution(int runTime, int delayPerStep) {
-        acos.setDelayPerStep(delayPerStep);
-        dgraph.move();
-        Timer t = new Timer();
-        t.time(runTime);
-        while (t.isTiming()) {
-            // Recalculate edge lengths so the ant has an accurate representation.
-            dgraph.stop();
-
-            graph.constructEdgeLengthMatrix();
-            acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
-
-            dgraph.move();
-            // Add the new ant
-            acos.getExecutorCompletionService().submit(new Ant(acos));
-            acos.setActiveAnts(acos.getActiveAnts() + 1);
-            // See if the ant found a shorter route.
-            acos.processAnts();
-            RepeatedFunctions.sleep(delayPerStep);
-        }
-        return new DynamicSolution(dgraph.getAverageRouteLength(), runTime);
+    /**
+     * Allows user to specify an amount of time for this solver to repeatedly solve its dgraph.
+     * @param runTime The amount of milliseconds for which this solver should repeatedly solve.
+     * @param delayPerSolve The time the solver should wait between each solve.
+     * @return DynamicSolution The result of the solver running over that period of time.
+     */
+    public SolverOutput runSolution(int runTime, int delayPerSolve) {
+        Thread th = new Thread(() -> {
+            new Timer().time(runTime, false); // Makes this thread wait until the timer is up
+            running = false;
+        });
+        th.start();
+        return runSolution(delayPerSolve);
     }
+
     /**
      * Returns the value of the @code{dgraph} attribute.
      * @return dgraph The value of the @code{dgraph} attribute.
