@@ -2,8 +2,10 @@ package com.alike;
 
 import com.alike.customexceptions.*;
 import com.alike.graphsystem.DynamicGraph;
+import com.alike.graphsystem.Graph;
 import com.alike.graphsystem.GraphGenerator;
 import com.alike.graphsystem.StaticGraph;
+import com.alike.read_write.GraphReader;
 import com.alike.read_write.GraphWriter;
 
 import java.io.IOException;
@@ -39,5 +41,11 @@ public class Main2 {
             gw.writeGraph(g);
         }
         gw.close();
+        GraphReader gr = new GraphReader();
+        for (int i = 0; i<100; i++) {
+            System.out.println(gr.getNextGraph(10, false, true).toStorageFormat(';'));
+        }
+        gr.close();
+
     }
 }

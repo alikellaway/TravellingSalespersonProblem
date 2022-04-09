@@ -297,7 +297,6 @@ public class DynamicGraph implements Graph {
         ArrayList<String> coordinateStrings = new ArrayList<>(elements.subList(0, idxOfCoordVecSplit));
         ArrayList<String> vectorStrings = new ArrayList<>(elements.subList(idxOfCoordVecSplit + 1, elements.size()));
         for (String s : coordinateStrings) { // Add nodes by looping through the coordinates
-            System.out.println(s);
             nodeContainer.add(new Node(Coordinate.parseCoordinate(s)));
         }
         StaticGraph g = new StaticGraph(); // Create a graph object.
