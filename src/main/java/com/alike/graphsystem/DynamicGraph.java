@@ -277,6 +277,9 @@ public class DynamicGraph implements Graph {
     public static DynamicGraph fromStorageFormat(String storageFormatString, char delimiter, int speed,
                                           boolean randomMovement, boolean velocityMovement)
             throws NodeSuperimpositionException {
+        if (storageFormatString == null) {
+            return null;
+        }
         // NB: I am not happy with this code but I am rushing through it.
         // Create an array list of our information
         ArrayList<String> elements = new ArrayList<>(List.of(storageFormatString.split(String.valueOf(delimiter))));

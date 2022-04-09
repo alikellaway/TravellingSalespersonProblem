@@ -4,6 +4,7 @@ import com.alike.customexceptions.*;
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.graphsystem.GraphGenerator;
 import com.alike.graphsystem.StaticGraph;
+import com.alike.read_write.GraphWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,5 +32,12 @@ public class Main2 {
 //        for (boolean b : arr) {
 //            System.out.println(b);
 //        }
+        GraphWriter gw = new GraphWriter();
+        gw.clearFile();
+        for (int i = 0; i < 100; i++) {
+            DynamicGraph g = GraphGenerator.generateRandomDynamicGraph(10, 10, false, false);
+            gw.writeGraph(g);
+        }
+        gw.close();
     }
 }
