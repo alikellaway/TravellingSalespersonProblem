@@ -212,4 +212,35 @@ public class NodeContainer {
     public void trimToSize() {
         this.nodeSet.trimToSize();
     }
+
+    /**
+     * Outputs the nodes in the container as a string that can be stored and later read back into program memory.
+     * @param delimiter The separating element between node coordinates.
+     * @return string The node container represented as a string.
+     */
+    public String toStorageFormat(char delimiter) {
+        StringBuilder sb = new StringBuilder();
+        for (Node n : nodeSet) {
+            sb.append(n.getCoordinate().toStorageFormat());
+            sb.append(delimiter);
+        }
+        return sb.substring(0, sb.length() - 1); // Output and remove last delimiter.
+    }
+
+    /**
+     * Creates a node container given a string of coordinates in storage format.
+     * @param storedContainer The coordinates from storage as a string.
+     * @return container The newly initialised and filled @code{NodeContainer} object.
+     * @throws NodeSuperimpositionException Thrown if the incoming string has duplicate coordinates causing the method
+     * to try to create nodes on the same coordinate.
+     */
+    public static NodeContainer createFromStorageString(String storedContainer) throws NodeSuperimpositionException {
+        Node.restartNodeCounter();
+        NodeContainer container = new NodeContainer();
+        String[] coords = storedContainer.split(";");
+        for (String c : coords) {
+            container.add(new Node(Coordinate.parseCoordinate(c)));
+        }
+        return container;
+    }
 }

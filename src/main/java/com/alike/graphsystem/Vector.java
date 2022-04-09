@@ -158,4 +158,23 @@ public class Vector {
         }
         return vectors;
     }
+
+    /**
+     * Returns the vector in the format "x,y" for storage - this saves a lot of () in the storage file and will
+     * minorly help the read times for the coordinate list parser.
+     * @return string The coordinate in storage format.
+     */
+    public String toStorageFormat() {
+        return getX() + "," + getY();
+    }
+
+    /**
+     * Parses a vector from a string if the data is in the format "x,y".
+     * @param vectorString The string from which to parse a vector.
+     * @return vector A new vector containing the values from the string.
+     */
+    public static Vector parseVector(String vectorString) {
+        String[] xny = vectorString.split(",");
+        return new Vector(Double.parseDouble(xny[0]), Double.parseDouble(xny[1]));
+    }
 }

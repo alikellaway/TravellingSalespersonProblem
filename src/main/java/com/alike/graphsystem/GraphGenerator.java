@@ -144,7 +144,6 @@ public class GraphGenerator {
                 }
             }
         }
-
         nSet.trimToSize();
         // Create an empty edge set.
         EdgeContainer eSet = new EdgeContainer();
@@ -162,5 +161,13 @@ public class GraphGenerator {
         g.setNodeContainer(nSet);
         g.setEdgeContainer(eSet);
         return g;
+    }
+
+    public static DynamicGraph generateRandomDynamicGraph(int numNodes, int nodeSpeed, boolean randomMovement, boolean vectorMovement) {
+        StaticGraph g = generateRandomGraph(numNodes, false);
+        Vector[] vectors = Vector.randomVectors(numNodes, nodeSpeed);
+        DynamicGraph dg = new DynamicGraph(g, randomMovement, vectorMovement);
+        dg.getCm().setCoordinateVelocities(vectors);
+        return dg;
     }
 }

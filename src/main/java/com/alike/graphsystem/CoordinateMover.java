@@ -278,4 +278,12 @@ public class CoordinateMover {
     public void setCoordinateVelocities(Vector[] coordinateVelocities) {
         this.coordinateVelocities = coordinateVelocities;
     }
+
+    /**
+     * Returns the value of the @code{coordinateVelocities} attribute.
+     * @return coordinateVelocities The value of the @code{coordinateVelocities}.
+     */
+    public Vector[] getCoordinateVelocities() {
+        return this.coordinateVelocities;
+    }
 }

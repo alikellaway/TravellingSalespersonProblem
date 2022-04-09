@@ -1,6 +1,10 @@
 package com.alike.graphsystem;
 
+import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.solution_helpers.RepeatedFunctions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class combines the @code{StaticGraph} and @code{CoordinateMover} classes to create a dynamic travelling salesperson
@@ -224,5 +228,86 @@ public class DynamicGraph implements Graph {
      */
     public void setAwake(boolean awake) {
         this.awake = awake;
+    }
+
+    /**
+     * Returns the value of the @code{cm} attribute.
+     * @return cm The value of the @code{cm} attribute.
+     */
+    public CoordinateMover getCm() {
+        return cm;
+    }
+
+    /**
+     * Outputs the values of this graph as a string that can be stored in file and later read back into program.
+     * @return
+     */
+    @Override
+    public String toStorageFormat(char delimiter) throws IllegalArgumentException {
+        if (delimiter == ',') {
+            throw new IllegalArgumentException("Delimiter value cannot be ','");
+        }
+        StringBuilder sb = new StringBuilder();
+        // Add the coordinates
+        sb.append(getUnderlyingGraph().getNodeContainer().toStorageFormat(delimiter));
+        sb.append(delimiter);
+        sb.append(delimiter);
+        // Add the velocities of nodes.
+        Vector[] vecs = getCm().getCoordinateVelocities();
+        StringBuilder vecS = new StringBuilder();
+        for (Vector v : vecs) {
+            vecS.append(v.toStorageFormat());
+            vecS.append(delimiter);
+        }
+        sb.append(vecS.substring(0, vecS.length() - 1));
+        return sb.toString();
+    }
+
+    /**
+     * Loads a dynamic graph from storage format i.e. cx1,cy1;cx2,cy2;cxn,cyn;;vx1,vy1;vx2,vy2
+     * @param storageFormatString The dynamic graphs string representation.
+     * @param delimiter The delimiter used to separate graph information.
+     * @param speed The speed the graph nodes should be set to.
+     * @param randomMovement Whether the nodes should have step randomly on.
+     * @param velocityMovement Whether the nodes should have step by velocity on.
+     * @return dg A dynamic graph with nodes starting at the written places and starting velocities of the written
+     * vectors.
+     * @throws NodeSuperimpositionException Thrown if an attempt is made to create a node where one already lies.
+     */
+    public static DynamicGraph fromStorageFormat(String storageFormatString, char delimiter, int speed,
+                                          boolean randomMovement, boolean velocityMovement)
+            throws NodeSuperimpositionException {
+        // NB: I am not happy with this code but I am rushing through it.
+        // Create an array list of our information
+        ArrayList<String> elements = new ArrayList<>(List.of(storageFormatString.split(String.valueOf(delimiter))));
+        NodeContainer nodeContainer = new NodeContainer();
+        if (!elements.contains("")) { // This input doesn't have node velocities => just a list of coordinates.
+            for (String s : elements) {
+                nodeContainer.add(new Node(Coordinate.parseCoordinate(s)));
+            }
+            StaticGraph g = new StaticGraph();
+            g.setNodeContainer(nodeContainer);
+            return new DynamicGraph(g, randomMovement, velocityMovement, speed);
+        }
+        // We did receive velocities => find nodes and velocities.
+        int idxOfCoordVecSplit = elements.indexOf(""); // Index of split
+        ArrayList<String> coordinateStrings = new ArrayList<>(elements.subList(0, idxOfCoordVecSplit));
+        ArrayList<String> vectorStrings = new ArrayList<>(elements.subList(idxOfCoordVecSplit + 1, elements.size()));
+        for (String s : coordinateStrings) { // Add nodes by looping through the coordinates
+            System.out.println(s);
+            nodeContainer.add(new Node(Coordinate.parseCoordinate(s)));
+        }
+        StaticGraph g = new StaticGraph(); // Create a graph object.
+        g.setNodeContainer(nodeContainer); // Assing the node container.
+        DynamicGraph dg = new DynamicGraph(g, randomMovement, velocityMovement, speed); // Create the dg
+        // Get and assign the velocities.
+        Vector[] velocities = new Vector[vectorStrings.size()];
+        int idx = 0;
+        for (String s : vectorStrings) {
+            velocities[idx] = Vector.parseVector(s);
+            idx++;
+        }
+        dg.getCm().setCoordinateVelocities(velocities);
+        return dg;
     }
 }

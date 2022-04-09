@@ -184,4 +184,15 @@ public class StaticGraph implements Graph {
         }
         setEdgeLengthMatrix(edgeLengthMatrix);
     }
+
+    /**
+     * Outputs the information in this graph object as a string that can be stored and later read back into program
+     * memory.
+     * @param delimiter The character used to separate graph information.
+     * @return storageFormatString The graph as a string of node coordinates.
+     */
+    @Override
+    public String toStorageFormat(char delimiter) {
+        return getNodeContainer().toStorageFormat(delimiter);
+    }
 }

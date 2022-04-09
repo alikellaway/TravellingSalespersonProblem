@@ -19,11 +19,11 @@ public class Coordinate {
     /**
      * The string used to separate the x and y values of this coordinate when it is cast into storage format.
      */
-    private static final String STORAGE_FORMAT_XY_SEPARATOR = ",";
+    private static final String STORAGE_FORMAT_XY_SEPARATOR = ","; // Dont change these.
     /**
      * The string used to delimit each coordinate in a storage format coordinate list.
      */
-    private static final String STORAGE_FORMAT_COORDINATE_LIST_DELIMETER = ";";
+    private static final String STORAGE_FORMAT_COORDINATE_LIST_DELIMETER = ";"; // Dont change these
 
     /**
      * This coordinate hashed into a string.
@@ -154,6 +154,16 @@ public class Coordinate {
      */
     public String toStorageFormat() {
         return getX() + STORAGE_FORMAT_XY_SEPARATOR + getY();
+    }
+
+    /**
+     * Parse a coordinate from a string in the format "<x>,<y>"
+     * @param xcommay The string to parse a coordinate from.
+     * @return coordinate A new coordinate object containing the values from the string.
+     */
+    public static Coordinate parseCoordinate(String xcommay) {
+        String[] xny = xcommay.split(",");
+        return new Coordinate(Integer.parseInt(xny[0]), Integer.parseInt(xny[1]));
     }
 
     /**

@@ -1,8 +1,13 @@
 package com.alike;
 
 import com.alike.customexceptions.*;
+import com.alike.graphsystem.DynamicGraph;
+import com.alike.graphsystem.GraphGenerator;
+import com.alike.graphsystem.StaticGraph;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main2 {
 
@@ -26,7 +31,5 @@ public class Main2 {
 //        for (boolean b : arr) {
 //            System.out.println(b);
 //        }
-
-
     }
 }
