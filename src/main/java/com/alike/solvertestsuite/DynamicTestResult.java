@@ -6,11 +6,6 @@ package com.alike.solvertestsuite;
  */
 public class DynamicTestResult {
     /**
-     * The number of solves the solver had to do in the test.
-     */
-    private int numSolves;
-
-    /**
      * The total time taken to complete all the solves.
      */
     private long totalTimeTaken;
@@ -20,26 +15,9 @@ public class DynamicTestResult {
      */
     private DynamicSolution sol;
 
-    public DynamicTestResult(DynamicSolution sol, int numSolves, long totalTime) {
-        setNumSolves(numSolves);
+    public DynamicTestResult(DynamicSolution sol, long totalTime) {
         setTotalTimeTaken(totalTime);
         setSol(sol);
-    }
-
-    /**
-     * Returns the value of the @code{numSolves} attribute.
-     * @return numSolves The value of the @code{numSolves} attribute.
-     */
-    public double getNumSolves() {
-        return numSolves;
-    }
-
-    /**
-     * Assigns the value of the @code{numSolves} attribute.
-     * @param numSolves The new value to assign the @code{numSolves} attribute.
-     */
-    public void setNumSolves(int numSolves) {
-        this.numSolves = numSolves;
     }
 
     /**

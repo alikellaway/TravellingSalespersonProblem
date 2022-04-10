@@ -20,7 +20,11 @@ public class DynamicTestSuiteResult {
     /**
      * The DynamicSolution objects output from each graph the solver solved.
      */
-    private ArrayList<DynamicSolution> results;
+    private ArrayList<DynamicTestResult> results;
+
+    private int nodeSpeed;
+    private boolean randomMovement;
+    private boolean velocityMovement;
 
     /**
      * Creates a new @code{DynamicTestSuiteResult} object.
@@ -28,10 +32,13 @@ public class DynamicTestSuiteResult {
      * @param numSolves The number of time the solver had to solve each graph.
      * @param delayPerSolve The forced delay between each solve the solver made.
      */
-    public DynamicTestSuiteResult(ArrayList<DynamicSolution> results, int numSolves, int delayPerSolve) {
+    public DynamicTestSuiteResult(ArrayList<DynamicTestResult> results, int numSolves, int delayPerSolve, int nodeSpeed, boolean randomMovement, boolean velocityMovement) {
         setResults(results);
         setNumSolves(numSolves);
         setDelayPerSolve(delayPerSolve);
+        setNodeSpeed(nodeSpeed);
+        setRandomMovement(randomMovement);
+        setVelocityMovement(velocityMovement);
     }
 
     /**
@@ -70,7 +77,7 @@ public class DynamicTestSuiteResult {
      * Returns the value of the @code{results} attribute.
      * @return results The value of the @code{results} attribute.
      */
-    public ArrayList<DynamicSolution> getResults() {
+    public ArrayList<DynamicTestResult> getResults() {
         return results;
     }
 
@@ -78,7 +85,55 @@ public class DynamicTestSuiteResult {
      * Assigns the @code{results} attribute.
      * @param results The value to assign the @code{results} attribute.
      */
-    public void setResults(ArrayList<DynamicSolution> results) {
+    public void setResults(ArrayList<DynamicTestResult> results) {
         this.results = results;
+    }
+
+    /**
+     * Returns the value of the @code{nodeSpeed} attribute.
+     * @return nodeSpeed The value of the @code{nodeSpeed} attribute.
+     */
+    public int getNodeSpeed() {
+        return nodeSpeed;
+    }
+
+    /**
+     * Assigns the @code{nodeSpeed} attribute.
+     * @param nodeSpeed The value to assign the @code{nodeSpeed} attribute.
+     */
+    public void setNodeSpeed(int nodeSpeed) {
+        this.nodeSpeed = nodeSpeed;
+    }
+
+    /**
+     * Returns the @code{randomMovement} attribute.
+     * @return randomMovement The @code{randomMovement} attribute.
+     */
+    public boolean isRandomMovement() {
+        return randomMovement;
+    }
+
+    /**
+     * Assigns the @code{randomMovement} attribute.
+     * @param randomMovement The value to assign the @code{randomMovement} attribute.
+     */
+    public void setRandomMovement(boolean randomMovement) {
+        this.randomMovement = randomMovement;
+    }
+
+    /**
+     * Returns the @code{velocityMovement} attribute.
+     * @return velocityMovement The @code{velocityMovement} attribute.
+     */
+    public boolean isVelocityMovement() {
+        return velocityMovement;
+    }
+
+    /**
+     * Assigns the @code{velocityMovement} attribute.
+     * @param velocityMovement The value to assign the @code{velocityMovement} attribute.
+     */
+    public void setVelocityMovement(boolean velocityMovement) {
+        this.velocityMovement = velocityMovement;
     }
 }

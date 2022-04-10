@@ -11,32 +11,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class DynamicTestSuite {
-
-    /**
-     * A reference to the solver that is being used to solve the dynamic graph during the current test.
-     */
-    private DynamicSolver solver;
-
-    /**
-     * The number of times a solver should solve the dynamic graph before outputting it's results.
-     */
-    private int numSolves;
-
-    /**
-     * The amount of time a solver should wait (allow the nodes to shift) before solving the graph again.
-     */
-    private int delayPerSolve;
-
     /**
      * The stopwatch object used to gather time and test length data.
      */
     private Stopwatch stopwatch;
 
+    /**
+     * Initialises a new @code{DynamicTestSuite} object.
+     */
     public DynamicTestSuite() {
         setStopwatch(new Stopwatch());
     }
 
-    public ArrayList<DynamicTestResult> testSolver(DynamicSolver solver, int numSolves, int delayPerSolve, int nodeSpeed, boolean randomMovement, boolean velocityMovement) throws IOException, NodeSuperimpositionException {
+    /**
+     * Method tests a solver against the graph's written in file and outputs the test results.
+     * @param solver The instance of a solver to test.
+     * @param numSolves The number of solves the solver should compute before terminating.
+     * @param delayPerSolve The delay between each solve during which the graph will move.
+     * @param nodeSpeed The speed at which nodes should move.
+     * @param randomMovement Whether nodes should move with a random component.
+     * @param velocityMovement Whetner nodes should move with velocity.
+     * @return results
+     * @throws IOException
+     * @throws NodeSuperimpositionException
+     */
+    public DynamicTestSuiteResult testSolver(DynamicSolver solver, int numSolves, int delayPerSolve, int nodeSpeed, boolean randomMovement, boolean velocityMovement) throws IOException, NodeSuperimpositionException {
         ArrayList<DynamicTestResult> results = new ArrayList<>();
         GraphReader gr = new GraphReader();
         while (true) { // While there are still graphs left in the file
@@ -47,19 +46,10 @@ public class DynamicTestSuite {
             solver.setGraph(dg); // Set the solver's dynamic graph so it can solve it
             stopwatch.start(); // Start the timer
             DynamicSolution ds = solver.calculateSolutions(numSolves, delayPerSolve);
-            results.add(new DynamicTestResult(ds, numSolves, stopwatch.getTimeNs()));
+            results.add(new DynamicTestResult(ds, stopwatch.getTimeNs()));
             stopwatch.clear();
         }
-        return results;
-    }
-
-
-//    private DynamicGraph loadGraph() {
-//
-//    }
-
-    public void setSolver(DynamicSolver solver) {
-        this.solver = solver;
+        return new DynamicTestSuiteResult(results, numSolves, delayPerSolve, nodeSpeed, randomMovement, velocityMovement);
     }
 
     /**

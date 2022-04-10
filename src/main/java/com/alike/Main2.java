@@ -7,6 +7,7 @@ import com.alike.graphsystem.GraphGenerator;
 import com.alike.graphsystem.StaticGraph;
 import com.alike.read_write.GraphReader;
 import com.alike.read_write.GraphWriter;
+import com.alike.solvertestsuite.DynamicTestSuite;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,11 +42,7 @@ public class Main2 {
             gw.writeGraph(g);
         }
         gw.close();
-        GraphReader gr = new GraphReader();
-        for (int i = 0; i<100; i++) {
-            System.out.println(gr.getNextGraph(10, false, true).toStorageFormat(';'));
-        }
-        gr.close();
+        DynamicTestSuite dts = new DynamicTestSuite();
 
     }
 }
