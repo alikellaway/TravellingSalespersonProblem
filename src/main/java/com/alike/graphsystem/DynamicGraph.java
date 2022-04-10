@@ -191,11 +191,14 @@ public class DynamicGraph implements Graph {
     }
 
     /**
-     * Updates the @code{averageRouteLength} attribute so that it is up-to-date.
+     * Updates the @code{averageRouteLength} attribute so that it is up-to-date only if it is not empty.
      */
     private void updateAverageRouteLength() {
-        double currentLength = getUnderlyingGraph().getEdgeContainer().getTotalLength();
-        this.averageRouteLength = (this.averageRouteLength + currentLength) / 2;
+        EdgeContainer c = getUnderlyingGraph().getEdgeContainer();
+        if (c.getEdgeSet().isEmpty()) {
+            double currentLength = getUnderlyingGraph().getEdgeContainer().getTotalLength();
+            this.averageRouteLength = (this.averageRouteLength + currentLength) / 2;
+        }
     }
 
     /**
