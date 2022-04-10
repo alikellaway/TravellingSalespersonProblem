@@ -113,7 +113,6 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
                 totalTime += stopwatch.getTimeNs(); // Also stops the watch.
                 stopwatch.clear(); // Ready it for use again.
                 solvesCompleted++; // Completed a solve.
-                System.out.println(graph.getEdgeContainer().getTotalLength());
                 dgraph.move(); // Restart movement.
                 RepeatedFunctions.sleep(delayPerSolve);
             } catch (Exception e) {
@@ -172,6 +171,7 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
      */
     public void setGraph(StaticGraph graph) {
         this.graph = graph;
+        hfcs.setGraph(graph);
     }
 
     /**
