@@ -38,8 +38,8 @@ public class Main2 {
 //        }
         GraphWriter gw = new GraphWriter();
         gw.clearFile();
-        for (int i = 0; i < 10; i++) {
-            DynamicGraph g = GraphGenerator.generateRandomDynamicGraph(10, 10, false, false);
+        for (int i = 3; i < 103; i++) {
+            DynamicGraph g = GraphGenerator.generateRandomDynamicGraph(i, 10, false, false);
             gw.writeGraph(g);
         }
         gw.close();
