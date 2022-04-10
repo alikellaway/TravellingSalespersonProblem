@@ -80,7 +80,6 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     public SolverOutput runSolution(int delayPerStep) {
         try { // Try to construct the route.
             graph.getEdgeContainer().clear();
-            Runtime.getRuntime().gc(); // Reclaim as much memory as possible.
             stopwatch.clear();
             stopwatch.start();
             constructRoute(delayPerStep);
