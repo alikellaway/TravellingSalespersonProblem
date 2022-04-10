@@ -82,7 +82,6 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      */
     public SolverOutput runSolution(int delayPerStep) {
         try { // Try to construct the route.
-            graph.getEdgeContainer().clear();
             stopwatch.clear();
             stopwatch.start();
             constructRoute(delayPerStep);
@@ -103,6 +102,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     public void constructRoute(int delayPerStep) throws NodeMissedException, HilbertCurveUnconstructedException {
         try {
             ArrayList<Node> nodesOrdered = getNodesOrdered();
+            graph.getEdgeContainer().clear();
             for (int i = 0; i < nodesOrdered.size(); i++) {
                 // Create the edge and add it
                 graph.getEdgeContainer().add(new Edge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
