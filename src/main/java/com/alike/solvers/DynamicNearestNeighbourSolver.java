@@ -139,7 +139,6 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
             completedSolves++;
             dgraph.move(); // Resume dgraph movement.
             RepeatedFunctions.sleep(delayPerSolve);
-            dgraph.getUnderlyingGraph().getEdgeContainer().clear();
         }
         return new DynamicSolution(dgraph.getAverageRouteLength(), totalTime/completedSolves);
     }
