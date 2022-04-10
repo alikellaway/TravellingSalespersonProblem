@@ -34,8 +34,8 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
      * @param dgraph The @code{DynamicGraph} object this solver will be solving or manipulating.
      */
     public DynamicHilbertFractalCurveSolver(DynamicGraph dgraph) {
+        setHfcs(new HilbertFractalCurveSolver());
         setGraph(dgraph);
-        setHfcs(new HilbertFractalCurveSolver(getGraph()));
     }
 
     /**
