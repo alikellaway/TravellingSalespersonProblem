@@ -35,6 +35,11 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     private final int numAntsPerSolve = 100;
 
     /**
+     * The object used for recording execution times in this class.
+     */
+    private final Stopwatch stopwatch = new Stopwatch();
+
+    /**
      * Initialises a new @code{DynamicAntColonyOptimisationSolver} object.
      * @param dgraph The @code{DynamicGraph} object this object will be used to solve.
      */
@@ -63,19 +68,19 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     public SolverOutput startSolving(int delayPerSolve) {
         dgraph.move();
         running = true;
-        Stopwatch watch = new Stopwatch();
+        stopwatch.clear();
         long totalTime = 0;
         int numSolves = 0;
         while (running) {
             dgraph.stop();
-            watch.start();
+            stopwatch.start();
             // Recalculate edge lengths so the ant has an accurate representation.
             graph.constructEdgeLengthMatrix(); // Reconstruct the edge matrix, since it has changed.
             acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
             // Run the ants
             acos.sendAnts(numAntsPerSolve);
-            totalTime += watch.getTimeNs(); // Also stops the stopwatch
-            watch.clear(); // Eradicate the values from the watch.
+            totalTime += stopwatch.getTimeNs(); // Also stops the stopwatch
+            stopwatch.clear(); // Eradicate the values from the watch.
             numSolves++;
             dgraph.move();
             RepeatedFunctions.sleep(delayPerSolve);
@@ -114,19 +119,19 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         }
         dgraph.move();
         running = true;
-        Stopwatch watch = new Stopwatch();
+        stopwatch.clear();
         long totalTime = 0;
         int completedSolves = 0;
         while (completedSolves < numSolves) {
             dgraph.stop();
-            watch.start();
+            stopwatch.start();
             // Recalculate edge lengths so the ant has an accurate representation.
             graph.constructEdgeLengthMatrix(); // Reconstruct the edge matrix, since it has changed.
             acos.setDistanceMatrix(graph.getEdgeLengthMatrix());
             // Run the ants
-            acos.sendAnts(numAntsPerSolve);
-            totalTime += watch.getTimeNs(); // Also stops the stopwatch
-            watch.clear(); // Eradicate the values from the watch.
+            acos.sendAnts(numAntsPerSolve); // Cannot use runSolution due to shutdownNow call.
+            totalTime += stopwatch.getTimeNs(); // Also stops the stopwatch
+            stopwatch.clear(); // Eradicate the values from the watch.
             completedSolves++;
             dgraph.move();
             RepeatedFunctions.sleep(delayPerSolve);
