@@ -47,7 +47,10 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      */
     private Coordinate[] curveCornerCoordinates; // Don't initialise yet, as its usually very large.
 
-    private Stopwatch stopwatch = new Stopwatch();
+    /**
+     * The object in charge of recording time in this class.
+     */
+    private final Stopwatch stopwatch = new Stopwatch();
 
     /**
      * Used to construct a new @code{HilbertFractalCurveSolver} object.
