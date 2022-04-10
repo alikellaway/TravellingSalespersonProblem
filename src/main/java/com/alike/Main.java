@@ -24,12 +24,12 @@ public class Main extends Application {
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_WIDTH = 1024;
+    public static final int COORDINATE_MAX_WIDTH = 512;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static final int COORDINATE_MAX_HEIGHT = 1024;
+    public static final int COORDINATE_MAX_HEIGHT = 512;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -73,13 +73,20 @@ public class Main extends Application {
      * enum used to determine which solver will be used during the program run.
      */
     private enum Mode {
-        NNS, BF, ACO, HFC, CA, DNNS, DACO, DHFC
+        NNS, // Solve statically with nearest neighbour algorithm.
+        BF, // Solve statically with brute force algorithm.
+        ACO, // Solve statically with ant colony optimisation algorithm.
+        HFC, // Solve statically with hilbert fractal curve heuristic.
+        CA, // Solve statically with Christofide's algorithm (non-functional).
+        DNNS, // Solve dynamically with nearest neighbour algorithm.
+        DACO, // Solve dynamically with ant colony optimisation algorithm.
+        DHFC // Solve dynamically with hilbert fractal curve heuristic.
     }
 
     /**
      * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
      */
-    private static final Mode mode = Mode.DACO;
+    private static final Mode mode = Mode.DHFC;
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException, RadiusExceedingBoundaryException {
 
@@ -107,64 +114,64 @@ public class Main extends Application {
 
         /* Here is a list of example use cases of the solver methods. */
         switch (mode) {
+            /* Nearest neighbour solver. */
             case NNS -> {
-                /* Nearest neighbour solver. */
                 Thread nnsT = new Thread(() -> {
                     NearestNeighbourSolver nns = new NearestNeighbourSolver(activeGraph);
                     nns.runSolution(100);
                 });
                 nnsT.start();
             }
+            /* Brute force solver. */
             case BF -> {
-                /* Brute force solver. */
                 Thread bsT = new Thread(() -> {
                     BruteForceSolver bs = new BruteForceSolver(activeGraph);
                     bs.runSolution(0);
                 });
                 bsT.start();
             }
+            /* Ant Colony Optimisation StaticSolver. */
             case ACO -> {
-                /* Ant Colony Optimisation StaticSolver. */
                 Thread acosT = new Thread(() -> {
                     AntColonyOptimisationSolver acos = new AntColonyOptimisationSolver(activeGraph);
                     acos.runSolution(0);
                 });
                 acosT.start();
             }
+            /* Hilbert fractal curve solver. */
             case HFC -> {
-                /* Hilbert fractal curve solver. */
                 Thread hfcsT = new Thread(() -> {
                     hfcs = new HilbertFractalCurveSolver(activeGraph);
                     hfcs.runSolution(10);
                 });
                 hfcsT.start();
             }
+            /* Christofide's algorithm solver. */
             case CA -> {
-                /* Christofide's algorithm solver. */
                 Thread csT = new Thread(() -> {
                     ChristofidesSolver cs = new ChristofidesSolver(activeGraph);
                     cs.runSolution(0);
                 });
                 csT.start();
             }
+            /* Dynamic Nearest Neighbour solver. */
             case DNNS -> {
-                /* Dynamic Nearest Neighbour solver. */
                 Thread dnnsT = new Thread(() -> {
                     dnns = new DynamicNearestNeighbourSolver(dactiveGraph);
                     dnns.startSolving(10);
                 });
                 dnnsT.start();
             }
+            /* Dynamic Ant Colony Optimisation solver. */
             case DACO -> {
-                /* Dynamic Ant Colony Optimisation solver. */
                 Thread dacosT = new Thread(() -> {
                     dacos = new DynamicAntColonyOptimisationSolver(dactiveGraph);
                     dacos.startSolving(10);
                 });
                 dacosT.start();
             }
+            /* Dynamic Hilbert Curve solver. */
             case DHFC -> {
-                /* Dynamic Hilbert Curve solver. */
                 Thread dhcsT = new Thread(() -> {
                     dhfcs = new DynamicHilbertFractalCurveSolver(dactiveGraph);
 //                    dhfcs.runSolution(0);
