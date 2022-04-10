@@ -51,6 +51,7 @@ public class DynamicTestSuite {
             stopwatch.clear();
             testNumber++;
             System.out.println("Completed.");
+            dg.kill(); // Kill the graph so it is no longer running in the background.
         }
         return new DynamicTestSuiteResult(results, numSolves, delayPerSolve, nodeSpeed, randomMovement, velocityMovement);
     }
