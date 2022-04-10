@@ -151,29 +151,6 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
     }
 
     /**
-     * Finds the closest node to the @code{currentNode} that is not itself, unvisted and not the origin.
-     * @return closestFound The closest found node to the @code{currentNode}.
-     * @throws NoClosestNodeException Thrown if a closest node could not be found (might have exhausted the pool).
-     */
-    private Node findClosestUnvisitedNode() throws NoClosestNodeException {
-        Node closestFound = null;
-        double shortestDist = Double.MAX_VALUE;
-        ArrayList<Node> set = getDgraph().getNodeContainer().getNodeSet();
-        for (Node n : set) {
-            if (!n.equals(getOrigin()) && !n.equals(currentNode) && !n.isVisited()) { // If its not the origin or the start node.
-                double dist = currentNode.getVectorTo(n).magnitude();
-                if (dist < shortestDist) {
-                    shortestDist = dist; closestFound = n;
-                }
-            }
-        }
-        if (closestFound == null) {
-            throw new NoClosestNodeException("Could not find a closest unvisited node.");
-        }
-        return closestFound;
-    }
-
-    /**
      * Returns the value of the @code{dgraph} attribute of the DynamicGraph stored in this classes @code{dgraph} attribute.
      * @return dgraph The value of the @code{dgraph} attribute within the @code{dgraph} attribute of this class.
      */
