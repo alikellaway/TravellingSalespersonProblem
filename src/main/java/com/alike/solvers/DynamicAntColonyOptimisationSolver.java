@@ -117,7 +117,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         Stopwatch watch = new Stopwatch();
         long totalTime = 0;
         int completedSolves = 0;
-        while (completedSolves <= numSolves) {
+        while (completedSolves < numSolves) {
             dgraph.stop();
             watch.start();
             // Recalculate edge lengths so the ant has an accurate representation.

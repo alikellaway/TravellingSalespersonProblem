@@ -103,17 +103,18 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
         dgraph.wake(); // Listen for start stop commands.
         setRunning(true); // Set this object into the 'solving' state (so its visible to other objects).
         long totalTime = 0; // The total time spent solving.
-        Stopwatch watch = new Stopwatch(); // The tool used to record how much time each solve takes.
+        Stopwatch stopwatch = new Stopwatch(); // The tool used to record how much time each solve takes.
         int solvesCompleted = 0; // A counter to record how many solves have already been completed.
-        while (solvesCompleted <= numSolves) {
+        while (solvesCompleted < numSolves) {
             try {
                 dgraph.stop();
-                watch.start();
+                stopwatch.start();
                 hfcs.runSolution(0);
-                totalTime += watch.getTimeNs(); // Also stops the watch.
-                solvesCompleted++;
-                watch.clear();
-                dgraph.move();
+                totalTime += stopwatch.getTimeNs(); // Also stops the watch.
+                stopwatch.clear(); // Ready it for use again.
+                solvesCompleted++; // Completed a solve.
+                System.out.println(graph.getEdgeContainer().getTotalLength());
+                dgraph.move(); // Restart movement.
                 RepeatedFunctions.sleep(delayPerSolve);
             } catch (Exception e) {
                 e.printStackTrace();

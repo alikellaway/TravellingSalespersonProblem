@@ -130,7 +130,7 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
         Stopwatch sw = new Stopwatch();
         long totalTime = 0;
         int completedSolves = 0;
-        while (completedSolves <= numSolves) {
+        while (completedSolves < numSolves) {
             dgraph.stop(); // Pause dgraph movement, so we can calculate distances between nodes.
             sw.start();
             nns.runSolution(0);
