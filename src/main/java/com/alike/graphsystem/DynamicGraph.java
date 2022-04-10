@@ -195,7 +195,7 @@ public class DynamicGraph implements Graph {
      */
     private void updateAverageRouteLength() {
         EdgeContainer c = getUnderlyingGraph().getEdgeContainer();
-        if (c.getEdgeSet().isEmpty()) {
+        if (!c.getEdgeSet().isEmpty()) {
             double currentLength = getUnderlyingGraph().getEdgeContainer().getTotalLength();
             this.averageRouteLength = (this.averageRouteLength + currentLength) / 2;
         }
