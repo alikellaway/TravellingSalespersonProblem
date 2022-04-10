@@ -44,7 +44,7 @@ public class Main extends Application {
     /**
      * The name of the window.
      */
-    private final String STAGE_TITLE = "TSP";
+    private static String stageTitle = "TSP";
 
     /**
      * The color of the window background.
@@ -174,7 +174,7 @@ public class Main extends Application {
             case DHFC -> {
                 Thread dhcsT = new Thread(() -> {
                     dhfcs = new DynamicHilbertFractalCurveSolver(dactiveGraph);
-//                    dhfcs.runSolution(0);
+                    dhfcs.startSolving(0);
                 });
                 dhcsT.start();
             }
@@ -240,7 +240,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws InterruptedException, NonSquareCanvasException, InvalidGraphException, NodeSuperimpositionException {
         // Give the name to the window.
-        stage.setTitle(STAGE_TITLE);
+        stage.setTitle(stageTitle);
         Group root = new Group();
         Scene scene = new Scene(root, WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
         scene.setFill(BACK_GROUND_COLOR);
