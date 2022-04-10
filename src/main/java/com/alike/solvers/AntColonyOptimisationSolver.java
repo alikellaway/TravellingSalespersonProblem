@@ -146,7 +146,6 @@ public class AntColonyOptimisationSolver implements StaticSolver {
      */
     public void sendAnts(int numAnts) {
         try {
-            setDelayPerStep(0);
             // Activate all ants
             for (int x = 0; x < numAnts; x++) {
                 executorCompletionService.submit(new Ant(this));

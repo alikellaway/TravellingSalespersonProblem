@@ -86,7 +86,7 @@ public class Main extends Application {
     /**
      * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
      */
-    private static final Mode mode = Mode.DHFC;
+    private static final Mode mode = Mode.DACO;
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException, RadiusExceedingBoundaryException {
 
@@ -102,7 +102,7 @@ public class Main extends Application {
                 dactiveGraph = new DynamicGraph(activeGraph, false, true);
             }
             case DACO -> {
-                activeGraph = GraphGenerator.generateRandomGraph(51, false);
+                activeGraph = GraphGenerator.generateRandomGraph(5, false);
                 dactiveGraph = new DynamicGraph(activeGraph,false, true);
             }
             case DHFC -> {
@@ -166,7 +166,7 @@ public class Main extends Application {
             case DACO -> {
                 Thread dacosT = new Thread(() -> {
                     dacos = new DynamicAntColonyOptimisationSolver(dactiveGraph);
-                    dacos.startSolving(10);
+                    dacos.calculateSolutions(1000000, 0);
                 });
                 dacosT.start();
             }
@@ -174,7 +174,7 @@ public class Main extends Application {
             case DHFC -> {
                 Thread dhcsT = new Thread(() -> {
                     dhfcs = new DynamicHilbertFractalCurveSolver(dactiveGraph);
-                    dhfcs.startSolving(0);
+                    dhfcs.calculateSolutions(10,1000);
                 });
                 dhcsT.start();
             }

@@ -133,6 +133,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
             totalTime += stopwatch.getTimeNs(); // Also stops the stopwatch
             stopwatch.clear(); // Eradicate the values from the watch.
             completedSolves++;
+            System.out.println(graph.getEdgeContainer().getTotalLength());
             dgraph.move();
             RepeatedFunctions.sleep(delayPerSolve);
         }

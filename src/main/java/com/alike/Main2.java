@@ -38,7 +38,7 @@ public class Main2 {
 //        }
         GraphWriter gw = new GraphWriter();
         gw.clearFile();
-        for (int i = 3; i < 103; i++) {
+        for (int i = 3; i < 5; i++) {
             DynamicGraph g = GraphGenerator.generateRandomDynamicGraph(i, 10, false, false);
             gw.writeGraph(g);
         }
@@ -50,13 +50,13 @@ public class Main2 {
         boolean velocityMovement = true;
 
         DynamicTestSuite dts = new DynamicTestSuite();
-        DynamicTestSuiteResult hilbertRestuls = dts.testSolver(new DynamicHilbertFractalCurveSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+//        DynamicTestSuiteResult hilbertRestuls = dts.testSolver(new DynamicHilbertFractalCurveSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
         DynamicAntColonyOptimisationSolver dacos = new DynamicAntColonyOptimisationSolver();
         DynamicTestSuiteResult antResults = dts.testSolver(dacos, numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
-        DynamicTestSuiteResult nnsResults = dts.testSolver(new DynamicNearestNeighbourSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+//        DynamicTestSuiteResult nnsResults = dts.testSolver(new DynamicNearestNeighbourSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+        dacos.kill(); // Needs to be killed to shutdown the thread pool
         System.out.println("ACO: " + antResults.getAverageAvgRoute() + " in " + antResults.getAverageAvgTime());
-        System.out.println("Hilbert: " + hilbertRestuls.getAverageAvgRoute() + " in " + hilbertRestuls.getAverageAvgTime());
-        System.out.println("NNS: " + nnsResults.getAverageAvgRoute() + " in " + nnsResults.getAverageAvgTime());
-        dacos.kill();
+//        System.out.println("Hilbert: " + hilbertRestuls.getAverageAvgRoute() + " in " + hilbertRestuls.getAverageAvgTime());
+//        System.out.println("NNS: " + nnsResults.getAverageAvgRoute() + " in " + nnsResults.getAverageAvgTime());
     }
 }
