@@ -121,6 +121,7 @@ public class AntColonyOptimisationSolver implements StaticSolver {
             Stopwatch sw = new Stopwatch();
             sw.start();
             setDelayPerStep(delayPerStep);
+            graph.getEdgeContainer().clear();
             // Activate all ants
             for (int x = 0; x < numAnts; x++) {
                 executorCompletionService.submit(new Ant(this));
