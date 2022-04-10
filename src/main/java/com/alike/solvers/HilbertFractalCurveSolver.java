@@ -7,6 +7,8 @@ import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.graphsystem.*;
+import com.alike.solvertestsuite.Stopwatch;
+
 import java.util.ArrayList;
 
 import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
@@ -45,6 +47,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      */
     private Coordinate[] curveCornerCoordinates; // Don't initialise yet, as its usually very large.
 
+    private Stopwatch stopwatch = new Stopwatch();
 
     /**
      * Used to construct a new @code{HilbertFractalCurveSolver} object.
@@ -76,11 +79,12 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      */
     public SolverOutput runSolution(int delayPerStep) {
         try { // Try to construct the route.
+            graph.getEdgeContainer().clear();
             Runtime.getRuntime().gc(); // Reclaim as much memory as possible.
-            long startTime = System.nanoTime();
+            stopwatch.clear();
+            stopwatch.start();
             constructRoute(delayPerStep);
-            long finishTime = System.nanoTime();
-            return new Solution(graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+            return new Solution(graph, graph.getEdgeContainer().getTotalLength(), stopwatch.getTimeNs());
         } catch (Exception e) {
             return new Fail(e, graph);
         } catch (Error e) {
@@ -97,11 +101,9 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     public void constructRoute(int delayPerStep) throws NodeMissedException, HilbertCurveUnconstructedException {
         try {
             ArrayList<Node> nodesOrdered = getNodesOrdered();
-            EdgeContainer container = new EdgeContainer();
-            graph.setEdgeContainer(container); // We do this here, so we can see the path as its being constructed
             for (int i = 0; i < nodesOrdered.size(); i++) {
                 // Create the edge and add it
-                container.add(new Edge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
+                graph.getEdgeContainer().add(new Edge(nodesOrdered.get(i), nodesOrdered.get((i + 1) % nodesOrdered.size())));
                 RepeatedFunctions.sleep(delayPerStep);
             }
         } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
