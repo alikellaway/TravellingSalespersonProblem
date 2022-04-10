@@ -176,7 +176,6 @@ public class StaticGraph implements Graph {
                         edgeLengthMatrix[y][x] = snPos.getVectorTo(enPos).magnitude();
                         edgeLengthMatrix[x][y] = snPos.getVectorTo(enPos).magnitude();
                     }
-
                 }
             } catch (NonExistentNodeException e) {
                 e.printStackTrace();
