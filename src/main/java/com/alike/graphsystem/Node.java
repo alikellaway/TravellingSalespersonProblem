@@ -152,7 +152,7 @@ public class Node {
     /**
      * Sets the value of the @code{numNodes} attribute to 0.
      */
-    public static void restartNodeCounter() {
+    public static void resetNodeCounter() {
         numNodes = 0;
     }
 

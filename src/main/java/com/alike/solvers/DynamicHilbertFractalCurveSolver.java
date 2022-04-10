@@ -1,9 +1,8 @@
-package com.alike.dynamicsolvers;
+package com.alike.solvers;
 
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.Timer;
-import com.alike.solvers.HilbertFractalCurveSolver;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.solvertestsuite.Stopwatch;
@@ -35,9 +34,15 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
      * @param dgraph The @code{DynamicGraph} object this solver will be solving or manipulating.
      */
     public DynamicHilbertFractalCurveSolver(DynamicGraph dgraph) {
-        setGraph(dgraph.getUnderlyingGraph());
         setGraph(dgraph);
         setHfcs(new HilbertFractalCurveSolver(getGraph()));
+    }
+
+    /**
+     * An empty constructor so that the graph can be set at a later time.
+     */
+    public DynamicHilbertFractalCurveSolver() {
+        setHfcs(new HilbertFractalCurveSolver());
     }
 
     /**
@@ -92,21 +97,21 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
      */
     @Override
     public DynamicSolution calculateSolutions(int numSolves, int delayPerSolve) {
-        if (numSolves == 0) {
-            throw new IllegalArgumentException("Cannot complete 0 solves.");
+        if (numSolves <= 0) {
+            throw new IllegalArgumentException("Cannot complete 0 or fewer solves.");
         }
         dgraph.wake(); // Listen for start stop commands.
         setRunning(true); // Set this object into the 'solving' state (so its visible to other objects).
         long totalTime = 0; // The total time spent solving.
         Stopwatch watch = new Stopwatch(); // The tool used to record how much time each solve takes.
         int solvesCompleted = 0; // A counter to record how many solves have already been completed.
-        while (solvesCompleted != numSolves) {
+        while (solvesCompleted <= numSolves) {
             try {
                 dgraph.stop();
                 watch.start();
                 hfcs.runSolution(0);
                 totalTime += watch.getTimeNs(); // Also stops the watch.
-                numSolves++;
+                solvesCompleted++;
                 watch.clear();
                 dgraph.move();
                 RepeatedFunctions.sleep(delayPerSolve);
@@ -157,6 +162,7 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
     @Override
     public void setGraph(DynamicGraph dgraph) {
         this.dgraph = dgraph;
+        setGraph(dgraph.getUnderlyingGraph());
     }
 
     /**

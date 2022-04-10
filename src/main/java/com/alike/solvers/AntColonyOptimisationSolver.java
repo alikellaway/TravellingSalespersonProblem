@@ -109,8 +109,6 @@ public class AntColonyOptimisationSolver implements StaticSolver {
     public AntColonyOptimisationSolver() {
         setExecutorService(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
         setExecutorCompletionService(new ExecutorCompletionService<>(getExecutorService()));
-        initialiseDistances();
-        initialisePheromoneLevels();
     }
 
     /**
@@ -192,6 +190,8 @@ public class AntColonyOptimisationSolver implements StaticSolver {
      */
     public void setGraph(StaticGraph graph) {
         this.graph = graph;
+        initialiseDistances();
+        initialisePheromoneLevels();
     }
 
     /**

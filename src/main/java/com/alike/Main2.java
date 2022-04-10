@@ -1,17 +1,18 @@
 package com.alike;
 
 import com.alike.customexceptions.*;
+import com.alike.solvers.DynamicAntColonyOptimisationSolver;
 import com.alike.graphsystem.DynamicGraph;
-import com.alike.graphsystem.Graph;
 import com.alike.graphsystem.GraphGenerator;
-import com.alike.graphsystem.StaticGraph;
-import com.alike.read_write.GraphReader;
 import com.alike.read_write.GraphWriter;
+import com.alike.solvers.DynamicHilbertFractalCurveSolver;
+import com.alike.solvers.DynamicNearestNeighbourSolver;
+import com.alike.solvers.HilbertFractalCurveSolver;
+import com.alike.solvertestsuite.DynamicTestResult;
 import com.alike.solvertestsuite.DynamicTestSuite;
+import com.alike.solvertestsuite.DynamicTestSuiteResult;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main2 {
 
@@ -37,12 +38,25 @@ public class Main2 {
 //        }
         GraphWriter gw = new GraphWriter();
         gw.clearFile();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             DynamicGraph g = GraphGenerator.generateRandomDynamicGraph(10, 10, false, false);
             gw.writeGraph(g);
         }
         gw.close();
-        DynamicTestSuite dts = new DynamicTestSuite();
+        int numSolves = 10;
+        int delayPerSovle = 30;
+        int nodeSpeed = 10;
+        boolean randomMovement = false;
+        boolean velocityMovement = true;
 
+        DynamicTestSuite dts = new DynamicTestSuite();
+        DynamicTestSuiteResult hilbertRestuls = dts.testSolver(new DynamicHilbertFractalCurveSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+        DynamicAntColonyOptimisationSolver dacos = new DynamicAntColonyOptimisationSolver();
+        DynamicTestSuiteResult antResults = dts.testSolver(dacos, numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+        DynamicTestSuiteResult nnsResults = dts.testSolver(new DynamicNearestNeighbourSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+        System.out.println("ACO: " + antResults.getAverageAvgRoute() + " in " + antResults.getAverageAvgTime());
+        System.out.println("Hilbert: " + hilbertRestuls.getAverageAvgRoute() + " in " + hilbertRestuls.getAverageAvgTime());
+        System.out.println("NNS: " + nnsResults.getAverageAvgRoute() + " in " + nnsResults.getAverageAvgTime());
+        dacos.kill();
     }
 }

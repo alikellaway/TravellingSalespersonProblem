@@ -1,4 +1,4 @@
-package com.alike.dynamicsolvers;
+package com.alike.solvers;
 
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.solvertestsuite.DynamicSolution;

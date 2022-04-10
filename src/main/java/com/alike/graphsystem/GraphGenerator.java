@@ -37,7 +37,7 @@ public class GraphGenerator {
         if (numCorners < 3) { // Check the graph has at least 3 nodes.
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
         }
-        Node.restartNodeCounter();
+        Node.resetNodeCounter();
         // Create a graph to populate
         StaticGraph staticGraph = new StaticGraph();
         // Calculate radius from width or height of screen of the screen (depends on which is smaller)
@@ -84,7 +84,7 @@ public class GraphGenerator {
 //            throw new RadiusExceedingBoundaryException("The radius of the polygon (" + radiusY + ") was too large in" +
 //                    " the y direction to be displayed as the maximum y diameter is " + Main.COORDINATE_MAX_HEIGHT);
 //        }
-        Node.restartNodeCounter(); // We need the nodes in each graph to be numbered from 0.
+        Node.resetNodeCounter(); // We need the nodes in each graph to be numbered from 0.
         // Create a graph to populate
         StaticGraph staticGraph = new StaticGraph();
         // Note: 2Pi is the number of radians in a circle
@@ -127,7 +127,7 @@ public class GraphGenerator {
      * @return g A new randomized StaticGraph object.
      */
     public static StaticGraph generateRandomGraph(int numNodes, boolean generateRandomEdges ) {
-        Node.restartNodeCounter();
+        Node.resetNodeCounter();
         // Create some random nodes
         NodeContainer nSet = new NodeContainer();
         while (nSet.getNodeSet().size() != numNodes) {

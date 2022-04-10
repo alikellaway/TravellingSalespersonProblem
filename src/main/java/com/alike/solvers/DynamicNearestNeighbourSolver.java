@@ -1,10 +1,9 @@
-package com.alike.dynamicsolvers;
+package com.alike.solvers;
 
 import com.alike.customexceptions.NoClosestNodeException;
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.Timer;
-import com.alike.solvers.NearestNeighbourSolver;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.solvertestsuite.Stopwatch;
@@ -47,7 +46,10 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
      */
     private Node currentNode;
 
-    private NearestNeighbourSolver nns;
+    /**
+     * The nearest neighbour object that will be used to solve the graph each time it's paused.
+     */
+    private final NearestNeighbourSolver nns;
 
     /**
      * Used to construct a new @code{DynamicNearestNeighbourSolver} object.
@@ -61,6 +63,11 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
         setRunning(false);
         setOrigin(nodeContainer.getNodeSet().get(0)); // The node from which we always start.
         nns = new NearestNeighbourSolver(dgraph.getUnderlyingGraph());
+    }
+
+    public DynamicNearestNeighbourSolver() {
+        setRunning(false);
+        nns = new NearestNeighbourSolver();
     }
 
     /**
@@ -107,16 +114,16 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
     }
 
     /**
-     *
-     * @param numSolves
-     * @param delayPerSolve
-     * @return
-     * @throws IllegalArgumentException
+     * Runs the solver until the target number of solutions has been produced.
+     * @param numSolves The number of solutions the solver should produce.
+     * @param delayPerSolve The delay between each solve.
+     * @return DynamicSolution The information output by the solver.
+     * @throws IllegalArgumentException Thrown if numSolves input is 0 or less.
      */
     @Override
     public DynamicSolution calculateSolutions(int numSolves, int delayPerSolve) throws IllegalArgumentException {
-        if (numSolves == 0) {
-            throw new IllegalArgumentException("Cannot complete 0 solves.");
+        if (numSolves <= 0) {
+            throw new IllegalArgumentException("Cannot complete 0 or fewer solves.");
         }
         dgraph.wake(); // Doesn't begin movement - just allows it to listen for pause/play commands.
         setRunning(true); // Another thread can set this volatile to false and stop the execution.
@@ -253,6 +260,12 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
      */
     @Override
     public void setGraph(DynamicGraph dgraph) {
-        this.dgraph = dgraph;
+        setDgraph(dgraph);
+        setNodeContainer(getDgraph().getNodeContainer());
+        setEdgeContainer(getDgraph().getEdgeContainer());
+        getDgraph().setAllNodesUnvisited();
+        setRunning(false);
+        setOrigin(nodeContainer.getNodeSet().get(0)); // The node from which we always start.
+        nns.setGraph(dgraph.getUnderlyingGraph());
     }
 }

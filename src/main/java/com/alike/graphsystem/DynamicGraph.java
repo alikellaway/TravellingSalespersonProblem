@@ -280,6 +280,7 @@ public class DynamicGraph implements Graph {
         if (storageFormatString == null) {
             return null;
         }
+        Node.resetNodeCounter();
         // NB: I am not happy with this code but I am rushing through it.
         // Create an array list of our information
         ArrayList<String> elements = new ArrayList<>(List.of(storageFormatString.split(String.valueOf(delimiter))));

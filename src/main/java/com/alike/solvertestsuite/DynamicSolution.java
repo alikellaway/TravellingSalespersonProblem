@@ -72,8 +72,7 @@ public class DynamicSolution implements SolverOutput {
      */
     @Override
     public String toString() {
-        return getAvgLength() + ", " + getAvgSolveTime() + "ms";
+        return "Averaged " + getAvgLength() + " in " + getAvgSolveTime() + "ns";
     }
-
 
 }

@@ -1,9 +1,8 @@
-package com.alike.dynamicsolvers;
+package com.alike.solvers;
 
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solution_helpers.Timer;
-import com.alike.solvers.AntColonyOptimisationSolver;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.solvertestsuite.Stopwatch;
@@ -40,16 +39,19 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      * @param dgraph The @code{DynamicGraph} object this object will be used to solve.
      */
     public DynamicAntColonyOptimisationSolver(DynamicGraph dgraph) {
+        acos = new AntColonyOptimisationSolver(dgraph.getUnderlyingGraph());
         setGraph(dgraph);
-        setGraph(dgraph.getUnderlyingGraph());
-        getDgraph().wake();
-        acos = new AntColonyOptimisationSolver(graph);
         acos.setDelayPerStep(0);
         // Set you values to allow the path to react quickly.
         /*acos.setAlpha(0.02);
         acos.setBeta(11.5);
         acos.setRh0(0.9);
         acos.setQ(0.0004);*/
+    }
+
+    public DynamicAntColonyOptimisationSolver() {
+        acos = new AntColonyOptimisationSolver();
+        acos.setDelayPerStep(0);
     }
 
     /**
@@ -108,7 +110,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     @Override
     public DynamicSolution calculateSolutions(int numSolves, int delayPerSolve) throws IllegalArgumentException {
         if (numSolves == 0) {
-            throw new IllegalArgumentException("Cannot complete 0 solves.");
+            throw new IllegalArgumentException("Cannot complete 0 or fewer solves.");
         }
         dgraph.move();
         running = true;
@@ -129,7 +131,6 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
             dgraph.move();
             RepeatedFunctions.sleep(delayPerSolve);
         }
-        acos.getExecutorService().shutdown();
         return new DynamicSolution(dgraph.getAverageRouteLength(), totalTime/completedSolves);
     }
 
@@ -156,6 +157,8 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     @Override
     public void setGraph(DynamicGraph dgraph) {
         this.dgraph = dgraph;
+        setGraph(dgraph.getUnderlyingGraph());
+        getDgraph().wake();
     }
 
     /**
@@ -164,6 +167,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      */
     public void setGraph(StaticGraph graph) {
         this.graph = graph;
+        acos.setGraph(graph);
     }
 
     /**
@@ -172,5 +176,6 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      */
     public void kill() {
         this.running = false;
+        acos.getExecutorService().shutdownNow();
     }
 }

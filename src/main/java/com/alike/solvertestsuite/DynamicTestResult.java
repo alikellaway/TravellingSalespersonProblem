@@ -15,7 +15,12 @@ public class DynamicTestResult {
      */
     private DynamicSolution sol;
 
-    public DynamicTestResult(DynamicSolution sol, long totalTime) {
+    /**
+     * When this test took place chronologically amongst other tests (allows us to differentiate tests if needed).
+     */
+    private int testNumber;
+
+    public DynamicTestResult(DynamicSolution sol, long totalTime, int testNumber) {
         setTotalTimeTaken(totalTime);
         setSol(sol);
     }
@@ -50,5 +55,30 @@ public class DynamicTestResult {
      */
     public void setSol(DynamicSolution sol) {
         this.sol = sol;
+    }
+
+    /**
+     * Returns the @code{testNumber} attribute.
+     * @return testNumber The @code{testNumber} attribute.
+     */
+    public int getTestNumber() {
+        return testNumber;
+    }
+
+    /**
+     * Assigns the @code{testNumber} attribute.
+     * @param testNumber The value to assign the @code{testNumber} attribute.
+     */
+    public void setTestNumber(int testNumber) {
+        this.testNumber = testNumber;
+    }
+
+    /**
+     * Returns the information in this test result as a string to be represented in console etc.
+     * @return string The information in the test result as a string.
+     */
+    @Override
+    public String toString() {
+        return sol.toString() + ", totalling " + getTotalTimeTaken() + "ns";
     }
 }

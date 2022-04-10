@@ -2,9 +2,9 @@ package com.alike;
 
 import com.alike.customexceptions.*;
 import com.alike.graphsystem.DynamicGraph;
-import com.alike.dynamicsolvers.DynamicAntColonyOptimisationSolver;
-import com.alike.dynamicsolvers.DynamicHilbertFractalCurveSolver;
-import com.alike.dynamicsolvers.DynamicNearestNeighbourSolver;
+import com.alike.solvers.DynamicAntColonyOptimisationSolver;
+import com.alike.solvers.DynamicHilbertFractalCurveSolver;
+import com.alike.solvers.DynamicNearestNeighbourSolver;
 import com.alike.graphical.HilbertFractalCurveAnimator;
 import com.alike.graphical.TSPGraphAnimator;
 import com.alike.solution_helpers.RepeatedFunctions;

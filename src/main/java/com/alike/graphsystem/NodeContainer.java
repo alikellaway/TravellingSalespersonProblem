@@ -235,7 +235,7 @@ public class NodeContainer {
      * to try to create nodes on the same coordinate.
      */
     public static NodeContainer createFromStorageString(String storedContainer) throws NodeSuperimpositionException {
-        Node.restartNodeCounter();
+        Node.resetNodeCounter();
         NodeContainer container = new NodeContainer();
         String[] coords = storedContainer.split(";");
         for (String c : coords) {

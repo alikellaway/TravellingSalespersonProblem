@@ -22,8 +22,19 @@ public class DynamicTestSuiteResult {
      */
     private ArrayList<DynamicTestResult> results;
 
+    /**
+     * The node speed the tests were run with.
+     */
     private int nodeSpeed;
+
+    /**
+     * Whether the @code{DynamicGraph} had random movement turned on.
+     */
     private boolean randomMovement;
+
+    /**
+     * Whether the @code{DynamicGraph} had velocity movement turned on.
+     */
     private boolean velocityMovement;
 
     /**
@@ -135,5 +146,29 @@ public class DynamicTestSuiteResult {
      */
     public void setVelocityMovement(boolean velocityMovement) {
         this.velocityMovement = velocityMovement;
+    }
+
+    /**
+     * Returns the average of the average route lengths of the results.
+     * @return avg The average of the average route lengths.
+     */
+    public double getAverageAvgRoute() {
+        double total = 0;
+        for (DynamicTestResult r : results) {
+            total += r.getSol().getAvgLength();
+        }
+        return total/results.size();
+    }
+
+    /**
+     * Returns the average of the average solve times output by DynamicSolver tests.
+     * @return avg The average of the average time value in the results.
+     */
+    public long getAverageAvgTime() {
+        long total = 0;
+        for (DynamicTestResult r : results) {
+            total += r.getSol().getAvgSolveTime();
+        }
+        return total/results.size();
     }
 }
