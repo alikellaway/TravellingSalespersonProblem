@@ -46,8 +46,8 @@ public class DynamicTestSuite {
             solver.setGraph(dg); // Set the solver's dynamic graph so it can solve it
             stopwatch.start(); // Start the timer
             DynamicSolution ds = solver.calculateSolutions(numSolves, delayPerSolve);
-            System.out.println("Solver finished.");
             results.add(new DynamicTestResult(ds, stopwatch.getTimeNs(), testNumber));
+            System.out.println("Solver finished.");
             stopwatch.clear();
             testNumber++;
             System.out.println("Completed.");
