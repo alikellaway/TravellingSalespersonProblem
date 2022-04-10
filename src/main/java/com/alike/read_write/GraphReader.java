@@ -59,4 +59,12 @@ public class GraphReader {
     public void close() throws IOException {
         br.close();
     }
+
+    /**
+     * Returns the value of the @code{br} attribute.
+     * @return br The value of the @code{br} attribute.
+     */
+    public BufferedReader getBr() {
+        return br;
+    }
 }

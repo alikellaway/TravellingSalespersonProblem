@@ -1,6 +1,7 @@
 package com.alike.dynamicsolvers;
 
 import com.alike.graphsystem.DynamicGraph;
+import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.graphsystem.Graph;
 
@@ -9,5 +10,5 @@ public interface DynamicSolver {
     void setGraph(DynamicGraph dgraph);
     SolverOutput startSolving(int delayPerSolve);
     SolverOutput solveForTime(int runTime, int delayPerSolve);
-    SolverOutput calculateSolutions(int numSolves, int delayPerSolve) throws IllegalArgumentException;
+    DynamicSolution calculateSolutions(int numSolves, int delayPerSolve) throws IllegalArgumentException;
 }

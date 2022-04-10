@@ -106,7 +106,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      * @throws IllegalArgumentException
      */
     @Override
-    public SolverOutput calculateSolutions(int numSolves, int delayPerSolve) throws IllegalArgumentException {
+    public DynamicSolution calculateSolutions(int numSolves, int delayPerSolve) throws IllegalArgumentException {
         if (numSolves == 0) {
             throw new IllegalArgumentException("Cannot complete 0 solves.");
         }

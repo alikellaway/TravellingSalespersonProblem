@@ -91,7 +91,7 @@ public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
      * @return DynamicSolution A @code{SolverOutput} object containing information about the solves.
      */
     @Override
-    public SolverOutput calculateSolutions(int numSolves, int delayPerSolve) {
+    public DynamicSolution calculateSolutions(int numSolves, int delayPerSolve) {
         if (numSolves == 0) {
             throw new IllegalArgumentException("Cannot complete 0 solves.");
         }
