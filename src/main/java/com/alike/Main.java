@@ -179,7 +179,7 @@ public class Main extends Application {
             case DHFC -> {
                 Thread dhcsT = new Thread(() -> {
                     dhfcs = new DynamicHilbertFractalCurveSolver(dactiveGraph);
-                    dhfcs.calculateSolutions(10,10);
+                    dhfcs.startSolving(10);
                 });
                 dhcsT.start();
             }
