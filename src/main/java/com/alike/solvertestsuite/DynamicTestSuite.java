@@ -37,7 +37,7 @@ public class DynamicTestSuite {
     public DynamicTestSuiteResult testSolver(DynamicSolver solver, int numSolves, int delayPerSolve, int nodeSpeed, boolean randomMovement, boolean velocityMovement) throws IOException, NodeSuperimpositionException {
         ArrayList<DynamicTestResult> results = new ArrayList<>();
         GraphReader gr = new GraphReader();
-        int testNumber = 1;
+        int testNumber = 3; // Starts at three so it also represents the number of nodes for how the tests are currently
         while (true) { // While there are still graphs left in the file
             DynamicGraph testGraph = gr.getNextGraph(nodeSpeed, randomMovement, velocityMovement); // Try to get a graph
             if (testGraph == null) { // If returns null then reach end of graph file.
