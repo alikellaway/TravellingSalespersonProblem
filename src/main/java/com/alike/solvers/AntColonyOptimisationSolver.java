@@ -5,9 +5,8 @@ import com.alike.solution_helpers.AtomicDouble;
 import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
-import com.alike.solvertestsuite.Stopwatch;
+import com.alike.time.Stopwatch;
 import com.alike.graphsystem.EdgeContainer;
-import com.alike.graphsystem.Node;
 import com.alike.graphsystem.StaticGraph;
 
 import java.util.Random;
@@ -172,8 +171,7 @@ public class AntColonyOptimisationSolver implements StaticSolver {
                 // Check if the route found was shorter than the shortest thus far.
                 if (shortestRoute == null || ant.getRoute().getTotalLength() < shortestRoute.getTotalLength()) {
                     shortestRoute = ant.getRoute();
-//                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
-                    graph.getEdgeContainer().replaceEdges(shortestRoute);
+                    graph.setEdgeContainer(shortestRoute);
                 }
                 activeAnts--;
             } catch (InterruptedException | ExecutionException e) {
@@ -188,6 +186,7 @@ public class AntColonyOptimisationSolver implements StaticSolver {
      */
     public void setGraph(StaticGraph graph) {
         this.graph = graph;
+        this.shortestRoute = null;
         initialiseDistances();
         initialisePheromoneLevels();
     }
