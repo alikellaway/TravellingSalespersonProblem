@@ -38,20 +38,20 @@ public class DynamicTestSuite {
         GraphReader gr = new GraphReader();
         int testNumber = 1;
         while (true) { // While there are still graphs left in the file
-            DynamicGraph dg = gr.getNextGraph(nodeSpeed, randomMovement, velocityMovement); // Try to get a graph
-            if (dg == null) { // If returns null then reach end of graph file.
+            DynamicGraph testGraph = gr.getNextGraph(nodeSpeed, randomMovement, velocityMovement); // Try to get a graph
+            if (testGraph == null) { // If returns null then reach end of graph file.
                 break;
             }
-            System.out.println(testNumber + ":" + dg.toStorageFormat(';'));
-            solver.setGraph(dg); // Set the solver's dynamic graph so it can solve it
-            stopwatch.start(); // Start the timer
+            System.out.println(testNumber + ": " + testGraph.toStorageFormat(';'));
+            solver.setGraph(testGraph); // Set the solver's dynamic graph, so it can solve it
+            stopwatch.start(); // Start the watch
             DynamicSolution ds = solver.calculateSolutions(numSolves, delayPerSolve);
             results.add(new DynamicTestResult(ds, stopwatch.getTimeNs(), testNumber));
             System.out.println("Solver finished.");
             stopwatch.clear();
             testNumber++;
             System.out.println("Completed.");
-            dg.kill(); // Kill the graph so it is no longer running in the background.
+            testGraph.kill(); // Kill the graph so it is no longer running in the background.
         }
         return new DynamicTestSuiteResult(results, numSolves, delayPerSolve, nodeSpeed, randomMovement, velocityMovement);
     }
