@@ -42,7 +42,7 @@ public class AntColonyOptimisationSolver implements StaticSolver {
     /**
      * A matrix used to store all the distances between each node in the graph.
      */
-    private double[][] distanceMatrix;
+    private Double[][] distanceMatrix;
 
     /**
      * A thread pool that will allow us to manage many Ant threads simultaneously.
@@ -254,16 +254,7 @@ public class AntColonyOptimisationSolver implements StaticSolver {
      * Fills the distance matrix with the distance of each node to each other node.
      */
     private void initialiseDistances() {
-        int numNodes = graph.getNumNodes(); // Find out how many nodes there are.
-        distanceMatrix = new double[numNodes][numNodes]; // Create a square matrix using the numNodes as side length
-        // For each node, check the distance to every other node.
-        for (int x = 0; x < numNodes; x++) {
-            Node n1 = graph.getNodeContainer().getNodeSet().get(x);
-            for (int y = 0; y < numNodes; y++) {
-                Node n2 = graph.getNodeContainer().getNodeSet().get(y);
-                distanceMatrix[x][y] = n1.getVectorTo(n2).magnitude();
-            }
-        }
+        graph.constructEdgeLengthMatrix();
     }
 
     /**
@@ -284,7 +275,7 @@ public class AntColonyOptimisationSolver implements StaticSolver {
      * Returns the value of the @code{distanceMatrix} attribute.
      * @return distanceMatrix The value of the @code{distanceMatrix} attribute.
      */
-    public double[][] getDistanceMatrix() {
+    public Double[][] getDistanceMatrix() {
         return distanceMatrix;
     }
 
@@ -292,7 +283,7 @@ public class AntColonyOptimisationSolver implements StaticSolver {
      * Sets the value of the @code{distanceMatrix} attribute to a new value.
      * @param newMatrix The new value to assign to the @code{distanceMatrix} attribute.
      */
-    public void setDistanceMatrix(double[][] newMatrix) {
+    public void setDistanceMatrix(Double[][] newMatrix) {
         this.distanceMatrix = newMatrix;
     }
 

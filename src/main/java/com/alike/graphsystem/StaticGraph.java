@@ -23,7 +23,10 @@ public class StaticGraph implements Graph {
      */
     private EdgeContainer edgeContainer;
 
-    private double[][] edgeLengthMatrix;
+    /**
+     * A matrix storing the distances between two nodes, access by inputting the node IDs.
+     */
+    private Double[][] edgeLengthMatrix;
 
     /**
      * Constructs a new graph with empty node and edge containers.
@@ -88,7 +91,7 @@ public class StaticGraph implements Graph {
      * Returns the value of the @code{edgeLengthMatrix} attribute.
      * @return edgeLengthMatrix The value of the @code{edgeLengthMatrix} attribute.
      */
-    public double[][] getEdgeLengthMatrix() {
+    public Double[][] getEdgeLengthMatrix() {
         return edgeLengthMatrix;
     }
 
@@ -96,7 +99,7 @@ public class StaticGraph implements Graph {
      * Sets the value of the @code{edgeLengthMatrix} attribute to a new value.
      * @param edgeLengthMatrix The new value to assign to the @code{edgeLengthMatrix} attribute.
      */
-    public void setEdgeLengthMatrix(double[][] edgeLengthMatrix) {
+    public void setEdgeLengthMatrix(Double[][] edgeLengthMatrix) {
         this.edgeLengthMatrix = edgeLengthMatrix;
     }
 
@@ -151,7 +154,6 @@ public class StaticGraph implements Graph {
     /**
      * Call to construct a matrix containing all the edge lengths between each node in the graph. Method is not called
      * automatically, so for a graph to have an edge length matrix value, this MUST be called.
-     * @throws NoNodeContainerException Thrown if the graph does not currently have a node container.
      */
     public void constructEdgeLengthMatrix() {
         if (nodeContainer == null) { // Check that we have nodes
@@ -163,16 +165,17 @@ public class StaticGraph implements Graph {
             }
         }
         // Construct the edge matrix
-        int nN = getNumNodes();
-        double[][] edgeLengthMatrix = new double[nN][nN];
+        int nN = getNumNodes(); // Side length a.k.a number of nodes.
+        Double[][] edgeLengthMatrix = new Double[nN][nN]; // Matrix space.
         for (int y = 0; y < nN; y++) {
             try {
-                Coordinate snPos = getNodeContainer().getNodeByID(y).getCoordinate();
+                Coordinate snPos = getNodeContainer().getNodeByID(y).getCoordinate(); // Start node position.
                 for (int x = y; x < nN; x++) { // Since the graph is symmetrical, we can fill the matrix in one.
                     if (x == y) { // If they are the same node, then the distance is null.
-                        edgeLengthMatrix[y][x] = 0; // Since nodes cannot occupy the same space, their distance cannot be 0
+                        edgeLengthMatrix[y][x] = null;
                     } else {
-                        Coordinate enPos = getNodeContainer().getNodeByID(x).getCoordinate();
+                        Coordinate enPos = getNodeContainer().getNodeByID(x).getCoordinate(); // End node position.
+                        // Fill both spaces this holds.
                         edgeLengthMatrix[y][x] = snPos.getVectorTo(enPos).magnitude();
                         edgeLengthMatrix[x][y] = snPos.getVectorTo(enPos).magnitude();
                     }
@@ -181,7 +184,7 @@ public class StaticGraph implements Graph {
                 e.printStackTrace();
             }
         }
-        setEdgeLengthMatrix(edgeLengthMatrix);
+        setEdgeLengthMatrix(edgeLengthMatrix); // Assign this to the edgeLengthMatrix attribute.
     }
 
     /**

@@ -14,7 +14,7 @@ public class LinKernighanSolver implements StaticSolver {
     /**
      * A reference to the edge matrix of the graph we are trying to solve.
      */
-    private double[][] edgeMatrix;
+    private Double[][] edgeMatrix;
 
     /**
      * The set of edges that is the current tour.
@@ -47,7 +47,7 @@ public class LinKernighanSolver implements StaticSolver {
      * Sets the @code{edgeMatrix} attribute to a new value.
      * @param edgeMatrix The new value to assign the @code{edgeMatrix} attribute.
      */
-    public void setEdgeMatrix(double[][] edgeMatrix) {
+    public void setEdgeMatrix(Double[][] edgeMatrix) {
         this.edgeMatrix = edgeMatrix;
     }
 
