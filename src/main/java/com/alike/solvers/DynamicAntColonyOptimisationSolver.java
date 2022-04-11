@@ -32,7 +32,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     /**
      * The number of ants sent per solve of the dynamic graph.
      */
-    private final int numAntsPerSolve = 30;
+    private int numAntsPerSolve = 30;
 
     /**
      * The object used for recording execution times in this class.
@@ -163,6 +163,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     public void setGraph(DynamicGraph dgraph) {
         this.dgraph = dgraph;
         setGraph(dgraph.getUnderlyingGraph());
+        this.numAntsPerSolve = (int) Math.max(25, Math.ceil(graph.getNumNodes()/4.0));
         getDgraph().wake();
     }
 
