@@ -1,4 +1,4 @@
-package com.alike.solvertestsuite;
+package com.alike.time;
 
 /**
  * Class can be used to measure execution time of other code by calling start and stop methods, similar to how a

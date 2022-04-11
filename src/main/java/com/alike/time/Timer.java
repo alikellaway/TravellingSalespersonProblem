@@ -1,4 +1,6 @@
-package com.alike.solution_helpers;
+package com.alike.time;
+
+import com.alike.solution_helpers.RepeatedFunctions;
 
 /**
  * Timer class used to indicate when a given time period has elapsed using an independant thread.
