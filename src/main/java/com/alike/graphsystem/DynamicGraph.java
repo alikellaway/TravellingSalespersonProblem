@@ -243,7 +243,7 @@ public class DynamicGraph implements Graph {
 
     /**
      * Outputs the values of this graph as a string that can be stored in file and later read back into program.
-     * @return
+     * @return string The information in this dynamic graph represented as a string to be stored and read later.
      */
     @Override
     public String toStorageFormat(char delimiter) throws IllegalArgumentException {
