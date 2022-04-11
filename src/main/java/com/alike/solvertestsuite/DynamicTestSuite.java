@@ -30,8 +30,8 @@ public class DynamicTestSuite {
      * @param randomMovement Whether nodes should move with a random component.
      * @param velocityMovement Whetner nodes should move with velocity.
      * @return results
-     * @throws IOException
-     * @throws NodeSuperimpositionException
+     * @throws IOException Thrown if an I/O error occurs.
+     * @throws NodeSuperimpositionException Thrown if an attempt is made to superimpose nodes.
      */
     public DynamicTestSuiteResult testSolver(DynamicSolver solver, int numSolves, int delayPerSolve, int nodeSpeed, boolean randomMovement, boolean velocityMovement) throws IOException, NodeSuperimpositionException {
         ArrayList<DynamicTestResult> results = new ArrayList<>();
