@@ -145,16 +145,16 @@ public class EdgeContainer {
     }
 
     /**
-     * Used to add all the edges from the parameter container into this container
+     * Moves edges from the parameter container into this container.
      * @param otherContainer The container to absorb.
      */
     public void absorb(EdgeContainer otherContainer) {
-        for (Edge e : otherContainer.getEdgeSet()) {
+        CopyOnWriteArrayList<Edge> edges = otherContainer.getEdgeSet();
+        for (int i = 0; i < edges.size(); i++) {
             try {
-                this.add(e);
-            } catch (EdgeSuperimpositionException ignored) {
-
-            }
+                this.add(edges.get(i));
+                edges.remove(i); // Remove from the other container.
+            } catch (EdgeSuperimpositionException ignored) {} // If we already have it, just ignore it.
         }
     }
 
@@ -169,5 +169,14 @@ public class EdgeContainer {
             copy.add(e);
         }
         return copy;
+    }
+
+    /**
+     * Removes all edges currently in the container and fills with copies the edges over from the parameter container.
+     * @param otherEdgeContainer The container containing the edges replacing the current edges.
+     */
+    public void replaceEdges(EdgeContainer otherEdgeContainer) {
+        this.clear();
+        this.absorb(otherEdgeContainer);
     }
 }
