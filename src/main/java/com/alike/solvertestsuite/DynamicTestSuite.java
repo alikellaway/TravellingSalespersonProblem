@@ -43,16 +43,13 @@ public class DynamicTestSuite {
             if (testGraph == null) { // If returns null then reach end of graph file.
                 break;
             }
-            System.out.println(testNumber + ": " + testGraph.toStorageFormat(';'));
             solver.setGraph(testGraph); // Set the solver's dynamic graph, so it can solve it
             stopwatch.start(); // Start the watch
             DynamicSolution ds = solver.calculateSolutions(numSolves, delayPerSolve);
             results.add(new DynamicTestResult(ds, stopwatch.getTimeNs(), testNumber));
-            System.out.println("Solver finished.");
+            System.out.println(testNumber + " : Completed.");
             stopwatch.clear();
             testNumber++;
-            System.out.println("Completed.");
-            System.out.println(testGraph.getAverageRouteLength());
             testGraph.kill(); // Kill the graph so it is no longer running in the background.
         }
         return new DynamicTestSuiteResult(results, numSolves, delayPerSolve, nodeSpeed, randomMovement, velocityMovement);
