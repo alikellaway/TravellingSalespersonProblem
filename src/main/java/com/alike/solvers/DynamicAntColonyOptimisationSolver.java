@@ -2,10 +2,10 @@ package com.alike.solvers;
 
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.solution_helpers.Timer;
+import com.alike.time.Timer;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
-import com.alike.solvertestsuite.Stopwatch;
+import com.alike.time.Stopwatch;
 import com.alike.graphsystem.StaticGraph;
 
 public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
@@ -32,7 +32,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     /**
      * The number of ants sent per solve of the dynamic graph.
      */
-    private final int numAntsPerSolve = 100;
+    private final int numAntsPerSolve = 30;
 
     /**
      * The object used for recording execution times in this class.
@@ -133,7 +133,6 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
             totalTime += stopwatch.getTimeNs(); // Also stops the stopwatch
             stopwatch.clear(); // Eradicate the values from the watch.
             completedSolves++;
-            System.out.println(graph.getEdgeContainer().getTotalLength());
             dgraph.move();
             RepeatedFunctions.sleep(delayPerSolve);
         }
