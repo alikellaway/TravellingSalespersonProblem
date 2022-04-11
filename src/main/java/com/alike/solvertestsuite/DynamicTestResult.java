@@ -23,6 +23,7 @@ public class DynamicTestResult {
     public DynamicTestResult(DynamicSolution sol, long totalTime, int testNumber) {
         setTotalTimeTaken(totalTime);
         setSol(sol);
+        setTestNumber(testNumber);
     }
 
     /**
@@ -80,5 +81,14 @@ public class DynamicTestResult {
     @Override
     public String toString() {
         return sol.toString() + ", totalling " + getTotalTimeTaken() + "ns";
+    }
+
+    /**
+     * Returns a string representing the information in this class in a format that can be stored and later read back
+     * into memory.
+     * @return string This object as a storage format string.
+     */
+    public String toStorageFormat() {
+        return  testNumber + "," + sol.toStorageFormat() + "," + getTotalTimeTaken();
     }
 }
