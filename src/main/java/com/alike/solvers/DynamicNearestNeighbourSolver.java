@@ -1,15 +1,12 @@
 package com.alike.solvers;
 
-import com.alike.customexceptions.NoClosestNodeException;
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.solution_helpers.Timer;
+import com.alike.time.Timer;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
-import com.alike.solvertestsuite.Stopwatch;
+import com.alike.time.Stopwatch;
 import com.alike.graphsystem.*;
-
-import java.util.ArrayList;
 
 /**
  * Class uses the nearest neighbour (or greedy) algorithm repeatedly at a set interval to give a route through
@@ -27,11 +24,6 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
     private NodeContainer nodeContainer;
 
     /**
-     * A reference to the edge container this class is operating on.
-     */
-    private EdgeContainer edgeContainer;
-
-    /**
      * A boolean describing whether this solver is actively calculating solutions.
      */
     private volatile boolean running;
@@ -40,11 +32,6 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
      * A record of the node we start each solve from.
      */
     private Node origin;
-
-    /**
-     * The node the algorithm is currently at.
-     */
-    private Node currentNode;
 
     /**
      * The nearest neighbour object that will be used to solve the graph each time it's paused.
@@ -58,7 +45,6 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
     public DynamicNearestNeighbourSolver(DynamicGraph dgraph) {
         setDgraph(dgraph);
         setNodeContainer(getDgraph().getNodeContainer());
-        setEdgeContainer(getDgraph().getEdgeContainer());
         getDgraph().setAllNodesUnvisited();
         setRunning(false);
         setOrigin(nodeContainer.getNodeSet().get(0)); // The node from which we always start.
@@ -198,22 +184,6 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
     }
 
     /**
-     * Sets the value of the @code{edgeContainer} attribute.
-     * @param edgeContainer The new value to assign to the @code{edgeContainer} attribute.
-     */
-    public void setEdgeContainer(EdgeContainer edgeContainer) {
-        this.edgeContainer = edgeContainer;
-    }
-
-    /**
-     * Sets the value of the @code{currentNode} attribute to a new value.
-     * @param currentNode The new value to assign to the @code{currentNode} attribute.
-     */
-    public void setCurrentNode(Node currentNode) {
-        this.currentNode = currentNode;
-    }
-
-    /**
      * Sets the value of the @code{running} attribute to a new value.
      * @param running The new value to assign the @code{running} attribute.
      */
@@ -238,7 +208,6 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
     public void setGraph(DynamicGraph dgraph) {
         setDgraph(dgraph);
         setNodeContainer(getDgraph().getNodeContainer());
-        setEdgeContainer(getDgraph().getEdgeContainer());
         getDgraph().setAllNodesUnvisited();
         setRunning(false);
         setOrigin(nodeContainer.getNodeSet().get(0)); // The node from which we always start.

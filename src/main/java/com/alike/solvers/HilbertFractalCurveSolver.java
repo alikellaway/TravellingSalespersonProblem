@@ -7,7 +7,7 @@ import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.graphsystem.*;
-import com.alike.solvertestsuite.Stopwatch;
+import com.alike.time.Stopwatch;
 
 import java.util.ArrayList;
 

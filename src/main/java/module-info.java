@@ -13,6 +13,7 @@ module com.alike {
     exports com.alike.solvers;
     exports com.alike.solvertestsuite to com.fasterxml.jackson.databind, javafx.graphics;
     exports com.alike.graphsystem;
+    exports com.alike.time to com.fasterxml.jackson.databind, javafx.graphics;
 
 }
 

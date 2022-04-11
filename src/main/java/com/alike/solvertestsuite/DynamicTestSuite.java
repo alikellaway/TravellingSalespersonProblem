@@ -4,6 +4,7 @@ import com.alike.customexceptions.NodeSuperimpositionException;
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.solvers.DynamicSolver;
 import com.alike.read_write.GraphReader;
+import com.alike.time.Stopwatch;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class DynamicTestSuite {
             stopwatch.clear();
             testNumber++;
             System.out.println("Completed.");
+            System.out.println(testGraph.getAverageRouteLength());
             testGraph.kill(); // Kill the graph so it is no longer running in the background.
         }
         return new DynamicTestSuiteResult(results, numSolves, delayPerSolve, nodeSpeed, randomMovement, velocityMovement);

@@ -2,10 +2,10 @@ package com.alike.solvers;
 
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.solution_helpers.RepeatedFunctions;
-import com.alike.solution_helpers.Timer;
+import com.alike.time.Timer;
 import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
-import com.alike.solvertestsuite.Stopwatch;
+import com.alike.time.Stopwatch;
 import com.alike.graphsystem.StaticGraph;
 
 public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
