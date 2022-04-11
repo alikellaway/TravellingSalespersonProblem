@@ -170,12 +170,10 @@ public class AntColonyOptimisationSolver implements StaticSolver {
             try {
                 Ant ant = executorCompletionService.take().get(); // Pick up an ant
                 // Check if the route found was shorter than the shortest thus far.
-                if (shortestRoute == null || ant.getRoute().getTotalLength()
-                                                        < shortestRoute.getTotalLength()) {
+                if (shortestRoute == null || ant.getRoute().getTotalLength() < shortestRoute.getTotalLength()) {
                     shortestRoute = ant.getRoute();
 //                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
-                    graph.getEdgeContainer().clear(); // Remove prior route.
-                    graph.getEdgeContainer().absorb(shortestRoute); // Insert the new route.
+                    graph.getEdgeContainer().replaceEdges(shortestRoute);
                 }
                 activeAnts--;
             } catch (InterruptedException | ExecutionException e) {
