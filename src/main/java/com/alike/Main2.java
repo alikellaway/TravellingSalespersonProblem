@@ -40,7 +40,7 @@ public class Main2 {
         // Create some new graphs and write them in.
         GraphWriter gw = new GraphWriter();
         gw.clearFile();
-        for (int i = 3; i < 103; i++) {
+        for (int i = 3; i <= 103; i++) {
             DynamicGraph g = GraphGenerator.generateRandomDynamicGraph(i, 10, false, false);
             gw.writeGraph(g);
         }
