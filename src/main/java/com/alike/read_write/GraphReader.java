@@ -18,7 +18,7 @@ public class GraphReader {
     /**
      * The @code{BufferedReader} object used to read the file.
      */
-    private BufferedReader br;
+    private final BufferedReader br;
 
     /**
      * Creates a new @code{GraphReader} object.
