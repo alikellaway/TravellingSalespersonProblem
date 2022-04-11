@@ -1,6 +1,7 @@
 package com.alike;
 
 import com.alike.customexceptions.*;
+import com.alike.read_write.DynamicTestSuiteResultWriter;
 import com.alike.solvers.DynamicAntColonyOptimisationSolver;
 import com.alike.graphsystem.DynamicGraph;
 import com.alike.graphsystem.GraphGenerator;
@@ -38,7 +39,7 @@ public class Main2 {
 //        }
         GraphWriter gw = new GraphWriter();
         gw.clearFile();
-        for (int i = 3; i < 9; i++) {
+        for (int i = 3; i < 103; i++) {
             DynamicGraph g = GraphGenerator.generateRandomDynamicGraph(i, 10, false, false);
             gw.writeGraph(g);
         }
@@ -50,13 +51,20 @@ public class Main2 {
         boolean velocityMovement = true;
 
         DynamicTestSuite dts = new DynamicTestSuite();
-//        DynamicTestSuiteResult hilbertRestuls = dts.testSolver(new DynamicHilbertFractalCurveSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+        DynamicTestSuiteResult hilbertRestuls = dts.testSolver(new DynamicHilbertFractalCurveSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
         DynamicAntColonyOptimisationSolver dacos = new DynamicAntColonyOptimisationSolver();
         DynamicTestSuiteResult antResults = dts.testSolver(dacos, numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
         DynamicTestSuiteResult nnsResults = dts.testSolver(new DynamicNearestNeighbourSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
         dacos.kill(); // Needs to be killed to shutdown the thread pool
         System.out.println("ACO: " + antResults.getAverageAvgRoute() + " in " + antResults.getAverageAvgTime());
-//        System.out.println("Hilbert: " + hilbertRestuls.getAverageAvgRoute() + " in " + hilbertRestuls.getAverageAvgTime());
+        System.out.println("Hilbert: " + hilbertRestuls.getAverageAvgRoute() + " in " + hilbertRestuls.getAverageAvgTime());
         System.out.println("NNS: " + nnsResults.getAverageAvgRoute() + " in " + nnsResults.getAverageAvgTime());
+
+        DynamicTestSuiteResultWriter dtsrw = new DynamicTestSuiteResultWriter();
+        dtsrw.clearFile();
+        dtsrw.writeResults(hilbertRestuls);
+        dtsrw.writeResults(antResults);
+        dtsrw.writeResults(nnsResults);
+        dtsrw.close();
     }
 }
