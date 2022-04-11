@@ -20,7 +20,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Class used to run and display different solvers at work.
+ * @author alike
+ */
 public class Main extends Application {
+    /**
+     * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
+     */
+    private static final Mode mode = Mode.DACO;
+
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
@@ -81,12 +90,8 @@ public class Main extends Application {
         DNNS, // Solve dynamically with nearest neighbour algorithm.
         DACO, // Solve dynamically with ant colony optimisation algorithm.
         DHFC // Solve dynamically with hilbert fractal curve heuristic.
-    }
 
-    /**
-     * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
-     */
-    private static final Mode mode = Mode.DACO;
+    }
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException, RadiusExceedingBoundaryException {
 
@@ -166,7 +171,7 @@ public class Main extends Application {
             case DACO -> {
                 Thread dacosT = new Thread(() -> {
                     dacos = new DynamicAntColonyOptimisationSolver(dactiveGraph);
-                    dacos.calculateSolutions(1000000, 0);
+                    dacos.startSolving(10);
                 });
                 dacosT.start();
             }
@@ -174,7 +179,7 @@ public class Main extends Application {
             case DHFC -> {
                 Thread dhcsT = new Thread(() -> {
                     dhfcs = new DynamicHilbertFractalCurveSolver(dactiveGraph);
-                    dhfcs.calculateSolutions(10,1000);
+                    dhfcs.calculateSolutions(10,10);
                 });
                 dhcsT.start();
             }
@@ -239,6 +244,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws InterruptedException, NonSquareCanvasException, InvalidGraphException, NodeSuperimpositionException {
+        // TODO: add a speed slider so we can change the speed of the nodes.
         // Give the name to the window.
         stage.setTitle(stageTitle);
         Group root = new Group();
