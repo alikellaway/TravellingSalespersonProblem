@@ -121,7 +121,7 @@ public class AntColonyOptimisationSolver implements StaticSolver {
             Stopwatch sw = new Stopwatch();
             sw.start();
             setDelayPerStep(delayPerStep);
-            graph.getEdgeContainer().clear();
+            graph.getEdgeContainer().clear(); // Ensure the container is empty before we start.
             // Activate all ants
             for (int x = 0; x < numAnts; x++) {
                 executorCompletionService.submit(new Ant(this));
@@ -169,13 +169,13 @@ public class AntColonyOptimisationSolver implements StaticSolver {
         while (activeAnts > 0) {
             try {
                 Ant ant = executorCompletionService.take().get(); // Pick up an ant
-                EdgeContainer currentRoute = ant.getRoute();
                 // Check if the route found was shorter than the shortest thus far.
-                if (shortestRoute == null || currentRoute.getTotalLength()
+                if (shortestRoute == null || ant.getRoute().getTotalLength()
                                                         < shortestRoute.getTotalLength()) {
-                    shortestRoute = currentRoute;
+                    shortestRoute = ant.getRoute();
 //                    System.out.println(shortestRoute.getTotalLength() + " : " + ant.getAntID());
-                    graph.setEdgeContainer(shortestRoute);
+                    graph.getEdgeContainer().clear(); // Remove prior route.
+                    graph.getEdgeContainer().absorb(shortestRoute); // Insert the new route.
                 }
                 activeAnts--;
             } catch (InterruptedException | ExecutionException e) {
