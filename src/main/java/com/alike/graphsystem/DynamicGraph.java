@@ -120,16 +120,16 @@ public class DynamicGraph implements Graph {
         setAwake(true);
         this.moving = false;
         Thread thread = new Thread(() -> {
-            while (this.awake) {
-                while (moving) {
-                    if (steppingRandomly) {
+            while (this.awake) { // Wait for commands.
+                while (moving) { // If moving is true, then start the movement.
+                    if (steppingRandomly) { // Step randomly if needed.
                         cm.stepRandomly();
                     }
-                    if (steppingByVelocity) {
+                    if (steppingByVelocity) { // Set by velocity if needed.
                         cm.stepByVelocity();
                     }
-                    RepeatedFunctions.sleep(delayPerStep);
-                    updateAverageRouteLength();
+                    RepeatedFunctions.sleep(delayPerStep); // Wait some time if needed.
+                    updateAverageRouteLength(); // Update the average route length attribute.
                 }
             }
         });
@@ -196,8 +196,9 @@ public class DynamicGraph implements Graph {
     private void updateAverageRouteLength() {
         EdgeContainer c = getUnderlyingGraph().getEdgeContainer();
         if (!c.getEdgeSet().isEmpty()) {
-            double currentLength = getUnderlyingGraph().getEdgeContainer().getTotalLength();
+            double currentLength = c.getTotalLength();
             this.averageRouteLength = (this.averageRouteLength + currentLength) / 2;
+//            System.out.println(getUnderlyingGraph().getNodeContainer().toString());
         }
     }
 
