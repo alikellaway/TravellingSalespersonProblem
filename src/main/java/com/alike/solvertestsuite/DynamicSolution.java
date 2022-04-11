@@ -75,4 +75,12 @@ public class DynamicSolution implements SolverOutput {
         return "Averaged " + getAvgLength() + " in " + getAvgSolveTime() + "ns";
     }
 
+    /**
+     * Returns a string representing this object's information in a format that can be stored and later read back into
+     * memory.
+     * @return string The object written as a string.
+     */
+    public String toStorageFormat() {
+        return (float) getAvgLength() + "," + getAvgSolveTime();
+    }
 }
