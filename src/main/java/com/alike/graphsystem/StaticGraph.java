@@ -4,7 +4,9 @@ import com.alike.customexceptions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Class used to represent and collate data on a travelling salesperson problem graph.
@@ -196,5 +198,42 @@ public class StaticGraph implements Graph {
     @Override
     public String toStorageFormat(char delimiter) {
         return getNodeContainer().toStorageFormat(delimiter);
+    }
+
+    /**
+     * Returns an array containing all the possible edges the graph can have.
+     * @return edges An array containing all the possible edges.
+     */
+    public ArrayList<Edge> getAllPossibleEdges() {
+        // NB: This code will make sense if you look at a matrix of the edges.
+        /*
+        *   0  1  2  3
+        * 0 x  |  |  |
+        * 1 c  x  |  |
+        * 2 c  c  x  |
+        * 3 c  c  c  x
+        *
+        * As you can see, represented by c, half the matrix is a copy of the other => we only need to output edges where
+        * the column idx is higher than the row idx as it makes a line (marked by |).
+        */
+        // Calculate the number of edges.
+        int numEdges = ((getNumNodes() - 1) * ((getNumNodes() - 1) + 1))/2; // We want 1 + 2 + 3 ... + (numNodes - 1)
+//        Edge[] edges = new Edge[numEdges];
+        ArrayList<Edge> edges = new ArrayList<>(numEdges);
+        // Populate edge array
+//        int edgesIdx = 0; // The idx of the next edge
+        for (int rowIdx = 0; rowIdx < getNumNodes(); rowIdx++) { // For the rows in our matrix
+            for (int colIdx = 0; colIdx < getNumNodes(); colIdx++) { // For the columns in our matrix
+                if (colIdx > rowIdx) { // If the column is higher than the node
+                    try { // Try to create the edge
+                        edges.add(new Edge(nodeContainer.getNodeByID(rowIdx), nodeContainer.getNodeByID(colIdx)));
+//                        edgesIdx++;
+                    } catch (EdgeToSelfException | NonExistentNodeException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return edges;
     }
 }
