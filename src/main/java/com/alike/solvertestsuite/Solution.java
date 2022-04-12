@@ -23,8 +23,8 @@ public class Solution implements SolverOutput {
 
     /**
      * Constructs a new test result object.
-     * @param g The value to assign the @code{solutionGraph} attribute.
-     * @param length The value to assign the @code{length} attribute.
+     * @param g The graph solved.
+     * @param length The length of the route on the graph.
      * @param executionTime The time taken for the solution to be found.
      */
     public Solution(Graph g, Double length, Long executionTime) {
