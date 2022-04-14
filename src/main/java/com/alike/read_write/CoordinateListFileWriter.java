@@ -94,8 +94,8 @@ public class CoordinateListFileWriter {
                 GraphGenerator.generateRandomGraph(n + 3, false).getNodeContainer().getNodeCoordinates()
             );
         }
-        int xMax = Main.COORDINATE_MAX_WIDTH;
-        int yMax = Main.COORDINATE_MAX_HEIGHT;
+        int xMax = (int) Main.coordinateMaxWidth;
+        int yMax = (int) Main.coordinateMaxHeight;
         // Writes the regular polygon graphs to the file
         for (int n = 0; n < NUM_REGULAR_POLYGON_GRAPHS; n++) {
             appendCoordinateList(bw, GraphGenerator.generateRegularPolygonalGraph(n + 3)

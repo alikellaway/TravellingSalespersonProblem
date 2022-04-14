@@ -99,7 +99,7 @@ public class Node implements Comparator<Node> {
      * @return Node A new Node with random coordinate values.
      */
     public static Node generateRandomTSPNode() {
-        return new Node(Coordinate.generateRandomCoordinate(Main.COORDINATE_MAX_WIDTH, Main.COORDINATE_MAX_HEIGHT));
+        return new Node(Coordinate.generateRandomCoordinate(Main.coordinateMaxWidth, Main.coordinateMaxHeight));
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.alike.graphical;
 
+import com.alike.Main;
 import com.alike.graphsystem.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -83,6 +84,7 @@ public class TSPGraphAnimator extends AnimationTimer {
     // white = Color.rgb(240, 240, 240);  --Pure white is too bright
     // leaf green = Color.rgb(77, 170, 81);
 
+
     /**
      * Used to initialise a TSPGraphAnimator object.
      * @param stage The stage on which the @code{canvas} will be animated.
@@ -161,7 +163,12 @@ public class TSPGraphAnimator extends AnimationTimer {
         // Design lines
         graphicsContext.setStroke(LINE_COLOR);
         graphicsContext.setLineWidth(LINE_WIDTH);
-        // graphicsContext.setLineDashes(5, 10); // Set lines to dotted
+        // Set lines to dotted
+            // graphicsContext.setLineDashes(5, 10);
+        // Draws the coordinate space.
+            // graphicsContext.strokeLine(Main.coordinateMaxWidth, 0, Main.coordinateMaxWidth, Main.coordinateMaxHeight);
+            // graphicsContext.strokeLine(0, Main.coordinateMaxHeight, Main.coordinateMaxWidth, Main.coordinateMaxHeight);
+
         // Draw lines
         for (Edge edge : graph.getEdgeContainer().getEdgeSet()) {
             drawEdge(edge);

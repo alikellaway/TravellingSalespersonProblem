@@ -46,7 +46,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
     /**
      * The number of coordinates drawn on the line each loop of the animator (smaller is slower).
      */
-    private int drawStep = Main.COORDINATE_MAX_WIDTH; // Chose this value randomly.
+    private int drawStep = 512; // Chose this value randomly.
 
     /**
      * Used to construct a new @code{HilbertFractalCurveAnimator} object.
@@ -105,7 +105,7 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      * @return float The value as a color between 0 and 360.
      */
     private int map(float coordinateIndex, float maxIndex) {
-        return Math.abs((int) ((int) (255.0 * (coordinateIndex/maxIndex))) % 255);
+        return Math.abs(((int) (255.0 * (coordinateIndex/maxIndex))) % 255);
 //        return (int) (i/iMax) * 360; // Note that when using the hue value in the hsb method, it will loop round to red
     }
 

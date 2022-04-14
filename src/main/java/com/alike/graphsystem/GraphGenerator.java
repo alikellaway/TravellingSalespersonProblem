@@ -41,15 +41,15 @@ public class GraphGenerator {
         // Create a graph to populate
         StaticGraph staticGraph = new StaticGraph();
         // Calculate radius from width or height of screen of the screen (depends on which is smaller)
-        int min = Math.min(Main.COORDINATE_MAX_WIDTH, Main.COORDINATE_MAX_HEIGHT);
+        int min = (int) Math.min(Main.coordinateMaxWidth, Main.coordinateMaxHeight);
         double r = min * CIRCLE_RADIUS_RATIO; // Chose 2.1 cos visibly pleasing
         // Work our way around the circle in a step wise manner
         double angleStep = (2 * Math.PI)/numCorners; // This is the step in angle between each corner
         double currentAngle = 0;
         while (currentAngle < 2 * Math.PI) {
             // Generate the coordinate for this step
-            int y = (int) (r * Math.cos(currentAngle) + Main.COORDINATE_MAX_HEIGHT/2);
-            int x = (int) (r * Math.sin(currentAngle) + Main.COORDINATE_MAX_WIDTH/2);
+            int y = (int) (r * Math.cos(currentAngle) + Main.coordinateMaxHeight /2);
+            int x = (int) (r * Math.sin(currentAngle) + Main.coordinateMaxWidth /2);
             Coordinate c = new Coordinate(x, y);
             staticGraph.getNodeContainer().add(new Node(c));
             currentAngle += angleStep;
@@ -76,13 +76,13 @@ public class GraphGenerator {
             throw new InvalidGraphException("Cannot generate a graph with less than 3 nodes.");
         }
         // Check the polgyon is not stretched too far to be displayed.
-//        if (radiusX * 2 > Main.COORDINATE_MAX_WIDTH) {
+//        if (radiusX * 2 > Main.coordinateMaxWidth) {
 //            throw new RadiusExceedingBoundaryException("The radius of the polygon ("+ radiusX + ") was too large in " +
-//                    "the x direction to be displayed as the maximum x diameter is " + Main.COORDINATE_MAX_WIDTH);
+//                    "the x direction to be displayed as the maximum x diameter is " + Main.coordinateMaxWidth);
 //        }
-//        if (radiusY * 2 > Main.COORDINATE_MAX_HEIGHT) {
+//        if (radiusY * 2 > Main.coordinateMaxHeight) {
 //            throw new RadiusExceedingBoundaryException("The radius of the polygon (" + radiusY + ") was too large in" +
-//                    " the y direction to be displayed as the maximum y diameter is " + Main.COORDINATE_MAX_HEIGHT);
+//                    " the y direction to be displayed as the maximum y diameter is " + Main.coordinateMaxHeight);
 //        }
         Node.resetNodeCounter(); // We need the nodes in each graph to be numbered from 0.
         // Create a graph to populate
@@ -95,8 +95,8 @@ public class GraphGenerator {
         double currentAngle = 0;
         while (currentAngle < maxRad) {
             // Generate the coordinate for this step
-            int x = (int) (radiusX * ELLIPSE_X_RADIUS_RATIO * Math.sin(currentAngle) + Main.COORDINATE_MAX_WIDTH/2);
-            int y = (int) (radiusY * ELLIPSE_Y_RADIUS_RATIO * Math.cos(currentAngle) + Main.COORDINATE_MAX_HEIGHT/2);
+            int x = (int) (radiusX * ELLIPSE_X_RADIUS_RATIO * Math.sin(currentAngle) + Main.coordinateMaxWidth /2);
+            int y = (int) (radiusY * ELLIPSE_Y_RADIUS_RATIO * Math.cos(currentAngle) + Main.coordinateMaxHeight /2);
             // We have divided by two to move the coordinate to the middle of the window ^ and away from the origin.
             Coordinate c = new Coordinate(x, y);
             /* Check that the node is not outside the coordinate space in either direction. If it is then set the
@@ -139,7 +139,7 @@ public class GraphGenerator {
                 * We need to regenerate a node without incrementing the node counter in the node class. */
                 Node.decrementNumNodes();
                 // If the plane is completely full, then we want to terminate.
-                if (nSet.getNodeSet().size() == Main.COORDINATE_MAX_WIDTH * Main.COORDINATE_MAX_HEIGHT) {
+                if (nSet.getNodeSet().size() == Main.coordinateMaxWidth * Main.coordinateMaxHeight) {
                     e.printStackTrace();
                 }
             }

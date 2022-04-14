@@ -1,6 +1,7 @@
 package com.alike.graphsystem;
 
 import com.alike.Main;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -44,6 +45,8 @@ public class CoordinateMover {
     public CoordinateMover(ArrayList<Coordinate> coordinates, int speed) {
         setCoordinates(coordinates);
         setMovementSpeed(speed);
+        // Populate the velocities with random vectors, they can be overwritten.
+        coordinateVelocities = Vector.randomVectors(coordinates.size(), movementSpeed);
     }
 
     /**
@@ -57,14 +60,11 @@ public class CoordinateMover {
      * Moves each coordinate in @code{coordinates} by their value in @code{coordinateVelocities} (matched by index).
      */
     public void stepByVelocity() {
-        // If the list of velocities is not yet populated then initialise it and fill it with random velocities.
-        if (coordinateVelocities == null) {
-            coordinateVelocities = Vector.randomVectors(coordinates.size(), movementSpeed);
-        }
         // Start the movement
         for (int i = 0; i < coordinates.size(); i++) { // Move each coordinate
             moveCoordinateByAVector(coordinates.get(i), coordinateVelocities[i]);
         }
+
     }
 
     /**
@@ -96,7 +96,7 @@ public class CoordinateMover {
             for (int x = 0; x < v.getX(); x++) {
                 moveCoordinateAStep(c, Direction.RIGHT); // Increment x (move it right).
                 // If we hit the right wall then we need to invert the velocity's x component and stop.
-                if (c.getX() >= Main.COORDINATE_MAX_WIDTH) {
+                if (c.getX() >= Main.coordinateMaxWidth) {
                     v.invertX();
                     break;
                 }
@@ -116,11 +116,15 @@ public class CoordinateMover {
             for (int y = 0; y < v.getY(); y++) {
                 moveCoordinateAStep(c, Direction.DOWN); // Increment y (move it down).
                 // If we hit the bottom wall then we need to invert the velocity's y component and skip.
-                if (c.getY() >= Main.COORDINATE_MAX_HEIGHT) {
+                if (c.getY() >= Main.coordinateMaxHeight) {
                     v.invertY();
                     break;
                 }
             }
+        }
+        Pair<Boolean, Vector> outOfBoundsRes = outOfBounds(c);
+        if (outOfBoundsRes.getKey()) {
+            moveCoordinateByAVector(c, outOfBoundsRes.getValue());
         }
     }
 
@@ -135,6 +139,10 @@ public class CoordinateMover {
             // Choose a random Direction by choosing a random index and move the coordinate in that Direction.
             Direction dir = possibleDirections[rand.nextInt(possibleDirections.length)];
             moveCoordinateAStep(coordinate, dir);
+            Pair<Boolean, Vector> outOfBoundsRes = outOfBounds(coordinate);
+            if (outOfBoundsRes.getKey()) {
+                moveCoordinateByAVector(coordinate, outOfBoundsRes.getValue());
+            }
         }
         if (speed != 0) {
             stepRandomly(speed - 1);
@@ -156,7 +164,7 @@ public class CoordinateMover {
      * @return boolean: True if the coordinate is touching the top edge.
      */
     private boolean coordinateTouchingBottomEdge(Coordinate coordinate) {
-        return coordinate.getY() >= Main.COORDINATE_MAX_HEIGHT;
+        return coordinate.getY() >= Main.coordinateMaxHeight;
     }
 
     /**
@@ -174,7 +182,7 @@ public class CoordinateMover {
      * @return boolean: True if the coordinate is touching the right edge of the coordinate space.
      */
     private boolean coordinateTouchingRightEdge(Coordinate coordinate) {
-        return coordinate.getX() >= Main.COORDINATE_MAX_WIDTH;
+        return coordinate.getX() >= Main.coordinateMaxWidth;
     }
 
 
@@ -208,7 +216,7 @@ public class CoordinateMover {
             possibleDirections = new Direction[]{Direction.NONE, Direction.RIGHT, Direction.DOWNRIGHT, Direction.DOWN, Direction.DOWN_LEFT, Direction.LEFT};
         // Right edge check
         } else if (coordinateTouchingRightEdge(c)) {
-            possibleDirections = new Direction[]{Direction.NONE, Direction.UP, Direction.DOWN, Direction.DOWN_LEFT, Direction.RIGHT, Direction.UPRIGHT};
+            possibleDirections = new Direction[]{Direction.NONE, Direction.UP, Direction.DOWN, Direction.DOWN_LEFT, Direction.LEFT, Direction.UP_LEFT};
         // Bottom edge check
         } else if (coordinateTouchingBottomEdge(c)) {
             possibleDirections = new Direction[]{Direction.NONE, Direction.UP, Direction.UPRIGHT, Direction.RIGHT, Direction.LEFT, Direction.UP_LEFT};
@@ -223,9 +231,9 @@ public class CoordinateMover {
     }
 
     /**
-     * Shifts an input coordinate in one unit in a given Direction.
-     * @param c The coordinate to adjust.
-     * @param direction The Direction in which to adjust the coordinate.
+     * Shifts an input coordinate one unit in a given Direction.
+     * @param c The coordinate to move.
+     * @param direction The Direction in which to move the coordinate 1 unit.
      */
     private void moveCoordinateAStep(Coordinate c, Direction direction) {
         switch(direction) {
@@ -285,5 +293,32 @@ public class CoordinateMover {
      */
     public Vector[] getCoordinateVelocities() {
         return this.coordinateVelocities;
+    }
+
+    /**
+     * Returns whether the input coordinate is out of bounds.
+     * @param c The coordinate to check for bounding.
+     * @return boolean True if the coordinate is out of bounds.
+     */
+    private Pair<Boolean, Vector> outOfBounds(Coordinate c) {
+        Vector v = new Vector(0,0);
+        boolean b = false;
+        // If outOfBounds in x direction.
+        if (c.getX() > Main.coordinateMaxWidth) {
+            b = true;
+            v.setX(Main.coordinateMaxWidth - c.getX()) ;
+        } else if (c.getX() < 0) {
+            b = true;
+            v.setX(c.getX() * -1); // To move back to 0 x
+        }
+        // If out of bounds in y direction.
+        if (c.getY() > Main.coordinateMaxHeight) {
+            b = true;
+            v.setY(Main.coordinateMaxHeight - c.getY());
+        } else if (c.getY() < 0) {
+            b = true;
+            v.setY(c.getY() * -1);
+        }
+        return new Pair<>(b, v);
     }
 }

@@ -214,8 +214,8 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      */
     private void validateCoordinateSpaceIsSquareOfSideLenPowerOf2() {
         // Check that we are running this solver in a square context with a side length or a n^2
-        int w = Main.COORDINATE_MAX_WIDTH;
-        int h = Main.COORDINATE_MAX_HEIGHT;
+        int w = (int) Main.coordinateMaxWidth;
+        int h = (int) Main.coordinateMaxHeight;
         if (h != w || (!isPowerOfTwo(h)) ) { // We don't need to check both for power of two since they should be equal
             try {
                 throw new NonSquareCanvasException("Canvas must be a square of side lengths of power of 2, the received " +
@@ -234,7 +234,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
         for (int i = 0; i < numCorners; i++) {
             curveCoordinates[i] = getHilbertCorner(i); // Get & insert coordinates for each corner
             // Change it from 0, 1 format to fit out window.
-            float len = (float) Main.COORDINATE_MAX_WIDTH / N;
+            float len = (float) Main.coordinateMaxWidth / N;
             curveCoordinates[i].mult(len);
             // Moves it to the middle - good for animator
             // curveCornerCoordinates[i].add(len/2, len/2);
@@ -272,9 +272,9 @@ public class HilbertFractalCurveSolver implements StaticSolver {
          *  deduce our order given we know how many pixels we need to fill.
          *  i.e. width^2 = (2^order)^2
          *  i.e. width = 2^order */
-        setOrder((int) (Math.log(Main.COORDINATE_MAX_WIDTH)/Math.log(2))); // Java has no log2(x)
+        setOrder((int) (Math.log(Main.coordinateMaxWidth)/Math.log(2))); // Java has no log2(x)
         // We also know that N is our side length given that N = 2 ^ order
-        setN(Main.COORDINATE_MAX_WIDTH);
+        setN((int) Main.coordinateMaxWidth);
         setNumCorners((int) Math.pow(getN(), 2));
     }
 }
