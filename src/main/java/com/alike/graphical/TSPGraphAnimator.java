@@ -84,6 +84,7 @@ public class TSPGraphAnimator extends AnimationTimer {
     // white = Color.rgb(240, 240, 240);  --Pure white is too bright
     // leaf green = Color.rgb(77, 170, 81);
 
+    private int hue = 0;
 
     /**
      * Used to initialise a TSPGraphAnimator object.
@@ -174,7 +175,9 @@ public class TSPGraphAnimator extends AnimationTimer {
             drawEdge(edge);
         }
         // Design nodes
-        graphicsContext.setFill(TSPGraphAnimator.NODE_COLOR);
+        Color c = Color.hsb(hue % 360, 1,1);
+        hue++;
+        graphicsContext.setFill(c);
         graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
         graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
         // graphicsContext.setLineDashes(); // Turns of dotted lines when outlining nodes
