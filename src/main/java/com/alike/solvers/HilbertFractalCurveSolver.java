@@ -43,9 +43,9 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     private int numCorners = (int) Math.pow(N, 2); // Where n is 2^order.
 
     /**
-     * The series of corners in the curve.
+     * The series of coordinates in the curve.
      */
-    private Coordinate[] curveCornerCoordinates; // Don't initialise yet, as its usually very large.
+    private Coordinate[] curveCoordinates; // Don't initialise yet, as its usually very large.
 
     /**
      * The object in charge of recording time in this class.
@@ -120,7 +120,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      */
     public ArrayList<Node> getNodesOrdered() throws NodeMissedException, HilbertCurveUnconstructedException {
 
-        if (curveCornerCoordinates == null || curveCornerCoordinates.length == 0) {
+        if (curveCoordinates == null || curveCoordinates.length == 0) {
             throw new HilbertCurveUnconstructedException("No curve constructed.");
         }
         // Find which nodes we want and put them in order according to the graph.
@@ -128,7 +128,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
 
         ArrayList<Node> nodesOrdered = new ArrayList<>();
         ArrayList<Node> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
-        for (Coordinate c : curveCornerCoordinates) {
+        for (Coordinate c : curveCoordinates) {
             for (int i = 0; i < nodes.size(); i++) {
                 Node n = nodes.get(i);
                 if (n.getCoordinate().match(c)) {
@@ -205,7 +205,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      * @return curveCornerCoordinates The value of the @code{curveCornerCoordinates} attribute.
      */
     public Coordinate[] getCornerCoordinates() {
-        return curveCornerCoordinates;
+        return curveCoordinates;
     }
 
     /**
@@ -230,12 +230,12 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      * Used to calculate the coordinates of every corner on our hilbert curve.
      */
     private void constructHilbertCurve() {
-        curveCornerCoordinates = new Coordinate[numCorners]; // Create space for them.
+        curveCoordinates = new Coordinate[numCorners]; // Create space for them.
         for (int i = 0; i < numCorners; i++) {
-            curveCornerCoordinates[i] = getHilbertCorner(i); // Get & insert coordinates for each corner
+            curveCoordinates[i] = getHilbertCorner(i); // Get & insert coordinates for each corner
             // Change it from 0, 1 format to fit out window.
             float len = (float) Main.COORDINATE_MAX_WIDTH / N;
-            curveCornerCoordinates[i].mult(len);
+            curveCoordinates[i].mult(len);
             // Moves it to the middle - good for animator
             // curveCornerCoordinates[i].add(len/2, len/2);
         }

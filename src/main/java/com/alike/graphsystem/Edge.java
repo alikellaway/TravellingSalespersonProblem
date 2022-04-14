@@ -2,11 +2,13 @@ package com.alike.graphsystem;
 
 import com.alike.customexceptions.EdgeToSelfException;
 
+import java.util.Comparator;
+
 /**
  * Used to link two TSPNodes together.
  * @author alike
  */
-public class Edge implements Comparable<Edge> {
+public class Edge implements Comparable<Edge>, Comparator<Edge> {
     /**
      * The node at which the edge starts (note: the edge does not start of finish, its just a naming convention).
      */
@@ -35,6 +37,11 @@ public class Edge implements Comparable<Edge> {
         setEndNode(endNode);
         setEdgeID(generateEdgeID(startNode, endNode));
     }
+
+    /**
+     * Constructs a new Edge that can be used as the comparator in list sorting.
+     */
+    public Edge() {}
 
     /**
      * Used to check whether this edge links the same two nodes as another edge.
@@ -147,5 +154,18 @@ public class Edge implements Comparable<Edge> {
     @Override
     public int compareTo(Edge otherEdge) {
         return Double.compare(this.getLength(), otherEdge.getLength());
+    }
+
+    /**
+     * Used to sort edges into order using their lengths.
+     * @param o1 The first edge.
+     * @param o2 The second edge.
+     * @return Returns the result of Double.compare() of the lengths.
+     */
+    @Override
+    public int compare(Edge o1, Edge o2) {
+        double l1 = o1.getLength();
+        double l2 = o2.getLength();
+        return Double.compare(l1, l2);
     }
 }

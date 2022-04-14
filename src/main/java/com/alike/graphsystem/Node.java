@@ -4,12 +4,13 @@ import com.alike.Main;
 import com.alike.customexceptions.NoClosestNodeException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Used to represent nodes (cities) in the TSP.
  * @author alike
  */
-public class Node {
+public class Node implements Comparator<Node> {
     /**
      * A record of the number of nodes initialised used to assign each node a unique ID.
      */
@@ -193,5 +194,16 @@ public class Node {
      */
     public static void decrementNumNodes() {
         numNodes--;
+    }
+
+    /**
+     * Used to sort nodes based on node ID.
+     * @param o1 The first node.
+     * @param o2 The second node.
+     * @return compare result from integer compare.
+     */
+    @Override
+    public int compare(Node o1, Node o2) {
+        return Integer.compare(o1.getNodeID(), o2.getNodeID());
     }
 }
