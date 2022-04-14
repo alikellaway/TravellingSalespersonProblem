@@ -102,7 +102,7 @@ public class Main extends Application {
             case HFC -> activeGraph = GraphGenerator.generateRandomGraph(100, false);
             case CA -> activeGraph = GraphGenerator.generateRandomGraph(101, false);
             case DNNS -> {
-                activeGraph = GraphGenerator.generateRandomGraph(4000, false);
+                activeGraph = GraphGenerator.generateRandomGraph(40000, false);
                 dactiveGraph = new DynamicGraph(activeGraph, true, true);
             }
             case DACO -> {

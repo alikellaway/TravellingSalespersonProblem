@@ -1,6 +1,5 @@
 package com.alike.graphical;
 
-import com.alike.Main;
 import com.alike.graphsystem.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -175,15 +174,12 @@ public class TSPGraphAnimator extends AnimationTimer {
             drawEdge(edge);
         }
         // Design nodes
-        Color c = Color.hsb(hue % 360, 1,1);
-        hue++;
-        graphicsContext.setFill(c);
-        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
-        graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
         // graphicsContext.setLineDashes(); // Turns of dotted lines when outlining nodes
         // Draw nodes
         for (Node node : graph.getNodeContainer().getNodeSet()) {
+            designNodesPolkaDot(node.getNodeID());
             drawNode(node);
+
         }
         // Number nodes
         if (numbered) {
@@ -192,6 +188,50 @@ public class TSPGraphAnimator extends AnimationTimer {
                 graphicsContext.fillText(Integer.toString(node.getNodeID()), node.getX(), node.getY() - 2);
             }
         }
+    }
+
+    /**
+     * Sets the colour of nodes to be the same colour at once and fades around the rainbow (place outside the draw node
+     * loop).
+     */
+    private void designNodesRainbowFade() {
+        Color c = Color.hsb(hue % 360, 1,1);
+        hue++;
+        graphicsContext.setFill(c);
+        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
+        graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
+    }
+
+    /**
+     * Sets the colour of the nodes to be a constant solid colour (place outside the draw node loop).
+     */
+    private void designNodesSolidColour() {
+        graphicsContext.setFill(NODE_COLOR);
+        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
+        graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
+    }
+
+    /**
+     * Sets each node to be a different colour base on its node ID (place inside the drawNode loop).
+     * @param nodeID The node ID we are setting the colour of.
+     */
+    private void designNodesPolkaDot(int nodeID) {
+        Color c = Color.hsb(nodeID % 360, 1,1);
+        graphicsContext.setFill(c);
+        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
+        graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
+    }
+
+    /**
+     * Sets the colour of the node to be an absolutely crazy rainbow (Flashing lights!) Place outside the loop with
+     * a "hue++" inside the loop.
+     */
+    private void designNodesRainbowSolid() {
+        // Note need to add hue++ in the node drawing loop.
+        Color c = Color.hsb(hue %360, 1, 1);
+        graphicsContext.setFill(c);
+        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
+        graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
     }
 
     /**
