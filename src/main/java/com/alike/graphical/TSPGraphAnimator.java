@@ -7,8 +7,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
  * Class runs at frame rate and views the graph object input during construction and then updates the canvas object
  * input during construction to represent what the graph looks like in that during that moment. This is not synced with
@@ -165,8 +163,7 @@ public class TSPGraphAnimator extends AnimationTimer {
         graphicsContext.setLineWidth(LINE_WIDTH);
         // graphicsContext.setLineDashes(5, 10); // Set lines to dotted
         // Draw lines
-        CopyOnWriteArrayList<Edge> edges = graph.getEdgeContainer().getEdgeSet();
-        for (Edge edge : edges) {
+        for (Edge edge : graph.getEdgeContainer().getEdgeSet()) {
             drawEdge(edge);
         }
         // Design nodes
@@ -194,10 +191,8 @@ public class TSPGraphAnimator extends AnimationTimer {
     private void drawEdge(Edge edge) {
         Coordinate start = edge.getStartNode().getCoordinate();
         Coordinate end = edge.getEndNode().getCoordinate();
-        Coordinate tempStart = new Coordinate(start.getX(), start.getY());
-        Coordinate tempEnd = new Coordinate(end.getX(), end.getY());
-        adjustCoordinateToCentreNode(tempStart);
-        adjustCoordinateToCentreNode(tempEnd);
+        Coordinate tempStart = getCoordinateAdjustedForCentreNode(start);
+        Coordinate tempEnd = getCoordinateAdjustedForCentreNode(end);
         graphicsContext.strokeLine(tempStart.getX(), tempStart.getY(), tempEnd.getX(), tempEnd.getY());
     }
 
@@ -212,12 +207,12 @@ public class TSPGraphAnimator extends AnimationTimer {
     }
 
     /**
-     * Used to adjust coordinates of edges so that they appear to end and start in the middle of drawn nodes.
-     * @param c The coordinate to adjust.
+     * Returns a new coordinate with the x and y values increased by a node radius.
+     * @param cIn The coordinate to adjust.
      */
-    private static void adjustCoordinateToCentreNode(Coordinate c) {
-        c.setX(c.getX() + TSPGraphAnimator.NODE_RADIUS);
-        c.setY(c.getY() + TSPGraphAnimator.NODE_RADIUS);
+    private static Coordinate getCoordinateAdjustedForCentreNode(Coordinate cIn) {
+        return new Coordinate(cIn.getX() + NODE_RADIUS, cIn.getY() + NODE_RADIUS);
+
     }
 
     /**
