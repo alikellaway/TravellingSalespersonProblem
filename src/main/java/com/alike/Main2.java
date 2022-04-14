@@ -38,18 +38,18 @@ public class Main2 {
 //            System.out.println(b);
 //        }
         // Create some new graphs and write them in.
-        GraphWriter gw = new GraphWriter();
-        gw.clearFile();
-        for (int i = 3; i <= 1003; i++) {
-            DynamicGraph g = GraphGenerator.generateRandomDynamicGraph(i, 10, false, false);
-            gw.writeGraph(g);
-        }
-        gw.close();
+//        GraphWriter gw = new GraphWriter();
+//        gw.clearFile();
+//        for (int i = 3; i <= 1003; i++) {
+//            DynamicGraph g = GraphGenerator.generateRandomDynamicGraph(i, 10, false, false);
+//            gw.writeGraph(g);
+//        }
+//        gw.close();
 
         // Set some test parameters.
         int numSolves = 100;
-        int delayPerSovle = 30;
-        int nodeSpeed = 3;
+        int delayPerSolve = 20;
+        int nodeSpeed = 6; // Original speed was 3 over 30ms, however 9 over 10ms is the same result but in less time.
         boolean randomMovement = false;
         boolean velocityMovement = true;
 
@@ -60,28 +60,30 @@ public class Main2 {
 
         // Test and write in hilbert curve.
         System.out.println("Commencing hilbert curve test.");
-        DynamicTestSuiteResult hilbertRestuls = dts.testSolver(new DynamicHilbertFractalCurveSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+        DynamicTestSuiteResult hilbertRestuls = dts.testSolver(new DynamicHilbertFractalCurveSolver(), numSolves, delayPerSolve, nodeSpeed, randomMovement, velocityMovement);
         System.out.println("Hilbert: " + hilbertRestuls.getAverageAvgRoute() + " in " + hilbertRestuls.getAverageAvgTime());
         dtsrw.writeResults(hilbertRestuls);
+        dtsrw.close(); // Write the results in so progress is saved.
         Runtime.getRuntime().gc();
 
         // Test and write in Acos
+        dtsrw = new DynamicTestSuiteResultWriter();
         System.out.println("Commencing ACO test.");
         DynamicAntColonyOptimisationSolver dacos = new DynamicAntColonyOptimisationSolver();
-        DynamicTestSuiteResult antResults = dts.testSolver(dacos, numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+        DynamicTestSuiteResult antResults = dts.testSolver(dacos, numSolves, delayPerSolve, nodeSpeed, randomMovement, velocityMovement);
         System.out.println("ACO: " + antResults.getAverageAvgRoute() + " in " + antResults.getAverageAvgTime());
         dacos.kill(); // Needs to be killed to shutdown the thread pool
         dtsrw.writeResults(antResults);
+        dtsrw.close();
         Runtime.getRuntime().gc();
 
         // Test and write in nns
+        dtsrw = new DynamicTestSuiteResultWriter();
         System.out.println("Commencing NNS test.");
-        DynamicTestSuiteResult nnsResults = dts.testSolver(new DynamicNearestNeighbourSolver(), numSolves, delayPerSovle, nodeSpeed, randomMovement, velocityMovement);
+        DynamicTestSuiteResult nnsResults = dts.testSolver(new DynamicNearestNeighbourSolver(), numSolves, delayPerSolve, nodeSpeed, randomMovement, velocityMovement);
         System.out.println("NNS: " + nnsResults.getAverageAvgRoute() + " in " + nnsResults.getAverageAvgTime());
         dtsrw.writeResults(nnsResults);
-        Runtime.getRuntime().gc();
-
-        // Close the test tools.
         dtsrw.close();
+        Runtime.getRuntime().gc();
     }
 }
