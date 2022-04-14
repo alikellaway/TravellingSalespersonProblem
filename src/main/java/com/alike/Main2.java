@@ -56,7 +56,7 @@ public class Main2 {
         // Initialise test tools.
         DynamicTestSuite dts = new DynamicTestSuite();
         DynamicTestSuiteResultWriter dtsrw = new DynamicTestSuiteResultWriter();
-        dtsrw.clearFile();
+//        dtsrw.clearFile();
 
         // Test and write in hilbert curve.
         System.out.println("Commencing hilbert curve test.");
