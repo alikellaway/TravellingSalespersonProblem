@@ -8,6 +8,8 @@ import com.alike.solvertestsuite.SolverOutput;
 import com.alike.time.Stopwatch;
 import com.alike.graphsystem.StaticGraph;
 
+import java.util.concurrent.TimeUnit;
+
 public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     /**
      * The dynamic graph through which graph interaction will occur.
@@ -32,7 +34,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     /**
      * The number of ants sent per solve of the dynamic graph.
      */
-    private int numAntsPerSolve = 30;
+    private int numAntsPerSolve = 20;
 
     /**
      * The object used for recording execution times in this class.
@@ -182,6 +184,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      */
     public void kill() {
         this.running = false;
+        acos.processAnts();
         acos.getExecutorService().shutdownNow();
     }
 }
