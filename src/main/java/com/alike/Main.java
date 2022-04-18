@@ -2,11 +2,12 @@ package com.alike;
 
 import com.alike.customexceptions.*;
 import com.alike.graphsystem.DynamicGraph;
+import com.alike.graphsystem.Graph;
 import com.alike.solvers.DynamicAntColonyOptimisationSolver;
 import com.alike.solvers.DynamicHilbertFractalCurveSolver;
 import com.alike.solvers.DynamicNearestNeighbourSolver;
 import com.alike.graphical.HilbertFractalCurveAnimator;
-import com.alike.graphical.TSPGraphAnimator;
+import com.alike.graphical.GraphAnimator;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvers.*;
 import com.alike.graphsystem.GraphGenerator;
@@ -28,7 +29,7 @@ public class Main extends Application {
     /**
      * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
      */
-    private static final Mode mode = Mode.DNNS;
+    private static final Mode mode = Mode.NODE_SHOW;
 
     /**
      * The maximum value x value that coordinates are allowed to be given.
@@ -43,12 +44,12 @@ public class Main extends Application {
     /**
      * The maximum width value the window and canvas can be given.
      */
-    public static int windowMaxWidth/* = (int) Math.ceil(coordinateMaxWidth + TSPGraphAnimator.NODE_RADIUS*2)*/;
+    public static int windowMaxWidth/* = (int) Math.ceil(coordinateMaxWidth + GraphAnimator.NODE_RADIUS*2)*/;
 
     /**
      * The maximum height value the window and canvas can be given.
      */
-    public static int windowMaxHeight/*= (int) Math.ceil(coordinateMaxHeight + TSPGraphAnimator.NODE_RADIUS*2)*/;
+    public static int windowMaxHeight/*= (int) Math.ceil(coordinateMaxHeight + GraphAnimator.NODE_RADIUS*2)*/;
 
     /**
      * The name of the window.
@@ -89,7 +90,8 @@ public class Main extends Application {
         CA, // Solve statically with Christofide's algorithm (non-functional).
         DNNS, // Solve dynamically with nearest neighbour algorithm.
         DACO, // Solve dynamically with ant colony optimisation algorithm.
-        DHFC // Solve dynamically with hilbert fractal curve heuristic.
+        DHFC, // Solve dynamically with hilbert fractal curve heuristic.
+        NODE_SHOW // Used to display only moving nodes.
 
     }
 
@@ -111,6 +113,10 @@ public class Main extends Application {
             }
             case DHFC -> {
                 activeGraph = GraphGenerator.generateRandomGraph(310, false);
+                dactiveGraph = new DynamicGraph(activeGraph, false, true);
+            }
+            case NODE_SHOW -> {
+                activeGraph = GraphGenerator.generateRandomGraph(3000, false);
                 dactiveGraph = new DynamicGraph(activeGraph, false, true);
             }
         }
@@ -162,9 +168,7 @@ public class Main extends Application {
             case DNNS -> {
                 Thread dnnsT = new Thread(() -> {
                     dnns = new DynamicNearestNeighbourSolver(dactiveGraph);
-//                    dnns.startSolving(30);
-                    dactiveGraph.wake();
-                    dactiveGraph.move();
+                    dnns.startSolving(30);
                 });
                 dnnsT.start();
             }
@@ -174,6 +178,7 @@ public class Main extends Application {
                     dacos = new DynamicAntColonyOptimisationSolver(dactiveGraph);
                     dacos.startSolving(10);
                 });
+
                 dacosT.start();
             }
             /* Dynamic Hilbert Curve solver. */
@@ -183,6 +188,14 @@ public class Main extends Application {
                     dhfcs.startSolving(10);
                 });
                 dhcsT.start();
+            }
+            /* Can use this to demonstrate the node movement system. */
+            case NODE_SHOW -> {
+                Thread nsT = new Thread(() -> {
+                    dactiveGraph.wake();
+                    dactiveGraph.move();
+                });
+                nsT.start();
             }
         }
 
@@ -240,14 +253,17 @@ public class Main extends Application {
                 dnns.kill();
                 dactiveGraph.kill();
             }
+            case NODE_SHOW -> {
+                dactiveGraph.kill();
+            }
         }
     }
 
     @Override
     public void start(Stage stage) throws InterruptedException, NonSquareCanvasException, InvalidGraphException, NodeSuperimpositionException {
         // TODO: add a speed slider so we can change the speed of the nodes.
-        setWindowMaxHeight(coordinateMaxHeight + TSPGraphAnimator.NODE_RADIUS * 2);
-        setWindowMaxWidth(coordinateMaxWidth + TSPGraphAnimator.NODE_RADIUS * 2);
+        setWindowMaxHeight(coordinateMaxHeight + GraphAnimator.NODE_RADIUS * 2);
+        setWindowMaxWidth(coordinateMaxWidth + GraphAnimator.NODE_RADIUS * 2);
         // Give the name to the window.
         stage.setTitle(stageTitle);
         Group root = new Group();
@@ -261,7 +277,7 @@ public class Main extends Application {
         root.getChildren().add(curveCanvas);
         root.getChildren().add(graphCanvas);
         // Start the graph drawer thread.
-        TSPGraphAnimator graphDrawer = new TSPGraphAnimator(stage, graphCanvas, activeGraph,1, false);
+        GraphAnimator graphDrawer = new GraphAnimator(stage, graphCanvas, activeGraph,1, false);
         graphDrawer.start();
         // Start the curve drawer thread (if needed).
         if (mode == Mode.DHFC) {
@@ -288,13 +304,13 @@ public class Main extends Application {
     }
 
     private static void setWindowMaxWidth(int newWidth) {
-        coordinateMaxWidth = newWidth - (TSPGraphAnimator.NODE_RADIUS * 4);
+        coordinateMaxWidth = newWidth - (GraphAnimator.NODE_RADIUS * 4);
         windowMaxWidth = newWidth;
     }
 
 
     private static void setWindowMaxHeight(int newHeight) {
-        coordinateMaxHeight = Math.max(25, (newHeight - (TSPGraphAnimator.NODE_RADIUS * 6)));
+        coordinateMaxHeight = Math.max(25, (newHeight - (GraphAnimator.NODE_RADIUS * 6)));
         windowMaxHeight = newHeight;
     }
 }

@@ -159,7 +159,8 @@ public class DynamicGraph implements Graph {
     }
 
     /**
-     * Sets the value of the @code{delayPerStep} attribute to a new value.
+     * Sets the value of the @code{delayPerStep} attribute to a new value. This is the pause between each tick or
+     * movement of nodes on this graph.
      * @param delayPerStep The new value to assign to the @code{delayPerStep} attribute.
      */
     public void setDelayPerStep(int delayPerStep) {

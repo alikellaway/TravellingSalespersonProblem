@@ -1,6 +1,5 @@
 package com.alike.graphical;
 
-import com.alike.Main;
 import com.alike.customexceptions.NonSquareCanvasException;
 import com.alike.solvers.HilbertFractalCurveSolver;
 import com.alike.graphsystem.Coordinate;
@@ -123,8 +122,8 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      * @throws NonSquareCanvasException Thrown if the parameter canvas is not a square and of side length of power of 2.
      */
     public void checkCanvas(Canvas canvas) throws NonSquareCanvasException {
-        double h = canvas.getHeight() - TSPGraphAnimator.NODE_RADIUS*2;
-        double w = canvas.getWidth() - TSPGraphAnimator.NODE_RADIUS*2;
+        double h = canvas.getHeight() - GraphAnimator.NODE_RADIUS*2;
+        double w = canvas.getWidth() - GraphAnimator.NODE_RADIUS*2;
         if (h != w || (!isPowerOfTwo(h)) ) { // We don't need to check both for power of two since they should be equal
             throw new NonSquareCanvasException("Canvas must be a square of side lengths of power of 2, the received " +
                     "canvas was of dimensions (w,h): (" + canvas.getWidth() + ", " + canvas.getHeight() );

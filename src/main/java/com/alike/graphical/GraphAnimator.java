@@ -13,7 +13,7 @@ import javafx.stage.Stage;
  * solution classes - it runs simultaneously.
  * @author alike
  */
-public class TSPGraphAnimator extends AnimationTimer {
+public class GraphAnimator extends AnimationTimer {
 
     /**
      * The scene in which the graph is being animated (reference is used to update the title of the scene).
@@ -86,14 +86,14 @@ public class TSPGraphAnimator extends AnimationTimer {
     private int hue = 0;
 
     /**
-     * Used to initialise a TSPGraphAnimator object.
+     * Used to initialise a GraphAnimator object.
      * @param stage The stage on which the @code{canvas} will be animated.
      * @param canvas The canvas on which the @code{graph} will be animated.
      * @param graph The graph that will be animated.
      * @param editsPerRedraw The number of edits accrued before the graph is redrawn.
      * @param drawNodeIDs Whether or not the node numbers should be displayed in the drawing.
      */
-    public TSPGraphAnimator(Stage stage, Canvas canvas, StaticGraph graph, int editsPerRedraw, boolean drawNodeIDs) {
+    public GraphAnimator(Stage stage, Canvas canvas, StaticGraph graph, int editsPerRedraw, boolean drawNodeIDs) {
         setGraph(graph);
         setCanvas(canvas);
         setGraphicsContext(canvas.getGraphicsContext2D());
@@ -198,7 +198,7 @@ public class TSPGraphAnimator extends AnimationTimer {
         Color c = Color.hsb(hue % 360, 1,1);
         hue++;
         graphicsContext.setFill(c);
-        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
+        graphicsContext.setStroke(GraphAnimator.NODE_OUTLINE_COLOR);
         graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
     }
 
@@ -207,7 +207,7 @@ public class TSPGraphAnimator extends AnimationTimer {
      */
     private void designNodesSolidColour() {
         graphicsContext.setFill(NODE_COLOR);
-        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
+        graphicsContext.setStroke(GraphAnimator.NODE_OUTLINE_COLOR);
         graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
     }
 
@@ -218,7 +218,7 @@ public class TSPGraphAnimator extends AnimationTimer {
     private void designNodesPolkaDot(int nodeID) {
         Color c = Color.hsb(nodeID % 360, 1,1);
         graphicsContext.setFill(c);
-        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
+        graphicsContext.setStroke(GraphAnimator.NODE_OUTLINE_COLOR);
         graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
     }
 
@@ -230,7 +230,7 @@ public class TSPGraphAnimator extends AnimationTimer {
         // Note need to add hue++ in the node drawing loop.
         Color c = Color.hsb(hue %360, 1, 1);
         graphicsContext.setFill(c);
-        graphicsContext.setStroke(TSPGraphAnimator.NODE_OUTLINE_COLOR);
+        graphicsContext.setStroke(GraphAnimator.NODE_OUTLINE_COLOR);
         graphicsContext.setLineWidth(NODE_OUTLINE_WIDTH);
     }
 
