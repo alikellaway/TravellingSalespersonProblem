@@ -29,7 +29,7 @@ public class Main extends Application {
     /**
      * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
      */
-    private static final Mode mode = Mode.NODE_SHOW;
+    private static final Mode mode = Mode.CURVE_DRAWER;
 
     /**
      * The maximum value x value that coordinates are allowed to be given.
@@ -91,8 +91,8 @@ public class Main extends Application {
         DNNS, // Solve dynamically with nearest neighbour algorithm.
         DACO, // Solve dynamically with ant colony optimisation algorithm.
         DHFC, // Solve dynamically with hilbert fractal curve heuristic.
-        NODE_SHOW // Used to display only moving nodes.
-
+        NODE_SHOW, // Used to display only moving nodes.
+        CURVE_DRAWER
     }
 
     public static void main(String[] args) throws InvalidGraphException, NodeSuperimpositionException, IOException, RadiusExceedingBoundaryException {
@@ -197,6 +197,9 @@ public class Main extends Application {
                 });
                 nsT.start();
             }
+            case CURVE_DRAWER -> {
+                hfcs = new HilbertFractalCurveSolver(5);
+            }
         }
 
         /* Example of using the test suite to test */
@@ -231,7 +234,7 @@ public class Main extends Application {
                     RepeatedFunctions.sleep(1);
                 }
             }
-            case HFC -> {
+            case HFC, CURVE_DRAWER -> {
                 while (hfcs == null) {
                     RepeatedFunctions.sleep(1);
                 }
@@ -277,18 +280,20 @@ public class Main extends Application {
         root.getChildren().add(curveCanvas);
         root.getChildren().add(graphCanvas);
         // Start the graph drawer thread.
-        GraphAnimator graphDrawer = new GraphAnimator(stage, graphCanvas, activeGraph,1, false);
-        graphDrawer.start();
+        if (mode != Mode.CURVE_DRAWER) {
+            GraphAnimator graphDrawer = new GraphAnimator(stage, graphCanvas, activeGraph,1, false);
+            graphDrawer.start();
+        }
         // Start the curve drawer thread (if needed).
         if (mode == Mode.DHFC) {
             HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(curveCanvas, dhfcs.getHfcs());
             curveDrawer.start();
-        } else if (mode == Mode.HFC) {
+        } else if (mode == Mode.HFC || mode == Mode.CURVE_DRAWER) {
             HilbertFractalCurveAnimator curveDrawer = new HilbertFractalCurveAnimator(curveCanvas, hfcs);
             curveDrawer.start();
         }
         // Change the size of the coordinate space if we change the size of the window (and its not curve based).
-        if (mode != Mode.HFC && mode != Mode.DHFC) {
+        if (mode != Mode.HFC && mode != Mode.DHFC && mode != Mode.CURVE_DRAWER) {
             stage.widthProperty().addListener((observable) -> {
                 setWindowMaxWidth((int) stage.getWidth());
                 graphCanvas.setWidth(windowMaxWidth);

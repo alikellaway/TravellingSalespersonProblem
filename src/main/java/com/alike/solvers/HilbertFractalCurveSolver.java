@@ -62,7 +62,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
         setGraph(graph);
         // Construct the curve.
         setValues();
-        constructHilbertCurve();
+        constructHilbertCurve(false);
     }
 
     /**
@@ -72,7 +72,19 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     public HilbertFractalCurveSolver() {
         validateCoordinateSpaceIsSquareOfSideLenPowerOf2();
         setValues();
-        constructHilbertCurve();
+        constructHilbertCurve(false);
+    }
+
+    /** Constructs a new @code{HilbertFractalCurveSolver} object without a graph, for the intention of using the object
+     * to construct a curve for drawing.
+     * @param order
+     */
+    public HilbertFractalCurveSolver(int order) {
+        validateCoordinateSpaceIsSquareOfSideLenPowerOf2();
+        setOrder(order);
+        setN((int) Math.pow(2, order));
+        setNumCorners((int) Math.pow(getN(), 2));
+        constructHilbertCurve(true);
     }
 
     /**
@@ -229,7 +241,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     /**
      * Used to calculate the coordinates of every corner on our hilbert curve.
      */
-    private void constructHilbertCurve() {
+    private void constructHilbertCurve(boolean centre) {
         curveCoordinates = new Coordinate[numCorners]; // Create space for them.
         for (int i = 0; i < numCorners; i++) {
             curveCoordinates[i] = getHilbertCorner(i); // Get & insert coordinates for each corner
@@ -237,7 +249,9 @@ public class HilbertFractalCurveSolver implements StaticSolver {
             float len = (float) Main.coordinateMaxWidth / N;
             curveCoordinates[i].mult(len);
             // Moves it to the middle - good for animator
-            // curveCornerCoordinates[i].add(len/2, len/2);
+            if (centre) {
+                 curveCoordinates[i].add(len/2, len/2);
+            }
         }
     }
 
