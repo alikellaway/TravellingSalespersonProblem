@@ -21,11 +21,17 @@ public class EdgeContainer {
     private int editCount;
 
     /**
+     * A recording of the combined length of all the edges in the container.
+     */
+    private double totalLength;
+
+    /**
      * Used to initialise a new empty @code{EdgeContainer} object.
      */
     public EdgeContainer() {
         edgeSet = new CopyOnWriteArrayList<>();
         editCount = 0;
+        totalLength = 0D;
     }
 
     /**
@@ -39,6 +45,7 @@ public class EdgeContainer {
         } else {
             edgeSet.add(e);
             editCount++;
+            totalLength += e.getLength();
         }
     }
 
@@ -50,6 +57,7 @@ public class EdgeContainer {
     public void remove(Edge e) {
         edgeSet.remove(e);
         editCount++;
+        totalLength -= e.getLength();
     }
 
     /**
@@ -110,15 +118,11 @@ public class EdgeContainer {
     }
 
     /**
-     * Calculates the numCorners length of the edges currently within the container.
-     * @return totalLenght The numCorners length of the edges in the container.
+     * Returns the value of the @code{totalLength} attribute.
+     * @return totalLength The value of the @code{totalLength} attribute.
      */
     public double getTotalLength() {
-        double totalLength = 0;
-        for (Edge e : edgeSet) {
-            totalLength += e.getLength();
-        }
-        return totalLength;
+        return this.totalLength;
     }
 
     /**
