@@ -59,7 +59,8 @@ public class Main extends Application {
     /**
      * The color of the window background.
      */
-    private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
+    private static final Color BACK_GROUND_COLOR = Color.rgb(255,255,255);
+    // Color.rgb(35,35,35); -- Nice grey darkmode.
 
     /**
      * A reference to the graph that is currently being solved.
@@ -198,7 +199,7 @@ public class Main extends Application {
                 nsT.start();
             }
             case CURVE_DRAWER -> {
-                hfcs = new HilbertFractalCurveSolver(5);
+                hfcs = new HilbertFractalCurveSolver(6);
             }
         }
 

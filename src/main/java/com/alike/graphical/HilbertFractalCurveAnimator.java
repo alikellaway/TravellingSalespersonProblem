@@ -81,7 +81,8 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
             // Design the line - vary the color with the path completion
             int hue = map(period*i, path.length);
 //            gc.setStroke(Color.hsb(hue, 1, 1, 2.0/hfcs.getOrder()));
-            gc.setStroke(Color.grayRgb(hue, 0.5D));
+//            gc.setStroke(Color.grayRgb(hue, 0.5D));
+            gc.setStroke(Color.rgb(255,0,0, 1));
             try { // Draw the line
                 gc.strokeLine(path[i].getX(), path[i].getY(), path[i - 1].getX(), path[i - 1].getY());
             } catch (IndexOutOfBoundsException ignored) {
@@ -93,8 +94,8 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         if (drawLimit > path.length) {
             drawLimit = path.length;
         }
-        period++;
-        period = (int) Math.pow(period, period);
+//        period++;
+//        period = (int) Math.pow(period, period);
     }
 
     /**

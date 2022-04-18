@@ -76,7 +76,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     }
 
     /** Constructs a new @code{HilbertFractalCurveSolver} object without a graph, for the intention of using the object
-     * to construct a curve for drawing.
+     * to construct a curve for drawing16
      * @param order
      */
     public HilbertFractalCurveSolver(int order) {
@@ -85,6 +85,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
         setN((int) Math.pow(2, order));
         setNumCorners((int) Math.pow(getN(), 2));
         constructHilbertCurve(true);
+        System.out.println(numCorners);
     }
 
     /**
