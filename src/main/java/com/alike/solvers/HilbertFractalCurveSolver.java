@@ -53,6 +53,16 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     private final Stopwatch stopwatch = new Stopwatch();
 
     /**
+     * The set of coordinates pertaining to the order 1 curve.
+     */
+    Coordinate[] orderOneCurve = {
+            new Coordinate(0,0),
+            new Coordinate(0,1),
+            new Coordinate(1,1),
+            new Coordinate(1,0)
+    };
+
+    /**
      * Used to construct a new @code{HilbertFractalCurveSolver} object.
      * @param graph The graph which we are solving.
      */
@@ -139,20 +149,20 @@ public class HilbertFractalCurveSolver implements StaticSolver {
         // Find which nodes we want and put them in order according to the graph.
         // We copy the node array here so that we can remove the node from the list once we've found it.
 
-        ArrayList<Node> nodesOrdered = new ArrayList<>();
         ArrayList<Node> nodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
+        ArrayList<Node> nodesInOrder = new ArrayList<>();
         for (Coordinate c : curveCoordinates) {
-            for (int i = 0; i < nodes.size(); i++) {
+            for (int i = nodes.size() - 1; i >= 0; i--) {
                 Node n = nodes.get(i);
                 if (n.getCoordinate().match(c)) {
-                    nodesOrdered.add(n);
+                    nodesInOrder.add(n);
                     nodes.remove(i); // Removing them as we go will speed it up as we advance
                     break; // Don't continue looping through the nodes if we found one.
                 }
             }
         }
         // Check to see if we missed nodes - if so throw an exception.
-        if (nodesOrdered.size() != graph.getNumNodes()) {
+        if (nodesInOrder.size() != graph.getNumNodes()) {
             StringBuilder sb = new StringBuilder("Node(s) missed: ");
             for (Node n : nodes) {
                 sb.append(n.toString()).append(", ");
@@ -160,8 +170,8 @@ public class HilbertFractalCurveSolver implements StaticSolver {
             sb.delete(sb.length()-2, sb.length()-1); // Remove the last comma
             throw new NodeMissedException(sb.toString());
         }
-        nodesOrdered.trimToSize();
-        return nodesOrdered;
+        nodesInOrder.trimToSize();
+        return nodesInOrder;
     }
 
     /**
@@ -171,14 +181,9 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      * @return c The coordinates of the i th step on the curve.
      */
     private Coordinate getHilbertCorner(int i) {
-        // This is order 1 (the simplest case)
-        Coordinate[] points = {new Coordinate(0,0),
-                               new Coordinate(0,1),
-                               new Coordinate(1,1),
-                               new Coordinate(1,0)};
         // Mask by 3 to find which quadrant the coordinate is in the order above.
         int index = i & 3; // Works by only caring about the last two bits of the number.
-        Coordinate c = points[index];
+        Coordinate c = orderOneCurve[index]; // This is order 1 (the simplest case)
         // As we go up, we need to continue to check the bits and shift across.
         for (int j = 1; j < order; j++) {
             int len = (int) Math.pow(2, j); // The relative length of this order curve
@@ -186,18 +191,18 @@ public class HilbertFractalCurveSolver implements StaticSolver {
             index = i & 3; // Mask by three again. (Think: which quadrant are we in this order?)
             // 0 and 2 remain the same, but 1 and 3 are swapped in the rotation
             if (index == 0) {
-                float temp = c.getX();
+                int temp = c.getX();
                 c.setX(c.getY());
-                c.setY((int) temp);
+                c.setY(temp);
             } else if (index == 1) {
                 c.setY(c.getY() + len);
             } else if (index == 2) {
                 c.setX(c.getX() + len);
                 c.setY(c.getY() + len);
             } else {
-                float temp = len - 1 - c.getX();
+                int temp = len - 1 - c.getX();
                 c.setX(len - 1 - c.getY());
-                c.setY((int) temp);
+                c.setY(temp);
                 c.setX(c.getX() + len);
             }
         }
