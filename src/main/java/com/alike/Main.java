@@ -113,7 +113,7 @@ public class Main extends Application {
                 dactiveGraph = new DynamicGraph(activeGraph,false, true);
             }
             case DHFC -> {
-                activeGraph = GraphGenerator.generateRandomGraph(250, false);
+                activeGraph = GraphGenerator.generateRandomGraph(25, false);
                 dactiveGraph = new DynamicGraph(activeGraph, false, true);
             }
             case NODE_SHOW -> {
