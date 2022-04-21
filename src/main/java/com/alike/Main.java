@@ -29,7 +29,7 @@ public class Main extends Application {
     /**
      * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
      */
-    private static final Mode mode = Mode.DNNS;
+    private static final Mode mode = Mode.DHFC;
 
     /**
      * The maximum value x value that coordinates are allowed to be given.
@@ -113,7 +113,7 @@ public class Main extends Application {
                 dactiveGraph = new DynamicGraph(activeGraph,false, true);
             }
             case DHFC -> {
-                activeGraph = GraphGenerator.generateRandomGraph(310, false);
+                activeGraph = GraphGenerator.generateRandomGraph(250, false);
                 dactiveGraph = new DynamicGraph(activeGraph, false, true);
             }
             case NODE_SHOW -> {
