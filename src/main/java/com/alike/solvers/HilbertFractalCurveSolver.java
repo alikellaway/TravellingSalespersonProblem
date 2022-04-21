@@ -55,7 +55,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     /**
      * The set of coordinates pertaining to the order 1 curve.
      */
-    Coordinate[] orderOneCurve = {
+    private final Coordinate[] orderOneCurve = {
             new Coordinate(0,0),
             new Coordinate(0,1),
             new Coordinate(1,1),
@@ -183,7 +183,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
     private Coordinate getHilbertCorner(int i) {
         // Mask by 3 to find which quadrant the coordinate is in the order above.
         int index = i & 3; // Works by only caring about the last two bits of the number.
-        Coordinate c = orderOneCurve[index]; // This is order 1 (the simplest case)
+        Coordinate c = orderOneCurve[index].copy(); // This is order 1 (the simplest case)
         // As we go up, we need to continue to check the bits and shift across.
         for (int j = 1; j < order; j++) {
             int len = (int) Math.pow(2, j); // The relative length of this order curve
