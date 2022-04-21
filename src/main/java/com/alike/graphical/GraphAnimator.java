@@ -170,14 +170,15 @@ public class GraphAnimator extends AnimationTimer {
             // graphicsContext.strokeLine(0, Main.coordinateMaxHeight, Main.coordinateMaxWidth, Main.coordinateMaxHeight);
 
         // Draw lines
+        // graphicsContext.setLineDashes(); // Turns of dotted lines when outlining nodes
         for (Edge edge : graph.getEdgeContainer().getEdgeSet()) {
             drawEdge(edge);
         }
         // Design nodes
-        // graphicsContext.setLineDashes(); // Turns of dotted lines when outlining nodes
+        designNodesSolidColour();
         // Draw nodes
         for (Node node : graph.getNodeContainer().getNodeSet()) {
-            designNodesPolkaDot(node.getNodeID());
+//            designNodesPolkaDot(node.getNodeID());
             drawNode(node);
 
         }

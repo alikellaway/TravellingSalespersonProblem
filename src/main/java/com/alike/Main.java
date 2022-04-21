@@ -29,7 +29,7 @@ public class Main extends Application {
     /**
      * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
      */
-    private static final Mode mode = Mode.CURVE_DRAWER;
+    private static final Mode mode = Mode.DNNS;
 
     /**
      * The maximum value x value that coordinates are allowed to be given.
@@ -59,7 +59,7 @@ public class Main extends Application {
     /**
      * The color of the window background.
      */
-    private static final Color BACK_GROUND_COLOR = Color.rgb(255,255,255);
+    private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
     // Color.rgb(35,35,35); -- Nice grey darkmode.
 
     /**
@@ -105,7 +105,7 @@ public class Main extends Application {
             case HFC -> activeGraph = GraphGenerator.generateRandomGraph(100, false);
             case CA -> activeGraph = GraphGenerator.generateRandomGraph(101, false);
             case DNNS -> {
-                activeGraph = GraphGenerator.generateRandomGraph(40000, false);
+                activeGraph = GraphGenerator.generateRandomGraph(12, false);
                 dactiveGraph = new DynamicGraph(activeGraph, true, true);
             }
             case DACO -> {
@@ -179,7 +179,6 @@ public class Main extends Application {
                     dacos = new DynamicAntColonyOptimisationSolver(dactiveGraph);
                     dacos.startSolving(10);
                 });
-
                 dacosT.start();
             }
             /* Dynamic Hilbert Curve solver. */
