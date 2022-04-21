@@ -58,13 +58,13 @@ public class GraphAnimator extends AnimationTimer {
     /**
      * The color of the nodes in the animations.
      */
-    private static final Color NODE_COLOR = Color.rgb(199, 84, 80);
+    private static final Color NODE_COLOR = Color.rgb(204,120,50);
     // nice blue = Color.rgb(62, 134, 180);
     // nice green = Color.rgb(77, 170, 81);
     // twig brown = Color.rgb(138, 99, 85);
     // bee yellow = Color.rgb(247, 186, 17);
     // Neat purple = Color.rgb(88, 0, 255);
-
+    // Nice orange = Color.rgb(204,120,50);
     /**
      * The colour of the outline of the node.
      */
@@ -78,7 +78,7 @@ public class GraphAnimator extends AnimationTimer {
     /**
      * The color of the lines representing the edges of the graph in the animations.
      */
-    private static final Color LINE_COLOR = Color.rgb(247, 186, 17);
+    private static final Color LINE_COLOR = Color.rgb(98, 10, 255);
     // nice red = Color.rgb(199, 84, 80);
     // white = Color.rgb(240, 240, 240);  --Pure white is too bright
     // leaf green = Color.rgb(77, 170, 81);
