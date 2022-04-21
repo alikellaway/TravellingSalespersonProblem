@@ -3,11 +3,15 @@ package com.alike.solvers;
 import com.alike.customexceptions.EdgeSuperimpositionException;
 import com.alike.customexceptions.EdgeToSelfException;
 import com.alike.customexceptions.NoClosestNodeException;
+import com.alike.customexceptions.NonExistentNodeException;
 import com.alike.solution_helpers.RepeatedFunctions;
 import com.alike.solvertestsuite.Fail;
 import com.alike.solvertestsuite.Solution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.graphsystem.*;
+import com.alike.time.Stopwatch;
+
+import java.util.ArrayList;
 
 /**
  * This class takes a graph object as a parameter, and will create a TSP route using the 'Nearest Neighbour Algorithm'.
@@ -26,10 +30,9 @@ public class NearestNeighbourSolver implements StaticSolver {
     private Node currentNode;
 
     /**
-     * This records the number of nodes we have already visited. We do this, so we don't have to repeatedly loop
-     * through the list to check they've all been visited.
+     * An array storing all the nodes the algorithm hasen't yet visited.
      */
-    private int numNodesVisited;
+    private ArrayList<Node> unvisitedNodes;
 
     /**
      * Constructor used to load a graph into the object, so that a solution can be run.
@@ -52,25 +55,26 @@ public class NearestNeighbourSolver implements StaticSolver {
      */
     public SolverOutput runSolution(int delayPerStep) {
         try { // Try to create a solution.
-            graph.setAllNodesUnvisited(); // Make sure all nodes are in unvisited state
+            unvisitedNodes = new ArrayList<>(graph.getNodeContainer().getNodeSet());
             graph.getEdgeContainer().clear(); // Make sure edge set is empty
-            long startTime = System.nanoTime();
+            Stopwatch watch = new Stopwatch(true);
             // Set our current node to be the first node in the list of nodes (could choose any).
             setCurrentNode(graph.getNodeContainer().getNodeSet().get(0)); // Current node is 0th
-            currentNode.setVisited(true); // Set it as visited
-            numNodesVisited = 1;
+            unvisitedNodes.remove(0);
             // Execute the traversal steps
-            while (numNodesVisited <= graph.getNodeContainer().getNodeSet().size()) {
+            while (!unvisitedNodes.isEmpty()) {
                 try {
-                    traverseToNextClosestNode();
+//                    traverseToNextClosestNode();
+                    traverse();
                     RepeatedFunctions.sleep(delayPerStep);
                 } catch (EdgeSuperimpositionException | EdgeToSelfException e) {
                     e.printStackTrace();
                 }
             }
+            // Join the end back together
+            graph.getEdgeContainer().add(new Edge(graph.getNodeContainer().getNodeSet().get(0), currentNode));
             // Output information about solve
-            long finishTime = System.nanoTime();
-            return new Solution(this.graph, graph.getEdgeContainer().getTotalLength(), finishTime - startTime);
+            return new Solution(this.graph, graph.getEdgeContainer().getTotalLength(), watch.getTimeNs());
         } catch (Exception e) { // Failed to create a solution due to an uncaught exception.
             return new Fail(e, graph);
         } catch (Error e) {
@@ -87,23 +91,31 @@ public class NearestNeighbourSolver implements StaticSolver {
     }
 
     /**
-     * Extends the route by moving to the next closest node (by distance) or to the start node if all nodes are visited.
+     * Traverses the algorithm to the next closest node.
+     * @throws EdgeToSelfException Thrown if an attempt is made to create an edge to and from the same node.
+     * @throws EdgeSuperimpositionException Thrown if an attempt is made to create an edge that already exists.
+     * @throws NonExistentNodeException Thrown if a node is searched for but does not exist.
      */
-    private void traverseToNextClosestNode() throws EdgeSuperimpositionException, EdgeToSelfException {
-        // Find the next closest unvisited node.
-        Node nextNode;
-        try {
-            nextNode = currentNode.getClosestNode(graph.getNodeContainer().getNodeSet(), true);
-        } catch (NoClosestNodeException e) { // If we didn't find one, we have exhausted nodes, loop back to beginning
-            nextNode = graph.getNodeContainer().getNodeSet().get(0);
+    private void traverse() throws EdgeToSelfException, EdgeSuperimpositionException, NonExistentNodeException {
+        // Find the next closest node
+        double shortestDist = Double.MAX_VALUE;
+        int closestID = -1;
+        int idxOfClosest = -1; // Set to -1 to keep compiler happy
+        for (int i = 0; i < unvisitedNodes.size(); i++) {
+            Node n = unvisitedNodes.get(i);
+            double dist = currentNode.getVectorTo(n).magnitude();
+            if (dist < shortestDist) {
+                shortestDist = dist;
+                closestID = n.getNodeID();
+                idxOfClosest = i;
+            }
         }
-        // Add an edge between the current node and the next closest node.
-        graph.getEdgeContainer().add(new Edge(currentNode, nextNode));
-        nextNode.setVisited(true); // Set that node to visited.
-        // System.out.println(nextNode.isVisited());
-        setCurrentNode(nextNode); // Change the current node.
-        numNodesVisited++;
-    } // TODO this is not the most efficient way of doing this, better would be to remove nodes as we've visited them
+        Node closest = graph.getNodeContainer().getNodeByID(closestID);
+        // Add an edge from the current node to the closest node
+        unvisitedNodes.remove(idxOfClosest);
+        graph.getEdgeContainer().add(new Edge(currentNode, closest));
+        setCurrentNode(closest);
+    }
 
     /**
      * Sets the value of the @code{graph} attribute to a new value.
