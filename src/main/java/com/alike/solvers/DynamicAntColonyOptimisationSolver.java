@@ -10,6 +10,10 @@ import com.alike.graphsystem.StaticGraph;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A dynamic travelling salesman problem solver that uses the Ant colony optimization heuristic.
+ * @author alike
+ */
 public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
     /**
      * The dynamic graph through which graph interaction will occur.
@@ -49,11 +53,6 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         acos = new AntColonyOptimisationSolver(dgraph.getUnderlyingGraph());
         setGraph(dgraph);
         acos.setDelayPerStep(0);
-        // Set you values to allow the path to react quickly.
-        /*acos.setAlpha(0.02);
-        acos.setBeta(11.5);
-        acos.setRh0(0.9);
-        acos.setQ(0.0004);*/
     }
 
     public DynamicAntColonyOptimisationSolver() {
@@ -112,7 +111,7 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
      * @param numSolves The number of times the graph should be solved.
      * @param delayPerSolve The time delay between each solve.
      * @return DynamicSolution The information about the dynamic solver's solving.
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException Thrown if an 0 is input as the numSolves value.
      */
     @Override
     public DynamicSolution calculateSolutions(int numSolves, int delayPerSolve) throws IllegalArgumentException {

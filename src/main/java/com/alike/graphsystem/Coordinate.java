@@ -157,7 +157,7 @@ public class Coordinate {
     }
 
     /**
-     * Parse a coordinate from a string in the format "<x>,<y>"
+     * Parse a coordinate from a string in the format "x,y"
      * @param xcommay The string to parse a coordinate from.
      * @return coordinate A new coordinate object containing the values from the string.
      */

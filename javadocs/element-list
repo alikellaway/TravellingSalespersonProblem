@@ -1,10 +1,10 @@
 module:com.alike
 com.alike
 com.alike.customexceptions
-com.alike.dynamicgraphsystem
 com.alike.graphical
+com.alike.graphsystem
 com.alike.read_write
 com.alike.solution_helpers
 com.alike.solvers
 com.alike.solvertestsuite
-com.alike.graphsystem
+com.alike.time

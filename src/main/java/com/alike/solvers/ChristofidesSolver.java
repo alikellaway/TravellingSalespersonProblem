@@ -157,20 +157,20 @@ public class ChristofidesSolver implements StaticSolver {
         return oddOrderedNodes;
     }
 
-    public EdgeContainer findBestPerfectMatching(StaticGraph graph) throws EdgeSuperimpositionException, EdgeToSelfException, NoClosestNodeException {
-        double bestLength = Double.MAX_VALUE;
-        EdgeContainer bestMatching = null;
-        // Iterate forwards
-        for (int i = 0; i < graph.getNumNodes(); i++) {
-            EdgeContainer currMatching = findPerfectMatching(graph, i);
-            double currLength = currMatching.getTotalLength();
-            if (currLength < bestLength) {
-                bestLength = currLength;
-                bestMatching = currMatching;
-            }
-        }
-        return bestMatching;
-    }
+//    public EdgeContainer findBestPerfectMatching(StaticGraph graph) throws EdgeSuperimpositionException, EdgeToSelfException, NoClosestNodeException {
+//        double bestLength = Double.MAX_VALUE;
+//        EdgeContainer bestMatching = null;
+//        // Iterate forwards
+//        for (int i = 0; i < graph.getNumNodes(); i++) {
+//            EdgeContainer currMatching = findPerfectMatching(graph, i);
+//            double currLength = currMatching.getTotalLength();
+//            if (currLength < bestLength) {
+//                bestLength = currLength;
+//                bestMatching = currMatching;
+//            }
+//        }
+//        return bestMatching;
+//    }
 
     /**
      * Finds a perfect matching using a greedy algorithm given a starting node (only finds perfect matching if input

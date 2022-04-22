@@ -59,11 +59,9 @@ public class CoordinateListFileWriter {
      * @param bw The BufferedWriter to write into.
      * @throws IOException Thrown if an io error is thrown.
      */
-    int counter = 1;
     public void appendCoordinateList(BufferedWriter bw, ArrayList<Coordinate> cL) throws IOException {
-        System.out.println(counter + " " + Coordinate.coordinateListToStorageFormat(cL) + "\n");
+        System.out.println(Coordinate.coordinateListToStorageFormat(cL) + "\n");
         bw.write(Coordinate.coordinateListToStorageFormat(cL) + "\n");
-        counter++;
     }
 
     /**
