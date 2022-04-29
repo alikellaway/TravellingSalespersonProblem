@@ -48,17 +48,17 @@ public class GraphAnimator extends AnimationTimer {
     /**
      * The drawn radius of the nodes.
      */
-    public static final int NODE_RADIUS = 10; // Nice val = 10
+    public static final int NODE_RADIUS = 15; // Nice val = 10
 
     /**
      * The width of the edges that are drawn in the animation.
      */
-    private static final double LINE_WIDTH = 2; // Nice val = 2/3/4
+    private static final double LINE_WIDTH = 4; // Nice val = 2/3/4
 
     /**
      * The color of the nodes in the animations.
      */
-    private static final Color NODE_COLOR = Color.rgb(204,120,50);
+    private static final Color NODE_COLOR = Color.rgb(250,255, 33);
     // nice blue = Color.rgb(62, 134, 180);
     // nice green = Color.rgb(77, 170, 81);
     // twig brown = Color.rgb(138, 99, 85);
@@ -78,7 +78,7 @@ public class GraphAnimator extends AnimationTimer {
     /**
      * The color of the lines representing the edges of the graph in the animations.
      */
-    private static final Color LINE_COLOR = Color.rgb(98, 10, 255);
+    private static final Color LINE_COLOR = Color.rgb(255, 0, 0);
     // nice red = Color.rgb(199, 84, 80);
     // white = Color.rgb(240, 240, 240);  --Pure white is too bright
     // leaf green = Color.rgb(77, 170, 81);

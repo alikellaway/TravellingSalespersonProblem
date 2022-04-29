@@ -29,17 +29,17 @@ public class Main extends Application {
     /**
      * This value switches which 'mode' the program is in i.e. which solver is used to solve the graph.
      */
-    private static final Mode mode = Mode.DHFC;
+    private static final Mode mode = Mode.NNS;
 
     /**
      * The maximum value x value that coordinates are allowed to be given.
      */
-    public static int coordinateMaxWidth = 512;
+    public static int coordinateMaxWidth = 1024;
 
     /**
      * The maximum value y value that coordinates are allowed to be given.
      */
-    public static int coordinateMaxHeight = 512;
+    public static int coordinateMaxHeight = 1024;
 
     /**
      * The maximum width value the window and canvas can be given.
@@ -59,8 +59,10 @@ public class Main extends Application {
     /**
      * The color of the window background.
      */
-    private static final Color BACK_GROUND_COLOR = Color.rgb(35,35,35);
-    // Color.rgb(35,35,35); -- Nice grey darkmode.
+    private static final Color BACK_GROUND_COLOR = Color.rgb(3,0,24);
+    // Color.rgb(35,35,35); -- Nice grey dark mode.
+    // Color.rgb(3,0,24); -- Poster background colour.
+
 
     /**
      * A reference to the graph that is currently being solved.
@@ -102,14 +104,14 @@ public class Main extends Application {
             case NNS -> activeGraph = GraphGenerator.generateRandomGraph(10, false);
             case BF -> activeGraph = GraphGenerator.generateRandomGraph(8, false);
             case ACO -> activeGraph = GraphGenerator.generateRandomGraph(1000, false);
-            case HFC -> activeGraph = GraphGenerator.generateRandomGraph(100, false);
+            case HFC -> activeGraph = GraphGenerator.generateRandomGraph(50, false);
             case CA -> activeGraph = GraphGenerator.generateRandomGraph(101, false);
             case DNNS -> {
                 activeGraph = GraphGenerator.generateRandomGraph(12, false);
                 dactiveGraph = new DynamicGraph(activeGraph, true, true);
             }
             case DACO -> {
-                activeGraph = GraphGenerator.generateRandomGraph(5, false);
+                activeGraph = GraphGenerator.generateRandomGraph(15, false);
                 dactiveGraph = new DynamicGraph(activeGraph,false, true);
             }
             case DHFC -> {
@@ -198,7 +200,7 @@ public class Main extends Application {
                 nsT.start();
             }
             case CURVE_DRAWER -> {
-                hfcs = new HilbertFractalCurveSolver(6);
+                hfcs = new HilbertFractalCurveSolver(5);
             }
         }
 

@@ -79,12 +79,15 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
         // Draw the lines from the graph that are after our progress counter but before the draw limit
         for (int i = 1 + progressCounter; i < drawLimit; i++) { // Start at one so we can draw backwards.
             // Design the line - vary the color with the path completion
-            int hue = map(period*i, path.length);
-//            gc.setStroke(Color.hsb(hue, 1, 1, 2.0/hfcs.getOrder()));
-            gc.setStroke(Color.grayRgb(hue, 0.5D));
+//            double hue = map(i, path.length);
+            double hue = map(period*i, path.length);
+//            gc.setStroke(Color.hsb(hue, 1, 1));
+            gc.setStroke(Color.grayRgb((int)hue, 0.5D));
 //            gc.setStroke(Color.rgb(255,0,0, 1));
             try { // Draw the line
-                gc.strokeLine(path[i].getX(), path[i].getY(), path[i - 1].getX(), path[i - 1].getY());
+                if (i % 1.5 != 0) {
+                    gc.strokeLine(path[i].getX(), path[i].getY(), path[i - 1].getX(), path[i - 1].getY());
+                }
             } catch (IndexOutOfBoundsException ignored) {
             }
             progressCounter++;
@@ -104,9 +107,9 @@ public class HilbertFractalCurveAnimator extends AnimationTimer {
      * @param maxIndex The length of the path.
      * @return float The value as a color between 0 and 360.
      */
-    private int map(float coordinateIndex, float maxIndex) {
+    private double map(float coordinateIndex, float maxIndex) {
         return Math.abs(((int) (255.0 * (coordinateIndex/maxIndex))) % 255);
-//        return (int) (i/iMax) * 360; // Note that when using the hue value in the hsb method, it will loop round to red
+//        return (coordinateIndex/maxIndex) * 360; // Note that when using the hue value in the hsb method, it will loop round to red
     }
 
     /**

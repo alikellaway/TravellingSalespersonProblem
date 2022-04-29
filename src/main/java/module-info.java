@@ -3,7 +3,7 @@ module com.alike {
     requires javafx.fxml;
     requires com.fasterxml.jackson.databind;
     requires java.base;
-
+    requires org.junit.jupiter.api;
 
 
     exports com.alike.customexceptions;
