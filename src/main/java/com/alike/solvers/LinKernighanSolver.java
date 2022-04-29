@@ -4,6 +4,9 @@ import com.alike.solvertestsuite.Solution;
 import com.alike.graphsystem.EdgeContainer;
 import com.alike.graphsystem.StaticGraph;
 
+/**
+ * A solver employing the LinKernighan algorithm (incomplete).
+ */
 public class LinKernighanSolver implements StaticSolver {
 
     /**
@@ -21,10 +24,19 @@ public class LinKernighanSolver implements StaticSolver {
      */
     private EdgeContainer tour;
 
+    /**
+     * Constructs a new @code{LinKernighanSolver} object.
+     * @param graph The graph the sovler will solve when instructed to do so.
+     */
     public LinKernighanSolver(StaticGraph graph) {
         setGraph(graph);
     }
 
+    /**
+     * Invokes the solver to solve the graph stored in the graph attribute.
+     * @param delayPerStep The delay between algorithmic decisions in the solution - used to slow a solver down.
+     * @return null - Incomplete.
+     */
     @Override
     public Solution runSolution(int delayPerStep) {
 

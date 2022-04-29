@@ -18,10 +18,6 @@ import static com.alike.solution_helpers.RepeatedFunctions.isPowerOfTwo;
  * @author alike
  */
 public class HilbertFractalCurveSolver implements StaticSolver {
-    /*
-        NTS: The curve should be able to perfectly cover all 1047576 points in a 1024x1024 canvas using only
-        the corners in the order 10 curve. Likewise, it should be able to cover all 262144 points with an order 9
-     */
     /**
      * The graph which we are solving.
      */
@@ -85,9 +81,10 @@ public class HilbertFractalCurveSolver implements StaticSolver {
         constructHilbertCurve(false);
     }
 
-    /** Constructs a new @code{HilbertFractalCurveSolver} object without a graph, for the intention of using the object
-     * to construct a curve for drawing16
-     * @param order
+    /**
+     * Constructs a new @code{HilbertFractalCurveSolver} object without a graph, for the intention of using the object
+     * to construct a curve for drawing.
+     * @param order The order of the curve to construct.
      */
     public HilbertFractalCurveSolver(int order) {
         validateCoordinateSpaceIsSquareOfSideLenPowerOf2();
@@ -140,6 +137,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      * Returns the nodes in an order using the current hilbert curve to map the nodes into an order.
      * @return nodesOrdered A list containing the nodes in the order the hilbert curve hits them.
      * @throws NodeMissedException Thrown if the current hilbert curve misses nodes when used as the map.
+     * @throws HilbertCurveUnconstructedException Thrown if the curve has not yet been constructed.
      */
     public ArrayList<Node> getNodesOrdered() throws NodeMissedException, HilbertCurveUnconstructedException {
 
@@ -232,8 +230,8 @@ public class HilbertFractalCurveSolver implements StaticSolver {
      */
     private void validateCoordinateSpaceIsSquareOfSideLenPowerOf2() {
         // Check that we are running this solver in a square context with a side length or a n^2
-        int w = (int) Main.coordinateMaxWidth;
-        int h = (int) Main.coordinateMaxHeight;
+        int w = Main.coordinateMaxWidth;
+        int h = Main.coordinateMaxHeight;
         if (h != w || (!isPowerOfTwo(h)) ) { // We don't need to check both for power of two since they should be equal
             try {
                 throw new NonSquareCanvasException("Canvas must be a square of side lengths of power of 2, the received " +
@@ -261,32 +259,50 @@ public class HilbertFractalCurveSolver implements StaticSolver {
         }
     }
 
+    /**
+     * Returns the value of the @code{order} attribute.
+     * @return order The value of the @code{order} attribute.
+     */
     public int getOrder() {
         return order;
     }
 
+    /**
+     * Assigns a new value to the @code{order} attribute.
+     * @param order The new value to assign the @code{order} attribute.
+     */
     public void setOrder(int order) {
         this.order = order;
     }
 
+    /**
+     * Returns the value of the @code{N} attribute.
+     * @return N The value of the @code{N} attribute.
+     */
     public int getN() {
         return N;
     }
 
+    /**
+     * Sets the value of the @code{N} attribute.
+     * @param n The new value to assign the @code{N} attribute.
+     */
     public void setN(int n) {
-        N = n;
+        this.N = n;
     }
 
-    public int getNumCorners() {
-        return numCorners;
-    }
-
+    /**
+     * Assigns a new value to the @code{numCorners} attribute.
+     * @param numCorners The new value to assign the @code{numCorners} attribute.
+     */
     public void setNumCorners(int numCorners) {
         this.numCorners = numCorners;
     }
 
+    /**
+     * Assigns the correct values for solving using a hilbert curve using the coordinate space.
+     */
     private void setValues() {
-
         /* The number of corners in a hilbert curve of a given order has
          *  (2^order)^2 corners. Since we try to fill the space, we can
          *  deduce our order given we know how many pixels we need to fill.
@@ -294,7 +310,7 @@ public class HilbertFractalCurveSolver implements StaticSolver {
          *  i.e. width = 2^order */
         setOrder((int) (Math.log(Main.coordinateMaxWidth)/Math.log(2))); // Java has no log2(x)
         // We also know that N is our side length given that N = 2 ^ order
-        setN((int) Main.coordinateMaxWidth);
+        setN(Main.coordinateMaxWidth);
         setNumCorners((int) Math.pow(getN(), 2));
     }
 }

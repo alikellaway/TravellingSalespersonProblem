@@ -76,7 +76,7 @@ public class Permuter<T> {
 
     /**
      * Returns the permutation that is currently being viewed.
-     * @return List<T> The permutation that is currently being viewed.
+     * @return perm The permutation that is currently being viewed.
      * @throws PermutationFocusException Thrown if the method is called when no permutation is being viewed.
      */
     public List<T> getCurrentPermutation() throws PermutationFocusException {

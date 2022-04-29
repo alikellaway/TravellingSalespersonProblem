@@ -41,7 +41,7 @@ public class GraphGenerator {
         // Create a graph to populate
         StaticGraph staticGraph = new StaticGraph();
         // Calculate radius from width or height of screen of the screen (depends on which is smaller)
-        int min = (int) Math.min(Main.coordinateMaxWidth, Main.coordinateMaxHeight);
+        int min = Math.min(Main.coordinateMaxWidth, Main.coordinateMaxHeight);
         double r = min * CIRCLE_RADIUS_RATIO; // Chose 2.1 cos visibly pleasing
         // Work our way around the circle in a step wise manner
         double angleStep = (2 * Math.PI)/numCorners; // This is the step in angle between each corner
@@ -163,6 +163,14 @@ public class GraphGenerator {
         return g;
     }
 
+    /**
+     * Creates a Dynamic graph with randomized values.
+     * @param numNodes The number of nodes the output graph should have.
+     * @param nodeSpeed The speed the nodes of the graph should have when moving.
+     * @param randomMovement Whether movement on the graph should include random movement.
+     * @param vectorMovement Whether movement on the graph should include movement by velocities.
+     * @return dg A new dynamic graph with random node starting locations and random starting velocities.
+     */
     public static DynamicGraph generateRandomDynamicGraph(int numNodes, int nodeSpeed, boolean randomMovement, boolean vectorMovement) {
         StaticGraph g = generateRandomGraph(numNodes, false);
         Vector[] vectors = Vector.randomVectors(numNodes, nodeSpeed);

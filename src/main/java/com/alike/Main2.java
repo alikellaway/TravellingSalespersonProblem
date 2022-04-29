@@ -15,8 +15,10 @@ import com.alike.solvertestsuite.DynamicTestSuiteResult;
 
 import java.io.IOException;
 
+/**
+ * Another space for program entry - used for testing and such.
+ */
 public class Main2 {
-
     public static void main(String[] args) throws IOException, NodeSuperimpositionException, InvalidGraphException, RadiusExceedingBoundaryException, EdgeToSelfException {
         // Uncomment the below to repopulate the graph files.
 //        CoordinateListFileWriter cw = new CoordinateListFileWriter();
