@@ -55,6 +55,9 @@ public class DynamicAntColonyOptimisationSolver implements DynamicSolver {
         acos.setDelayPerStep(0);
     }
 
+    /**
+     * Creates a new @code{DynamicAntColonyOptimisationSolver} object without a graph so it can be set later.
+     */
     public DynamicAntColonyOptimisationSolver() {
         acos = new AntColonyOptimisationSolver();
         acos.setDelayPerStep(0);

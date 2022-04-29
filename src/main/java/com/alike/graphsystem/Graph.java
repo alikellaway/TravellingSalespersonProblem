@@ -6,12 +6,14 @@ package com.alike.graphsystem;
 public interface Graph {
     /**
      * Returns the number of nodes in the graph.
+     * @return int The number of nodes in the graph.
      */
     int getNumNodes();
 
     /**
      * Outputs the graph's values as a string that can be stored and later read back into program memory.
      * @param delimiter The character used to separate graph information.
+     * @return String The Graph object in string format.
      */
     String toStorageFormat(char delimiter);
 }

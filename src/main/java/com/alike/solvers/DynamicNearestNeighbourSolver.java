@@ -51,6 +51,9 @@ public class DynamicNearestNeighbourSolver implements DynamicSolver {
         nns = new NearestNeighbourSolver(dgraph.getUnderlyingGraph());
     }
 
+    /**
+     * Creates a new @code{DynamicNearestNeighbourSolver} object.
+     */
     public DynamicNearestNeighbourSolver() {
         setRunning(false);
         nns = new NearestNeighbourSolver();
