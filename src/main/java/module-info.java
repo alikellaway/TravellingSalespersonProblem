@@ -4,6 +4,7 @@ module com.alike {
     requires com.fasterxml.jackson.databind;
     requires java.base;
     requires org.junit.jupiter.api;
+    requires org.junit.platform.commons;
 
 
     exports com.alike.customexceptions;
@@ -14,6 +15,5 @@ module com.alike {
     exports com.alike.solvertestsuite to com.fasterxml.jackson.databind, javafx.graphics;
     exports com.alike.graphsystem;
     exports com.alike.time to com.fasterxml.jackson.databind, javafx.graphics;
-
 }
 

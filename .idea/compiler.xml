@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="FinalYearProjectT2" options="--add-exports org.junit.platform.commons/org.junit.platform.commons.util=com.alike" />
+      <module name="FinalYearProjectT2" options="" />
     </option>
   </component>
 </project>
