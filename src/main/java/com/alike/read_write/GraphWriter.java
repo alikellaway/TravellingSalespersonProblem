@@ -14,7 +14,7 @@ public class GraphWriter {
     /**
      * The location at which graphs will be written.
      */
-    public static final String FILE_PATH = "graphs.txt";
+    public static final String FILE_PATH = "dynamicTestGraphs.txt";
 
     /**
      * The @code{BufferedWriter} object used to write into the file.
