@@ -5,8 +5,20 @@ import com.alike.solvertestsuite.DynamicSolution;
 import com.alike.solvertestsuite.SolverOutput;
 import com.alike.graphsystem.Graph;
 
+/**
+ * An interface allowing easy management and manipulation of dynamic solvers so that they can be tested fairly.
+ */
 public interface DynamicSolver {
+    /**
+     * Returns the value of the graph being solved.
+     * @return graph The graph being solved.
+     */
     Graph getGraph();
+
+    /**
+     * Sets the value of the @code{dgraph} attribute (which they should all also have).
+     * @param dgraph The new value to assign the @code{dgraph} attribute.
+     */
     void setGraph(DynamicGraph dgraph);
 
     /**

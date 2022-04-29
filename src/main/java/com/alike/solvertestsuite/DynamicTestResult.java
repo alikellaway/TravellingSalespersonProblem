@@ -20,6 +20,12 @@ public class DynamicTestResult {
      */
     private int testNumber;
 
+    /**
+     * Constructs a new @code{DynamicTestResult} object.
+     * @param sol The solver output.
+     * @param totalTime The total time spent on the graph.
+     * @param testNumber The test number of this test in its batch.
+     */
     public DynamicTestResult(DynamicSolution sol, long totalTime, int testNumber) {
         setTotalTimeTaken(totalTime);
         setSol(sol);

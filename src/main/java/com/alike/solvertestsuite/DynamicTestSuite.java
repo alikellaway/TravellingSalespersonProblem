@@ -9,6 +9,10 @@ import com.alike.time.Stopwatch;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Class used to test and compare dynamic solvers against one another.
+ * @author alike
+ */
 public class DynamicTestSuite {
     /**
      * The stopwatch object used to gather time and test length data.

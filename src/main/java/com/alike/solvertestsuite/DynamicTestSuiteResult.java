@@ -42,6 +42,8 @@ public class DynamicTestSuiteResult {
      * @param results The results the test suite created.
      * @param numSolves The number of time the solver had to solve each graph.
      * @param delayPerSolve The forced delay between each solve the solver made.
+     * @param randomMovement Whether the test graphs had random movement.
+     * @param velocityMovement Whether the test graphs had velocity movement.
      */
     public DynamicTestSuiteResult(ArrayList<DynamicTestResult> results, int numSolves, int delayPerSolve, int nodeSpeed, boolean randomMovement, boolean velocityMovement) {
         setResults(results);

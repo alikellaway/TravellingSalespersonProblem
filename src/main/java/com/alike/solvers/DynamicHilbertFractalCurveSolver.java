@@ -8,6 +8,10 @@ import com.alike.solvertestsuite.SolverOutput;
 import com.alike.time.Stopwatch;
 import com.alike.graphsystem.StaticGraph;
 
+/**
+ * A class that can solve DTSPs using the hilbert fractal curve method.
+ * @author alike 
+ */
 public class DynamicHilbertFractalCurveSolver implements DynamicSolver {
     /**
      * A reference to the @code{HilbertFractalCurveSolver} object that will be repeatedly solving the graph.

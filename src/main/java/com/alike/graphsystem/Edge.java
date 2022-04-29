@@ -13,6 +13,7 @@ public class Edge implements Comparable<Edge>, Comparator<Edge> {
      * The node at which the edge starts (note: the edge does not start of finish, its just a naming convention).
      */
     private Node startNode;
+
     /**
      * The node at which the edge ends (note: the edge does not start of finish, its just a naming convention).
      */
@@ -28,6 +29,7 @@ public class Edge implements Comparable<Edge>, Comparator<Edge> {
      * Used to initialise a new edge object.
      * @param startNode The node at which the edge starts.
      * @param endNode The node at which the edge ends.
+     * @throws EdgeToSelfException Thrown if an attempt is made to construct an edge to and from the same node.
      */
     public Edge(Node startNode, Node endNode) throws EdgeToSelfException {
         if (startNode == endNode) {
@@ -70,7 +72,7 @@ public class Edge implements Comparable<Edge>, Comparator<Edge> {
 
     /**
      * Returns the node this edge finishes on.
-     * @return @code{endNode} The node this edge ends on.
+     * @return endNode The node this edge ends on.
      */
     public Node getEndNode() {
         return endNode;
@@ -114,6 +116,7 @@ public class Edge implements Comparable<Edge>, Comparator<Edge> {
      * Its static because it needs to be called in the edge manager class to calculate edge IDs efficiently.
      * @param startNode One of the nodes the edge is linking.
      * @param endNode The other node the edge is linking.
+     * @throws EdgeToSelfException Thrown if an attempt is made to construct an edge to and from the same node.
      * @return edgeID The ID of this edge.
      */
     public static String generateEdgeID(Node startNode, Node endNode) throws EdgeToSelfException {

@@ -8,6 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Class used to write outputs from dynamic test suites into file.
+ * @author alike
+ */
 public class DynamicTestSuiteResultWriter {
     /**
      * The location at which graphs will be written.

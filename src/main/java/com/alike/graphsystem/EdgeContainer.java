@@ -103,7 +103,7 @@ public class EdgeContainer {
 
     /**
      * Returns the value of the @code{editCount} attribute.
-     * @return @code{editCount} The value of the @code{editCount} attribute.
+     * @return editCount The value of the @code{editCount} attribute.
      */
     public int getEditCount() {
         return editCount;

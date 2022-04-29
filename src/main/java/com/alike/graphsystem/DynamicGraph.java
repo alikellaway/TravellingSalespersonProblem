@@ -85,6 +85,13 @@ public class DynamicGraph implements Graph {
         setAwake(false);
     }
 
+    /**
+     * Constructs a new @code{DynamicGraph} object.0
+     * @param graph The static graph the coordinate mover will manipulate.
+     * @param stepRandomly Whether the coordinate mover should move the nodes randomly.
+     * @param stepByVelocity Whether the coordinate mover should move the nodes by a velocity.
+     * @param movementSpeed How fast the coordinate mover should move the nodes.
+     */
     public DynamicGraph(StaticGraph graph, boolean stepRandomly, boolean stepByVelocity, int movementSpeed) {
         cm = new CoordinateMover(graph.getNodeContainer().getNodeCoordinates(), movementSpeed);
         setEdgeStateManager(new EdgeStateManager());
