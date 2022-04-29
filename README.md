@@ -2,6 +2,8 @@
 
 This is a project containing code able to represent and solve travelling salesperson problems. It also contains code able to repersent and solve dynamic travelling salesman problems - TSPs where nodes are non-stationary.
 
+Up to date code for this project can be found and downloaded here: https://github.com/alikellaway/TravellingSalespersonProblem
+
 # How to Use
 The Main method (found in src/main/java/com.alike/main.java) has an attribute "mode" - this attribute can be switched to one of the enumerator values.
 
